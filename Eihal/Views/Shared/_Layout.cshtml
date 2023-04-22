@@ -1,0 +1,261 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    @*<title>@ViewData["Title"] - Eihal</title>*@
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+      <meta charset="utf-8">
+    <meta name="description" content="....">
+    <meta name="author" content="misara adel">
+    <meta name="csrf-token" content="wvWsm0XjwGINPWNPIYQ2Jqt1HSbQspywkcnKWPtL">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src='~/js/fontawesome.js' crossorigin='anonymous'></script>
+    <title>
+        EIHAL
+    </title>
+    <link rel="icon" type="image/x-icon" href="~/Eihal.ico" />
+    <link rel="stylesheet" href="~/css/fontawesome.css">
+    <link rel="stylesheet" href="~/css/animate.css">
+    <link rel="stylesheet" href="~/css/owl.theme.default.min.css">
+    <link rel="stylesheet" type="text/css" href="~/css/datepicker.css">
+    <link rel="stylesheet" href="~/css/style.css">
+    <link href="~/css/owl.carousel.min.css" rel="stylesheet" />
+    <link href="~/css/owl.theme.default.min.css" rel="stylesheet" />
+    
+</head>
+<style>
+    .error {
+        color: red !important;
+    }
+
+    .forget-input {
+        height: 50px !important;
+    }
+
+    .rating-star {
+        font-family: "Font Awesome 5 Free" !important;
+    }
+
+    .star-rating {
+        direction: rtl;
+        display: inline-block;
+        padding: 20px;
+        cursor: default;
+    }
+
+        .star-rating input[type=radio] {
+            display: none;
+        }
+
+        .star-rating label {
+            color: #bbb;
+            font-size: 2rem;
+            padding: 0;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            margin: 0 5px;
+        }
+
+            .star-rating label:hover,
+            .star-rating label:hover ~ label,
+            .star-rating input[type=radio]:checked ~ label {
+                color: #f2b600;
+            }
+
+    .custom-check-badge {
+        position: relative;
+        padding: 4px 0;
+    }
+
+        .custom-check-badge input {
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            position: absolute;
+            cursor: pointer;
+            padding: 4px 0;
+            top: 0;
+            left: 0;
+        }
+
+            .custom-check-badge input:checked ~ .custom-check-label a {
+                color: #00768c;
+                border-color: #00768c;
+            }
+
+        .custom-check-badge label {
+            margin-bottom: 0;
+        }
+
+    .review-star {
+        font-family: "Font Awesome 5 Free" !important;
+    }
+
+    .tooltiptext {
+        visibility: hidden;
+        width: 309px;
+        background-color: #565454;
+        ;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: -2px 0;
+        margin-left: 23%;
+        margin-top: -53px;
+        /* Position the tooltip */
+        position: absolute;
+        z-index: 1;
+    }
+
+    .tooltiptext {
+        visibility: visible;
+    }
+</style>
+<body>
+        <nav class="navabr">
+            <div class="top-nav">
+                <div class="container">
+                    <div class="content">
+                        <ul class="socail-media">
+                            <li>
+                                <a href="#">
+                                    <img src="~/images/navbar/message.svg" alt="">
+
+                                    <span>
+                                        info@eihal.com
+                                    </span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="facebook.com">
+                                    <img src="~/images/navbar/face.svg" alt="">
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="linkedin.com">
+                                    <img src="~/images/navbar/linkedn.svg" alt="">
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="instagram.com">
+                                    <img src="~/images/navbar/insta.svg" alt="">
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="twitter.com">
+                                    <img src="~/images/navbar/twiiter.svg" alt="">
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="drop-list-shape data">
+                            <a href="#" class="drop-name">
+                                <img src="~/images/navbar/lang.svg" loading="lazy" alt="" />
+                                <span>
+                                    English
+                                </span>
+                            </a>
+
+                            <ul class="list">
+
+                                <li class="item">
+                                    <a href="#" class="">
+                                        English
+                                    </a>
+                                </li>
+
+                                <li class="item">
+                                    <a href="#" class="">
+                                        Arabic
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom-nav">
+                <div class="container">
+                    <div class="content">
+                        <div class="hamburger">
+                            <span class="line"></span>
+                            <span class="line"></span>
+                            <span class="line"></span>
+                        </div>
+
+                            <a class="brand-name" asp-area="" asp-controller="Home" asp-action="Index"></a>
+                            <img src="~/images/logo.png" class="navbar-logo" alt="logo" style="height:50px">
+
+                        <div class="nav-contain">
+                            <ul class="navbar-nav">
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                                </li>
+
+                                <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">About Us</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Doctors</a>
+                                </li>
+
+                                <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Contact">Contact us</a>
+                                </li>
+
+
+                            </ul>
+
+                        </div>
+
+                        <a href="#" type="button" class="custom-btn" data-toggle="modal" data-target="#loginModal">
+                            <img src="~/images/navbar/user.svg" alt="">
+
+                            <span>
+                                SIGN IN
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+        </nav>
+        @*   <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+         <div class="container">
+    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Eihal</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+               <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>*@
+    <div >
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.0.min.js"></script>
+    <script src="~/js/owl.carousel.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

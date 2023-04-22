@@ -1,0 +1,527 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@*<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+*@
+<header>
+    <div class="container">
+        <div class="owl-carousel owl-theme owl-header">
+            <div class="item ">
+                <div class="contain">
+                    <h1>
+                        Our Vision Test 1
+                    </h1>
+
+                    <p>
+                        To improve the level of dental services, by providing and facilitating reaching the best doctors in various dental specialties, including specialists and consultants. Also, take advantage of the new graduated dentist to improve the dental profession.
+                    </p>
+
+                    <div class="flex-data">
+                        <a style="width: 200px !important;" class="custom-btn" asp-area="" asp-controller="Home" asp-action="About">
+                                <span>
+                                    Read more
+                                </span>
+                            </a>
+                    </div>
+                </div>
+            </div>
+
+          
+         
+        </div>
+
+        <form class="form-contain" id="search-doctors" action="https://eihal.paths.sa/search-doctors" method="GET">
+            <input type="hidden" name="_token" value="wvWsm0XjwGINPWNPIYQ2Jqt1HSbQspywkcnKWPtL">
+            <div class="row">
+                <input type="hidden" name="homepage_search" value="1">
+                <div class="col-lg-2 col-12 padding-screen">
+                    <div class="form-group round-left">
+                        <div class="form-data select-box">
+                            <select name="speciality" class="form-control">
+                                <option value="">
+                                    Select a specialty
+                                </option>
+
+                                <option value="12">
+                                    Dental Hygienist
+                                </option>
+
+                                <option value="14">
+                                    Advanced General Practic
+                                </option>
+
+                                <option value="16">
+                                    Family Dentistry
+                                </option>
+
+                                <option value="17">
+                                    Restorative
+                                </option>
+
+                                <option value="18">
+                                    Prosthodontics
+                                </option>
+
+                                <option value="19">
+                                    Endodontics
+                                </option>
+
+                                <option value="20">
+                                    Orthodontics
+                                </option>
+
+                                <option value="21">
+                                    Oral and Maxillofacial Surgery
+                                </option>
+
+                                <option value="22">
+                                    Periodontics
+                                </option>
+
+                                <option value="23">
+                                    Oral Medicin
+                                </option>
+
+                                <option value="44">
+                                    Pediatric Dentistry
+                                </option>
+
+                                <option value="55">
+                                    General Practice
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-12 padding-screen">
+                    <div class="form-group">
+                        <div class="form-data select-box">
+                            <select name="city" id="city_id" class="form-control">
+                                <option value="">
+                                    Choose city
+                                </option>
+
+                                <option value="2">
+                                    Riyadh
+                                </option>
+
+                                <option value="4">
+                                    Makka
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-12 padding-screen">
+                    <div class="form-group">
+                        <div class="form-data select-box">
+                            <select name="area" id="area_id" class="form-control">
+                                <option value="">
+                                    Choose District
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-12 padding-screen">
+                    <div class="form-group round-right">
+                        <div class="form-data">
+                            <input type="text" name="name" class="form-control" placeholder="Or search by name" />
+
+                            <a href="#" class="btn-contain">
+                                <img src="https://eihal.paths.sa/public/front/assets/images/form/user.svg"
+                                     loading="lazy"
+                                     alt="">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-12">
+                    <button type="submit" class="custom-btn" style="border: none;">
+                        <img src="https://eihal.paths.sa/public/front/assets/images/form/search.svg" alt="" />
+
+                        <span>
+                            SEARCH
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</header>
+
+
+<section class="choose general-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7 col-12 mb-4 order-mobile-0">
+                <div class="content">
+                    <h1>
+                        WhyEihal ?
+
+                        <span>
+                            Why use a referral platform?
+                        </span>
+                    </h1>
+
+                    <p class="desc">
+                        Eihal is the only platform that connects all dentists in different specialties, and facilitates their communications to do referrals of medical cases among them, and facilitate the accessibility to the appropriate specialist doctor through the following:
+                    </p>
+
+                    <ul class="list">
+                        <li>
+                            <!-- <img src="https://eihal.paths.sa/public/front/assets/images/advantages/advantages_2.svg" alt="">-->
+                            • Easy access to a large number of dentists, specialists and consultants, and easy identification of the academic qualifications and certificates of each doctor. Also, knowing the medical privileges and treatment services provided by each doctor and the
+                            prices of the services provided.
+                            <div>
+                                <!-- <h2>
+                                  Modern Equipment
+                                </h2> -->
+
+                                <p>
+
+                                </p>
+                            </div>
+                        </li>
+
+                        <li>
+                            <!-- <img src="https://eihal.paths.sa/public/front/assets/images/advantages/advantages_4.svg" alt=""> -->
+                            • Provides patients with multiple and appropriate options of qualified and certified dentists in all specialties at a variety of treatment prices suitable for each patient.
+                            <div>
+                                <!-- <h2>
+                                  High-Quality Materials
+                                </h2> -->
+
+                                <p>
+
+                                </p>
+                            </div>
+                        </li>
+
+                        <!-- <li>
+                          <img src="https://eihal.paths.sa/public/front/assets/images/advantages/advantages_1.svg" alt="">
+
+                          <div>
+                            <h2>
+                              Friendly Doctors
+                            </h2>
+
+                            <p>
+                              I am a New York based Psychologist, and was born and raised in New Jersey. I completed my Masters in Clinical Psychology from Rutgers University, New
+                            </p>
+                          </div>
+                        </li> -->
+                    </ul>
+                    <a href="#" class="custom-btn" data-toggle="modal" data-target="#loginModal">
+                        <span>
+                            MAKE ELHAL NOW
+                        </span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-lg-5 col-12 mb-3 order-mobile-1">
+                <div class="image-content">
+                    <img src="https://eihal.paths.sa/public/front/assets/images/about_elhlal.webp" alt="" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="circles">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</section>
+
+<section class="join-us">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-12 order-mobile-1">
+                <div class="image-content">
+                    <img src="https://eihal.paths.sa/public/front/assets/images/about.png" alt="">
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-12 order-mobile-0">
+                <div class="contain">
+                    <div class="graph-heading">
+                        <div class="text-data">
+                            <h1>
+                                How to join Eihal?
+                            </h1>
+
+                            <p class="grahp-text">
+                                ElHAL
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- <h2>
+                      Get Started
+                    </h2> -->
+
+                    <p class="desc">
+                        Eihal is an enjoyable professional experience and an additional source of income through referring and receivingpatients with other dentists. Also, it helps to exposed and share experiences with other expert professional dentists in all dental specialties.
+                    </p>
+
+                    <!-- <h2>
+                      Get Contracted & Credentialed
+                    </h2> -->
+
+                    <p class="desc">
+                        Few simple steps to register withEihal platform, and join the Eihal team and refer and receive medical referrals in all dental specialties.
+                    </p>
+                    <!--
+                    <h2>
+                      Get Welcomed
+                    </h2> -->
+
+                    <p class="desc">
+                        Registration to Eihal few information about your personal data, contact numbers and academic qualifications. Also, you will need to attach the professional classification and registration card of the Commission for Health Specialties.
+                    </p>
+                    <a href="#" class="custom-btn" data-toggle="modal" data-target="#loginModal">
+                        <span>
+                            JOIN NOW
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="circles">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <!--sign in modal-->
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title" id="loginModalLabel">
+                        Log in to your account
+                    </h1>
+                </div>
+                <div class="modal-body">
+
+
+                    <div class="d-none alert alert-danger" id="login-error">
+                    </div>
+
+                    <form class="form-contain" id="login">
+                        <input type="hidden" name="_token" value="wvWsm0XjwGINPWNPIYQ2Jqt1HSbQspywkcnKWPtL">
+                        <div class="form-group">
+                            <label for="">
+                                Phone
+                            </label>
+
+                            <div class="form-data">
+                                <input type="text" class="form-control " placeholder="Phone" id="login-phone" name="phone" value="" maxlength="10" onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="">
+                                Password
+                            </label>
+
+                            <div class="form-data show_hide_password">
+                                <input type="password" class="form-control shadow_input  " name="password" required placeholder="Password" id="login-password" />
+
+                                <a href="#" class="btn-contain show_pass">
+                                    <img src="https://eihal.paths.sa/public/front/assets/images/form/eye.svg" loading="lazy"
+                                         alt="">
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="flex-data mt-5">
+                            <div class="wrapper">
+                                <input type="radio" class="radio-check">
+
+                                <label class="radio-title">
+                                    Remember me
+                                </label>
+                            </div>
+
+                            <a href="#" type="button" class="link" data-toggle="modal" data-dismiss="modal" data-target="#restModal">
+                                I forgot password
+                            </a>
+                        </div>
+
+                        <button type="submit" class="custom-btn mb-3">
+                            <span>
+                                CLICK TO LOGIN
+                            </span>
+                        </button>
+
+                        <a href="#" type="button" class="link" data-toggle="modal" data-dismiss="modal" data-target="#singUpModal">
+                            Don’t have account yet?
+
+                            <span>
+                                Sign Up
+                            </span>
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--sign up -->
+    <div class="modal fade" id="singUpModal" tabindex="-1" role="dialog" aria-labelledby="singUpModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title" id="singUpModalLabel">
+                        Create a new account
+                    </h1>
+                </div>
+                <div class="modal-body">
+                    <form class="form-contain" id="doctor-reg" action="https://eihal.paths.sa/doctor-register" method="POST">
+                        <input type="hidden" name="_token" value="wvWsm0XjwGINPWNPIYQ2Jqt1HSbQspywkcnKWPtL">
+                        <div class="form-group">
+                            <label for="">
+                                Account Type
+                            </label>
+
+                            <div class="form-data select-box">
+                                <select class="form-control" name="account_type" id="account_type" required>
+                                    <option value="">Select Account Type</option>
+                                    <option value="1">ServiceProvider</option>
+                                    <option value="2">Beneficiary</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group" id="doctor_type_dropdown">
+                            <label for="">
+                                Health Practitioner Type
+                            </label>
+
+                            <div class="form-data select-box doctor_type_div">
+                                <select class="form-control" name="doctor_type" id="doctor_type" required>
+                                    <option value="">
+                                        Select Health Practitioner Type
+                                    </option>
+
+                                    <option value="10">
+                                        Dentist
+                                    </option>
+
+                                    <option value="2">
+                                        Dental Hygienist
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group" id="category_id_dropdown">
+                            <label for="">
+                                Professional Rank
+                            </label>
+
+                            <div class="form-data select-box category_type_div">
+                                <select class="form-control" name="category_type" id="category-id">
+                                    <option value="">
+                                        Select Professional Rank Type
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="">
+                                Full Name
+                            </label>
+
+                            <div class="form-data">
+                                <input type="text" class="form-control" placeholder="Full Name" name="name" required />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="">
+                                Phone Number
+                            </label>
+
+                            <div class="form-data">
+                                <input type="text" class="form-control" placeholder="Phone Number" onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))" name="phone" id="phone" onkeyup="contactVerify()"
+                                       maxlength="10" required />
+                                <p id="phoneError" style="display:none; color:#FF0000;font-size:12px;text-align:left;"> Phone Number Is Already Exists.</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="">
+                                Email ID
+                            </label>
+
+                            <div class="form-data">
+                                <input type="email" class="form-control" name="email" id="email" placeholder="Enter Email ID" type="email" value="" id="ValidMail" onkeyup="emailVerify()" />
+                            </div>
+                            <p id="emailError" style="display:none; color:#FF0000;font-size:12px;text-align:left"> Email Is Already Exists.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="">
+                                Password
+                            </label>
+
+                            <div class="form-data">
+                                <input type="password" class="form-control" placeholder="Password" name="password" required />
+                            </div>
+                        </div>
+                        <div class="flex-data mt-5">
+                            <div class="wrapper">
+                                <input type="radio" name="terms" class="radio-check">
+
+                                <label class="radio-title">
+                                    <a href="https://eihal.paths.sa/terms-and-conditions"> terms and policy</a>
+                                </label>
+                            </div>
+                        </div>
+                        <label id="terms-error" class="error" for="terms" style="display: none;color:red;">Please Select Terms and Policy</label>
+                        <button type="submit" id="submit" class="custom-btn mb-3">
+                            <span>
+                                CLICK NEW ACCOUNT
+                            </span>
+                        </button>
+
+                        <a href="#" class="link" type="button" data-dismiss="modal" data-toggle="modal" data-target="#loginModal">
+                            Already have account?
+
+                            <span>
+                                Sign In
+                            </span>
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".owl-carousel").owlCarousel({  items: 1});
+        });
+
+ 
+    </script>
+}
