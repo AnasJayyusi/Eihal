@@ -2230,6 +2230,8 @@ header {
     background: url("../images/header.png") center/cover no-repeat;
 }
 
+
+
     header .owl-carousel {
         margin-bottom: 50px;
     }
@@ -6710,4 +6712,8 @@ body {
 
 .search-box-control {
     text-transform: none !important;
+}
+.loginLogo {
+    background: url("../images/header.png") center/cover no-repeat;
+
 }

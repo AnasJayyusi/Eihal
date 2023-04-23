@@ -213,14 +213,8 @@
                             </ul>
 
                         </div>
-
-                        <a href="#" type="button" class="custom-btn" data-toggle="modal" data-target="#loginModal">
-                            <img src="~/images/navbar/user.svg" alt="">
-
-                            <span>
-                                SIGN IN
-                            </span>
-                        </a>
+                    <partial name="_LoginPartial" />
+                     
                     </div>
                 </div>
             </div>
@@ -256,6 +250,8 @@
     <script src="~/js/owl.carousel.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+

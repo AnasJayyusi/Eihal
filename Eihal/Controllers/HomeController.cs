@@ -1,4 +1,5 @@
 ﻿using Eihal.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -18,10 +19,23 @@ namespace Eihal.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Contact()
         {
             return View();
         }
+
+        public IActionResult About()
+        {
+            return View();
+        }
+
+
+        [Authorize(Roles = "Administrator")]
+        public IActionResult AdminOnly()
+        {
+            return View();
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

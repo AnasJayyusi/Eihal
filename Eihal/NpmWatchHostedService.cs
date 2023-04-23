@@ -1,11 +1,5 @@
-﻿using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Diagnostics;
-using System.IO;
+﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Eihal
 {
@@ -15,7 +9,7 @@ namespace Eihal
         private readonly bool _enabled;
         private readonly ILogger<NpmWatchHostedService> _logger;
 
-        private Process _process;
+        private Process? _process = null;
 
         public NpmWatchHostedService(bool enabled, ILogger<NpmWatchHostedService> logger)
         {
@@ -84,9 +78,9 @@ namespace Eihal
             _logger.LogInformation("Started NPM watch");
         }
 
-        private async void HandleProcessExit(object sender, object args)
+        private async void HandleProcessExit(object? sender, object args)
         {
-            _process.Dispose();
+            _process?.Dispose();
             _process = null;
 
             _logger.LogWarning("npm watch exited, restarting in 1 second.");

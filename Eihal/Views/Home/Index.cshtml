@@ -13,7 +13,7 @@
             <div class="item ">
                 <div class="contain">
                     <h1>
-                        Our Vision Test 1
+                        Our Vision 
                     </h1>
 
                     <p>
@@ -222,7 +222,7 @@
                     </ul>
                     <a href="#" class="custom-btn" data-toggle="modal" data-target="#loginModal">
                         <span>
-                            MAKE ELHAL NOW
+                            Make Eihal Now
                         </span>
                     </a>
                 </div>
@@ -307,213 +307,10 @@
         <span></span>
     </div>
 
-    <!--sign in modal-->
-    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title" id="loginModalLabel">
-                        Log in to your account
-                    </h1>
-                </div>
-                <div class="modal-body">
-
-
-                    <div class="d-none alert alert-danger" id="login-error">
-                    </div>
-
-                    <form class="form-contain" id="login">
-                        <input type="hidden" name="_token" value="wvWsm0XjwGINPWNPIYQ2Jqt1HSbQspywkcnKWPtL">
-                        <div class="form-group">
-                            <label for="">
-                                Phone
-                            </label>
-
-                            <div class="form-data">
-                                <input type="text" class="form-control " placeholder="Phone" id="login-phone" name="phone" value="" maxlength="10" onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="">
-                                Password
-                            </label>
-
-                            <div class="form-data show_hide_password">
-                                <input type="password" class="form-control shadow_input  " name="password" required placeholder="Password" id="login-password" />
-
-                                <a href="#" class="btn-contain show_pass">
-                                    <img src="https://eihal.paths.sa/public/front/assets/images/form/eye.svg" loading="lazy"
-                                         alt="">
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="flex-data mt-5">
-                            <div class="wrapper">
-                                <input type="radio" class="radio-check">
-
-                                <label class="radio-title">
-                                    Remember me
-                                </label>
-                            </div>
-
-                            <a href="#" type="button" class="link" data-toggle="modal" data-dismiss="modal" data-target="#restModal">
-                                I forgot password
-                            </a>
-                        </div>
-
-                        <button type="submit" class="custom-btn mb-3">
-                            <span>
-                                CLICK TO LOGIN
-                            </span>
-                        </button>
-
-                        <a href="#" type="button" class="link" data-toggle="modal" data-dismiss="modal" data-target="#singUpModal">
-                            Don’t have account yet?
-
-                            <span>
-                                Sign Up
-                            </span>
-                        </a>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!--sign up -->
-    <div class="modal fade" id="singUpModal" tabindex="-1" role="dialog" aria-labelledby="singUpModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title" id="singUpModalLabel">
-                        Create a new account
-                    </h1>
-                </div>
-                <div class="modal-body">
-                    <form class="form-contain" id="doctor-reg" action="https://eihal.paths.sa/doctor-register" method="POST">
-                        <input type="hidden" name="_token" value="wvWsm0XjwGINPWNPIYQ2Jqt1HSbQspywkcnKWPtL">
-                        <div class="form-group">
-                            <label for="">
-                                Account Type
-                            </label>
-
-                            <div class="form-data select-box">
-                                <select class="form-control" name="account_type" id="account_type" required>
-                                    <option value="">Select Account Type</option>
-                                    <option value="1">ServiceProvider</option>
-                                    <option value="2">Beneficiary</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group" id="doctor_type_dropdown">
-                            <label for="">
-                                Health Practitioner Type
-                            </label>
-
-                            <div class="form-data select-box doctor_type_div">
-                                <select class="form-control" name="doctor_type" id="doctor_type" required>
-                                    <option value="">
-                                        Select Health Practitioner Type
-                                    </option>
-
-                                    <option value="10">
-                                        Dentist
-                                    </option>
-
-                                    <option value="2">
-                                        Dental Hygienist
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group" id="category_id_dropdown">
-                            <label for="">
-                                Professional Rank
-                            </label>
-
-                            <div class="form-data select-box category_type_div">
-                                <select class="form-control" name="category_type" id="category-id">
-                                    <option value="">
-                                        Select Professional Rank Type
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="">
-                                Full Name
-                            </label>
-
-                            <div class="form-data">
-                                <input type="text" class="form-control" placeholder="Full Name" name="name" required />
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="">
-                                Phone Number
-                            </label>
-
-                            <div class="form-data">
-                                <input type="text" class="form-control" placeholder="Phone Number" onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))" name="phone" id="phone" onkeyup="contactVerify()"
-                                       maxlength="10" required />
-                                <p id="phoneError" style="display:none; color:#FF0000;font-size:12px;text-align:left;"> Phone Number Is Already Exists.</p>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="">
-                                Email ID
-                            </label>
-
-                            <div class="form-data">
-                                <input type="email" class="form-control" name="email" id="email" placeholder="Enter Email ID" type="email" value="" id="ValidMail" onkeyup="emailVerify()" />
-                            </div>
-                            <p id="emailError" style="display:none; color:#FF0000;font-size:12px;text-align:left"> Email Is Already Exists.</p>
-                        </div>
-                        <div class="form-group">
-                            <label for="">
-                                Password
-                            </label>
-
-                            <div class="form-data">
-                                <input type="password" class="form-control" placeholder="Password" name="password" required />
-                            </div>
-                        </div>
-                        <div class="flex-data mt-5">
-                            <div class="wrapper">
-                                <input type="radio" name="terms" class="radio-check">
-
-                                <label class="radio-title">
-                                    <a href="https://eihal.paths.sa/terms-and-conditions"> terms and policy</a>
-                                </label>
-                            </div>
-                        </div>
-                        <label id="terms-error" class="error" for="terms" style="display: none;color:red;">Please Select Terms and Policy</label>
-                        <button type="submit" id="submit" class="custom-btn mb-3">
-                            <span>
-                                CLICK NEW ACCOUNT
-                            </span>
-                        </button>
-
-                        <a href="#" class="link" type="button" data-dismiss="modal" data-toggle="modal" data-target="#loginModal">
-                            Already have account?
-
-                            <span>
-                                Sign In
-                            </span>
-                        </a>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+   
 
 </section>
+
 
 
 @section Scripts {
@@ -525,3 +322,136 @@
  
     </script>
 }
+
+
+<!--sign up -->
+<div class="modal fade" id="singUpModal" tabindex="-1" role="dialog" aria-labelledby="singUpModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title" id="singUpModalLabel">
+                    Create a new account
+                </h1>
+            </div>
+            <div class="modal-body">
+                <form class="form-contain" id="doctor-reg" action="https://eihal.paths.sa/doctor-register" method="POST">
+                    <input type="hidden" name="_token" value="wvWsm0XjwGINPWNPIYQ2Jqt1HSbQspywkcnKWPtL">
+                    <div class="form-group">
+                        <label for="">
+                            Account Type
+                        </label>
+
+                        <div class="form-data select-box">
+                            <select class="form-control" name="account_type" id="account_type" required>
+                                <option value="">Select Account Type</option>
+                                <option value="1">ServiceProvider</option>
+                                <option value="2">Beneficiary</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="doctor_type_dropdown">
+                        <label for="">
+                            Health Practitioner Type
+                        </label>
+
+                        <div class="form-data select-box doctor_type_div">
+                            <select class="form-control" name="doctor_type" id="doctor_type" required>
+                                <option value="">
+                                    Select Health Practitioner Type
+                                </option>
+
+                                <option value="10">
+                                    Dentist
+                                </option>
+
+                                <option value="2">
+                                    Dental Hygienist
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="category_id_dropdown">
+                        <label for="">
+                            Professional Rank
+                        </label>
+
+                        <div class="form-data select-box category_type_div">
+                            <select class="form-control" name="category_type" id="category-id">
+                                <option value="">
+                                    Select Professional Rank Type
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="">
+                            Full Name
+                        </label>
+
+                        <div class="form-data">
+                            <input type="text" class="form-control" placeholder="Full Name" name="name" required />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="">
+                            Phone Number
+                        </label>
+
+                        <div class="form-data">
+                            <input type="text" class="form-control" placeholder="Phone Number" onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))" name="phone" id="phone" onkeyup="contactVerify()"
+                                   maxlength="10" required />
+                            <p id="phoneError" style="display:none; color:#FF0000;font-size:12px;text-align:left;"> Phone Number Is Already Exists.</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="">
+                            Email ID
+                        </label>
+
+                        <div class="form-data">
+                            <input type="email" class="form-control" name="email" id="email" placeholder="Enter Email ID" />
+                        </div>
+                        <p id="emailError" style="display:none; color:#FF0000;font-size:12px;text-align:left"> Email Is Already Exists.</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="">
+                            Password
+                        </label>
+
+                        <div class="form-data">
+                            <input type="password" class="form-control" placeholder="Password" name="password" required />
+                        </div>
+                    </div>
+                    <div class="flex-data mt-5">
+                        <div class="wrapper">
+                            <input type="radio" name="terms" class="radio-check">
+
+                            <label class="radio-title">
+                                <a href="https://eihal.paths.sa/terms-and-conditions"> terms and policy</a>
+                            </label>
+                        </div>
+                    </div>
+                    <label id="terms-error" class="error" for="terms" style="display: none;color:red;">Please Select Terms and Policy</label>
+                    <button type="submit" id="submit" class="custom-btn mb-3">
+                        <span>
+                            CLICK NEW ACCOUNT
+                        </span>
+                    </button>
+
+                    <a href="#" class="link" type="button" data-dismiss="modal" data-toggle="modal" data-target="#loginModal">
+                        Already have account?
+
+                        <span>
+                            Sign In
+                        </span>
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
