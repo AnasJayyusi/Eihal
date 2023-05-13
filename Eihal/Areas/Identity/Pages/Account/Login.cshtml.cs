@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
@@ -26,21 +27,20 @@ namespace Eihal.Areas.Identity.Pages.Account
         }
 
         [BindProperty]
-        public InputModel Input { get; set; }
+        public InputModel? Input { get; set; }
 
-        public IList<AuthenticationScheme> ExternalLogins { get; set; }
+        public IList<AuthenticationScheme>? ExternalLogins { get; set; }
 
-        public string ReturnUrl { get; set; }
+        public string? ReturnUrl { get; set; }
 
         [TempData]
-        public string ErrorMessage { get; set; }
+        public string? ErrorMessage { get; set; }
 
         public class InputModel
         {
             [EmailAddress]
             public string? Email { get; set; }
 
-            [Required(ErrorMessage = "The Phone is Required.")]
             public string? PhoneNumber { get; set; }
 
             [Required(ErrorMessage = "The Password is Required.")]
@@ -51,7 +51,7 @@ namespace Eihal.Areas.Identity.Pages.Account
             public bool RememberMe { get; set; }
         }
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public async Task OnGetAsync(string? returnUrl = null)
         {
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
@@ -68,41 +68,63 @@ namespace Eihal.Areas.Identity.Pages.Account
             ReturnUrl = returnUrl;
         }
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
+            string? username = string.Empty;
 
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-            var user = await _signInManager.UserManager.Users
-                   .SingleOrDefaultAsync(x => x.PhoneNumber == Input.PhoneNumber);
-
-            //_signInManager.UserManager.phone();
-            //string? username = identityDbContext.Users.Where(x => x.PhoneNumber == Input.PhoneNumber).Select(x => x.UserName).FirstOrDefault();
-
-            if (string.IsNullOrEmpty(Input.Password) || string.IsNullOrEmpty(Input.PhoneNumber) || user == null)
+            if (Input == null || string.IsNullOrEmpty(Input.Password) || (string.IsNullOrEmpty(Input.PhoneNumber) && string.IsNullOrEmpty(Input.Email)))
             {
                 // If we got this far, something failed, redisplay form
                 return Page();
             }
             else
             {
+                if (!string.IsNullOrEmpty(Input.PhoneNumber))
+                {
+                    // Search In Phone
+                    var user = await _signInManager.UserManager.Users
+                                                  .SingleOrDefaultAsync(x => x.PhoneNumber == Input.PhoneNumber);
+                    if (user != null)
+                        username = user.UserName;
+                }
+                else
+                {
+                    // Search In Email
+                    var user = await _signInManager.UserManager.Users
+                                                   .SingleOrDefaultAsync(x => x.Email == Input.Email);
+                    if (user != null)
+                        username = user.UserName;
+                }
+
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(user.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(username, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }
-                if (result.RequiresTwoFactor)
+
+
+                if (result.IsNotAllowed)
                 {
-                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
+                    ModelState.AddModelError(string.Empty, "This account is not active yet");
+                    return Page();
                 }
-                if (result.IsLockedOut)
-                {
-                    _logger.LogWarning("User account locked out.");
-                    return RedirectToPage("./Lockout");
-                }
+                #region RequiresTwoFactor,IsLockedOut Checks
+                // Later On maybe we will use it 
+                //if (result.RequiresTwoFactor)
+                //{
+                //    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
+                //}
+                //if (result.IsLockedOut)
+                //{
+                //    _logger.LogWarning("User account locked out.");
+                //    return RedirectToPage("./Lockout");
+                //}
+                #endregion
+
                 else
                 {
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");

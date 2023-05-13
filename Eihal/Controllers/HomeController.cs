@@ -16,7 +16,18 @@ namespace Eihal.Controllers
 
         public IActionResult Index()
         {
-            return View();
+
+            if (User.IsInRole("User"))
+            {
+                return RedirectToAction("Index", "User");
+            }
+            else if (User.IsInRole("Administrator"))
+            {
+                return RedirectToAction("Index", "Admin");
+            }
+            else
+                return View();
+
         }
 
         public IActionResult Contact()

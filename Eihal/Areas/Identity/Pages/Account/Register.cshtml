@@ -1,0 +1,308 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+
+<!--Sign Up -->
+<div class="loginLogo" id="singUpModal" style="padding: 5%;" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width:50%" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title" id="singUpModalLabel">
+                    Create a new account
+                </h1>
+            </div>
+            <div class="modal-body">
+                <form class="form-contain" id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div style="width: 100%; display: table;">
+                        <div style="display: table-row">
+                            <div class="form-group">
+                                <label for="">
+                                    Account Type
+                                </label>
+                                <div id="account-type-div" class="form-data select-box" style="width:75%">
+                                    <select class="form-control" name="account_type" id="account_type" required>
+                                        <option value="0">Select Account Type</option>
+                                        <option value="1">Service Provider</option>
+                                        <option value="2">Beneficiary</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div id="providerDetails">
+                                <div class="form-group" id="doctor_type_dropdown">
+                                    <label for="">
+                                        Health Practitioner Type
+                                    </label>
+
+                                    <div id="doctor-type-div" class="form-data select-box doctor_type_div" style="width:75%">
+                                        <select disabled style="cursor:not-allowed" class="form-control" name="doctor_type" id="doctor-type-ddl">
+                                            <option value="0">
+                                                Select Health Practitioner Type
+                                            </option>
+
+                                            <option value="1">
+                                                Dentist
+                                            </option>
+
+                                            <option value="2">
+                                                Dental Hygienist
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" id="category_id_dropdown">
+                                    <label for="">
+                                        Professional Rank
+                                    </label>
+
+                                    <div id="category-id-div" class="form-data select-box category_type_div" style="width:75%">
+                                        <select disabled style="cursor:not-allowed" class="form-control" name="category_type" id="category-rank-ddl">
+                                            <option value="0">
+                                                Select Professional Rank Type
+                                            </option>
+                                            <option value="1">
+                                                PHD
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div style="display: table-cell;">
+                                <div class="form-group">
+                                    <label for="">
+                                        Full Name
+                                    </label>
+
+                                    <div id="fullname-div" class="form-data">
+                                        <input asp-for="Input.FullName" class="form-control" autocomplete="current-password" aria-required="true" placeholder="Enter Full Name" name="FullName" required />
+                                        <span asp-validation-for="Input.FullName" class="text-danger"></span>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="">
+                                        Phone Number
+                                    </label>
+
+                                    <div id="phone-div" class="form-data">
+                                        <input asp-for="Input.PhoneNumber" name="PhoneNumber" class="form-control" maxlength="10" onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))" aria-required="true" placeholder="Phone Number" required />
+                                        <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                                        <p id="phoneError" style="display:none; color:#FF0000;font-size:12px;text-align:left;"> Phone Number Is Already Exists.</p>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="">
+                                        Email Address
+                                    </label>
+
+                                    <div id="email-div" class="form-data">
+                                        <input asp-for="Input.Email" onkeyup=checkEmail() class="form-control" autocomplete="current-password" aria-required="true" placeholder="Enter Email" name="Email" required type="email" />
+                                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                                    </div>
+                                    <p style="display:none; color:#FF0000;font-size:12px;text-align:left"> Email Is Already Exists.</p>
+                                    <span style="display:none" class="success-email">Valid Email!</span>
+                                    <span style="display:none" class="error-email">InValid Email!</span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="">
+                                        Password
+                                    </label>
+
+                                    <div id="password-div" class="form-data">
+                                        <input asp-for="Input.Password" class="form-control" autocomplete="current-password" onkeyup="isPasswordAccept()" aria-required="true" placeholder="Password" name="Password" required />
+                                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                                    </div>
+                                    <p id="password-notAccept" style="display:none; color:#FF0000;font-size:12px;text-align:left">At least 6 characters.</p>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="">
+                                        Confirm Password
+                                    </label>
+
+                                    <div id="confirmpassword-div" class="form-data">
+                                        <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="current-password" onkeyup="comparePassword()" aria-required="true" placeholder="Confirm Password" name="ConfirmPassword" required />
+                                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                                    </div>
+                                    <p id="password-notmatch" style="display:none; color:#FF0000;font-size:12px;text-align:left"> Password not match.</p>
+                                </div>
+
+                                <div class="flex-data mt-5">
+                                    <div class="wrapper">
+                                        <input id="term-div" type="checkbox" name="terms" class="radio-check">
+                                        <label class="radio-title">
+                                            <a asp-page="./ForgotPassword"> terms and policy</a>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <label id="fields-error" class="error" for="terms" style="display: none;color:red;">Please Fill ALL Fields.</label>
+
+                    <button id="registerSubmit" type="submit" onclick="isFormValid()" class="custom-btn mb-3">
+                        <span>Sign Up</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.5.0.min.js"></script>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<script>
+
+    $(function () {
+
+
+    });
+
+    function checkEmail() {
+        var regExp = /^([\w\.\+]{1,})([^\W])(@@)([\w]{1,})(\.[\w]{1,})+$/;
+
+        isValidEmail = regExp.test($("#Input_Email").val())
+
+        if (isValidEmail) {
+            $('.success-email').show()
+            $('.error-email').hide();
+        }
+        else
+        {
+            $('.success-email').hide()
+            $('.error-email').show();
+        }
+
+
+
+    }
+
+    function isFormValid() {
+        resetAllValidation();
+        var accountTypeId = $('#account_type').val();
+        var doctoryTypeId = $('#doctor-type-ddl').val();
+        var categoryId = $('#category-rank-ddl').val();
+        var showErrorlabel = false;
+
+        if (accountTypeId < 1) { // mean is no selected{
+            $('#account-type-div').css("border", "solid 1px red");
+        }
+
+        if (accountTypeId == 1) { // Service Provider Should fill
+            if (doctoryTypeId < 1) {
+                $('#doctor-type-div').css("border", "solid 1px red");
+                showErrorlabel = true;
+            }
+            if (categoryId < 1) {
+                $('#category-id-div').css("border", "solid 1px red");
+                showErrorlabel = true;
+            }
+        }
+
+        if ($("#Input_FullName").val().length == 0) {
+            $('#fullname-div').css("border", "solid 1px red");
+            showErrorlabel = true;
+        }
+
+        if ($("#Input_PhoneNumber").val().length == 0) {
+            $('#phone-div').css("border", "solid 1px red");
+            showErrorlabel = true;
+        }
+
+        if ($("#Input_Email").val().length == 0) {
+            $('#email-div').css("border", "solid 1px red")
+            showErrorlabel = true;
+        }
+
+        if ($("#Input_Password").val().length == 0) {
+            $('#password-div').css("border", "solid 1px red");
+            showErrorlabel = true;
+        }
+
+        if ($("#Input_ConfirmPassword").val().length == 0) {
+            $('#confirmpassword-div').css("border", "solid 1px red");
+            showErrorlabel = true;
+        }
+
+        if ($('#term-div').is(":checked") == false) {
+            $('#term-div').css("border", "solid 1px red");
+            showErrorlabel = true;
+        }
+
+        // When is not valid
+        if (showErrorlabel == true)
+            $("#fields-error").show();
+
+    }
+
+    function resetAllValidation() {
+        $('#account-type-div').css("border", "");
+        $('#doctor-type-div').css("border", "");
+        $('#category-id-div').css("border", "");
+        $('#fullname-div').css("border", "");
+        $('#phone-div').css("border", "");
+        $('#email-div').css("border", "");
+        $('#password-div').css("border", "");
+        $('#confirmpassword-div').css("border", "");
+        $('#term-div').css("border", "");
+        $("#fields-error").hide();
+    }
+
+    function comparePassword() {
+        if ($("#Input_Password").val() != $("#Input_ConfirmPassword").val())
+            $("#password-notmatch").show();
+        else
+            $("#password-notmatch").hide();
+
+    }
+
+    function isPasswordAccept() {
+        if ($("#Input_Password").val().length < 6)
+            $("#password-notAccept").show();
+        else
+            $("#password-notAccept").hide();
+
+    }
+
+    //CheckBox Show Password
+    $('#account_type').click(function () {
+        var id = $('#account_type').val()
+        if (id == 2)   // Which is Beneficiary
+        {
+            // Disable Options
+            $('#doctor-type-ddl').prop("disabled", true);
+            $('#category-rank-ddl').prop("disabled", true);
+            $('#doctor-type-ddl').css("cursor", "not-allowed")
+            $('#category-rank-ddl').css("cursor", "not-allowed")
+
+        }
+        else if (id == 1) {
+            // Element(s) are now enabled.
+            // Enable Options
+            $('#doctor-type-ddl').prop("disabled", false);
+            $('#category-rank-ddl').prop("disabled", false);
+            $('#doctor-type-ddl').css("cursor", "")
+            $('#category-rank-ddl').css("cursor", "")
+        }
+
+    });
+</script>
+

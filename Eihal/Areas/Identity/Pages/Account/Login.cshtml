@@ -22,18 +22,30 @@
 
                 <form class="form-contain" id="account" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input type="hidden" name="_token" value="wvWsm0XjwGINPWNPIYQ2Jqt1HSbQspywkcnKWPtL">
                     <div class="form-group">
-                        <label for="">
+                        <label style="display:block" id="phone-input-label" for="">
                             Phone
                         </label>
 
-                        <div class="form-data">
-                            @*<input type="text" class="form-control" placeholder="Phone" id="login-phone" required name="phone" value="" maxlength="10" onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))" />*@
-                            <input asp-for="Input.PhoneNumber" class="form-control" autocomplete="username" aria-required="true" maxlength="10" onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))" />
+                        <div id="phone-text" style="display:block" class="form-data">
+                            <input asp-for="Input.PhoneNumber" class="form-control" autocomplete="username" aria-required="true" maxlength="10" onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))" placeholder="Example: 05123456" />
                             <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-                          
                         </div>
+
+                        <label style="display:none" id="email-input-label" for="">
+                            Email
+                        </label>
+                        <div id="email-text" style="display:none" class="form-data">
+                            <input asp-for="Input.Email" class="form-control" autocomplete="email" aria-required="true" placeholder="Example: John@outlook.com" />
+                            <span asp-validation-for="Input.Email" class="text-danger"></span>
+                        </div>
+
+                        <div style="text-align: end; cursor:pointer">
+                            <label id="switch-to-email" onclick="showEmailInput()" style="cursor:pointer;display:block"> Use Email instead </label>
+                            <label id="switch-to-phone" onclick="showPhoneInput()" style="cursor:pointer;display:none"> Use Phone instead </label>
+                        </div>
+
+
                     </div>
                     <div class="form-group">
                         <label for="">
@@ -41,14 +53,16 @@
                         </label>
 
                         <div class="form-data show_hide_password">
-
                             <input id="txtPassword" asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" />
                             <span asp-validation-for="Input.Password" class="text-danger"></span>
-                            <a  class="btn-contain show_pass">
+                            <a class="btn-contain show_pass">
                                 <span id="show_password" class="fa fa-eye-slash icon"></span>
                             </a>
                         </div>
                     </div>
+
+
+
 
                     <div class="flex-data mt-5">
                         <div class="wrapper">
@@ -82,7 +96,42 @@
 }
 <script src="https://code.jquery.com/jquery-3.5.0.min.js"></script>
 <script>
-  
+
+    function showEmailInput() {
+        // Hide everything releated to phone & Clear
+        $('#phone-text').val("")
+        $('#Input_PhoneNumber').val("")
+
+        $('#phone-text').hide()
+        $('#phone-input-label').hide();
+
+        // Show email option
+        $('#email-input-label').show();
+        $('#email-text').show();
+
+        // Convert option
+        $('#switch-to-email').hide();
+        $('#switch-to-phone').show();
+    }
+
+    function showPhoneInput() {
+        // Hide everything releated to email & Clear
+        $('#email-text').val("")
+        $('#Input_Email').val("")
+        $('#email-input-label').hide();
+        $('#email-text').hide();
+
+        // Show email option
+
+        $('#phone-text').show();
+        $('#phone-input-label').show();
+
+        // Convert option
+        $('#switch-to-phone').hide();
+        $('#switch-to-email').show();
+    }
+
+
     $('#show_password').hover(function show() {
         //Change the attribute to text
         $('#txtPassword').attr('type', 'text');
