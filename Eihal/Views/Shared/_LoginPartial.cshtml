@@ -1,6 +1,11 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+
+
 
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
@@ -8,14 +13,62 @@
         var splitted = @User.Identity?.Name!.Split('.', 2);
         var username = splitted[0];
 
-    <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @username</a>
-        </li>
-        <li class="nav-item">
-            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-            </form>
-        </li>
+        <div class="button-container">
+
+            <!-- Modal -->
+
+
+            <a href="#" class="drop-name">
+                <span class="notification" data-toggle="modal" onclick="showNotifications()" data-target="#myModal">
+                    <i style="color:white" class="fas fa-bell"></i>
+                    <span onclick="showNotifications()" class="badge badge-danger">0 Notifications</span>
+                </span>
+            </a>
+
+        
+            <a asp-area="Identity" asp-page="/Account/Logout"  class="drop-name">
+                <span>
+                    
+                    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                        <i style="color:white" class='fas fa-sign-out-alt'></i>
+                        <button type="submit"  style="background-color:#0D6EFD" class="badge badge-primary">LOGOUT</button>
+                    </form>
+
+                </span>
+
+            </a>
+
+
+
+            <div class="drop-list-shape data">
+                <a href="#" class="drop-name">
+                    <img src="~/images/navbar/lang.svg" loading="lazy" alt="" />
+                    <span id="current-language">
+                        English
+                    </span>
+                </a>
+
+
+
+                <ul class="list">
+                    <li class="item">
+                        <a asp-action="SetCulture" asp-controller="Home" asp-route-culureCode="en-US" asp-route-returnUrl="@($"{Context.Request.Path}{Context.Request.QueryString}")">
+                            English
+                        </a>
+                    </li>
+
+                    <li class="item">
+                        <a asp-action="SetCulture" asp-controller="Home" asp-route-culureCode="ar-SA" asp-route-returnUrl="@($"{Context.Request.Path}{Context.Request.QueryString}")">
+                            العربية
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+
+
     }
     else
     {
@@ -23,7 +76,7 @@
         <a class="custom-btn" asp-area="Identity" asp-page="/Account/Login">
             <img src="~/images/navbar/user.svg" alt="">
             <span>
-                SIGN IN
+                @Localizer["SignIn"]
             </span>
         </a>
 
@@ -35,3 +88,25 @@
     </li>*@
     }
 </ul>
+
+
+
+
+
+<style>
+    .button-container {
+        display: flex;
+    }
+
+        .button-container .drop-name {
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+
+</style>
+
+
+
+
+

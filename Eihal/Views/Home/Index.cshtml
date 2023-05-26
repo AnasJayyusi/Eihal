@@ -1,37 +1,35 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+    string cultureCode = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
+    string direction = cultureCode.StartsWith("ar", StringComparison.OrdinalIgnoreCase) ? "rtl" : "ltr";
+    string textAlign = direction == "rtl" ? "right" :"left";
 }
 
-@*<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
-*@
-<header>
-    <div class="container">
+<div style="text-align:@textAlign">
+<header lang="@cultureCode" dir="@direction">
+    <div class="container" style="text-align:@textAlign">
         <div class="owl-carousel owl-theme owl-header">
             <div class="item ">
                 <div class="contain">
                     <h1>
-                        Our Vision 
+                        @Localizer["OurVision"]
                     </h1>
 
+
                     <p>
-                        To improve the level of dental services, by providing and facilitating reaching the best doctors in various dental specialties, including specialists and consultants. Also, take advantage of the new graduated dentist to improve the dental profession.
+                        @Localizer["OurVisionDesc"]
                     </p>
 
                     <div class="flex-data">
                         <a style="width: 200px !important;" class="custom-btn" asp-area="" asp-controller="Home" asp-action="About">
-                                <span>
-                                    Read more
-                                </span>
-                            </a>
+                            <span>
+                                @Localizer["Readmore"]
+                            </span>
+                        </a>
                     </div>
                 </div>
             </div>
-
-          
-         
         </div>
 
         <form class="form-contain" id="search-doctors" action="https://eihal.paths.sa/search-doctors" method="GET">
@@ -136,9 +134,9 @@
                             <input type="text" name="name" class="form-control" placeholder="Or search by name" />
 
                             <a href="#" class="btn-contain">
-                                <img src="https://eihal.paths.sa/public/front/assets/images/form/user.svg"
-                                     loading="lazy"
-                                     alt="">
+                                @*  <img src="~/images/user.svg
+                                loading="lazy"
+                                alt="">*@
                             </a>
                         </div>
                     </div>
@@ -146,10 +144,10 @@
 
                 <div class="col-lg-2 col-12">
                     <button type="submit" class="custom-btn" style="border: none;">
-                        <img src="https://eihal.paths.sa/public/front/assets/images/form/search.svg" alt="" />
+                        <img src="~/images/search.svg" alt="" />
 
                         <span>
-                            SEARCH
+                            @Localizer["Search"]
                         </span>
                     </button>
                 </div>
@@ -165,22 +163,19 @@
             <div class="col-lg-7 col-12 mb-4 order-mobile-0">
                 <div class="content">
                     <h1>
-                        WhyEihal ?
-
+                        @Localizer["WhyEihal"]
                         <span>
-                            Why use a referral platform?
+                            @Localizer["WhyEihalPlatform"]
                         </span>
                     </h1>
 
                     <p class="desc">
-                        Eihal is the only platform that connects all dentists in different specialties, and facilitates their communications to do referrals of medical cases among them, and facilitate the accessibility to the appropriate specialist doctor through the following:
+                        @Localizer["WhyEihalPlatformDesc"]
                     </p>
 
                     <ul class="list">
                         <li>
-                            <!-- <img src="https://eihal.paths.sa/public/front/assets/images/advantages/advantages_2.svg" alt="">-->
-                            • Easy access to a large number of dentists, specialists and consultants, and easy identification of the academic qualifications and certificates of each doctor. Also, knowing the medical privileges and treatment services provided by each doctor and the
-                            prices of the services provided.
+                            @Localizer["EasyAccessBenefit"]
                             <div>
                                 <!-- <h2>
                                   Modern Equipment
@@ -193,8 +188,7 @@
                         </li>
 
                         <li>
-                            <!-- <img src="https://eihal.paths.sa/public/front/assets/images/advantages/advantages_4.svg" alt=""> -->
-                            • Provides patients with multiple and appropriate options of qualified and certified dentists in all specialties at a variety of treatment prices suitable for each patient.
+                            @Localizer["MultipleOptionsBenefit"]
                             <div>
                                 <!-- <h2>
                                   High-Quality Materials
@@ -220,9 +214,9 @@
                           </div>
                         </li> -->
                     </ul>
-                    <a href="#" class="custom-btn" data-toggle="modal" data-target="#loginModal">
+                    <a class="custom-btn" asp-area="Identity" asp-page="/Account/Register">
                         <span>
-                            Make Eihal Now
+                            @Localizer["RegisterEihalNow"]
                         </span>
                     </a>
                 </div>
@@ -230,7 +224,7 @@
 
             <div class="col-lg-5 col-12 mb-3 order-mobile-1">
                 <div class="image-content">
-                    <img src="https://eihal.paths.sa/public/front/assets/images/about_elhlal.webp" alt="" />
+                    <img src="~/images/about_elhlal.webp" alt="" />
                 </div>
             </div>
         </div>
@@ -249,7 +243,7 @@
         <div class="row">
             <div class="col-lg-6 col-12 order-mobile-1">
                 <div class="image-content">
-                    <img src="https://eihal.paths.sa/public/front/assets/images/about.png" alt="">
+                    <img src="~/images/about.png" alt="">
                 </div>
             </div>
 
@@ -258,7 +252,7 @@
                     <div class="graph-heading">
                         <div class="text-data">
                             <h1>
-                                How to join Eihal?
+                                @Localizer["HowJoinEihal"]
                             </h1>
 
                             <p class="grahp-text">
@@ -272,7 +266,7 @@
                     </h2> -->
 
                     <p class="desc">
-                        Eihal is an enjoyable professional experience and an additional source of income through referring and receivingpatients with other dentists. Also, it helps to exposed and share experiences with other expert professional dentists in all dental specialties.
+                        @Localizer["HowJoinEihalDesc"]
                     </p>
 
                     <!-- <h2>
@@ -280,7 +274,7 @@
                     </h2> -->
 
                     <p class="desc">
-                        Few simple steps to register withEihal platform, and join the Eihal team and refer and receive medical referrals in all dental specialties.
+                        @Localizer["FewStepsToJoin"]
                     </p>
                     <!--
                     <h2>
@@ -288,11 +282,11 @@
                     </h2> -->
 
                     <p class="desc">
-                        Registration to Eihal few information about your personal data, contact numbers and academic qualifications. Also, you will need to attach the professional classification and registration card of the Commission for Health Specialties.
+                        @Localizer["JustFewInfo"]
                     </p>
-                    <a href="#" class="custom-btn" data-toggle="modal" data-target="#loginModal">
+                    <a class="custom-btn" asp-area="Identity" asp-page="/Account/Register">
                         <span>
-                            JOIN NOW
+                            @Localizer["JoinNow"]
                         </span>
                     </a>
                 </div>
@@ -307,19 +301,23 @@
         <span></span>
     </div>
 
-   
+
 
 </section>
-
+</div>
 
 
 @section Scripts {
     <script type="text/javascript">
         $(document).ready(function () {
-            $(".owl-carousel").owlCarousel({  items: 1});
+            $(".owl-carousel").owlCarousel({ items: 1 });
         });
 
- 
+        $('form').submit(function () {
+            var selectedCulture = $('select[name="cultureCode"]').val();
+            console.log(selectedCulture);
+            // ... perform additional logic or AJAX request
+        });
     </script>
 }
 

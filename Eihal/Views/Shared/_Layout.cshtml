@@ -1,12 +1,19 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+    string cultureCode = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
+    string direction = cultureCode.StartsWith("ar", StringComparison.OrdinalIgnoreCase) ? "rtl" : "ltr";
+}
+<!DOCTYPE html>
+
+<html lang="@cultureCode" >
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     @*<title>@ViewData["Title"] - Eihal</title>*@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
-      <meta charset="utf-8">
+    <meta charset="utf-8">
     <meta name="description" content="....">
     <meta name="author" content="misara adel">
     <meta name="csrf-token" content="wvWsm0XjwGINPWNPIYQ2Jqt1HSbQspywkcnKWPtL">
@@ -23,21 +30,21 @@
     <link rel="stylesheet" href="~/css/style.css">
     <link href="~/css/owl.carousel.min.css" rel="stylesheet" />
     <link href="~/css/owl.theme.default.min.css" rel="stylesheet" />
-    
+
 </head>
 <style>
 
-.error-email {
+    .error-email {
         color: red;
         font-size: 12px;
         text-align: left
-}
+    }
 
-.success-email {
+    .success-email {
         color: green;
-        font-size:12px;
-        text-align:left
-}
+        font-size: 12px;
+        text-align: left
+    }
 
     .error {
         color: red !important;
@@ -126,144 +133,282 @@
         visibility: visible;
     }
 </style>
-<body>
-        <nav class="navabr">
-            <div class="top-nav">
-                <div class="container">
-                    <div class="content">
-                        <ul class="socail-media">
-                            <li>
-                                <a href="#">
-                                    <img src="~/images/navbar/message.svg" alt="">
 
-                                    <span>
-                                        info@eihal.com
-                                    </span>
-                                </a>
-                            </li>
 
-                            <li>
-                                <a href="facebook.com">
-                                    <img src="~/images/navbar/face.svg" alt="">
-                                </a>
-                            </li>
+<body style="overflow-x: hidden">
+    <nav class="navabr">
+        <div class="top-nav">
+            <div class="container">
+                <div class="content">
+                    @{
+                        if (!User.Identity.IsAuthenticated)
+                        {
+                            <text>
+                                <ul class="socail-media">
+                                    <li>
+                                        <a href="#">
+                                            <img src="~/images/navbar/message.svg" alt="">
 
-                            <li>
-                                <a href="linkedin.com">
-                                    <img src="~/images/navbar/linkedn.svg" alt="">
-                                </a>
-                            </li>
+                                            <span>
+                                                info@eihal.com
+                                            </span>
+                                        </a>
+                                    </li>
 
-                            <li>
-                                <a href="instagram.com">
-                                    <img src="~/images/navbar/insta.svg" alt="">
-                                </a>
-                            </li>
+                                    <li>
+                                        <a href="facebook.com">
+                                            <img src="~/images/navbar/face.svg" alt="">
+                                        </a>
+                                    </li>
 
-                            <li>
-                                <a href="twitter.com">
-                                    <img src="~/images/navbar/twiiter.svg" alt="">
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="drop-list-shape data">
-                            <a href="#" class="drop-name">
-                                <img src="~/images/navbar/lang.svg" loading="lazy" alt="" />
-                                <span>
-                                    English
-                                </span>
-                            </a>
+                                    <li>
+                                        <a href="linkedin.com">
+                                            <img src="~/images/navbar/linkedn.svg" alt="">
+                                        </a>
+                                    </li>
 
-                            <ul class="list">
+                                    <li>
+                                        <a href="instagram.com">
+                                            <img src="~/images/navbar/insta.svg" alt="">
+                                        </a>
+                                    </li>
 
-                                <li class="item">
-                                    <a href="#" class="">
-                                        English
+                                    <li>
+                                        <a href="twitter.com">
+                                            <img src="~/images/navbar/twiiter.svg" alt="">
+                                        </a>
+                                    </li>
+                                </ul>
+                            </text>
+                        }
+                    }
+                    @{
+                        if (User.Identity.IsAuthenticated)
+                        {
+                            <text>
+                                       
+
+                                <div class="button-container">
+
+                                    <!-- Modal -->
+
+
+                                    <a href="#" class="drop-name">
+                                        <img src="/images/logo.png" class="navbar-logo" alt="logo" style="height:30px">
                                     </a>
-                                </li>
 
-                                <li class="item">
-                                    <a href="#" class="">
-                                        Arabic
+                                    <a  asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"  class="drop-name">
+                                        <i style="color:white" class="fa fa-user" aria-hidden="true">  <span style="color:white">Manage Account</span></i>
+                                      
                                     </a>
-                                </li>
-                            </ul>
+                                </div>
+                                  <partial name="_LoginPartial" />
+                            </text>
+
+
+                        }
+                    }
+                    @{
+                        if (!User.Identity.IsAuthenticated)
+                        {
+                            <text>
+                                <div class="drop-list-shape data">
+                                    <a href="#" class="drop-name">
+                                        <img src="~/images/navbar/lang.svg" loading="lazy" alt="" />
+                                        <span id="current-language">
+                                            English
+                                        </span>
+                                    </a>
+
+
+
+                                    <ul class="list">
+                                        <li class="item">
+                                            <a asp-action="SetCulture" asp-controller="Home" asp-route-culureCode="en-US" asp-route-returnUrl="@($"{Context.Request.Path}{Context.Request.QueryString}")">
+                                                English
+                                            </a>
+                                        </li>
+
+                                        <li class="item">
+                                            <a asp-action="SetCulture" asp-controller="Home" asp-route-culureCode="ar-SA" asp-route-returnUrl="@($"{Context.Request.Path}{Context.Request.QueryString}")">
+                                                العربية
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </text>
+
+
+                        }
+                    }
+
+
+
+
+
+
+                  
+                </div>
+            </div>
+        </div>
+        
+        @{
+            if (!User.Identity.IsAuthenticated)
+            {
+                <text>
+                    <div class="bottom-nav">
+                        <div class="container">
+                            <div class="content">
+                                <div class="hamburger">
+                                    <span class="line"></span>
+                                    <span class="line"></span>
+                                    <span class="line"></span>
+                                </div>
+
+                                <a class="brand-name" asp-area="" asp-controller="Home" asp-action="Index"></a>
+                                <img src="~/images/logo.png" class="navbar-logo" alt="logo" style="height:50px">
+
+                                <div class="nav-contain">
+                                    <ul class="navbar-nav">
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">@Localizer["Home"]</a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">@Localizer["AboutUs"]</a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">@Localizer["Doctors"] </a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Contact">@Localizer["ContactUs"] </a>
+                                        </li>
+
+
+                                    </ul>
+
+                                </div>
+                                <partial name="_LoginPartial" />
+
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="bottom-nav">
-                <div class="container">
-                    <div class="content">
-                        <div class="hamburger">
-                            <span class="line"></span>
-                            <span class="line"></span>
-                            <span class="line"></span>
-                        </div>
-
-                            <a class="brand-name" asp-area="" asp-controller="Home" asp-action="Index"></a>
-                            <img src="~/images/logo.png" class="navbar-logo" alt="logo" style="height:50px">
-
-                        <div class="nav-contain">
-                            <ul class="navbar-nav">
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                                </li>
-
-                                <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">About Us</a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Doctors</a>
-                                </li>
-
-                                <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Contact">Contact us</a>
-                                </li>
+                </text>
+            }
+        }
+      
+        
+       
+      
+         
+        </div>
+    </nav>
 
 
-                            </ul>
 
-                        </div>
-                    <partial name="_LoginPartial" />
-                     
-                    </div>
-                </div>
-            </div>
-            </div>
 
-        </nav>
-        @*   <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-         <div class="container">
-    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Eihal</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-               <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>*@
-    <div >
+    <div>
         <main role="main">
             @RenderBody()
         </main>
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Notifications</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>No notifcations yet</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.0.min.js"></script>
     <script src="~/js/owl.carousel.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        $(document).ready(function () {
+            var currentCultureCode = getCookie("CultureInfo");
+            console.log(currentCultureCode);
+            setCurrentLanguageOnUI(currentCultureCode)
+        });
 
+        function getCookie(name) {
+            function escape(s) { return s.replace(/([.*+?\^$(){}|\[\]\/\\])/g, '\\$1'); }
+            var match = document.cookie.match(RegExp('(?:^|;\\s*)' + escape(name) + '=([^;]*)'));
+            return match ? match[1] : null;
+        }
+           function showNotifications() {
+        }
+
+        function setCurrentLanguageOnUI(currentCultureCode) {
+            if (currentCultureCode == "en-US"){
+                // Smell Code Should be deleted
+                //$('html').attr('dir', "ltr");
+                //$('html').attr('lang', "en");
+                //$("html").children().css("direction", "ltr");
+                $("#current-language").text("English")
+            }
+              
+            if (currentCultureCode == "ar-SA"){
+                // Smell Code Should be deleted
+                $("#current-language").text("العربية")
+                //$('html').attr('dir', "rtl");
+                //$('html').attr('lang', "ar");
+                //$("html").children().css("direction", "rtl");
+
+                //var align = document.querySelectorAll("h1");
+                //for (var i = 0; i < align.length; i++) {
+                //    // Set the 'direction' property to 'ltr'
+                //    align[i].style.textAlign = "right";
+                //}
+                //align = document.querySelectorAll("p");
+                //for (var i = 0; i < align.length; i++) {
+                //    // Set the 'direction' property to 'ltr'
+                //    align[i].style.textAlign = "right";
+                //}
+
+                //align = document.querySelectorAll("select");
+                //for (var i = 0; i < align.length; i++) {
+                //    // Set the 'direction' property to 'ltr'
+                //    align[i].style.textAlign = "inherit";
+                //}
+
+                //align = document.querySelectorAll("li");
+                //for (var i = 0; i < align.length; i++) {
+                //    // Set the 'direction' property to 'ltr'
+                //    align[i].style.textAlign = "right";
+                //}
+
+                // align = document.querySelectorAll("form");
+                //for (var i = 0; i < align.length; i++) {
+                //    // Set the 'direction' property to 'ltr'
+                //    align[i].style.textAlign = "right";
+                //}
+
+                //align = document.querySelectorAll("select");
+                //for (var i = 0; i < align.length; i++) {
+                //    // Set the 'direction' property to 'ltr'
+                //    align[i].style.textAlign = "center";
+                //}
+            }
+                
+        }
+
+
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

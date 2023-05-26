@@ -1743,7 +1743,7 @@ html[dir=rtl] .navabr .bottom-nav .content .flex-contain .drop-list-shape .list 
 
                             .navabr .top-nav .content .drop-list-shape .list .item a::after {
                                 content: "";
-                                position: absolute;
+                                position: center;
                                 width: 24px;
                                 height: 24px;
                                 background: url("../images/navbar/check_circle.svg") center/contain no-repeat;
@@ -3707,6 +3707,7 @@ footer {
                 display: flex;
             }
 
+           
                 .form-contain .form-group .form-data .btn-contain img {
                     width: 24px;
                     height: 24px;

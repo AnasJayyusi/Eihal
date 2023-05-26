@@ -1,100 +1,129 @@
 using Eihal.Data;
+using Eihal.Helper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
-string test = string.Empty;
-// Write file using StreamWriter
+string logger = string.Empty;
+logger = "Starting Program";
 
-test = "l8";
-var builder = WebApplication.CreateBuilder(args);
-test = "l10";
-// Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-test = "l12";
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
-test = "l16";
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-test = "l18";
-
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.User.RequireUniqueEmail = false).AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
-builder.Services.AddControllersWithViews();
-test = "l22";
-builder.Services.AddRazorPages();
-test = "l25";
-builder.Services.Configure<IdentityOptions>(options =>
+try
 {
-    // Default Password settings.
-    options.Password.RequireDigit = false;
-    options.Password.RequireLowercase = false;
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequireUppercase = false;
-    options.Password.RequiredLength = 6;
-    options.Password.RequiredUniqueChars = 0;
-});
-test = "l36";
-builder.Services.Configure<IdentityOptions>(opts =>
-{
-    opts.SignIn.RequireConfirmedEmail = true;
-});
-test = "l41";
 
-builder.Services.AddScoped<RoleManager<IdentityRole>>();
+    var builder = WebApplication.CreateBuilder(args);
+    logger = "Create CreateBuilder";
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    logger = "connectionString Applied";
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        options.UseSqlServer(connectionString));
+    builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+    logger = "AddDatabaseDeveloperPageExceptionFilter Applied";
+
+    builder.Services.AddDefaultIdentity<IdentityUser>(options => options.User.RequireUniqueEmail = false).AddRoles<IdentityRole>()
+        .AddEntityFrameworkStores<ApplicationDbContext>();
+
+    builder.Services.AddLocalization(o => { o.ResourcesPath = "Resources"; });
+    builder.Services.Configure<RequestLocalizationOptions>(options =>
+    {
+        options.DefaultRequestCulture = new RequestCulture("en-US");
+        options.SupportedCultures = new List<CultureInfo> { new CultureInfo("en-US"), new CultureInfo("ar-SA") };
+        options.SupportedUICultures = new List<CultureInfo> { new CultureInfo("en-US"), new CultureInfo("ar-SA") };
+        options.RequestCultureProviders.Insert(0, new Eihal.Helper.CookieRequestCultureProvider());
+    });
 
 
-test = "l46";
-//// Add Admin Role
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("RequireAdministratorRole",
-         policy => policy.RequireRole("Administrator"));
 
-    options.AddPolicy("RequireUserRole",
-         policy => policy.RequireRole("User"));
+    builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation()
+         .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+            .AddDataAnnotationsLocalization(); 
+    builder.Services.AddRazorPages();
+    logger = "AddRazorPages Applied";
 
-    options.AddPolicy("RequireDoctorRole",
-         policy => policy.RequireRole("Doctor"));
-});
 
-test = "l60";
-// Read a file
-var app = builder.Build();
-if (!app.Environment.IsDevelopment())
-{
-    //using (var scope = app.Services.CreateScope())
-    //{
-    //    await DbInitializer.Initialize(scope.ServiceProvider);
-    //}
+
+    builder.Services.Configure<IdentityOptions>(options =>
+    {
+        // Default Password settings.
+        options.Password.RequireDigit = false;
+        options.Password.RequireLowercase = false;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequiredLength = 6;
+        options.Password.RequiredUniqueChars = 0;
+    });
+    builder.Services.Configure<IdentityOptions>(opts =>
+    {
+        opts.SignIn.RequireConfirmedEmail = true;
+    });
+    logger = "IdentityOptions Applied";
+
+
+
+    builder.Services.AddScoped<RoleManager<IdentityRole>>();
+
+    logger = "IdentityRole Applied";
+    //// Add Admin Role
+    builder.Services.AddAuthorization(options =>
+    {
+        options.AddPolicy("RequireAdministratorRole",
+             policy => policy.RequireRole("Administrator"));
+
+        options.AddPolicy("RequireUserRole",
+             policy => policy.RequireRole("User"));
+
+        options.AddPolicy("RequireDoctorRole",
+             policy => policy.RequireRole("Doctor"));
+    });
+
+    logger = "Policy Applied";
+
+    var app = builder.Build();
+    logger = "Start Building";
+    // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseMigrationsEndPoint();
+    }
+    else
+    {
+        //using (var scope = app.Services.CreateScope())
+        //{
+        //    await DbInitializer.Initialize(scope.ServiceProvider);
+        //}
+        app.UseExceptionHandler("/Home/Error");
+        // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+        app.UseHsts();
+    }
+    app.UseHttpsRedirection();
+    app.UseStaticFiles();
+    logger = "Static Files Applied";
+    app.UseRouting();
+    logger = "Routing Applied";
+    app.UseAuthentication();
+    app.UseAuthorization();
+    //app.UseMiddleware<CultureMiddleware>();
+
+    logger = "Authorization Applied";
+
+    app.UseRequestLocalization();
+    app.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+    app.MapRazorPages();
+
+    using (StreamWriter writer = new StreamWriter("./Debug.txt"))
+        writer.WriteLine(logger);
+
+    app.Run();
+
+
 }
-test = "l70";
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+catch (Exception)
 {
-    app.UseMigrationsEndPoint();
+    using (StreamWriter writer = new StreamWriter("./Debug.txt"))
+        writer.WriteLine(logger);
+    throw;
 }
-else
-{
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
-test = "l82";
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-test = "l85";
-app.UseRouting();
-test = "87";
-app.UseAuthentication();
-app.UseAuthorization();
-test = "l90";
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-app.MapRazorPages();
-
-using (StreamWriter writer = new StreamWriter("./Debug.txt"))
-    writer.WriteLine(test);
-
-app.Run();
 
