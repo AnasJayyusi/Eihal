@@ -1,0 +1,371 @@
+﻿@model Eihal.Data.Entites.InsuranceCompany
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+
+<div id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <!-- End of Sidebar -->
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <!-- End of Topbar -->
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4" style="margin-top:125px;">
+                        @*  <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                        <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
+                        </a>*@
+                    </div>
+                    <!-- Content Row -->
+                    <div class="row">
+                        <div class="col-xl-2 col-lg-2 offset-xl-1 offset-lg-1 card shadow mb-4 " style="height:5%;padding:1%">
+                            @*   <div style="background-color:#fff">
+                            <ul id="menu" class="navbar-nav">
+                            <li class=" tab-button">
+                            <a class="nav-link " href="#">Home</a>
+                            </li>
+                            <li class=" tab-button">
+                            <a class="nav-link" href="#">About</a>
+                            </li>
+                            <li class=" tab-button">
+                            <a class="nav-link" href="#">Info</a>
+                            </li>
+                            <li class=" tab-button">
+                            <a class="nav-link" href="#">Contact</a>
+                            </li>
+                            <li class=" tab-button">
+                            <a class="nav-link" href="https://erikterwan.com/" target="_blank">Show me more</a>
+                            </li>
+                            </ul>
+                            </div>*@
+
+                            @Html.Partial("_Sidebar")
+
+                        </div>
+
+
+                        <div class="col-xl-8 col-lg-8 ">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div class="tab-container card-header py-3 d-flex flex-row align-items-center justify-content-between">
+
+                                    <h6 style="color:#00768c" class="m-0 font-weight-bold text-primary">
+                                        <a style="color:#00768c" class="nav-link" href="index.html">
+                                            <i style="color:#00768c" class="fa fa-user" aria-hidden="true"></i>
+                                            <span style="color:#00768c">My Profile</span>
+                                        </a>
+                                    </h6>
+                                    <div>
+                                        <button class="tab-button active" onclick="openTab(event, 'tab1')">Overview</button>
+                                        <button class="tab-button" onclick="openTab(event, 'tab2')">My Services</button>
+                                        <button class="tab-button" onclick="openTab(event, 'tab3')">Time & Insurance</button>
+                                    </div>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div id="tab1" class="tab-content" style="color:#00768c">
+                                        <div style="text-align: end; cursor:pointer">
+                                            <button type="button" style="background-color:#00768c" class="btn btn-success">  <i style="font-size:25px" class="fas fa-edit"></i> Edit Profile </button>
+                                        </div>
+                                        <table cellpadding="10">
+                                            <tr>
+                                                <td>
+                                                    <img src="~/images/User/Default-User-Profle.png" width="150" height="150" />
+                                                </td>
+                                                <td>
+                                                    Welcome!
+                                                    <h4 style="font-weight:bold">Dr John</h4>
+                                                </td>
+
+
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <i class="fa fa-hospital-o" aria-hidden="true"></i>
+                                                    <label style="font-weight:bold">Number Of Patients</label>  <span style="color:black">0</span>
+                                                </td>
+                                                <td>
+                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                    <label style="font-weight:bold">Review</label>    <img src="~/icon/Doctor/review-icon.png" width="25" height="25" /> <span style="color:black">(0)</span>
+                                                </td>
+                                                <td>
+                                                    <i class="fa-solid fa-shield-halved"></i>
+                                                    <img src="~/icon/Doctor/shield-icon.png" width="25" height="25" />
+                                                    <label style="font-weight:bold">Insurance Accept</label>  <span style="color:black">No</span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <hr>
+
+                                        <table cellpadding="10">
+                                            <tr>
+                                                <td style="font-weight:bold">Bio</td>
+                                            </tr>
+                                            <tr style="color:black">
+                                                <td>KSA staff</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-weight:bold">Speciality</td>
+                                                <td style="color:black">Prosthdontics</td>
+                                            </tr>
+
+                                            <tr>
+                                                <td style="font-weight:bold">Certifactions</td>
+                                                <td style="color:black">Phd.D Degree From Adelah Uni</td>
+                                            </tr>
+                                        </table>
+
+
+
+
+
+                                    </div>
+
+                                    <div id="tab2" class="tab-content" style="display: none;">
+                                        <h3>Tab 2 Content</h3>
+                                        <p>This is the content of tab 2.</p>
+                                    </div>
+
+                                    <div id="tab3" class="tab-content" style="display: none;">
+                                        <div style="text-align: end; cursor:pointer">
+                                            <button type="button" style="background-color:#00768c" class="btn btn-success">  <i style="font-size:25px" class="fas fa-edit"></i> Edit Clinic Info </button>
+                                        </div>
+                                        <h3 style="color:#00768c">Eihal Clinic</h3>
+                                        <i style="color:#00768c" class="	fas fa-map-marker-alt" aria-hidden="true"></i>
+                                        <label>Riyadh </label>
+
+                                        <br />
+                                        <br />
+                                        <table width="75%">
+                                            <h3 style="color:#00768c">Opening Hours</h3>
+                                            <tr>
+                                                <td>
+                                                    Sunday
+                                                </td>
+                                                <td>
+                                                    04:00 PM <span style="color:#00768c;font-weight:bold">To</span> 06:30 PM
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                        <br />
+                                        <br />
+                                        <h3 style="color:#00768c">Insurance Company</h3>
+                                        @*    @using (Html.BeginForm())
+                                        {
+
+                                        <div class="form-horizontal">
+
+                                        <hr />
+
+                                        <div class="form-group">
+
+                                        <div class="col-md-12">
+                                        @Html.EditorFor(model => model.NameAr, new { htmlAttributes = new { @class = "form-control" } })
+
+                                        </div>
+                                        </div>
+
+                                        </div>
+                                        }*@
+
+                                        <form action="/Doctor" method="post">
+                                            <div class="form-horizontal">
+
+                                                <hr>
+
+                                                <div class="form-group">
+
+                                                    <div class="col-md-12">
+                                                        <input placeholder="Search In Companies" class="form-control text-box single-line ui-autocomplete-input ui-autocomplete-loading" id="companyAutoComplete" name="companyAutoComplete" type="text" value="" autocomplete="off">
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </form>
+
+
+                                        <div style="text-align:center">
+                                            <label style="font-weight:bold">No Result Found</label>    <img src="~/icon/no-result-found-icon.png" width="25" height="25" /> <span style="color:black"></span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+        <!-- Footer -->
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary" href="login.html">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</div>
+
+@section Scripts {
+
+    <!-- Bootstrap core JavaScript-->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="vendor/datatables/dataTables.bootstrap4.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="js/demo/datatables-demo.js"></script>
+
+    <script>
+
+        function openTab(evt, tabName) {
+            // Hide all tab content
+            var tabContent = document.getElementsByClassName("tab-content");
+            for (var i = 0; i < tabContent.length; i++) {
+                tabContent[i].style.display = "none";
+            }
+
+            // Remove 'active' class from all tab buttons
+            var tabButtons = document.getElementsByClassName("tab-button");
+            for (var i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].className = tabButtons[i].className.replace(" active", "");
+            }
+
+            // Show the selected tab content and set the corresponding button as active
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            // Get the current URL
+            var currentUrl = window.location.href;
+
+            // Check if the URL contains a specific segment
+            if (currentUrl.includes("MyProfile")) {
+                // Perform an action when the URL contains "something"
+                $("#myProfile-li").addClass("activeLink");
+                $("#myProfile-text").addClass("activeLink");
+            } else {
+                // Perform a different action when the URL doesn't contain "something"
+                console.log("The URL does not contain 'MyProfile'.");
+            }
+            $("#companyAutoComplete").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Doctor/Index",
+                        type: "POST",
+                        dataType: "json",
+                        data: { kw: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.nameEn + ' - ' + item.nameAr, value: item.nameEn + ' - ' + item.nameAr };
+                            }))
+                        }
+                    })
+                },
+
+            });
+        })
+    </script>
+    <style>
+
+        .activeLink {
+            color: #00768c;
+            font-weight: bold;
+            pointer-events: none;
+            cursor: not-allowed;
+            background-color:whitesmoke
+        }
+
+        #menu .nav-item:hover {
+            /* Add your desired styles for hover state */
+            background-color: #e0e0e0;
+            color: #333;
+        }
+
+
+        .tab-header {
+            display: flex;
+            justify-content: space-between;
+            background-color: #f1f1f1;
+        }
+
+        .tab-button {
+            background-color: inherit;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 10px 20px;
+            transition: background-color 0.3s;
+            border-radius: 12px;
+            margin: 5px;
+        }
+
+            .tab-button:hover {
+                background-color: #ddd;
+            }
+
+            .tab-button.active {
+                background-color: #00768c;
+                color: white
+            }
+
+        .tab-content {
+            background-color: #fff;
+        }
+    </style>
+
+}
+
+

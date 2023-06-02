@@ -12,7 +12,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     @*<title>@ViewData["Title"] - Eihal</title>*@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
     <meta charset="utf-8">
     <meta name="description" content="....">
     <meta name="author" content="misara adel">
@@ -30,6 +29,10 @@
     <link rel="stylesheet" href="~/css/style.css">
     <link href="~/css/owl.carousel.min.css" rel="stylesheet" />
     <link href="~/css/owl.theme.default.min.css" rel="stylesheet" />
+    <!-- Custom fonts for this template-->
+    <link href="~/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
 
 </head>
 <style>
@@ -140,10 +143,7 @@
         <div class="top-nav">
             <div class="container">
                 <div class="content">
-                    @{
-                        if (!User.Identity.IsAuthenticated)
-                        {
-                            <text>
+                   
                                 <ul class="socail-media">
                                     <li>
                                         <a href="#">
@@ -179,9 +179,7 @@
                                         </a>
                                     </li>
                                 </ul>
-                            </text>
-                        }
-                    }
+                          
                     @{
                         if (User.Identity.IsAuthenticated)
                         {
@@ -191,18 +189,24 @@
                                 <div class="button-container">
 
                                     <!-- Modal -->
-
-
+                                    @if (this.User.IsInRole("Administrator"))
+                                    {
                                     <a href="#" class="drop-name">
                                         <img src="/images/logo.png" class="navbar-logo" alt="logo" style="height:30px">
                                     </a>
-
-                                    <a  asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"  class="drop-name">
-                                        <i style="color:white" class="fa fa-user" aria-hidden="true">  <span style="color:white">Manage Account</span></i>
+                                
+                                    
+                                    //<a  asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"  class="drop-name">
+                                    //    <i style="color:white" class="fa fa-user" aria-hidden="true">  <span style="color:white">Manage Account</span></i>
                                       
-                                    </a>
+                                    //</a>
+                                    }
+                                   
                                 </div>
+                              
                                   <partial name="_LoginPartial" />
+                               
+                                   
                             </text>
 
 
@@ -254,7 +258,7 @@
         </div>
         
         @{
-            if (!User.Identity.IsAuthenticated)
+            if (!this.User.IsInRole("Administrator"))
             {
                 <text>
                     <div class="bottom-nav">
@@ -291,7 +295,42 @@
                                     </ul>
 
                                 </div>
-                                <partial name="_LoginPartial" />
+                                @if (!User.Identity.IsAuthenticated)
+                                {
+
+                                    <partial name="_LoginPartial" />
+                                }
+                                else
+                                {
+
+
+                                 
+                                    <div class="dropdown">
+                                        <a href="#">
+                                            <img src="/images/User/Default-User-Profle.png" width="40" height="40" alt="user-profile">
+                                        </a>
+
+                                        <div class="dropdown-content">
+                                            <a class="nav-link text-dark  linkButton" asp-area="" asp-controller="Doctor" asp-action="Index">My Profile </a>
+                                            <a class="nav-link text-dark linkButton" asp-area="" asp-controller="Doctor" asp-action="Index">My Order </a>
+
+
+                                            <a style="text-transform: none;" class="my-profile-button" asp-area="Identity" asp-page="/Account/Logout">
+                                                Logout
+                                                <span>
+                                                    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                                        <button style="text-transform: none;" class="my-profile-button" type="submit"></button>
+                                                    </form>
+                                                </span>
+                                               
+                                            </a>
+
+                                        </div>
+                                    </div>
+                                
+
+                                }
+
 
                             </div>
                         </div>
@@ -334,9 +373,99 @@
         </div>
     </div>
 
+    <style>
+
+      .dropdown  a {
+            overflow: hidden;
+            position: relative;
+            display: inline-block;
+        }
+
+         .dropdown   a::before,
+         .dropdown   a::after {
+                content: '';
+                position: absolute;
+                width: 100%;
+                left: 0;
+            }
+
+          .dropdown  a::before {
+                background-color: #54b3d6;
+                height: 2px;
+                bottom: 0;
+                transform-origin: 100% 50%;
+                transform: scaleX(0);
+                transition: transform .3s cubic-bezier(0.76, 0, 0.24, 1);
+            }
+
+           .dropdown a::after {
+                content: attr(data-replace);
+                height: 100%;
+                top: 0;
+                transform-origin: 100% 50%;
+                transform: translate3d(200%, 0, 0);
+                transition: transform .3s cubic-bezier(0.76, 0, 0.24, 1);
+                color: #54b3d6;
+            }
+
+          .dropdown  a:hover::before {
+                transform-origin: 0% 50%;
+                transform: scaleX(1);
+            }
+
+         .dropdown   a:hover::after {
+                transform: translate3d(0, 0, 0);
+            }
+
+           .dropdown a span {
+                display: inline-block;
+                transition: transform .3s cubic-bezier(0.76, 0, 0.24, 1);
+            }
+
+            .dropdown a:hover span {
+                transform: translate3d(-200%, 0, 0);
+            }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            padding: 12px 16px;
+            z-index: 1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .my-profile-button {
+            background-color: transparent; /* Button background color */
+            color: black; /* Button text color */
+            border: none; /* Remove button border */
+            padding: 8px 16px; /* Adjust padding as needed */
+            font-size: 14px; /* Adjust font size as needed */
+            /* Add any additional styles you want */
+        }
+
+        .linkButton
+        {
+            background-color: transparent; /* Button background color */
+            color: black; /* Button text color */
+            border: none; /* Remove button border */
+            padding: 8px 16px; /* Adjust padding as needed */
+            font-size: 14px; /* Adjust font size as needed */
+            /* Add any additional styles you want */
+        }
+    </style>
     <script src="https://code.jquery.com/jquery-3.5.0.min.js"></script>
     <script src="~/js/owl.carousel.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/vendor/bootstrap/js/bootstrap.bundle.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script>
         $(document).ready(function () {

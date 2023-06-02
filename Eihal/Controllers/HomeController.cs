@@ -1,7 +1,5 @@
 ﻿using Eihal.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Diagnostics;
 using System.Globalization;
 
@@ -18,15 +16,8 @@ namespace Eihal.Controllers
 
         public IActionResult Index()
         {
-            if (User.IsInRole("User"))
-            {
-                return RedirectToAction("Index", "User");
-            }
-            else if (User.IsInRole("Administrator"))
-            {
-                return RedirectToAction("Index", "Admin");
-            }
-            else
+           
+        
                 return View();
 
         }
@@ -69,7 +60,7 @@ namespace Eihal.Controllers
         }
 
 
-      
+
         public IActionResult AdminOnly()
         {
             return View();

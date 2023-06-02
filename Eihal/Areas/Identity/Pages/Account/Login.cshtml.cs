@@ -102,7 +102,21 @@ namespace Eihal.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(username, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    var user = await _userManager.FindByNameAsync(username);
+                    var userRole = await _userManager.GetRolesAsync(user);
                     _logger.LogInformation("User logged in.");
+                    if (userRole.Contains("User"))
+                    {
+                        return RedirectToAction("Index", "User");
+                    }
+                    if (userRole.Contains("Doctor"))
+                    {
+                        return RedirectToAction("Index", "Doctor");
+                    }
+                    if (userRole.Contains("Administrator"))
+                    {
+                        return RedirectToAction("Index", "Admin");
+                    }
                     return LocalRedirect(returnUrl);
                 }
 

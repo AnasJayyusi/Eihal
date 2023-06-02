@@ -37,10 +37,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Entites\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="wwwroot\css\navs\_global.scss" />
     <None Include="wwwroot\css\navs\_sidebar.scss" />
     <None Include="wwwroot\css\navs\_topbar.scss" />
