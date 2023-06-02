@@ -6,207 +6,103 @@
 }
 <!DOCTYPE html>
 
-<html lang="@cultureCode" >
+<html lang="@cultureCode">
 <head>
+    <!-- Releate To HTMl-->
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    @*<title>@ViewData["Title"] - Eihal</title>*@
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <meta charset="utf-8">
-    <meta name="description" content="....">
-    <meta name="author" content="misara adel">
-    <meta name="csrf-token" content="wvWsm0XjwGINPWNPIYQ2Jqt1HSbQspywkcnKWPtL">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <script src='~/js/fontawesome.js' crossorigin='anonymous'></script>
-    <title>
-        EIHAL
-    </title>
-    <link rel="icon" type="image/x-icon" href="~/Eihal.ico" />
-    <link rel="stylesheet" href="~/css/fontawesome.css">
-    <link rel="stylesheet" href="~/css/animate.css">
-    <link rel="stylesheet" href="~/css/owl.theme.default.min.css">
+    <title>EIHAL</title>
+      <link rel="icon" type="image/x-icon" href="~/Eihal.ico" />
     <link rel="stylesheet" type="text/css" href="~/css/datepicker.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Cdn Css libraries-->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /> <!-- Bootstrap v4.3.1 -->
+    
+    <!-- Cdn Js libraries-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+
+    <!-- Internal Css  Theme libraries-->
     <link rel="stylesheet" href="~/css/style.css">
+    <link rel="stylesheet" href="~/css/layout.css">
     <link href="~/css/owl.carousel.min.css" rel="stylesheet" />
     <link href="~/css/owl.theme.default.min.css" rel="stylesheet" />
-    <!-- Custom fonts for this template-->
-    <link href="~/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-          rel="stylesheet">
 
+    <!-- Internal JavaScripts  Theme libraries-->
+    <script src="~/vendor/bootstrap/js/bootstrap.bundle.js"></script>
 </head>
-<style>
 
-    .error-email {
-        color: red;
-        font-size: 12px;
-        text-align: left
-    }
-
-    .success-email {
-        color: green;
-        font-size: 12px;
-        text-align: left
-    }
-
-    .error {
-        color: red !important;
-    }
-
-    .forget-input {
-        height: 50px !important;
-    }
-
-    .rating-star {
-        font-family: "Font Awesome 5 Free" !important;
-    }
-
-    .star-rating {
-        direction: rtl;
-        display: inline-block;
-        padding: 20px;
-        cursor: default;
-    }
-
-        .star-rating input[type=radio] {
-            display: none;
-        }
-
-        .star-rating label {
-            color: #bbb;
-            font-size: 2rem;
-            padding: 0;
-            cursor: pointer;
-            transition: all 0.3s ease-in-out;
-            margin: 0 5px;
-        }
-
-            .star-rating label:hover,
-            .star-rating label:hover ~ label,
-            .star-rating input[type=radio]:checked ~ label {
-                color: #f2b600;
-            }
-
-    .custom-check-badge {
-        position: relative;
-        padding: 4px 0;
-    }
-
-        .custom-check-badge input {
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            position: absolute;
-            cursor: pointer;
-            padding: 4px 0;
-            top: 0;
-            left: 0;
-        }
-
-            .custom-check-badge input:checked ~ .custom-check-label a {
-                color: #00768c;
-                border-color: #00768c;
-            }
-
-        .custom-check-badge label {
-            margin-bottom: 0;
-        }
-
-    .review-star {
-        font-family: "Font Awesome 5 Free" !important;
-    }
-
-    .tooltiptext {
-        visibility: hidden;
-        width: 309px;
-        background-color: #565454;
-        ;
-        color: #fff;
-        text-align: center;
-        border-radius: 6px;
-        padding: -2px 0;
-        margin-left: 23%;
-        margin-top: -53px;
-        /* Position the tooltip */
-        position: absolute;
-        z-index: 1;
-    }
-
-    .tooltiptext {
-        visibility: visible;
-    }
-</style>
-
+@await RenderSectionAsync("Scripts", required: false)
 
 <body style="overflow-x: hidden">
     <nav class="navabr">
         <div class="top-nav">
             <div class="container">
                 <div class="content">
-                   
-                                <ul class="socail-media">
-                                    <li>
-                                        <a href="#">
-                                            <img src="~/images/navbar/message.svg" alt="">
 
-                                            <span>
-                                                info@eihal.com
-                                            </span>
-                                        </a>
-                                    </li>
+                    <ul class="socail-media">
+                        <li>
+                            <a href="#">
+                                <img src="~/images/navbar/message.svg" alt="">
 
-                                    <li>
-                                        <a href="facebook.com">
-                                            <img src="~/images/navbar/face.svg" alt="">
-                                        </a>
-                                    </li>
+                                <span>
+                                    info@eihal.com
+                                </span>
+                            </a>
+                        </li>
 
-                                    <li>
-                                        <a href="linkedin.com">
-                                            <img src="~/images/navbar/linkedn.svg" alt="">
-                                        </a>
-                                    </li>
+                        <li>
+                            <a href="facebook.com">
+                                <img src="~/images/navbar/face.svg" alt="">
+                            </a>
+                        </li>
 
-                                    <li>
-                                        <a href="instagram.com">
-                                            <img src="~/images/navbar/insta.svg" alt="">
-                                        </a>
-                                    </li>
+                        <li>
+                            <a href="linkedin.com">
+                                <img src="~/images/navbar/linkedn.svg" alt="">
+                            </a>
+                        </li>
 
-                                    <li>
-                                        <a href="twitter.com">
-                                            <img src="~/images/navbar/twiiter.svg" alt="">
-                                        </a>
-                                    </li>
-                                </ul>
-                          
+                        <li>
+                            <a href="instagram.com">
+                                <img src="~/images/navbar/insta.svg" alt="">
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="twitter.com">
+                                <img src="~/images/navbar/twiiter.svg" alt="">
+                            </a>
+                        </li>
+                    </ul>
+
                     @{
                         if (User.Identity.IsAuthenticated)
                         {
                             <text>
-                                       
+
 
                                 <div class="button-container">
 
                                     <!-- Modal -->
                                     @if (this.User.IsInRole("Administrator"))
                                     {
-                                    <a href="#" class="drop-name">
-                                        <img src="/images/logo.png" class="navbar-logo" alt="logo" style="height:30px">
-                                    </a>
-                                
-                                    
-                                    //<a  asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"  class="drop-name">
-                                    //    <i style="color:white" class="fa fa-user" aria-hidden="true">  <span style="color:white">Manage Account</span></i>
-                                      
-                                    //</a>
+                                        <a href="#" class="drop-name">
+                                            <img src="/images/logo.png" class="navbar-logo" alt="logo" style="height:30px">
+                                        </a>
+
+
+                                        //<a  asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"  class="drop-name">
+                                        //    <i style="color:white" class="fa fa-user" aria-hidden="true">  <span style="color:white">Manage Account</span></i>
+
+                                        //</a>
                                     }
-                                   
+
                                 </div>
-                              
-                                  <partial name="_LoginPartial" />
-                               
-                                   
+
+                                <partial name="_LoginPartial" />
+
+
                             </text>
 
 
@@ -243,20 +139,13 @@
                                 </div>
                             </text>
 
-
                         }
                     }
 
-
-
-
-
-
-                  
                 </div>
             </div>
         </div>
-        
+
         @{
             if (!this.User.IsInRole("Administrator"))
             {
@@ -304,7 +193,7 @@
                                 {
 
 
-                                 
+
                                     <div class="dropdown">
                                         <a href="#">
                                             <img src="/images/User/Default-User-Profle.png" width="40" height="40" alt="user-profile">
@@ -322,12 +211,12 @@
                                                         <button style="text-transform: none;" class="my-profile-button" type="submit"></button>
                                                     </form>
                                                 </span>
-                                               
+
                                             </a>
 
                                         </div>
                                     </div>
-                                
+
 
                                 }
 
@@ -338,12 +227,12 @@
                 </text>
             }
         }
-      
-        
-       
-      
-         
-        </div>
+
+
+
+
+
+
     </nav>
 
 
@@ -373,172 +262,7 @@
         </div>
     </div>
 
-    <style>
 
-      .dropdown  a {
-            overflow: hidden;
-            position: relative;
-            display: inline-block;
-        }
-
-         .dropdown   a::before,
-         .dropdown   a::after {
-                content: '';
-                position: absolute;
-                width: 100%;
-                left: 0;
-            }
-
-          .dropdown  a::before {
-                background-color: #54b3d6;
-                height: 2px;
-                bottom: 0;
-                transform-origin: 100% 50%;
-                transform: scaleX(0);
-                transition: transform .3s cubic-bezier(0.76, 0, 0.24, 1);
-            }
-
-           .dropdown a::after {
-                content: attr(data-replace);
-                height: 100%;
-                top: 0;
-                transform-origin: 100% 50%;
-                transform: translate3d(200%, 0, 0);
-                transition: transform .3s cubic-bezier(0.76, 0, 0.24, 1);
-                color: #54b3d6;
-            }
-
-          .dropdown  a:hover::before {
-                transform-origin: 0% 50%;
-                transform: scaleX(1);
-            }
-
-         .dropdown   a:hover::after {
-                transform: translate3d(0, 0, 0);
-            }
-
-           .dropdown a span {
-                display: inline-block;
-                transition: transform .3s cubic-bezier(0.76, 0, 0.24, 1);
-            }
-
-            .dropdown a:hover span {
-                transform: translate3d(-200%, 0, 0);
-            }
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            padding: 12px 16px;
-            z-index: 1;
-        }
-
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        .my-profile-button {
-            background-color: transparent; /* Button background color */
-            color: black; /* Button text color */
-            border: none; /* Remove button border */
-            padding: 8px 16px; /* Adjust padding as needed */
-            font-size: 14px; /* Adjust font size as needed */
-            /* Add any additional styles you want */
-        }
-
-        .linkButton
-        {
-            background-color: transparent; /* Button background color */
-            color: black; /* Button text color */
-            border: none; /* Remove button border */
-            padding: 8px 16px; /* Adjust padding as needed */
-            font-size: 14px; /* Adjust font size as needed */
-            /* Add any additional styles you want */
-        }
-    </style>
-    <script src="https://code.jquery.com/jquery-3.5.0.min.js"></script>
-    <script src="~/js/owl.carousel.min.js"></script>
-    <script src="~/vendor/bootstrap/js/bootstrap.bundle.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script>
-        $(document).ready(function () {
-            var currentCultureCode = getCookie("CultureInfo");
-            console.log(currentCultureCode);
-            setCurrentLanguageOnUI(currentCultureCode)
-        });
-
-        function getCookie(name) {
-            function escape(s) { return s.replace(/([.*+?\^$(){}|\[\]\/\\])/g, '\\$1'); }
-            var match = document.cookie.match(RegExp('(?:^|;\\s*)' + escape(name) + '=([^;]*)'));
-            return match ? match[1] : null;
-        }
-           function showNotifications() {
-        }
-
-        function setCurrentLanguageOnUI(currentCultureCode) {
-            if (currentCultureCode == "en-US"){
-                // Smell Code Should be deleted
-                //$('html').attr('dir', "ltr");
-                //$('html').attr('lang', "en");
-                //$("html").children().css("direction", "ltr");
-                $("#current-language").text("English")
-            }
-              
-            if (currentCultureCode == "ar-SA"){
-                // Smell Code Should be deleted
-                $("#current-language").text("العربية")
-                //$('html').attr('dir', "rtl");
-                //$('html').attr('lang', "ar");
-                //$("html").children().css("direction", "rtl");
-
-                //var align = document.querySelectorAll("h1");
-                //for (var i = 0; i < align.length; i++) {
-                //    // Set the 'direction' property to 'ltr'
-                //    align[i].style.textAlign = "right";
-                //}
-                //align = document.querySelectorAll("p");
-                //for (var i = 0; i < align.length; i++) {
-                //    // Set the 'direction' property to 'ltr'
-                //    align[i].style.textAlign = "right";
-                //}
-
-                //align = document.querySelectorAll("select");
-                //for (var i = 0; i < align.length; i++) {
-                //    // Set the 'direction' property to 'ltr'
-                //    align[i].style.textAlign = "inherit";
-                //}
-
-                //align = document.querySelectorAll("li");
-                //for (var i = 0; i < align.length; i++) {
-                //    // Set the 'direction' property to 'ltr'
-                //    align[i].style.textAlign = "right";
-                //}
-
-                // align = document.querySelectorAll("form");
-                //for (var i = 0; i < align.length; i++) {
-                //    // Set the 'direction' property to 'ltr'
-                //    align[i].style.textAlign = "right";
-                //}
-
-                //align = document.querySelectorAll("select");
-                //for (var i = 0; i < align.length; i++) {
-                //    // Set the 'direction' property to 'ltr'
-                //    align[i].style.textAlign = "center";
-                //}
-            }
-                
-        }
-
-
-    </script>
-    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
 
