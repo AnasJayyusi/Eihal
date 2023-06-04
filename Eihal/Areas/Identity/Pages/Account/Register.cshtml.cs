@@ -70,9 +70,10 @@ namespace Eihal.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string? ConfirmPassword { get; set; }
-            public int AccountType { get; set; }
-            public int HealthPractitionerType { get; set; }
-            public int ProfessionalRank { get; set; }
+
+            public int AccountTypeId { get; set; }
+            public int PractitionerTypeId { get; set; } = 0;
+            public int ProfessionalRankId { get; set; } = 0;
 
             [Required]
             public string? FullName { get; set; }

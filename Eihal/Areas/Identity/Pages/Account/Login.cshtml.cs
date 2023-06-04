@@ -115,7 +115,7 @@ namespace Eihal.Areas.Identity.Pages.Account
                     }
                     if (userRole.Contains("Administrator"))
                     {
-                        return RedirectToAction("Index", "Admin");
+                        return RedirectToAction("Dashboard", "Admin");
                     }
                     return LocalRedirect(returnUrl);
                 }

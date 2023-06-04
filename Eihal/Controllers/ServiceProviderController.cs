@@ -7,8 +7,8 @@ namespace Eihal.Controllers
 {
 
     [Route("ServiceProvider")]
-    [Authorize(Roles = "Doctor")]
-    public class DoctorController : Controller
+    [Authorize(Roles = "ServiceProvider")]
+    public class ServiceProviderController : Controller
     {
         [Route("MyProfile")]
         public IActionResult Index()

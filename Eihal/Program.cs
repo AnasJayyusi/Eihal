@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
+using System.Configuration;
 using System.Globalization;
 
 string logger = string.Empty;
@@ -11,9 +12,9 @@ logger = "Starting Program";
 
 try
 {
-
     var builder = WebApplication.CreateBuilder(args);
     logger = "Create CreateBuilder";
+
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
     logger = "connectionString Applied";
     builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -59,25 +60,24 @@ try
     });
     logger = "IdentityOptions Applied";
 
+  
+    //builder.Services.AddScoped<RoleManager<IdentityRole>>();
 
+    //logger = "IdentityRole Applied";
+    ////// Add Admin Role
+    //builder.Services.AddAuthorization(options =>
+    //{
+    //    options.AddPolicy("RequireAdministratorRole",
+    //         policy => policy.RequireRole("Administrator"));
 
-    builder.Services.AddScoped<RoleManager<IdentityRole>>();
+    //    options.AddPolicy("RequireUserRole",
+    //         policy => policy.RequireRole("User"));
 
-    logger = "IdentityRole Applied";
-    //// Add Admin Role
-    builder.Services.AddAuthorization(options =>
-    {
-        options.AddPolicy("RequireAdministratorRole",
-             policy => policy.RequireRole("Administrator"));
+    //    options.AddPolicy("RequireDoctorRole",
+    //         policy => policy.RequireRole("Doctor"));
+    //});
 
-        options.AddPolicy("RequireUserRole",
-             policy => policy.RequireRole("User"));
-
-        options.AddPolicy("RequireDoctorRole",
-             policy => policy.RequireRole("Doctor"));
-    });
-
-    logger = "Policy Applied";
+    //logger = "Roles Applied";
 
     var app = builder.Build();
     logger = "Start Building";

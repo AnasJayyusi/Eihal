@@ -5,20 +5,21 @@
 <div class="nav-contain sidebar">
     <ul class="navbar-nav">
         <li id="myProfile-li" class="nav-item">
-            <a  class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index"><span id="myProfile-text"> @Localizer["My Profile"]</span></a>
+            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index"><span id="myProfile-text">    <i class='fas fa-user-alt'></i> @Localizer["My Profile"]</span></a>
         </li>
 
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">@Localizer["AboutUs"]</a>
+        <li id="myServices-li" class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">
+                <img src="~/icon/Doctor/service-icon.png" width="20" height="20" /></i>&nbsp;@Localizer["My Services"]
+            </a>
         </li>
 
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">@Localizer["Doctors"] </a>
+        <li id="myReferrals-li" class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">
+                <img src="~/icon/Doctor/referrals-icon.png" width="20" height="20" />&nbsp;@Localizer["My Referrals"]
+            </a>
         </li>
 
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Contact">@Localizer["ContactUs"] </a>
-        </li>
 
 
     </ul>
@@ -32,7 +33,7 @@
         overflow: hidden;
         position: relative;
         display: inline-block;
-        font-family: Arial, Helvetica, sans-serif
+        font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"
     }
 
         .sidebar a::before,
