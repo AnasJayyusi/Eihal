@@ -1,4 +1,4 @@
-﻿@model List<Eihal.Data.Entites.PractitionerType>
+﻿@model List<Eihal.Data.Entites.ProfessionalRank>
 <head>
     <!-- Custom styles for this template-->
     <link href="~/css/sb-admin-2.css" rel="stylesheet">
@@ -29,7 +29,7 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid" style="margin-top:50px">
                     <div class="alert alert-success hidden" role="alert">
-                        The Practitioner Type Added/Updated Successfully!
+                        The Professional Rank Added/Updated Successfully!
                     </div>
 
                     @if (@ViewBag.SuccessMessage != null)
@@ -38,7 +38,7 @@
                         {
                             <text>
                                 <div class="alert alert-success" role="alert">
-                                    Practitioner type deleted successfully!
+                                    Professional Rank deleted successfully!
                                 </div>
                             </text>
                         }
@@ -54,7 +54,7 @@
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h6 style="font-weight:bold;color:#00768c " class="h6 mb-0 ">  Master List  &#8658; Practitioner Types</h6>
+                        <h6 style="font-weight:bold;color:#00768c " class="h6 mb-0 ">  Master List  &#8658; Professional Ranks</h6>
 
 
                         <!--ToDo:Move To Partial View -->
@@ -112,7 +112,7 @@
                                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                     <h6 class="m-0 font-weight-bold text-primary">Practitioner Types</h6>
                                     <div style="text-align: end; cursor:pointer">
-                                        <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#AddNewPractitionerType">  <i class="fa fa-plus text-white-50"></i>  </button>
+                                        <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#AddNewProfessionalRank">  <i class="fa fa-plus text-white-50"></i>  </button>
                                     </div>
                                 </div>
                                 <!-- Card Body -->
@@ -121,7 +121,7 @@
                                     <br />
 
                                     <div class="table-responsive" id="dataTableContainer">
-                                        @Html.Partial("ListPractitionerTypes", Model)
+                                        @Html.Partial("ListProfessionalRanks", Model)
 
                                     </div>
                                 </div>
@@ -147,11 +147,11 @@
 </div>
 
 
-<div class="modal fade" id="AddNewPractitionerType" tabindex="-1" role="dialog" aria-labelledby="AddNewPractitionerTypeModal" aria-hidden="true">
+<div class="modal fade" id="AddNewProfessionalRank" tabindex="-1" role="dialog" aria-labelledby="AddNewProfessionalRankModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="AddNewPractitionerTypeModal">Add</h5>
+                <h5 class="modal-title" id="AddNewProfessionalRankModal">Add</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -174,8 +174,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button id="close-add-PractitionerType" type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                <button id="add-PractitionerType" type="button" class="btn btn-success" style="background-color:#00768c">Save</button>
+                <button id="close-add-ProfessionalRank" type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button id="add-ProfessionalRank" type="button" class="btn btn-success" style="background-color:#00768c">Save</button>
             </div>
         </div>
     </div>
@@ -197,23 +197,23 @@
             }, 3000);
 
 
-            $('#add-PractitionerType').click(function () {
-                var practitionerType = {
+            $('#add-ProfessionalRank').click(function () {
+                var professionalRank = {
                     TitleAr: $('#titleArInput').val(),
                     TitleEn: $('#titleEnInput').val(),
                 };
 
                 $.ajax({
-                    url: '/Admin/AddPractitionerType', // Replace with your actual API endpoint URL
+                    url: '/Admin/AddProfessionalRank', // Replace with your actual API endpoint URL
                     type: 'POST',
-                    data: JSON.stringify(practitionerType),
+                    data: JSON.stringify(professionalRank),
                     contentType: 'application/json',
                     success: function (response) {
                         // Show the success message
                         $('.alert-success').removeClass('hidden').hide().fadeIn();
                         // Close the modal after the success message fades out
-                        $("#close-add-PractitionerType").trigger("click");
-                        $('#dataTableContainer').load('/Admin/GetPractitionerTypes');
+                        $("#close-add-ProfessionalRank").trigger("click");
+                        $('#dataTableContainer').load('/Admin/GetProfessionalRanks');
 
                         // Hide the success message after 2 seconds
                         setTimeout(function () {

@@ -1,10 +1,7 @@
 ﻿using Eihal.Data;
 using Eihal.Data.Entites;
-using Humanizer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace Eihal.Controllers
 {
@@ -18,14 +15,15 @@ namespace Eihal.Controllers
         {
         }
 
+        #region Dashboard
         [Route("Dashboard")]
         public IActionResult Dashboard()
         {
             return View();
         }
+        #endregion
 
-
-        #region
+        #region PractitionerTypes
         [Route("MasterList/PractitionerTypes")]
         public IActionResult PractitionerTypes()
         {
@@ -155,18 +153,134 @@ namespace Eihal.Controllers
             var practitionerTypes = _dbContext.PractitionerTypes.Single(w => w.Id == id);
             return practitionerTypes;
         }
-
-
         #endregion
 
-        #region
-        [Route("MasterList/ProfessionalRank")]
-        public IActionResult ProfessionalRank()
+        #region ProfessionalRanks
+        [Route("MasterList/ProfessionalRanks")]
+        public IActionResult ProfessionalRanks()
         {
-            return View();
+            // Retrieve the value from TempData
+            bool? isFromDeleteRequest = TempData["isFromDeleteRequest"] as bool?;
+            bool? isSuccessDelete = TempData["isSuccessDelete"] as bool?;
+
+            if (isFromDeleteRequest != null && isSuccessDelete != null)
+            {
+                // Clear the TempData value to avoid persisting it across subsequent requests
+                TempData.Remove("isFromDeleteRequest");
+                TempData.Remove("isSuccessDelete");
+
+                // Use the value as needed
+                ViewBag.SuccessMessage = isSuccessDelete;
+            }
+
+            return View(_dbContext.ProfessionalRank.ToList());
+        }
+
+
+        [Route("GetProfessionalRanks")]
+        public IActionResult ProfessionalRanksList()
+        {
+            var professionalRanks = _dbContext.ProfessionalRank.ToList();
+            return PartialView("ListProfessionalRanks", professionalRanks);
+        }
+
+        [HttpPost]
+        [Route("AddProfessionalRank")]
+        public IActionResult AddProfessionalRank([FromBody] ProfessionalRank professionalRank)
+        {
+            if (professionalRank == null || string.IsNullOrEmpty(professionalRank.TitleEn) || string.IsNullOrEmpty(professionalRank.TitleAr))
+            {
+                return BadRequest("Please fill all fields.");
+            }
+
+            bool isDuplicate = _dbContext.ProfessionalRank.Any(w => w.TitleEn == professionalRank.TitleEn || w.TitleAr == professionalRank.TitleAr);
+            if (isDuplicate)
+            {
+                return BadRequest("The details for the Professional Rank have already been added.");
+            }
+
+            else
+            {
+                if (!string.IsNullOrEmpty(professionalRank.TitleAr) || !string.IsNullOrEmpty(professionalRank.TitleEn))
+                {
+                    _dbContext.ProfessionalRank.Add(professionalRank);
+                    _dbContext.SaveChanges();
+                }
+            }
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("UpdateProfessionalRank")]
+        public IActionResult UpdateProfessionalRank([FromBody] ProfessionalRank professionalRank)
+        {
+            if (professionalRank == null || string.IsNullOrEmpty(professionalRank.TitleEn) || string.IsNullOrEmpty(professionalRank.TitleAr))
+            {
+                return BadRequest("Please fill all fields.");
+            }
+
+            bool isDuplicate = _dbContext.ProfessionalRank.Any(w => w.TitleEn == professionalRank.TitleEn || w.TitleAr == professionalRank.TitleAr);
+            if (isDuplicate)
+            {
+                return BadRequest("The details for the Professional Rank have already been added.");
+            }
+
+            else
+            {
+                if (!string.IsNullOrEmpty(professionalRank.TitleAr) || !string.IsNullOrEmpty(professionalRank.TitleEn))
+                {
+                    _dbContext.ProfessionalRank.Update(professionalRank);
+                    _dbContext.SaveChanges();
+                }
+            }
+
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("DeleteProfessionalRank/{id}")]
+        public IActionResult DeleteProfessionalRank(int id)
+        {
+
+            bool isLinked = _dbContext.ApplicationUsers.Any(w => w.ProfessionalRankId == id);
+            if (isLinked)
+            {
+                return BadRequest("You cannot delete this item as it is linked to users in the system.");
+            }
+
+            else
+            {
+                // Retrieve the practitioner type from the database using the id
+                var professionalRank = _dbContext.ProfessionalRank.Find(id);
+
+
+                if (professionalRank == null)
+                {
+                    // Handle the case where the practitioner type doesn't exist
+                    TempData["isSuccessDelete"] = false;
+                }
+
+                // Remove the practitioner type from the DbSet
+                _dbContext.ProfessionalRank.Remove(professionalRank);
+
+                // Save the changes to the database
+                _dbContext.SaveChanges();
+                TempData["isSuccessDelete"] = true;
+            }
+            // Set the value in TempData
+            TempData["isFromDeleteRequest"] = true;
+            return RedirectToAction("ProfessionalRanks");
+        }
+
+
+        [HttpGet]
+        [Route("GetProfessionalRank/{id}")]
+        public ProfessionalRank GetProfessionalRank(int id)
+        {
+            var professionalRanks = _dbContext.ProfessionalRank.Single(w => w.Id == id);
+            return professionalRanks;
         }
         #endregion
-
-
     }
 }
