@@ -26,6 +26,13 @@ namespace Eihal.Areas.Identity.Pages.Account
             _logger = logger;
         }
 
+        public enum UserRolesEnum
+        {
+            Administrator = 1,
+            ServiceProvider = 2,
+            Beneficiary = 3
+        }
+
         [BindProperty]
         public InputModel? Input { get; set; }
 
@@ -105,15 +112,15 @@ namespace Eihal.Areas.Identity.Pages.Account
                     var user = await _userManager.FindByNameAsync(username);
                     var userRole = await _userManager.GetRolesAsync(user);
                     _logger.LogInformation("User logged in.");
-                    if (userRole.Contains("User"))
+                    if (userRole.Contains(UserRolesEnum.Beneficiary.ToString()))
                     {
                         return RedirectToAction("Index", "User");
                     }
-                    if (userRole.Contains("Doctor"))
+                    if (userRole.Contains(UserRolesEnum.ServiceProvider.ToString()))
                     {
-                        return RedirectToAction("Index", "Doctor");
+                        return RedirectToAction("Profile", "ServiceProvider");
                     }
-                    if (userRole.Contains("Administrator"))
+                    if (userRole.Contains(UserRolesEnum.Administrator.ToString()))
                     {
                         return RedirectToAction("Dashboard", "Admin");
                     }

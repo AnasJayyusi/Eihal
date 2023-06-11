@@ -1,17 +1,27 @@
-﻿using Eihal.Data.Entites;
+﻿using Eihal.Data;
+using Eihal.Data.Entites;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SixLabors.ImageSharp.Formats.Jpeg;
 using System.Data;
+using System.Security.Claims;
+using System.Xml.Linq;
 
 namespace Eihal.Controllers
 {
 
     [Route("ServiceProvider")]
     [Authorize(Roles = "ServiceProvider")]
-    public class ServiceProviderController : Controller
+    public class ServiceProviderController : BaseController
     {
-        [Route("MyProfile")]
-        public IActionResult Index()
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public ServiceProviderController(IWebHostEnvironment webHostEnvironment, ApplicationDbContext dbContext) : base(dbContext)
+        {
+            _webHostEnvironment = webHostEnvironment;
+        }
+
+        [Route("Profile")]
+        public IActionResult Profile()
         {
             return View();
         }
@@ -19,6 +29,109 @@ namespace Eihal.Controllers
         public IActionResult Referrals()
         {
             return View();
+        }
+
+        [HttpGet]
+        [Route("GetUserProfileInfo")]
+        public ActionResult GetUserProfileInfo()
+        {
+            _loggedUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userProfile = _dbContext.UserProfiles.FirstOrDefault(w => w.UserId == _loggedUserId);
+            // Your logic to retrieve the necessary data
+            var data = new
+            {
+                fullname = userProfile?.FullName,
+                numberPatients = userProfile.NumOfPatients ?? 0,
+                review = userProfile.Reviews ?? 0,
+                insurance = userProfile.InsuranceAccepted ?? false,
+                bio = userProfile.Bio ?? "No Bio yet.",
+                speciality = userProfile.SpecialtiesTitlesEn ?? "No Speciality added yet.",
+                certifactions = userProfile.Certifications ?? "No Certifications added yet.",
+                profilePicturePath = userProfile.ProfilePicturePath
+            };
+
+            return Json(data);
+        }
+
+        [HttpGet]
+        [Route("GetFullUserProfileInfo")]
+        public ActionResult GetFullUserProfileInfo()
+        {
+            _loggedUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userProfile = _dbContext.UserProfiles.FirstOrDefault(w => w.UserId == _loggedUserId);
+            // Your logic to retrieve the necessary data
+            var data = new
+            {
+                fullName = userProfile?.FullName,
+                bio = userProfile?.Bio,
+                accountType = userProfile.AccountTypeId,
+                practitioner = userProfile.PractitionerTypeId,
+                phone = userProfile.PhoneNumber,
+                email = userProfile.Email,
+                professional = userProfile.ProfessionalRankId,
+                country = userProfile.CountryId,
+                state = userProfile.StateId,
+                city = userProfile.CityId,
+                speciality = userProfile.SpecialtiesTitlesEn,
+                profilePicturePath = userProfile.ProfilePicturePath
+            };
+
+            return Json(data);
+        }
+
+        [HttpGet]
+        [Route("GetUserProfessionalRanksDDL")]
+        public ActionResult GetUserProfessionalRanksDDL()
+        {
+            _loggedUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var practitionerTypeId = _dbContext.UserProfiles
+                                                .Where(u => u.UserId == _loggedUserId)
+                                                .Select(u => u.PractitionerTypeId);
+
+            var professionalRanks = _dbContext.ProfessionalRanks
+                                               .Where(w => w.IsActive && practitionerTypeId.Contains(w.PractitionerTypeId))
+                                               .Select(s => new { Id = s.Id, TitleEn = s.TitleEn, TitleAr = s.TitleAr })
+                                               .ToList();
+            return Json(professionalRanks);
+        }
+
+        [HttpGet]
+        [Route("GetUserSpecialtiesDDL")]
+        public ActionResult GetUserSpecialtiesDDL()
+        {
+            _loggedUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var practitionerTypeId = _dbContext.UserProfiles
+                                                .Where(u => u.UserId == _loggedUserId)
+                                                .Select(u => u.PractitionerTypeId);
+
+            var Specialties = _dbContext.Specialties
+                                               .Where(w => w.IsActive && practitionerTypeId.Contains(w.PractitionerTypeId))
+                                               .Select(s => new { id = s.Id, TitleEn = s.TitleEn, TitleAr = s.TitleAr })
+                                               .ToList();
+            return Json(Specialties);
+        }
+
+        [HttpGet]
+        [Route("GetCountriesDDL")]
+        public ActionResult GetCountriesDDL()
+        {
+            var countries = _dbContext.Countries.ToList();
+            return Json(countries);
+        }
+
+        [HttpGet]
+        [Route("GetStatesDDL")]
+        public ActionResult GetStatesDDL(int countryId)
+        {
+            var countries = _dbContext.States.Where(w => w.CountryId == countryId).ToList();
+            return Json(countries);
+        }
+
+        [Route("GetCitiesDDL")]
+        public ActionResult GetCitiesDDL(int stateId)
+        {
+            var cities = _dbContext.Cities.Where(w => w.StateId == stateId).ToList();
+            return Json(cities);
         }
 
 
@@ -40,6 +153,69 @@ namespace Eihal.Controllers
                         select new { c.Id, c.NameAr, c.NameEn, c.Base64Image });
             return Json(Name);
         }
+
+        [HttpPost]
+        [Route("UpdateUserProfile")]
+        public IActionResult UpdateUserProfile(IFormCollection form)
+        {
+            _loggedUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userProfile = _dbContext.UserProfiles.Single(w => w.UserId == _loggedUserId);
+
+
+            // Handle image file
+            var imageFile = form.Files["image"];
+
+          
+
+            // Access form data & fill to user profile object
+            userProfile.FullName = form["FullName"];
+            userProfile.Bio = form["Bio"];
+            userProfile.ProfessionalRankId = Convert.ToInt32(form["ProfessionalRankId"]);
+            userProfile.CountryId = Convert.ToInt32(form["CountryId"]);
+            userProfile.StateId = Convert.ToInt32(form["StateId"]);
+            userProfile.CityId = Convert.ToInt32(form["CityId"]);
+            userProfile.SpecialtiesIds = form["SpecialtiesIds"];
+
+            if (imageFile != null)
+                userProfile.ProfilePicturePath = StoreImageFilePathInDatabase(imageFile);
+
+            _dbContext.UserProfiles.Update(userProfile);
+            _dbContext.SaveChanges();
+            return Ok("Updated successfully.");
+        }
+
+        private string StoreImageFilePathInDatabase(IFormFile profileImage)
+        {
+            // File extension
+            string extension = Path.GetExtension(profileImage.FileName);
+            // Get the root path of the web application
+            string webRootPath = _webHostEnvironment.WebRootPath;
+
+            // Define the relative path to the image directory within the wwwroot folder
+            string imagePath = Path.Combine("users", "images");
+
+            // Create the full path to save the image
+            string uploadPath = Path.Combine(webRootPath, imagePath);
+
+            // Create the directory if it doesn't exist
+            Directory.CreateDirectory(uploadPath);
+
+            // Generate a unique filename for the image (you can use your own logic here)
+            string uniqueFileName = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Combine the upload path with the unique filename
+            string filePath = Path.Combine(uploadPath, uniqueFileName) + extension;
+
+            // Save the image file
+            using (var imageStream = new FileStream(filePath, FileMode.Create))
+            {
+                profileImage.CopyTo(imageStream);
+            }
+
+            // Path To Save In Database
+            return $"/users/images/{uniqueFileName}{extension}";
+        }
+     
     }
 }
 

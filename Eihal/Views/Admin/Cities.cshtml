@@ -1,4 +1,4 @@
-﻿@model List<Eihal.Data.Entites.ProfessionalRank>
+﻿@model List<Eihal.Data.Entites.City>
 <head>
     <!-- Custom styles for this template-->
     <link href="~/css/sb-admin-2.css" rel="stylesheet">
@@ -34,7 +34,7 @@
 <!-- Toaster -->
 <div id="toast-container" class="toast-container toast-center">
     <div class="alert alert-success hidden" role="alert">
-        The Professional Rank Added/Updated Successfully!
+        The City Added/Updated Successfully!
     </div>
 
     @if (@ViewBag.SuccessMessage != null)
@@ -43,7 +43,7 @@
         {
             <text>
                 <div class="alert alert-success" role="alert">
-                    Professional Rank deleted successfully!
+                    City deleted successfully!
                 </div>
             </text>
         }
@@ -51,7 +51,7 @@
         {
             <text>
                 <div class="alert alert-danger" role="alert">
-                    You cannot delete this item as it is linked to users in the system.
+                    You cannot delete this item as it is linked in the system.
                 </div>
             </text>
         }
@@ -78,7 +78,7 @@
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h6 style="font-weight:bold;color:#00768c " class="h6 mb-0 ">  Master List  &#8658; Professional Ranks</h6>
+                        <h6 style="font-weight:bold;color:#00768c " class="h6 mb-0 ">  Master List  &#8658; Cities</h6>
 
 
                         <!--ToDo:Move To Partial View -->
@@ -134,9 +134,9 @@
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
                                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Professional Ranks</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Cities</h6>
                                     <div style="text-align: end; cursor:pointer">
-                                        <button id="openNewProfessionalRankModal" type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#AddNewProfessionalRank">  <i class="fa fa-plus text-white-50"></i>  </button>
+                                        <button id="openNewCityModal" type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#AddNewCity">  <i class="fa fa-plus text-white-50"></i>  </button>
                                     </div>
                                 </div>
                                 <!-- Card Body -->
@@ -145,7 +145,7 @@
                                     <br />
 
                                     <div class="table-responsive" id="dataTableContainer">
-                                        @Html.Partial("ProfessionalRanksList", Model)
+                                        @Html.Partial("CitiesList", Model)
 
                                     </div>
                                 </div>
@@ -171,11 +171,11 @@
 </div>
 
 
-<div class="modal fade" id="AddNewProfessionalRank" tabindex="-1" role="dialog" aria-labelledby="AddNewProfessionalRankModal" aria-hidden="true">
+<div class="modal fade" id="AddNewCity" tabindex="-1" role="dialog" aria-labelledby="AddNewCityModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="AddNewProfessionalRankModal">Add</h5>
+                <h5 class="modal-title" id="AddNewCityModal">Add</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -192,19 +192,19 @@
                         <input type="text" class="form-control" id="titleArInput" required>
                     </div>
                     <div class="form-group">
-                        <label for="practitionerTypes-ddl" style="font-weight:bold;color:#00768c">Practitioner Type:</label>
+                        <label for="states-ddl" style="font-weight:bold;color:#00768c">State:</label>
                         <!-- Dropdown list HTML element -->
-                        <select class="form-control" id="practitionerTypes-ddl"></select>
+                        <select class="form-control" id="states-ddl"></select>
                     </div>
                 </form>
                 <div class="alert alert-danger hidden sm" role="alert">
                     <span id="error-msg-not-fill" style="display:none">Please fill all fields.</span>
-                    <span id="error-msg-duplicate" style="display:none">The details for the Professional Rank have already been added.</span>
+                    <span id="error-msg-duplicate" style="display:none">The details for the City have already been added.</span>
                 </div>
             </div>
             <div class="modal-footer">
-                <button id="close-add-ProfessionalRank" type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                <button id="add-ProfessionalRank" type="button" class="btn btn-success" style="background-color:#00768c">Save</button>
+                <button id="close-add-City" type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button id="add-City" type="button" class="btn btn-success" style="background-color:#00768c">Save</button>
             </div>
         </div>
     </div>
@@ -225,20 +225,20 @@
             }, 3000);
 
 
-            $('#openNewProfessionalRankModal').click(function () {
+            $('#openNewCityModal').click(function () {
                 $('#titleArInput').val("");
                 $('#titleEnInput').val("");
 
-                if ($('#practitionerTypes-ddl').children().length == 0) {
+                if ($('#states-ddl').children().length == 0) {
                     $.ajax({
-                        url: '@Url.Action("GetPractitionerTypesDDL", "Common")',
+                        url: '@Url.Action("GetStatesDDL", "Common")',
                         type: 'GET',
                         dataType: 'json',
                         success: function (data) {
                             // Clear existing options
-                            $('#practitionerTypes-ddl').empty();
+                            $('#states-ddl').empty();
                             // Populate the dropdown list
-                            var dropdown = $('#practitionerTypes-ddl');
+                            var dropdown = $('#states-ddl');
                             $.each(data, function (index, item) {
                                 dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
                             });
@@ -247,25 +247,24 @@
                 }
             });
 
-            $('#add-ProfessionalRank').click(function () {
-                var professionalRank = {
+            $('#add-City').click(function () {
+                var city = {
                     TitleAr: $('#titleArInput').val(),
                     TitleEn: $('#titleEnInput').val(),
-                    IsActive:true,
-                    PractitionerTypeId: $('#practitionerTypes-ddl').val()
+                    stateId: $('#states-ddl').val()
                 };
 
                 $.ajax({
-                    url: '/Admin/AddProfessionalRank', // Replace with your actual API endpoint URL
+                    url: '/Admin/AddCity', // Replace with your actual API endpoint URL
                     type: 'POST',
-                    data: JSON.stringify(professionalRank),
+                    data: JSON.stringify(city),
                     contentType: 'application/json',
                     success: function (response) {
                         // Show the success message
                         $('.alert-success').removeClass('hidden').hide().fadeIn();
                         // Close the modal after the success message fades out
-                        $("#close-add-ProfessionalRank").trigger("click");
-                        $('#dataTableContainer').load('/Admin/GetProfessionalRanks');
+                        $("#close-add-City").trigger("click");
+                        $('#dataTableContainer').load('/Admin/GetCities');
 
                         // Hide the success message after 2 seconds
                         setTimeout(function () {
@@ -283,7 +282,7 @@
                             $('#error-msg-duplicate').hide();
                         }
 
-                        if (msg == "The details for the Professional Rank have already been added.") {
+                        if (msg == "The details for the City have already been added.") {
                             $('#error-msg-not-fill').hide();
                             $('#error-msg-duplicate').show();
                         }

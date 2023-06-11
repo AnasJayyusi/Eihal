@@ -1,0 +1,551 @@
+﻿<style>
+    .drop-container {
+        position: relative;
+        display: flex;
+        gap: 10px;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 200px;
+        padding: 20px;
+        border-radius: 10px;
+        border: 2px dashed #555;
+        color: #444;
+        cursor: pointer;
+        transition: background .2s ease-in-out, border .2s ease-in-out;
+    }
+
+        .drop-container:hover {
+            background: #eee;
+            border-color: #111;
+        }
+
+            .drop-container:hover .drop-title {
+                color: #222;
+            }
+
+    .drop-title {
+        color: #444;
+        font-size: 20px;
+        font-weight: bold;
+        text-align: center;
+        transition: color .2s ease-in-out;
+    }
+
+    input[type=file] {
+        width: 350px;
+        max-width: 100%;
+        color: #444;
+        padding: 5px;
+        background: #fff;
+        border-radius: 10px;
+        border: 1px solid #555;
+    }
+
+        input[type=file]::file-selector-button {
+            margin-right: 20px;
+            border: none;
+            background: #00768c;
+            padding: 10px 20px;
+            border-radius: 10px;
+            color: #fff;
+            cursor: pointer;
+            transition: background .2s ease-in-out;
+        }
+
+            input[type=file]::file-selector-button:hover {
+                background: #0d45a5;
+            }
+</style>
+
+<div id="tab1" class="tab-content" style="color:#00768c">
+    <div style="text-align: end; cursor:pointer">
+        <button onclick="getFullUserProfileInfo()" type="button" style="background-color:#00768c" class="btn btn-success" data-toggle="modal" data-target="#EditProfileModal">
+            <i onclick="getFullUserProfileInfo()" style="font-size:25px" class="fas fa-edit"></i> Edit Profile
+        </button>
+    </div>
+    <table cellpadding="10">
+        <tr>
+            <td>
+                <img id="user-image" src="~/users/images/Default-User-Profile.jpg" width="150" height="150" />
+            </td>
+            <td>
+                Welcome!
+                <h4 id="fullname-label" style="font-weight:bold"></h4>
+            </td>
+
+
+        </tr>
+        <tr>
+            <td>
+                <i class="fa fa-hospital-o" aria-hidden="true"></i>
+                <label style="font-weight:bold">Number Of Patients</label>  <span id="number-patients-label" style="color:black"></span>
+            </td>
+
+            <td>
+                <img src="~/icon/Doctor/shield-icon.png" width="25" height="25" />
+                <label style="font-weight:bold">Insurance Accept</label>  <span id="insurance-label" style="color:black"></span>
+            </td>
+
+            <td>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <label style="font-weight:bold">Reviews</label> <img src="~/icon/Doctor/review-icon.png" width="25" height="25" />
+                <span id="review-label" style="color:black"></span>
+            </td>
+
+        </tr>
+    </table>
+    <hr>
+
+    <table cellpadding="10">
+        <tr>
+            <td style="font-weight:bold">Bio</td>
+        </tr>
+        <tr style="color:black">
+            <td><span id="bio-label"></span></td>
+        </tr>
+        <tr>
+            <td style="font-weight:bold">Speciality</td>
+            <td style="color:black"><span id="speciality-label"></span></td>
+        </tr>
+
+        <tr>
+            <td style="font-weight:bold">Certifactions</td>
+            <td style="color:black">
+                <span id="certifactions-label"></span>
+                <button type="button" style="background-color:#00768c; padding: 5px 45px; font-size: 14px;" class="btn btn-success" data-toggle="modal" data-target="#AttachCertifactionsModal">
+                    <i class="fa fa-upload" aria-hidden="true"></i> Attach
+                </button>
+            </td>
+
+
+        </tr>
+    </table>
+</div>
+
+
+
+<!------------------------------ Edit User Profile -------------------->
+<div class="modal fade" id="EditProfileModal" tabindex="-1" role="dialog" aria-labelledby="EditUserProfileModal" aria-hidden="true">
+    <div class="modal-dialog custom-modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="EditUserProfileModal">Edit User Profile</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <!-- Add your modal content here -->
+                    <table cellpadding="10">
+
+                        <tr>
+                            <td>
+                                <label for="image-upload">
+                                    <img title="Click here to upload new image" id="user-image-edit" style="cursor: pointer;" src="~/users/images/Default-User-Profile.jpg" id="preview-image" width="150" height="150" />
+                                </label>
+                                <input type="file" accept="image/*" id="image-upload" onchange="loadImage(event)" style="display: none;" />
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <label style="font-weight:bold;color:#00768c" for="full-name-edit-input"> Full Name</label>
+                                    <input type="text" class="form-control" id="full-name-edit-input" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label style="font-weight:bold;color:#00768c" for="bio-edit-input">Bio</label>
+                                    <textarea placeholder="No Bio Added Yet." rows="4" cols="50" type="text" class="form-control" id="bio-edit-input" required></textarea>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+
+                            <td>
+                                <div class="form-group">
+                                    <label style="font-weight:bold;color:#00768c" for="accountTypes-ddl-edit">Account Type:</label>
+                                    <select disabled class="form-control" id="accountTypes-ddl-edit"></select>
+                                </div>
+                            <td>
+                                <div class="form-group">
+                                    <label style="font-weight:bold;color:#00768c" for="practitionerTypes-ddl-edit">Practitioner Type:</label>
+                                    <select disabled class="form-control" id="practitionerTypes-ddl-edit"></select>
+                                </div>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-group">
+                                    <label style="font-weight:bold;color:#00768c" for="phone-edit-input">Phone:</label>
+                                    <input disabled type="text" class="form-control" id="phone-edit-input" value="Test" required>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <label style="font-weight:bold;color:#00768c" for="email-edit-input">Email:</label>
+                                    <input disabled type="text" class="form-control" id="email-edit-input" value="Test" required>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-group">
+                                    <label style="font-weight:bold;color:#00768c" for="professionalRanks-ddl-edit">Professional Rank:</label>
+                                    <select class="form-control" id="professionalRanks-ddl-edit">
+                                        <option value="">Select a professional rank</option>
+                                    </select>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <label style="font-weight:bold;color:#00768c" for="countries-ddl-edit">Country:</label>
+                                    <select class="form-control" id="countries-ddl-edit" onchange="getStates(this.value)">
+                                        <option value="">Select a Country</option>
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="form-group">
+                                    <label style="font-weight:bold;color:#00768c" for="states-ddl-edit">State:</label>
+                                    <select class="form-control" id="states-ddl-edit" onchange="getCites(this.value)">
+                                        <option value="">Select a State</option>
+                                    </select>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <label style="font-weight:bold;color:#00768c" for="cities-ddl-edit">City:</label>
+                                    <select class="form-control" id="cities-ddl-edit">
+                                        <option value="">Select a City</option>
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="2">
+                                <div class="form-group">
+                                    <label style="font-weight:bold;color:#00768c" for="speciality-edit-multiSelect">Speciality:</label>
+                                    <div>
+                                        <div>
+                                            <select id="speciality-edit-multiSelect" multiple>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+
+                        </tr>
+
+
+                    </table>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button onclick="updateProfile()" type="button" class="btn btn-success" style="background-color:#00768c">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!------------------------------ Attachment -------------------->
+
+<div class="modal fade" id="AttachCertifactionsModal" tabindex="-1" role="dialog" aria-labelledby="AttachCertifactionsModal" aria-hidden="true">
+    <div class="modal-dialog custom-modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AttachCertifactionsModal">Attach Certifactions</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <!-- Add your modal content here -->
+                    <label for="images" class="drop-container">
+                        <span class="drop-title">Drop files here</span>
+                        or
+                        <input type="file" id="images" accept="image/*" required>
+                    </label>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button onclick="updateProfile()" type="button" class="btn btn-success" style="background-color:#00768c">Upload</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .custom-modal-dialog {
+        max-width: 650px; /* Set the desired width */
+        max-height: 400px;
+        /* Add additional CSS properties if needed */
+    }
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        const dropContainer = document.querySelector('.drop-container');
+        const fileInput = document.querySelector('#images');
+
+        dropContainer.addEventListener('dragover', handleDragOver);
+        dropContainer.addEventListener('dragleave', handleDragLeave);
+        dropContainer.addEventListener('drop', handleDrop);
+
+        function handleDragOver(event) {
+            event.preventDefault();
+            dropContainer.style.background = '#eee';
+            dropContainer.style.borderColor = '#111';
+        }
+
+        function handleDragLeave(event) {
+            event.preventDefault();
+            dropContainer.style.background = 'transparent';
+            dropContainer.style.borderColor = '#555';
+        }
+
+        function handleDrop(event) {
+            event.preventDefault();
+            dropContainer.style.background = 'transparent';
+            dropContainer.style.borderColor = '#555';
+
+            const files = event.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+            }
+        }
+
+
+        $.ajax({
+
+            url: "/ServiceProvider/GetUserProfileInfo",
+            method: "GET",
+            success: function (response) {
+                $("#fullname-label").text(response.fullname);
+                $("#number-patients-label").text(response.numberPatients);
+                $("#review-label").text("(" + response.review + ")");
+                $("#insurance-label").text(response.insurance == "true" ? "Yes" : "No");
+                $("#bio-label").text(response.bio);
+                $("#speciality-label").text(response.speciality);
+                $("#certifactions-label").text(response.certifactions);
+
+                if (response.profilePicturePath != null || response.profilePicturePath != undefined)
+                    $('[id^="user-image"]').attr('src', response.profilePicturePath);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    });
+
+    function getFullUserProfileInfo() {
+        if ($(".choices__list").length == 0 && $(".choices__inner").length == 0) {
+            $.ajax({
+                url: '@Url.Action("GetUserSpecialtiesDDL", "ServiceProvider")',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    var select = $('#speciality-edit-multiSelect');
+                    $.each(data, function (index, item) {
+                        select.append($('<option></option>').val(item.id).text(item.titleEn));
+                    });
+                    new Choices(select[0], {
+                        removeItemButton: true,
+                        maxItemCount: 10,
+                        placeholderValue: ''
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+
+
+        if ($('#practitionerTypes-ddl-edit').children().length == 0) {
+            $.ajax({
+                url: '@Url.Action("GetPractitionerTypesDDL", "Common")',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Clear existing options
+                    $('#practitionerTypes-ddl-edit').empty();
+                    // Populate the dropdown list
+                    var dropdown = $('#practitionerTypes-ddl-edit');
+                    // Add remaining options
+                    $.each(data, function (index, item) {
+                        dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                    });
+                }
+            });
+
+
+            $.ajax({
+                url: '@Url.Action("GetAccountTypesDDL", "Common")',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Clear existing options
+                    $('#accountTypes-ddl-edit').empty();
+                    // Populate the dropdown list
+                    var dropdown = $('#accountTypes-ddl-edit');
+                    $.each(data, function (index, item) {
+                        dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                    });
+                }
+            });
+
+            $.ajax({
+                url: '@Url.Action("GetUserProfessionalRanksDDL", "ServiceProvider")',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Clear existing options
+                    $('#professionalRanks-ddl-edit').empty();
+
+                    // Populate the dropdown list
+                    var dropdown = $('#professionalRanks-ddl-edit');
+
+                    // Add default option
+                    dropdown.append($('<option></option>').val('').text('Select a professional Rank'));
+
+                    $.each(data, function (index, item) {
+                        dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                    });
+                }
+            });
+
+            $.ajax({
+                url: '@Url.Action("GetCountriesDDL", "ServiceProvider")',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Clear existing options
+                    $('#countries-ddl-edit').empty();
+                    // Populate the dropdown list
+                    var dropdown = $('#countries-ddl-edit');
+                    // Add default option
+                    dropdown.append($('<option></option>').val('').text('Select a country'));
+                    $.each(data, function (index, item) {
+                        dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                    });
+                }
+            });
+
+
+
+            $.ajax({
+                url: "/ServiceProvider/GetFullUserProfileInfo",
+                method: "GET",
+                success: function (response) {
+                    $("#full-name-edit-input").val(response.fullName);
+                    $("#bio-edit-input").val(response.bio);
+                    $("#account-type-edit-input").val(response.accountType);
+                    $("#practitioner-edit-input").val(response.practitioner);
+                    $("#phone-edit-input").val(response.phone);
+                    $("#email-edit-input").val(response.email);
+                    $("#professional-edit-input").val(response.professional);
+                    $("#country-edit-input").val(response.country);
+                    $("#state-edit-input").val(response.state);
+                    $("#city-edit-input").val(response.city);
+                    $("#speciality-edit-multiSelect").val(response.speciality);
+
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+
+
+        }
+    }
+
+    function loadImage(event) {
+        var image = document.getElementById('user-image-edit');
+        image.src = URL.createObjectURL(event.target.files[0]);
+    }
+
+    function getStates(countryId) {
+        $.ajax({
+            url: '@Url.Action("GetStatesDDL", "ServiceProvider")' + '?countryId=' + countryId,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                // Clear existing options
+                $('#states-ddl-edit').empty();
+                // Populate the dropdown list
+                var dropdown = $('#states-ddl-edit');
+                // Add default option
+                dropdown.append($('<option></option>').val('').text('Select a state'));
+                $.each(data, function (index, item) {
+                    dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                });
+            }
+        });
+    }
+
+    function getCites(stateId) {
+        $.ajax({
+            url: '@Url.Action("GetCitiesDDL", "ServiceProvider")' + '?stateId=' + stateId,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                // Clear existing options
+                $('#cities-ddl-edit').empty();
+                // Populate the dropdown list
+                var dropdown = $('#cities-ddl-edit');
+                dropdown.append($('<option></option>').val('').text('Select a city'));
+                $.each(data, function (index, item) {
+                    dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                });
+            }
+        });
+    }
+
+
+    function updateProfile() {
+        debugger;
+        var formData = new FormData();
+        formData.append('FullName', $('#full-name-edit-input').val());
+        formData.append('Bio', $('#bio-edit-input').val());
+        formData.append('ProfessionalRankId', $('#professionalRanks-ddl-edit').val());
+        formData.append('CountryId', $('#countries-ddl-edit').val());
+        formData.append('StateId', $('#states-ddl-edit').val());
+        formData.append('CityId', $('#cities-ddl-edit').val());
+        formData.append('SpecialtiesIds', $('#speciality-edit-multiSelect').val());
+
+        var imageFile = $('#image-upload')[0].files[0];
+        formData.append('image', imageFile);
+
+        $.ajax({
+            url: '/ServiceProvider/UpdateUserProfile',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                console.log(response);
+                // Handle success response
+            },
+            error: function (error) {
+                console.log(error);
+                // Handle error response
+            }
+        });
+    }
+
+</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
+<script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
+
+

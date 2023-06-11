@@ -4,6 +4,7 @@ using Eihal.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Eihal.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230609220344_AddLocationTables")]
+    partial class AddLocationTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -209,14 +211,16 @@ namespace Eihal.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Bio")
-                        .HasMaxLength(4096)
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Certifications")
                         .HasMaxLength(4096)
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CityId")
+                    b.Property<int?>("City")
                         .HasColumnType("int");
 
                     b.Property<int?>("CountryId")
@@ -232,6 +236,7 @@ namespace Eihal.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<int?>("NumOfPatients")
+                        .HasMaxLength(4096)
                         .HasColumnType("int");
 
                     b.Property<string>("PhoneNumber")
@@ -240,39 +245,23 @@ namespace Eihal.Data.Migrations
                     b.Property<int?>("PractitionerTypeId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProfessionalRankId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ProfilePicturePath")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Reviews")
                         .HasColumnType("int");
 
-                    b.Property<string>("SpecialtiesIds")
+                    b.Property<string>("Speciality")
+                        .HasMaxLength(4096)
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SpecialtiesTitlesAr")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SpecialtiesTitlesEn")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("StateId")
+                    b.Property<int?>("State")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CityId");
-
-                    b.HasIndex("CountryId");
-
-                    b.HasIndex("ProfessionalRankId");
-
-                    b.HasIndex("StateId");
 
                     b.ToTable("UserProfiles");
                 });
@@ -560,33 +549,6 @@ namespace Eihal.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Country");
-                });
-
-            modelBuilder.Entity("Eihal.Data.Entites.UserProfile", b =>
-                {
-                    b.HasOne("Eihal.Data.Entites.City", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId");
-
-                    b.HasOne("Eihal.Data.Entites.Country", "Country")
-                        .WithMany()
-                        .HasForeignKey("CountryId");
-
-                    b.HasOne("Eihal.Data.Entites.ProfessionalRank", "ProfessionalRank")
-                        .WithMany()
-                        .HasForeignKey("ProfessionalRankId");
-
-                    b.HasOne("Eihal.Data.Entites.State", "State")
-                        .WithMany()
-                        .HasForeignKey("StateId");
-
-                    b.Navigation("City");
-
-                    b.Navigation("Country");
-
-                    b.Navigation("ProfessionalRank");
-
-                    b.Navigation("State");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

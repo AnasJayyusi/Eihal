@@ -13,7 +13,7 @@
 <!--Sign Up -->
 <div class="loginLogo" id="singUpModal" style="padding: 10%;" tabindex="-1" role="dialog">
 
-   
+
 
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width:60%" role="document">
         <div class="modal-content">
@@ -29,14 +29,14 @@
                     <div style="width: 100%; display: table;">
                         <div style="display: table-row">
                             <div class="form-group">
-                                <label for="">
-                                    Account Type
-                                </label>
+                                <label for="account_type">Account Type</label>
                                 <div id="account-type-div" class="form-data select-box" style="width:75%">
-                                    <select class="form-control" name="account_type" id="account_type" required>
-                                        <option value="0">Select Account Type</option>
-                                        <option value="1">Service Provider</option>
-                                        <option value="2">Beneficiary</option>
+                                    <select asp-for="Input.AccountTypeId" class="form-control" name="account_type" id="account_type" required>
+                                        <option value="">Select Account Type</option>
+                                        @foreach (var accountType in Model.AccountTypes)
+                                        {
+                                            <option value="@accountType.Id">@accountType.TitleEn</option>
+                                        }
                                     </select>
                                 </div>
                             </div>
@@ -46,21 +46,15 @@
                                         Health Practitioner Type
                                     </label>
 
-                                    <div id="doctor-type-div" class="form-data select-box doctor_type_div" style="width:75%">
-                                        <select disabled style="cursor:not-allowed" class="form-control" name="doctor_type" id="doctor-type-ddl">
-                                            <option value="0">
-                                                Select Health Practitioner Type
-                                            </option>
-
-                                            <option value="1">
-                                                Dentist
-                                            </option>
-
-                                            <option value="2">
-                                                Dental Hygienist
-                                            </option>
+                                    <div id="doctor-type-div" class="form-data select-box practitioner_type_div" style="width:75%">
+                                        <select asp-for="Input.PractitionerTypeId" disabled style="cursor:not-allowed" class="form-control" name="practitioner_type" id="doctor-type-ddl">
+                                            <option value="">Select Health Practitioner Type</option>
+                                            @foreach (var practitionerType in Model.PractitionerTypes)
+                                            {
+                                                <option value="@practitionerType.Id">@practitionerType.TitleEn</option>
+                                            }
                                         </select>
-                                    </div>
+                                </div>
                                 </div>
 
                                 <div class="form-group" id="category_id_dropdown">
@@ -68,16 +62,15 @@
                                         Professional Rank
                                     </label>
 
-                                    <div id="category-id-div" class="form-data select-box category_type_div" style="width:75%">
-                                        <select disabled style="cursor:not-allowed" class="form-control" name="category_type" id="category-rank-ddl">
-                                            <option value="0">
-                                                Select Professional Rank Type
-                                            </option>
-                                            <option value="1">
-                                                PHD
-                                            </option>
-                                        </select>
-                                    </div>
+                                    <div id="category-id-div" class="form-data select-box professionalRank_div" style="width:75%">
+                                        <select asp-for="Input.ProfessionalRankId" disabled style="cursor:not-allowed" class="form-control" name="professional_Rank" id="category-rank-ddl">
+                                                <option value="">Select Professional Rank Type</option>
+                                                @foreach (var professionalRank in Model.ProfessionalRanks)
+                                                {
+                                                    <option value="@professionalRank.Id">@professionalRank.TitleEn</option>
+                                                }
+                                            </select>
+                                        </div>
                                 </div>
                             </div>
 

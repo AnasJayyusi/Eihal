@@ -1,4 +1,4 @@
-﻿@model List<Eihal.Data.Entites.ProfessionalRank>
+﻿@model List<Eihal.Data.Entites.Country>
 <head>
     <!-- Custom styles for this template-->
     <link href="~/css/sb-admin-2.css" rel="stylesheet">
@@ -9,7 +9,6 @@
         .hidden {
             display: none;
         }
-
 
         .toast-container {
             position: fixed;
@@ -31,10 +30,11 @@
     </style>
 </head>
 
+
 <!-- Toaster -->
 <div id="toast-container" class="toast-container toast-center">
     <div class="alert alert-success hidden" role="alert">
-        The Professional Rank Added/Updated Successfully!
+        The Country Added/Updated Successfully!
     </div>
 
     @if (@ViewBag.SuccessMessage != null)
@@ -43,7 +43,7 @@
         {
             <text>
                 <div class="alert alert-success" role="alert">
-                    Professional Rank deleted successfully!
+                   Country deleted successfully!
                 </div>
             </text>
         }
@@ -51,7 +51,7 @@
         {
             <text>
                 <div class="alert alert-danger" role="alert">
-                    You cannot delete this item as it is linked to users in the system.
+                    You cannot delete this item as it is linked to state in the system.
                 </div>
             </text>
         }
@@ -78,7 +78,7 @@
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h6 style="font-weight:bold;color:#00768c " class="h6 mb-0 ">  Master List  &#8658; Professional Ranks</h6>
+                        <h6 style="font-weight:bold;color:#00768c " class="h6 mb-0 ">  Master List  &#8658; Countries</h6>
 
 
                         <!--ToDo:Move To Partial View -->
@@ -134,9 +134,9 @@
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
                                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Professional Ranks</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Countries</h6>
                                     <div style="text-align: end; cursor:pointer">
-                                        <button id="openNewProfessionalRankModal" type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#AddNewProfessionalRank">  <i class="fa fa-plus text-white-50"></i>  </button>
+                                        <button id="openNewPractitionerModal" type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#AddNewCountry">  <i class="fa fa-plus text-white-50"></i>  </button>
                                     </div>
                                 </div>
                                 <!-- Card Body -->
@@ -145,7 +145,7 @@
                                     <br />
 
                                     <div class="table-responsive" id="dataTableContainer">
-                                        @Html.Partial("ProfessionalRanksList", Model)
+                                        @Html.Partial("CountriesList", Model)
 
                                     </div>
                                 </div>
@@ -171,11 +171,11 @@
 </div>
 
 
-<div class="modal fade" id="AddNewProfessionalRank" tabindex="-1" role="dialog" aria-labelledby="AddNewProfessionalRankModal" aria-hidden="true">
+<div class="modal fade" id="AddNewCountry" tabindex="-1" role="dialog" aria-labelledby="AddNewCountryModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="AddNewProfessionalRankModal">Add</h5>
+                <h5 class="modal-title" id="AddNewCountryModal">Add</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -191,20 +191,14 @@
                         <label style="font-weight:bold;color:#00768c" for="titleArInput">Title (Arabic):</label>
                         <input type="text" class="form-control" id="titleArInput" required>
                     </div>
-                    <div class="form-group">
-                        <label for="practitionerTypes-ddl" style="font-weight:bold;color:#00768c">Practitioner Type:</label>
-                        <!-- Dropdown list HTML element -->
-                        <select class="form-control" id="practitionerTypes-ddl"></select>
-                    </div>
                 </form>
                 <div class="alert alert-danger hidden sm" role="alert">
-                    <span id="error-msg-not-fill" style="display:none">Please fill all fields.</span>
-                    <span id="error-msg-duplicate" style="display:none">The details for the Professional Rank have already been added.</span>
+                    <span id="error-msg-add"></span>
                 </div>
             </div>
             <div class="modal-footer">
-                <button id="close-add-ProfessionalRank" type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                <button id="add-ProfessionalRank" type="button" class="btn btn-success" style="background-color:#00768c">Save</button>
+                <button id="close-add-Country" type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button id="add-Country" type="button" class="btn btn-success" style="background-color:#00768c">Save</button>
             </div>
         </div>
     </div>
@@ -218,54 +212,38 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
         $(document).ready(function () {
-
             // Hide the success message after 2 seconds
             setTimeout(function () {
                 $('.alert-success').fadeOut();
             }, 3000);
 
 
-            $('#openNewProfessionalRankModal').click(function () {
+            setTimeout(function () {
+                $('.alert-danger').fadeOut();
+            }, 3000);
+
+            $('#openNewPractitionerModal').click(function () {
                 $('#titleArInput').val("");
                 $('#titleEnInput').val("");
-
-                if ($('#practitionerTypes-ddl').children().length == 0) {
-                    $.ajax({
-                        url: '@Url.Action("GetPractitionerTypesDDL", "Common")',
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function (data) {
-                            // Clear existing options
-                            $('#practitionerTypes-ddl').empty();
-                            // Populate the dropdown list
-                            var dropdown = $('#practitionerTypes-ddl');
-                            $.each(data, function (index, item) {
-                                dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
-                            });
-                        }
-                    });
-                }
             });
 
-            $('#add-ProfessionalRank').click(function () {
-                var professionalRank = {
+            $('#add-Country').click(function () {
+                var practitionerType = {
                     TitleAr: $('#titleArInput').val(),
                     TitleEn: $('#titleEnInput').val(),
-                    IsActive:true,
-                    PractitionerTypeId: $('#practitionerTypes-ddl').val()
                 };
 
                 $.ajax({
-                    url: '/Admin/AddProfessionalRank', // Replace with your actual API endpoint URL
+                    url: '/Admin/AddCountry', // Replace with your actual API endpoint URL
                     type: 'POST',
-                    data: JSON.stringify(professionalRank),
+                    data: JSON.stringify(practitionerType),
                     contentType: 'application/json',
                     success: function (response) {
                         // Show the success message
                         $('.alert-success').removeClass('hidden').hide().fadeIn();
                         // Close the modal after the success message fades out
-                        $("#close-add-ProfessionalRank").trigger("click");
-                        $('#dataTableContainer').load('/Admin/GetProfessionalRanks');
+                        $("#close-add-Country").trigger("click");
+                        $('#dataTableContainer').load('/Admin/GetCountries');
 
                         // Hide the success message after 2 seconds
                         setTimeout(function () {
@@ -277,16 +255,7 @@
                         // Show the error message
                         $('.alert-danger').removeClass('hidden');
                         var msg = xhr.responseText;
-                        debugger;
-                        if (msg == "Please fill all fields.") {
-                            $('#error-msg-not-fill').show();
-                            $('#error-msg-duplicate').hide();
-                        }
-
-                        if (msg == "The details for the Professional Rank have already been added.") {
-                            $('#error-msg-not-fill').hide();
-                            $('#error-msg-duplicate').show();
-                        }
+                        $('#error-msg-add').text(msg.toString());
                         // Hide the error message after 2 seconds
                         setTimeout(function () {
                             $('.alert-danger').addClass('hidden');
@@ -298,5 +267,3 @@
         });
     </script>
 }
-
-<!-- Dropdown list HTML element -->

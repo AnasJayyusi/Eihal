@@ -6716,5 +6716,9 @@ body {
 }
 .loginLogo {
     background: url("../images/header.png") center/cover no-repeat;
-
 }
+
+.register-confirmation-logo {
+    background: url("../images/header-blur.jpg") center;
+}
+

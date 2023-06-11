@@ -1,33 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 
-
-<div class="nav-contain sidebar">
-    <ul class="navbar-nav">
-        <li id="myProfile-li" class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index"><span id="myProfile-text">    <i class='fas fa-user-alt'></i> @Localizer["My Profile"]</span></a>
-        </li>
-
-        <li id="myServices-li" class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">
-                <img src="~/icon/Doctor/service-icon.png" width="20" height="20" /></i>&nbsp;@Localizer["My Services"]
-            </a>
-        </li>
-
-        <li id="myReferrals-li" class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">
-                <img src="~/icon/Doctor/referrals-icon.png" width="20" height="20" />&nbsp;@Localizer["My Referrals"]
-            </a>
-        </li>
-
-
-
-    </ul>
-
-
-
-</div>
-
 <style>
     .sidebar a {
         overflow: hidden;
@@ -101,4 +74,32 @@
     }
 </style>
 
+
+
+
+<div class="nav-contain sidebar">
+    <ul class="navbar-nav">
+        <li id="myProfile-li" class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index"><span id="myProfile-text">    <i class='fas fa-user-alt'></i> @Localizer["My Profile"]</span></a>
+        </li>
+
+        <li id="myServices-li" class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">
+                <img src="~/icon/Doctor/service-icon.png" width="20" height="20" /></i>&nbsp;@Localizer["My Services"]
+            </a>
+        </li>
+
+        <li id="myReferrals-li" class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">
+                <img src="~/icon/Doctor/referrals-icon.png" width="20" height="20" />&nbsp;@Localizer["My Referrals"]
+            </a>
+        </li>
+
+
+
+    </ul>
+
+
+
+</div>
 

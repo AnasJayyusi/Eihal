@@ -2,15 +2,61 @@
 <head>
     <!-- Custom styles for this template-->
     <link href="~/css/sb-admin-2.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
 
     <style>
         .hidden {
             display: none;
         }
+
+        .toast-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toast-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
     </style>
 </head>
 
+
+<!-- Toaster -->
+<div id="toast-container" class="toast-container toast-center">
+    <div class="alert alert-success hidden" role="alert">
+        The Practitioner Type Added/Updated Successfully!
+    </div>
+
+    @if (@ViewBag.SuccessMessage != null)
+    {
+        if (@ViewBag.SuccessMessage == true)
+        {
+            <text>
+                <div class="alert alert-success" role="alert">
+                    Practitioner type deleted successfully!
+                </div>
+            </text>
+        }
+        if (@ViewBag.SuccessMessage == false)
+        {
+            <text>
+                <div class="alert alert-danger" role="alert">
+                    You cannot delete this item as it is linked to users in the system.
+                </div>
+            </text>
+        }
+    }
+</div>
 
 
 <div id="page-top" style="margin-top:50px">
@@ -28,29 +74,7 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid" style="margin-top:50px">
-                    <div class="alert alert-success hidden" role="alert">
-                        The Practitioner Type Added/Updated Successfully!
-                    </div>
 
-                    @if (@ViewBag.SuccessMessage != null)
-                    {
-                        if (@ViewBag.SuccessMessage == true)
-                        {
-                            <text>
-                                <div class="alert alert-success" role="alert">
-                                    Practitioner type deleted successfully!
-                                </div>
-                            </text>
-                        }
-                        if (@ViewBag.SuccessMessage == false)
-                        {
-                            <text>
-                                <div class="alert alert-danger" role="alert">
-                                    You cannot delete this item as it is linked to users in the system.
-                                </div>
-                            </text>
-                        }
-                    }
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -61,7 +85,7 @@
                         <div class="dropdown" style="margin-right: 5%;" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
                             <a href="#">
                                 <label style="font-weight:bold;color:#00768c ">Administrator</label>
-                                <img src="/images/User/Default-User-Profle.png" width="40" height="40" alt="user-profile">
+                                <img src="~/users/images/Default-User-Profile.jpg" width="40" height="40" alt="user-profile">
                             </a>
 
                             <div class="dropdown-content">
@@ -112,7 +136,7 @@
                                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                     <h6 class="m-0 font-weight-bold text-primary">Practitioner Types</h6>
                                     <div style="text-align: end; cursor:pointer">
-                                        <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#AddNewPractitionerType">  <i class="fa fa-plus text-white-50"></i>  </button>
+                                        <button id="openNewPractitionerModal" type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#AddNewPractitionerType">  <i class="fa fa-plus text-white-50"></i>  </button>
                                     </div>
                                 </div>
                                 <!-- Card Body -->
@@ -121,7 +145,7 @@
                                     <br />
 
                                     <div class="table-responsive" id="dataTableContainer">
-                                        @Html.Partial("ListPractitionerTypes", Model)
+                                        @Html.Partial("PractitionerTypesList", Model)
 
                                     </div>
                                 </div>
@@ -169,7 +193,6 @@
                     </div>
                 </form>
                 <div class="alert alert-danger hidden sm" role="alert">
-
                     <span id="error-msg-add"></span>
                 </div>
             </div>
@@ -185,22 +208,25 @@
 
 
 @section Scripts {
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
         $(document).ready(function () {
-
-
             // Hide the success message after 2 seconds
             setTimeout(function () {
                 $('.alert-success').fadeOut();
             }, 3000);
-
+          
+            $('#openNewPractitionerModal').click(function () {
+                $('#titleArInput').val("");
+                $('#titleEnInput').val("");
+            });
 
             $('#add-PractitionerType').click(function () {
                 var practitionerType = {
                     TitleAr: $('#titleArInput').val(),
                     TitleEn: $('#titleEnInput').val(),
+                    IsActive: true,
                 };
 
                 $.ajax({
@@ -222,7 +248,6 @@
 
                     },
                     error: function (xhr, status, error) {
-                        debugger;
                         // Show the error message
                         $('.alert-danger').removeClass('hidden');
                         var msg = xhr.responseText;
@@ -237,5 +262,4 @@
             });
         });
     </script>
-
 }

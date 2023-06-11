@@ -17,7 +17,12 @@ namespace Eihal.Data
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<AccountType> AccountTypes { get; set; }
         public DbSet<PractitionerType> PractitionerTypes { get; set; }
-        public DbSet<ProfessionalRank> ProfessionalRank { get; set; }
+        public DbSet<ProfessionalRank> ProfessionalRanks { get; set; }
+        public DbSet<UserProfile> UserProfiles { get; set; }
+        public DbSet<Specialty> Specialties { get; set; }
+        public DbSet<Country> Countries { get; set; }
+        public DbSet<State> States { get; set; }
+        public DbSet<City> Cities { get; set; }
 
     }
 }

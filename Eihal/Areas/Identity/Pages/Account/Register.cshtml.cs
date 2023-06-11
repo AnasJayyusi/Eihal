@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Data;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
+﻿using Eihal.Data;
+using Eihal.Data.Entites;
 using Eihal.Helper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
+using System.Text;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 
@@ -29,19 +23,38 @@ namespace Eihal.Areas.Identity.Pages.Account
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private IHostingEnvironment _environment;
+        protected readonly ApplicationDbContext _dbContext;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IHostingEnvironment environment
+            IHostingEnvironment environment,
+            ApplicationDbContext dbContext
           )
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _environment = environment;
+            _dbContext = dbContext;
         }
+
+        public enum AccountTypeEnum
+        {
+            ServiceProvider = 1,
+            Beneficiary = 2
+        }
+
+
+        [BindProperty]
+        public List<AccountType> AccountTypes { get; set; }
+
+        [BindProperty]
+        public List<PractitionerType> PractitionerTypes { get; set; }
+
+        [BindProperty]
+        public List<ProfessionalRank> ProfessionalRanks { get; set; }
 
         [BindProperty]
         public InputModel Input { get; set; }
@@ -83,9 +96,17 @@ namespace Eihal.Areas.Identity.Pages.Account
         {
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            LoadDDLs();
         }
 
-        public async Task<IActionResult> OnPostAsync(string? returnUrl)
+        private void LoadDDLs()
+        {
+            FillAccountTypes();
+            FillPractitionerTypes();
+            FillProfessionalRanks();
+        }
+
+        public async Task<IActionResult> OnPostAsync(string? returnUrl, int account_type, int practitioner_type, int professional_Rank)
         {
             string debug = "Start";
 
@@ -93,14 +114,30 @@ namespace Eihal.Areas.Identity.Pages.Account
             returnUrl ??= Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = Input.Email, Email = Input.Email, PhoneNumber = Input.PhoneNumber };
+                var user = new ApplicationUser
+                {
+                    UserName = Input.Email,
+                    Email = Input.Email,
+                    PhoneNumber = Input.PhoneNumber,
+                    AccountTypeId = account_type,
+                    PractitionerTypeId = practitioner_type,
+                    ProfessionalRankId = professional_Rank,
+                    FullName=Input.FullName,
+                    EmailConfirmed = true
+                };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
+                   
                     debug = "Succeeded";
 
                     _logger.LogInformation("User created a new account with password.");
-                    await _userManager.AddToRoleAsync(user, "User");
+
+                    if (account_type == (int)AccountTypeEnum.ServiceProvider)
+                        await _userManager.AddToRoleAsync(user, AccountTypeEnum.ServiceProvider.ToString());
+
+                    if (account_type == (int)AccountTypeEnum.Beneficiary)
+                        await _userManager.AddToRoleAsync(user, AccountTypeEnum.Beneficiary.ToString());
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -110,9 +147,10 @@ namespace Eihal.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
                     debug = "callbackUrl";
-
-                    await SendEmailConfirmation(callbackUrl);
+                    CreateUserProfileData(user.Id);
+                    //await SendEmailConfirmation(callbackUrl);
                     debug = "send";
+
                     //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                     //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
@@ -125,6 +163,9 @@ namespace Eihal.Areas.Identity.Pages.Account
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
                     }
+
+                
+
                 }
                 foreach (var error in result.Errors)
                 {
@@ -135,6 +176,8 @@ namespace Eihal.Areas.Identity.Pages.Account
             using (StreamWriter writer = new StreamWriter("./RegisterDebug.txt"))
                 writer.WriteLine(debug);
             // If we got this far, something failed, redisplay form
+
+            LoadDDLs();
             return Page();
         }
 
@@ -158,6 +201,21 @@ namespace Eihal.Areas.Identity.Pages.Account
             return body;
         }
 
+        private void FillAccountTypes()
+        {
+            AccountTypes = _dbContext.AccountTypes.ToList();
+
+        }
+
+        private void FillPractitionerTypes()
+        {
+            PractitionerTypes = _dbContext.PractitionerTypes.Where(x => x.IsActive).ToList();
+        }
+
+        private void FillProfessionalRanks()
+        {
+            ProfessionalRanks = _dbContext.ProfessionalRanks.Where(x => x.IsActive).ToList();
+        }
 
         public FileResult DownloadFileFromFolder(string fileName)
         {
@@ -169,6 +227,22 @@ namespace Eihal.Areas.Identity.Pages.Account
 
             //Send the File to Download.  
             return File(bytes, "application/octet-stream", fileName);
+        }
+
+        private void CreateUserProfileData(string userId)
+        {
+                var applicationUser = _dbContext.ApplicationUsers.Single(x => x.Id == userId);
+                var obj = new UserProfile()
+                {
+                    UserId = userId,
+                    FullName = applicationUser.FullName,
+                    AccountTypeId = applicationUser.AccountTypeId,
+                    PractitionerTypeId = applicationUser.PractitionerTypeId,
+                    PhoneNumber = applicationUser.PhoneNumber,
+                    Email = applicationUser.Email,
+                };
+                _dbContext.UserProfiles.Add(obj);
+                _dbContext.SaveChanges();
         }
     }
 }

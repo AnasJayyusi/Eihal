@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="IronSoftware.System.Drawing" Version="2023.6.1" />
     <PackageReference Include="Magnific.Popup" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.16" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.16" />
@@ -33,6 +34,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.16" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.16" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.13" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.0.1" />
 	  
   </ItemGroup>
 
@@ -1842,6 +1844,11 @@
     <None Include="wwwroot\vendor\jquery\jquery.slim.js" />
     <None Include="wwwroot\vendor\jquery\jquery.slim.min.js" />
     <None Include="wwwroot\vendor\jquery\jquery.slim.min.map" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\images\User\" />
+    <Folder Include="wwwroot\users\attachments\" />
   </ItemGroup>
 
 </Project>

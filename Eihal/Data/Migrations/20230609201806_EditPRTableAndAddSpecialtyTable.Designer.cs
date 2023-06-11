@@ -4,6 +4,7 @@ using Eihal.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Eihal.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230609201806_EditPRTableAndAddSpecialtyTable")]
+    partial class EditPRTableAndAddSpecialtyTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,56 +44,6 @@ namespace Eihal.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AccountTypes");
-                });
-
-            modelBuilder.Entity("Eihal.Data.Entites.City", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int?>("CountryId")
-                        .IsRequired()
-                        .HasColumnType("int");
-
-                    b.Property<int?>("StateId")
-                        .IsRequired()
-                        .HasColumnType("int");
-
-                    b.Property<string>("TitleAr")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TitleEn")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CountryId");
-
-                    b.HasIndex("StateId");
-
-                    b.ToTable("Cities");
-                });
-
-            modelBuilder.Entity("Eihal.Data.Entites.Country", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("TitleAr")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TitleEn")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Countries");
                 });
 
             modelBuilder.Entity("Eihal.Data.Entites.PractitionerType", b =>
@@ -172,31 +124,6 @@ namespace Eihal.Data.Migrations
                     b.ToTable("Specialties");
                 });
 
-            modelBuilder.Entity("Eihal.Data.Entites.State", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int?>("CountryId")
-                        .IsRequired()
-                        .HasColumnType("int");
-
-                    b.Property<string>("TitleAr")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TitleEn")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CountryId");
-
-                    b.ToTable("States");
-                });
-
             modelBuilder.Entity("Eihal.Data.Entites.UserProfile", b =>
                 {
                     b.Property<int>("Id")
@@ -209,14 +136,16 @@ namespace Eihal.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Bio")
-                        .HasMaxLength(4096)
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Certifications")
                         .HasMaxLength(4096)
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CityId")
+                    b.Property<int?>("City")
                         .HasColumnType("int");
 
                     b.Property<int?>("CountryId")
@@ -232,6 +161,7 @@ namespace Eihal.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<int?>("NumOfPatients")
+                        .HasMaxLength(4096)
                         .HasColumnType("int");
 
                     b.Property<string>("PhoneNumber")
@@ -240,39 +170,23 @@ namespace Eihal.Data.Migrations
                     b.Property<int?>("PractitionerTypeId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProfessionalRankId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ProfilePicturePath")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Reviews")
                         .HasColumnType("int");
 
-                    b.Property<string>("SpecialtiesIds")
+                    b.Property<string>("Speciality")
+                        .HasMaxLength(4096)
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SpecialtiesTitlesAr")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SpecialtiesTitlesEn")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("StateId")
+                    b.Property<int?>("State")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CityId");
-
-                    b.HasIndex("CountryId");
-
-                    b.HasIndex("ProfessionalRankId");
-
-                    b.HasIndex("StateId");
 
                     b.ToTable("UserProfiles");
                 });
@@ -510,25 +424,6 @@ namespace Eihal.Data.Migrations
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
 
-            modelBuilder.Entity("Eihal.Data.Entites.City", b =>
-                {
-                    b.HasOne("Eihal.Data.Entites.Country", "Country")
-                        .WithMany()
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Eihal.Data.Entites.State", "State")
-                        .WithMany("Cities")
-                        .HasForeignKey("StateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Country");
-
-                    b.Navigation("State");
-                });
-
             modelBuilder.Entity("Eihal.Data.Entites.ProfessionalRank", b =>
                 {
                     b.HasOne("Eihal.Data.Entites.PractitionerType", "PractitionerType")
@@ -549,44 +444,6 @@ namespace Eihal.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("PractitionerType");
-                });
-
-            modelBuilder.Entity("Eihal.Data.Entites.State", b =>
-                {
-                    b.HasOne("Eihal.Data.Entites.Country", "Country")
-                        .WithMany("States")
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Country");
-                });
-
-            modelBuilder.Entity("Eihal.Data.Entites.UserProfile", b =>
-                {
-                    b.HasOne("Eihal.Data.Entites.City", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId");
-
-                    b.HasOne("Eihal.Data.Entites.Country", "Country")
-                        .WithMany()
-                        .HasForeignKey("CountryId");
-
-                    b.HasOne("Eihal.Data.Entites.ProfessionalRank", "ProfessionalRank")
-                        .WithMany()
-                        .HasForeignKey("ProfessionalRankId");
-
-                    b.HasOne("Eihal.Data.Entites.State", "State")
-                        .WithMany()
-                        .HasForeignKey("StateId");
-
-                    b.Navigation("City");
-
-                    b.Navigation("Country");
-
-                    b.Navigation("ProfessionalRank");
-
-                    b.Navigation("State");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -666,11 +523,6 @@ namespace Eihal.Data.Migrations
                     b.Navigation("ApplicationUsers");
                 });
 
-            modelBuilder.Entity("Eihal.Data.Entites.Country", b =>
-                {
-                    b.Navigation("States");
-                });
-
             modelBuilder.Entity("Eihal.Data.Entites.PractitionerType", b =>
                 {
                     b.Navigation("ApplicationUsers");
@@ -681,11 +533,6 @@ namespace Eihal.Data.Migrations
             modelBuilder.Entity("Eihal.Data.Entites.ProfessionalRank", b =>
                 {
                     b.Navigation("ApplicationUsers");
-                });
-
-            modelBuilder.Entity("Eihal.Data.Entites.State", b =>
-                {
-                    b.Navigation("Cities");
                 });
 #pragma warning restore 612, 618
         }

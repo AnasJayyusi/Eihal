@@ -1,4 +1,4 @@
-﻿@model List<Eihal.Data.Entites.PractitionerType>
+﻿@model List<Eihal.Data.Entites.ProfessionalRank>
 
 @{
     var defaultPageSize = 5; // Default number of items per page
@@ -55,10 +55,11 @@
 
 
 
-<table class="table table-bordered" id="dataTable-PractitionerTypes" width="100%" cellspacing="0">
+<table class="table table-bordered" id="dataTable-ProfessionalRanks" width="100%" cellspacing="0">
     <thead>
         <tr>
             <th>#</th>
+            <th>Practitioner Type</th>
             <th>Title (English)</th>
             <th>Title (Arabic)</th>
             <th>Status</th>
@@ -68,23 +69,29 @@
     <tbody>
         @for (int i = 0; i < visibleItems.Count; i++)
         {
-            var practitionerType = visibleItems[i];
+            var professionalRank = visibleItems[i];
             <tr>
                 <td>@(startIndex + i + 1)</td>
-                <td>@practitionerType.TitleEn</td>
-                <td>@practitionerType.TitleAr</td>
-                <td>Status</td>
+                <td>@professionalRank.PractitionerType.TitleEn</td>
+                <td>@professionalRank.TitleEn</td>
+                <td>@professionalRank.TitleAr</td>
+                <td>
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="statusToggle_@professionalRank.Id" @(professionalRank.IsActive ? "checked" : "") data-id="@professionalRank.Id">
+                        <label class="custom-control-label" for="statusToggle_@professionalRank.Id"></label>
+                    </div>
+                </td>
                 <td>
                     <li class="list-inline-item">
-                        <button onclick="getPractitionerType(@practitionerType.Id)" href="#" class="btn btn-success btn-sm rounded-0" type="button" data-toggle="modal" data-target="#EditPractitionerType" data-placement="top" title="Edit">
+                        <button onclick="getProfessionalRank(@professionalRank.Id)" href="#" class="btn btn-success btn-sm rounded-0" type="button" data-toggle="modal" data-target="#EditProfessionalRank" data-placement="top" title="Edit">
                             <i class="fa fa-edit"></i>
                         </button>
                     </li>
                     <li class="list-inline-item">
-                        <a href="#" class="btn btn-danger btn-sm rounded-0" data-toggle="modal" data-target="#confirmDeleteModal"><i class="fa fa-trash"></i></a>
+                        <a href="#" class="btn btn-danger btn-sm rounded-0" data-toggle="modal" data-target="#confirmDeleteModal_@professionalRank.Id"><i class="fa fa-trash"></i></a>
                     </li>
                     <!-- Confirm Delete Modal -->
-                    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="confirmDeleteModal_@professionalRank.Id" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -94,11 +101,11 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    Are you sure you want to delete this practitioner type?
+                                    Are you sure you want to delete this Professional Rank?
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                    <a href="/Admin/DeletePractitionerType/@practitionerType.Id" class="btn btn-danger" id="deleteButton">Delete</a>
+                                    <a href="/Admin/DeleteprofessionalRank/@professionalRank.Id" class="btn btn-danger" id="deleteButton">Delete</a>
                                 </div>
                             </div>
                         </div>
@@ -109,11 +116,11 @@
     </tbody>
 </table>
 
-<div class="modal fade" id="EditPractitionerType" tabindex="-1" role="dialog" aria-labelledby="EditPractitionerTypeModal" aria-hidden="true">
+<div class="modal fade" id="EditProfessionalRank" tabindex="-1" role="dialog" aria-labelledby="EditProfessionalRankModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="EditPractitionerTypeModal">Edit</h5>
+                <h5 class="modal-title" id="EditProfessionalRankModal">Edit</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -130,14 +137,19 @@
                         <label style="font-weight:bold;color:#00768c" for="titleArInputEdit">Title (Arabic):</label>
                         <input type="text" class="form-control" id="titleArInputEdit" required>
                     </div>
+                    <div class="form-group">
+                        <label for="practitionerTypes-ddl-edit" style="font-weight:bold;color:#00768c">Practitioner Type:</label>
+                        <!-- Dropdown list HTML element -->
+                        <select class="form-control" id="practitionerTypes-ddl-edit"></select>
+                    </div>
                 </form>
                 <div class="alert alert-danger hidden sm" role="alert">
-                    <span id="error-msg"></span>
+                    <span id="error-msg-add"></span>
                 </div>
             </div>
             <div class="modal-footer">
-                <button id="close-edit-PractitionerType" type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                <button id="edit-PractitionerType" type="button" class="btn btn-success" style="background-color:#00768c">Update</button>
+                <button id="close-edit-ProfessionalRank" type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button id="edit-ProfessionalRank" type="button" class="btn btn-success" style="background-color:#00768c">Update</button>
             </div>
         </div>
     </div>
@@ -167,9 +179,61 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
-        function getPractitionerType(id) {
+    $(document).ready(function () {
+        $('.custom-control-input').on('change', function () {
+
+            var isChecked = $(this).is(':checked');
+            var professionalRankId = $(this).data('id');
+
+            // Make an API call to update the status using the professionalRankId and isChecked values
+            updateStatus(professionalRankId, isChecked);
+        });
+    });
+
+    function updateStatus(professionalRankId, isChecked) {
+        // Perform the API call here to update the status based on the professionalRankId and isChecked values
+        // You can use $.ajax or any other method to make the API request
+        // Example using $.ajax:
+        $.ajax({
+            url: '/Admin/UpdateProfessionalRankStatus/' + professionalRankId + '/' + isChecked,
+            type: 'GET',
+            data: { isActive: isChecked },
+            success: function (response) {
+                // Show the success message
+                $('.alert-success').removeClass('hidden').hide().fadeIn();
+                // Hide the success message after 2 seconds
+                setTimeout(function () {
+                    $('.alert-success').fadeOut();
+                }, 3000);
+
+
+            },
+            error: function (error) {
+                // Handle the error response if needed
+            }
+        });
+    }
+
+        function getProfessionalRank(id) {
+        if ($('#practitionerTypes-ddl-edit').children().length == 0) {
             $.ajax({
-                url: '/Admin/GetPractitionerType/' + id,
+                url: '@Url.Action("GetPractitionerTypesDDL", "Common")',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Clear existing options
+                    $('#practitionerTypes-ddl-edit').empty();
+                    // Populate the dropdown list
+                    var dropdown = $('#practitionerTypes-ddl-edit');
+                    $.each(data, function (index, item) {
+                        dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                    });
+                }
+            });
+        }
+
+            $.ajax({
+                url: '/Admin/GetProfessionalRank/' + id,
                 type: 'GET',
                 success: function (data) {
                     // Handle the success response here
@@ -179,6 +243,8 @@
                     // For example, you can update HTML elements with the received values
                 $('#titleArInputEdit').val(data.titleAr);
                 $('#titleEnInputEdit').val(data.titleEn);
+                $('#practitionerTypes-ddl-edit').val(data.practitionerTypeId);
+
                 $('#titleId').val(data.id);
                 },
                 error: function (error) {
@@ -188,24 +254,26 @@
             });
         }
 
-    $('#edit-PractitionerType').click(function () {
-        var practitionerType = {
+    $('#edit-ProfessionalRank').click(function () {
+        var professionalRank = {
             TitleAr: $('#titleArInputEdit').val(),
             TitleEn: $('#titleEnInputEdit').val(),
+            PractitionerTypeId: $('#practitionerTypes-ddl-edit').val(),
+            IsActive:true,
             Id: $('#titleId').val(),
         };
 
         $.ajax({
-            url: '/Admin/UpdatePractitionerType', // Replace with your actual API endpoint URL
+            url: '/Admin/UpdateProfessionalRank', // Replace with your actual API endpoint URL
             type: 'POST',
-            data: JSON.stringify(practitionerType),
+            data: JSON.stringify(professionalRank),
             contentType: 'application/json',
             success: function (response) {
                 // Show the success message
                 $('.alert-success').removeClass('hidden').hide().fadeIn();
                 // Close the modal after the success message fades out
-                $("#close-edit-PractitionerType").trigger("click");
-                $('#dataTableContainer').load('/Admin/GetPractitionerTypes');
+                $("#close-edit-ProfessionalRank").trigger("click");
+                $('#dataTableContainer').load('/Admin/GetProfessionalRanks');
 
                 // Hide the success message after 2 seconds
                 setTimeout(function () {

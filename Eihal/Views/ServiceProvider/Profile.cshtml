@@ -3,6 +3,54 @@
 @inject IViewLocalizer Localizer
 
 
+<style>
+
+    .activeLink {
+        color: #00768c;
+        font-weight: bold;
+        pointer-events: none;
+        cursor: not-allowed;
+        background-color: whitesmoke
+    }
+
+    #menu .nav-item:hover {
+        /* Add your desired styles for hover state */
+        background-color: #e0e0e0;
+        color: #333;
+    }
+
+
+    .tab-header {
+        display: flex;
+        justify-content: space-between;
+        background-color: #f1f1f1;
+    }
+
+    .tab-button {
+        background-color: inherit;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 10px 20px;
+        transition: background-color 0.3s;
+        border-radius: 12px;
+        margin: 5px;
+    }
+
+        .tab-button:hover {
+            background-color: #ddd;
+        }
+
+        .tab-button.active {
+            background-color: #00768c;
+            color: white
+        }
+
+    .tab-content {
+        background-color: #fff;
+    }
+</style>
+
 <div id="page-top">
 
     <!-- Page Wrapper -->
@@ -53,8 +101,16 @@
 
                         </div>
 
-
+                       
                         <div class="col-xl-8 col-lg-8 ">
+                            <div class="card bg-info text-white shadow d-flex flex-row">
+                                <div class="card-body d-flex align-items-center" style="padding:10px">
+                                    <div>
+                                        Profile Status: Under Review.
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
                                 <div class="tab-container card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -73,68 +129,9 @@
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
-                                    <div id="tab1" class="tab-content" style="color:#00768c">
-                                        <div style="text-align: end; cursor:pointer">
-                                            <button type="button" style="background-color:#00768c" class="btn btn-success" data-toggle="modal" data-target="#EditProfileModal">  <i style="font-size:25px" class="fas fa-edit"></i> Edit Profile </button>
-                                        </div>
-                                        <table cellpadding="10">
-                                            <tr>
-                                                <td>
-                                                    <img src="~/images/User/Default-User-Profle.png" width="150" height="150" />
-                                                </td>
-                                                <td>
-                                                    Welcome!
-                                                    <h4 style="font-weight:bold">Dr John</h4>
-                                                </td>
-
-
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <i class="fa fa-hospital-o" aria-hidden="true"></i>
-                                                    <label style="font-weight:bold">Number Of Patients</label>  <span style="color:black">0</span>
-                                                </td>
-                                                <td>
-                                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                                    <label style="font-weight:bold">Review</label>    <img src="~/icon/Doctor/review-icon.png" width="25" height="25" /> <span style="color:black">(0)</span>
-                                                </td>
-                                                <td>
-                                                    <i class="fa-solid fa-shield-halved"></i>
-                                                    <img src="~/icon/Doctor/shield-icon.png" width="25" height="25" />
-                                                    <label style="font-weight:bold">Insurance Accept</label>  <span style="color:black">No</span>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                        <hr>
-
-                                        <table cellpadding="10">
-                                            <tr>
-                                                <td style="font-weight:bold">Bio</td>
-                                            </tr>
-                                            <tr style="color:black">
-                                                <td>KSA staff</td>
-                                            </tr>
-                                            <tr>
-                                                <td style="font-weight:bold">Speciality</td>
-                                                <td style="color:black">Prosthdontics</td>
-                                            </tr>
-
-                                            <tr>
-                                                <td style="font-weight:bold">Certifactions</td>
-                                                <td style="color:black">Phd.D Degree From Adelah Uni</td>
-                                            </tr>
-                                        </table>
-
-
-
-
-
-                                    </div>
-
-                                    <div id="tab2" class="tab-content" style="display: none;">
-                                        <h3>Tab 2 Content</h3>
-                                        <p>This is the content of tab 2.</p>
-                                    </div>
+                                    @Html.Partial("Overview")
+                                    @Html.Partial("Services")
+                                 
 
                                     <div id="tab3" class="tab-content" style="display: none;">
                                         <div style="text-align: end; cursor:pointer">
@@ -221,50 +218,45 @@
     <i class="fas fa-angle-up"></i>
 </a>
 
-<div class="modal fade" id="EditProfileModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="myModalLabel">Modal Title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <!-- Add your modal content here -->
-                <p>This is the modal content.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-success" style="background-color:#00768c">Save</button>
-            </div>
-        </div>
-    </div>
-</div>
+
 
 
 
 
 @section Scripts {
-
-    <!-- Bootstrap core JavaScript-->
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
-
-    <!-- Page level plugins -->
-    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="vendor/datatables/dataTables.bootstrap4.js"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="js/demo/datatables-demo.js"></script>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
+        $(document).ready(function () {
+            // Get the current URL
+            var currentUrl = window.location.href;
+
+            // Check if the URL contains a specific segment
+            if (currentUrl.includes("Profile")) {
+                // Perform an action when the URL contains "something"
+                $("#myProfile-li").addClass("activeLink");
+                $("#myProfile-text").addClass("activeLink");
+            } else {
+                // Perform a different action when the URL doesn't contain "something"
+                console.log("The URL does not contain 'MyProfile'.");
+            }
+            //$("#companyAutoComplete").autocomplete({
+            //    source: function (request, response) {
+            //        $.ajax({
+            //            url: "/Doctor/Index",
+            //            type: "POST",
+            //            dataType: "json",
+            //            data: { kw: request.term },
+            //            success: function (data) {
+            //                response($.map(data, function (item) {
+            //                    return { label: item.nameEn + ' - ' + item.nameAr, value: item.nameEn + ' - ' + item.nameAr };
+            //                }))
+            //            }
+            //        })
+            //    },
+
+            //});
+        })
 
         function openTab(evt, tabName) {
             // Hide all tab content
@@ -284,87 +276,9 @@
             evt.currentTarget.className += " active";
         }
     </script>
-
-    <script>
-        $(document).ready(function () {
-            // Get the current URL
-            var currentUrl = window.location.href;
-
-            // Check if the URL contains a specific segment
-            if (currentUrl.includes("MyProfile")) {
-                // Perform an action when the URL contains "something"
-                $("#myProfile-li").addClass("activeLink");
-                $("#myProfile-text").addClass("activeLink");
-            } else {
-                // Perform a different action when the URL doesn't contain "something"
-                console.log("The URL does not contain 'MyProfile'.");
-            }
-            $("#companyAutoComplete").autocomplete({
-                source: function (request, response) {
-                    $.ajax({
-                        url: "/Doctor/Index",
-                        type: "POST",
-                        dataType: "json",
-                        data: { kw: request.term },
-                        success: function (data) {
-                            response($.map(data, function (item) {
-                                return { label: item.nameEn + ' - ' + item.nameAr, value: item.nameEn + ' - ' + item.nameAr };
-                            }))
-                        }
-                    })
-                },
-
-            });
-        })
-    </script>
-    <style>
-
-        .activeLink {
-            color: #00768c;
-            font-weight: bold;
-            pointer-events: none;
-            cursor: not-allowed;
-            background-color:whitesmoke
-        }
-
-        #menu .nav-item:hover {
-            /* Add your desired styles for hover state */
-            background-color: #e0e0e0;
-            color: #333;
-        }
-
-
-        .tab-header {
-            display: flex;
-            justify-content: space-between;
-            background-color: #f1f1f1;
-        }
-
-        .tab-button {
-            background-color: inherit;
-            border: none;
-            outline: none;
-            cursor: pointer;
-            padding: 10px 20px;
-            transition: background-color 0.3s;
-            border-radius: 12px;
-            margin: 5px;
-        }
-
-            .tab-button:hover {
-                background-color: #ddd;
-            }
-
-            .tab-button.active {
-                background-color: #00768c;
-                color: white
-            }
-
-        .tab-content {
-            background-color: #fff;
-        }
-    </style>
+  
 
 }
+
 
 
