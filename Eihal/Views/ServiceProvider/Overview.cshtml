@@ -1,4 +1,5 @@
-﻿<style>
+﻿<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
+<style>
     .drop-container {
         position: relative;
         display: flex;
@@ -61,7 +62,7 @@
 <div id="tab1" class="tab-content" style="color:#00768c">
     <div style="text-align: end; cursor:pointer">
         <button onclick="getFullUserProfileInfo()" type="button" style="background-color:#00768c" class="btn btn-success" data-toggle="modal" data-target="#EditProfileModal">
-            <i onclick="getFullUserProfileInfo()" style="font-size:25px" class="fas fa-edit"></i> Edit Profile
+            <i  style="font-size:25px" class="fas fa-edit"></i> Edit Profile
         </button>
     </div>
     <table cellpadding="10">
@@ -230,11 +231,15 @@
                                     <label style="font-weight:bold;color:#00768c" for="speciality-edit-multiSelect">Speciality:</label>
                                     <div>
                                         <div>
-                                            <select id="speciality-edit-multiSelect" multiple>
+                                           <select id="speciality-edit-multiSelect" multiple>
+
                                             </select>
+                                        
                                         </div>
                                     </div>
                                 </div>
+
+                             
                             </td>
 
                         </tr>
@@ -292,6 +297,7 @@
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
 <script>
     $(document).ready(function () {
 
@@ -324,8 +330,6 @@
                 fileInput.files = files;
             }
         }
-
-
         $.ajax({
 
             url: "/ServiceProvider/GetUserProfileInfo",
@@ -349,125 +353,125 @@
     });
 
     function getFullUserProfileInfo() {
-        if ($(".choices__list").length == 0 && $(".choices__inner").length == 0) {
-            $.ajax({
-                url: '@Url.Action("GetUserSpecialtiesDDL", "ServiceProvider")',
-                type: 'GET',
-                dataType: 'json',
-                success: function (data) {
-                    var select = $('#speciality-edit-multiSelect');
-                    $.each(data, function (index, item) {
-                        select.append($('<option></option>').val(item.id).text(item.titleEn));
-                    });
-                    new Choices(select[0], {
-                        removeItemButton: true,
-                        maxItemCount: 10,
-                        placeholderValue: ''
-                    });
-                },
-                error: function (error) {
-                    console.log(error);
-                }
-            });
-        }
 
+        const selectId = 'speciality-edit-multiSelect';
+        const selectedValues = ['value1', 'value2', 'value3'];
 
-        if ($('#practitionerTypes-ddl-edit').children().length == 0) {
-            $.ajax({
-                url: '@Url.Action("GetPractitionerTypesDDL", "Common")',
-                type: 'GET',
-                dataType: 'json',
-                success: function (data) {
-                    // Clear existing options
-                    $('#practitionerTypes-ddl-edit').empty();
-                    // Populate the dropdown list
-                    var dropdown = $('#practitionerTypes-ddl-edit');
-                    // Add remaining options
-                    $.each(data, function (index, item) {
-                        dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
-                    });
-                }
-            });
+        loadOptionsAndSetSelection(selectId, selectedValues);
+    
+        //if ($(".choices__list").length == 0 && $(".choices__inner").length == 0) {
+            //$.ajax({
+            //    url: '@Url.Action("GetUserSpecialtiesDDL", "ServiceProvider")',
+            //    type: 'GET',
+            //    dataType: 'json',
+            //    success: function (data) {
+            //        var select = $('#speciality-edit-multiSelect');
+            //        $.each(data, function (index, item) {
+            //            select.append($('<option></option>').val(item.id).text(item.titleEn));
+            //        });
+            //        new Choices(select[0], {
+            //            removeItemButton: true,
+            //            maxItemCount: 10,
+            //            placeholderValue: ''
+            //        });
+                  
+            //    },
+            //    error: function (error) {
+            //        console.log(error);
+            //    }
+            //});
+        //}
+        //$.ajax({
+        //    url: '@Url.Action("GetPractitionerTypesDDL", "Common")',
+        //    type: 'GET',
+        //    dataType: 'json',
+        //    success: function (data) {
+        //        // Clear existing options
+        //        $('#practitionerTypes-ddl-edit').empty();
+        //        // Populate the dropdown list
+        //        var dropdown = $('#practitionerTypes-ddl-edit');
+        //        // Add remaining options
+        //        $.each(data, function (index, item) {
+        //            dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+        //        });
+        //    }
+        //});
 
+        $.ajax({
+            url: '@Url.Action("GetAccountTypesDDL", "Common")',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                // Clear existing options
+                $('#accountTypes-ddl-edit').empty();
+                // Populate the dropdown list
+                var dropdown = $('#accountTypes-ddl-edit');
+                $.each(data, function (index, item) {
+                    dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                });
+            }
+        });
 
-            $.ajax({
-                url: '@Url.Action("GetAccountTypesDDL", "Common")',
-                type: 'GET',
-                dataType: 'json',
-                success: function (data) {
-                    // Clear existing options
-                    $('#accountTypes-ddl-edit').empty();
-                    // Populate the dropdown list
-                    var dropdown = $('#accountTypes-ddl-edit');
-                    $.each(data, function (index, item) {
-                        dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
-                    });
-                }
-            });
+        $.ajax({
+            url: '@Url.Action("GetUserProfessionalRanksDDL", "ServiceProvider")',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                // Clear existing options
+                $('#professionalRanks-ddl-edit').empty();
 
-            $.ajax({
-                url: '@Url.Action("GetUserProfessionalRanksDDL", "ServiceProvider")',
-                type: 'GET',
-                dataType: 'json',
-                success: function (data) {
-                    // Clear existing options
-                    $('#professionalRanks-ddl-edit').empty();
+                // Populate the dropdown list
+                var dropdown = $('#professionalRanks-ddl-edit');
 
-                    // Populate the dropdown list
-                    var dropdown = $('#professionalRanks-ddl-edit');
+                // Add default option
+                dropdown.append($('<option></option>').val('').text('Select a professional Rank'));
 
-                    // Add default option
-                    dropdown.append($('<option></option>').val('').text('Select a professional Rank'));
+                $.each(data, function (index, item) {
+                    dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                });
+            }
+        });
 
-                    $.each(data, function (index, item) {
-                        dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
-                    });
-                }
-            });
-
-            $.ajax({
-                url: '@Url.Action("GetCountriesDDL", "ServiceProvider")',
-                type: 'GET',
-                dataType: 'json',
-                success: function (data) {
-                    // Clear existing options
-                    $('#countries-ddl-edit').empty();
-                    // Populate the dropdown list
-                    var dropdown = $('#countries-ddl-edit');
-                    // Add default option
-                    dropdown.append($('<option></option>').val('').text('Select a country'));
-                    $.each(data, function (index, item) {
-                        dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
-                    });
-                }
-            });
-
-
-
-            $.ajax({
-                url: "/ServiceProvider/GetFullUserProfileInfo",
-                method: "GET",
-                success: function (response) {
+        $.ajax({
+            url: '@Url.Action("GetCountriesDDL", "ServiceProvider")',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                // Clear existing options
+                $('#countries-ddl-edit').empty();
+                // Populate the dropdown list
+                var dropdown = $('#countries-ddl-edit');
+                // Add default option
+                dropdown.append($('<option></option>').val('').text('Select a country'));
+                $.each(data, function (index, item) {
+                    dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                });
+            }
+        });
+        
+        $.ajax({
+            url: "/ServiceProvider/GetFullUserProfileInfo",
+            method: "GET",
+            success: function (response) {
+                setTimeout(function () {
                     $("#full-name-edit-input").val(response.fullName);
                     $("#bio-edit-input").val(response.bio);
-                    $("#account-type-edit-input").val(response.accountType);
-                    $("#practitioner-edit-input").val(response.practitioner);
-                    $("#phone-edit-input").val(response.phone);
+                    $("#account-type-edit-input").val(response.accountTypeId);
+                    $("#practitioner-edit-input").val(response.practitionerTypeId);
+                    $("#phone-edit-input").val(response.phoneNumber);
                     $("#email-edit-input").val(response.email);
-                    $("#professional-edit-input").val(response.professional);
-                    $("#country-edit-input").val(response.country);
-                    $("#state-edit-input").val(response.state);
-                    $("#city-edit-input").val(response.city);
+                    $("#professionalRanks-ddl-edit").val(response.professionalRankId);
+                    $("#countries-ddl-edit").val(response.countryId);
+                    $('#states-ddl-edit option:first').text(response.stateName);
+                    $('#cities-ddl-edit option:first').text(response.cityName);
                     $("#speciality-edit-multiSelect").val(response.speciality);
+                }, 300); // Delay for 1 second (1000 milliseconds)
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
 
-                },
-                error: function (error) {
-                    console.log(error);
-                }
-            });
-
-
-        }
     }
 
     function loadImage(event) {
@@ -476,6 +480,7 @@
     }
 
     function getStates(countryId) {
+        debugger;
         $.ajax({
             url: '@Url.Action("GetStatesDDL", "ServiceProvider")' + '?countryId=' + countryId,
             type: 'GET',
@@ -512,7 +517,6 @@
         });
     }
 
-
     function updateProfile() {
         debugger;
         var formData = new FormData();
@@ -544,8 +548,46 @@
         });
     }
 
+   
+     function loadOptionsAndSetSelection(url, selectId, selectedValues) {
+  const selectElement = document.getElementById(selectId);
+
+  // Clear any existing Choices instance
+  if (selectElement.choices) {
+    selectElement.choices.destroy();
+  }
+
+  // Make an AJAX request to load the options
+  $.ajax({
+            url: '@Url.Action("GetUserSpecialtiesDDL", "ServiceProvider")',
+    method: 'GET',
+    dataType: 'json',
+    success: function (data) {
+      // Clear existing options
+     selectElement.choices.clear();
+
+      // Add options from the API response
+      data.forEach(function (option) {
+        const newOption = new Option(option.label, option.value, option.selected, option.disabled);
+        selectElement.appendChild(newOption);
+      });
+
+      // Initialize Choices with the provided options and settings
+      const choices = new Choices(selectElement, {
+        choices: selectedValues,
+        removeItemButton: true,
+        maxItemCount: -1,
+        placeholderValue: ''
+      });
+    },
+    error: function (error) {
+      console.log(error);
+    }
+  });
+}
+
 </script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
-<script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
+
+
 
 

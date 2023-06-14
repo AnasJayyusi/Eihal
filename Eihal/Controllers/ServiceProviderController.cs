@@ -2,6 +2,7 @@
 using Eihal.Data.Entites;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using System.Data;
 using System.Security.Claims;
@@ -58,22 +59,25 @@ namespace Eihal.Controllers
         public ActionResult GetFullUserProfileInfo()
         {
             _loggedUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var userProfile = _dbContext.UserProfiles.FirstOrDefault(w => w.UserId == _loggedUserId);
+            var userProfile = _dbContext.UserProfiles.Include(i => i.State).Include(i => i.City).FirstOrDefault(w => w.UserId == _loggedUserId);
+
             // Your logic to retrieve the necessary data
             var data = new
             {
-                fullName = userProfile?.FullName,
-                bio = userProfile?.Bio,
-                accountType = userProfile.AccountTypeId,
-                practitioner = userProfile.PractitionerTypeId,
-                phone = userProfile.PhoneNumber,
-                email = userProfile.Email,
-                professional = userProfile.ProfessionalRankId,
-                country = userProfile.CountryId,
-                state = userProfile.StateId,
-                city = userProfile.CityId,
-                speciality = userProfile.SpecialtiesTitlesEn,
-                profilePicturePath = userProfile.ProfilePicturePath
+                FullName = userProfile?.FullName,
+                Bio = userProfile?.Bio,
+                AccountTypeId = userProfile.AccountTypeId,
+                PractitionerTypeId = userProfile.PractitionerTypeId,
+                PhoneNumber = userProfile.PhoneNumber,
+                Email = userProfile.Email,
+                ProfessionalRankId = userProfile.ProfessionalRankId,
+                CountryId = userProfile.CountryId,
+                StateId = userProfile.StateId,
+                StateName = userProfile?.State?.TitleEn,
+                CityId = userProfile.CityId,
+                CityName= userProfile?.City?.TitleEn,
+                SpecialtiesTitlesEn = userProfile.SpecialtiesTitlesEn,
+                ProfilePicturePath = userProfile.ProfilePicturePath
             };
 
             return Json(data);
@@ -165,16 +169,26 @@ namespace Eihal.Controllers
             // Handle image file
             var imageFile = form.Files["image"];
 
-          
+
 
             // Access form data & fill to user profile object
             userProfile.FullName = form["FullName"];
             userProfile.Bio = form["Bio"];
-            userProfile.ProfessionalRankId = Convert.ToInt32(form["ProfessionalRankId"]);
-            userProfile.CountryId = Convert.ToInt32(form["CountryId"]);
-            userProfile.StateId = Convert.ToInt32(form["StateId"]);
-            userProfile.CityId = Convert.ToInt32(form["CityId"]);
-            userProfile.SpecialtiesIds = form["SpecialtiesIds"];
+
+            if (!string.IsNullOrEmpty(form["ProfessionalRankId"]))
+                userProfile.ProfessionalRankId = Convert.ToInt32(form["ProfessionalRankId"]);
+
+            if (!string.IsNullOrEmpty(form["CountryId"]))
+                userProfile.CountryId = Convert.ToInt32(form["CountryId"]);
+
+            if (!string.IsNullOrEmpty(form["StateId"]))
+                userProfile.StateId = Convert.ToInt32(form["StateId"]);
+
+            if (!string.IsNullOrEmpty(form["CityId"]))
+                userProfile.CityId = Convert.ToInt32(form["CityId"]);
+
+            if (!string.IsNullOrEmpty(form["SpecialtiesIds"]))
+                userProfile.SpecialtiesIds = form["SpecialtiesIds"];
 
             if (imageFile != null)
                 userProfile.ProfilePicturePath = StoreImageFilePathInDatabase(imageFile);
@@ -215,7 +229,7 @@ namespace Eihal.Controllers
             // Path To Save In Database
             return $"/users/images/{uniqueFileName}{extension}";
         }
-     
+
     }
 }
 
