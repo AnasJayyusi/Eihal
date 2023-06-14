@@ -62,7 +62,7 @@
 <div id="tab1" class="tab-content" style="color:#00768c">
     <div style="text-align: end; cursor:pointer">
         <button onclick="getFullUserProfileInfo()" type="button" style="background-color:#00768c" class="btn btn-success" data-toggle="modal" data-target="#EditProfileModal">
-            <i  style="font-size:25px" class="fas fa-edit"></i> Edit Profile
+            <i style="font-size:25px" class="fas fa-edit"></i> Edit Profile
         </button>
     </div>
     <table cellpadding="10">
@@ -231,15 +231,14 @@
                                     <label style="font-weight:bold;color:#00768c" for="speciality-edit-multiSelect">Speciality:</label>
                                     <div>
                                         <div>
-                                           <select id="speciality-edit-multiSelect" multiple>
-
+                                            <select id="speciality-edit-multiSelect" multiple>
                                             </select>
-                                        
+
                                         </div>
                                     </div>
                                 </div>
 
-                             
+
                             </td>
 
                         </tr>
@@ -275,14 +274,13 @@
                     <label for="images" class="drop-container">
                         <span class="drop-title">Drop files here</span>
                         or
-                        <input type="file" id="images" accept="image/*" required>
+                        <input type="file" id="attachments-uploader" required>
                     </label>
-
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                <button onclick="updateProfile()" type="button" class="btn btn-success" style="background-color:#00768c">Upload</button>
+                <button onclick="uploadAttachment()" type="button" class="btn btn-success" style="background-color:#00768c">Upload</button>
             </div>
         </div>
     </div>
@@ -354,7 +352,7 @@
 
     function getFullUserProfileInfo() {
 
-    
+
         if ($(".choices__list").length == 0 && $(".choices__inner").length == 0) {
             $.ajax({
                 url: '@Url.Action("GetUserSpecialtiesDDL", "ServiceProvider")',
@@ -370,7 +368,7 @@
                         maxItemCount: 10,
                         placeholderValue: ''
                     });
-                  
+
                 },
                 error: function (error) {
                     console.log(error);
@@ -444,7 +442,7 @@
                 });
             }
         });
-        
+
         $.ajax({
             url: "/ServiceProvider/GetFullUserProfileInfo",
             method: "GET",
@@ -544,43 +542,67 @@
         });
     }
 
-   
-     function loadOptionsAndSetSelection(url, selectId, selectedValues) {
-  const selectElement = document.getElementById(selectId);
 
-  // Clear any existing Choices instance
-  if (selectElement.choices) {
-    selectElement.choices.destroy();
-  }
+    function loadOptionsAndSetSelection(url, selectId, selectedValues) {
+        const selectElement = document.getElementById(selectId);
 
-  // Make an AJAX request to load the options
-  $.ajax({
+        // Clear any existing Choices instance
+        if (selectElement.choices) {
+            selectElement.choices.destroy();
+        }
+
+        // Make an AJAX request to load the options
+        $.ajax({
             url: '@Url.Action("GetUserSpecialtiesDDL", "ServiceProvider")',
-    method: 'GET',
-    dataType: 'json',
-    success: function (data) {
-      // Clear existing options
-     selectElement.choices.clear();
+            method: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                // Clear existing options
+                selectElement.choices.clear();
 
-      // Add options from the API response
-      data.forEach(function (option) {
-        const newOption = new Option(option.label, option.value, option.selected, option.disabled);
-        selectElement.appendChild(newOption);
-      });
+                // Add options from the API response
+                data.forEach(function (option) {
+                    const newOption = new Option(option.label, option.value, option.selected, option.disabled);
+                    selectElement.appendChild(newOption);
+                });
 
-      // Initialize Choices with the provided options and settings
-      const choices = new Choices(selectElement, {
-        choices: selectedValues,
-        removeItemButton: true,
-        maxItemCount: -1,
-        placeholderValue: ''
-      });
-    },
-    error: function (error) {
-      console.log(error);
+                // Initialize Choices with the provided options and settings
+                const choices = new Choices(selectElement, {
+                    choices: selectedValues,
+                    removeItemButton: true,
+                    maxItemCount: -1,
+                    placeholderValue: ''
+                });
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
     }
-  });
-}
+
+
+    function uploadAttachment() {
+        var fileInput = document.getElementById('attachments-uploader');
+        var file = fileInput.files[0];
+        var formData = new FormData();
+        formData.append('file', file);
+
+        $.ajax({
+            url: '/File/UploadFile', // Replace with your API endpoint URL
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                // Handle the success response
+                console.log('File uploaded successfully.');
+            },
+            error: function (xhr, status, error) {
+                // Handle the error response
+                console.log('File upload failed.');
+            }
+        });
+    }
 
 </script>
 

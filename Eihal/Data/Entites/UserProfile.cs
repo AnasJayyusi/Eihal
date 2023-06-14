@@ -58,5 +58,7 @@ namespace Eihal.Data.Entites
         public string? SpecialtiesTitlesEn { get; set; }
         #endregion
 
+        public List<Attachment> Attachments { get; set; }
+
     }
 }
