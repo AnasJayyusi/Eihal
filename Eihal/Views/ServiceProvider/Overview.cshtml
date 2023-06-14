@@ -354,48 +354,44 @@
 
     function getFullUserProfileInfo() {
 
-        const selectId = 'speciality-edit-multiSelect';
-        const selectedValues = ['value1', 'value2', 'value3'];
-
-        loadOptionsAndSetSelection(selectId, selectedValues);
     
-        //if ($(".choices__list").length == 0 && $(".choices__inner").length == 0) {
-            //$.ajax({
-            //    url: '@Url.Action("GetUserSpecialtiesDDL", "ServiceProvider")',
-            //    type: 'GET',
-            //    dataType: 'json',
-            //    success: function (data) {
-            //        var select = $('#speciality-edit-multiSelect');
-            //        $.each(data, function (index, item) {
-            //            select.append($('<option></option>').val(item.id).text(item.titleEn));
-            //        });
-            //        new Choices(select[0], {
-            //            removeItemButton: true,
-            //            maxItemCount: 10,
-            //            placeholderValue: ''
-            //        });
+        if ($(".choices__list").length == 0 && $(".choices__inner").length == 0) {
+            $.ajax({
+                url: '@Url.Action("GetUserSpecialtiesDDL", "ServiceProvider")',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    var select = $('#speciality-edit-multiSelect');
+                    $.each(data, function (index, item) {
+                        select.append($('<option></option>').val(item.id).text(item.titleEn));
+                    });
+                    new Choices(select[0], {
+                        removeItemButton: true,
+                        maxItemCount: 10,
+                        placeholderValue: ''
+                    });
                   
-            //    },
-            //    error: function (error) {
-            //        console.log(error);
-            //    }
-            //});
-        //}
-        //$.ajax({
-        //    url: '@Url.Action("GetPractitionerTypesDDL", "Common")',
-        //    type: 'GET',
-        //    dataType: 'json',
-        //    success: function (data) {
-        //        // Clear existing options
-        //        $('#practitionerTypes-ddl-edit').empty();
-        //        // Populate the dropdown list
-        //        var dropdown = $('#practitionerTypes-ddl-edit');
-        //        // Add remaining options
-        //        $.each(data, function (index, item) {
-        //            dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
-        //        });
-        //    }
-        //});
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+        $.ajax({
+            url: '@Url.Action("GetPractitionerTypesDDL", "Common")',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                // Clear existing options
+                $('#practitionerTypes-ddl-edit').empty();
+                // Populate the dropdown list
+                var dropdown = $('#practitionerTypes-ddl-edit');
+                // Add remaining options
+                $.each(data, function (index, item) {
+                    dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                });
+            }
+        });
 
         $.ajax({
             url: '@Url.Action("GetAccountTypesDDL", "Common")',
