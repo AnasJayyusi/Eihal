@@ -15,6 +15,12 @@ namespace Eihal.Controllers
             _dbContext = dbContext;
         }
 
+        public int GetUserId()
+        {
+            string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return _dbContext.UserProfiles.Where(w => w.UserId == currentUserId).Select(x => x.Id).Single();
+        }
+
 
     }
 }
