@@ -39,6 +39,16 @@ namespace Eihal.Controllers
             _loggedUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userProfile = _dbContext.UserProfiles.FirstOrDefault(w => w.UserId == _loggedUserId);
             // Your logic to retrieve the necessary data
+            List<int> specialityIds = userProfile.SpecialtiesIds.Split(',').Select(int.Parse).ToList();
+            var specialityNames = "";
+            if (specialityIds != null) {
+                var specialities = _dbContext.Specialties
+                               .Where(t => specialityIds.Contains(t.Id)).Select(a=> new
+                               {
+                                   a.TitleEn
+                               }).ToList();
+                specialityNames = String.Join(",", specialities.Select(a=>a.TitleEn));
+            }
             var data = new
             {
                 fullname = userProfile?.FullName,
@@ -46,7 +56,7 @@ namespace Eihal.Controllers
                 review = userProfile.Reviews ?? 0,
                 insurance = userProfile.InsuranceAccepted ?? false,
                 bio = userProfile.Bio ?? "No Bio yet.",
-                speciality = userProfile.SpecialtiesTitlesEn ?? "No Speciality added yet.",
+                speciality = specialityNames ?? "No Speciality added yet.",
                 certifactions = userProfile.Certifications ?? "No Certifications added yet.",
                 profilePicturePath = userProfile.ProfilePicturePath
             };
