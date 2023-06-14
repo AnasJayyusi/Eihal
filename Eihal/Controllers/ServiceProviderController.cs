@@ -77,7 +77,9 @@ namespace Eihal.Controllers
                 CityId = userProfile.CityId,
                 CityName= userProfile?.City?.TitleEn,
                 SpecialtiesTitlesEn = userProfile.SpecialtiesTitlesEn,
-                ProfilePicturePath = userProfile.ProfilePicturePath
+                ProfilePicturePath = userProfile.ProfilePicturePath,
+                speciliaties = userProfile.SpecialtiesIds
+
             };
 
             return Json(data);

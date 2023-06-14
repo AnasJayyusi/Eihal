@@ -1,5 +1,13 @@
 ﻿<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
 <style>
+.toast {
+    margin-top: 50px !important;
+}
+    .toast-success { 
+  background-color: #00333f; 
+}
     .drop-container {
         position: relative;
         display: flex;
@@ -249,8 +257,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                <button onclick="updateProfile()" type="button" class="btn btn-success" style="background-color:#00768c">Update</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="close-overview">Cancel</button>
+                <button onclick="updateProfile()" type="button" class="btn btn-success" style="background-color:#00768c" >Update</button>
             </div>
         </div>
     </div>
@@ -300,6 +308,7 @@
 <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
 <script>
     $(document).ready(function () {
+        loadUserProfileOverview();
 
         const dropContainer = document.querySelector('.drop-container');
         const fileInput = document.querySelector('#images');
@@ -330,7 +339,10 @@
                 fileInput.files = files;
             }
         }
-        $.ajax({
+    });
+
+    function loadUserProfileOverview(){
+                $.ajax({
 
             url: "/ServiceProvider/GetUserProfileInfo",
             method: "GET",
@@ -350,8 +362,8 @@
                 console.log(error);
             }
         });
-    });
 
+    }
     function getFullUserProfileInfo() {
 
     
@@ -361,7 +373,7 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
-                    var select = $('#speciality-edit-multiSelect');
+           var select = $('#speciality-edit-multiSelect');
                     $.each(data, function (index, item) {
                         select.append($('<option></option>').val(item.id).text(item.titleEn));
                     });
@@ -460,7 +472,7 @@
                     $("#countries-ddl-edit").val(response.countryId);
                     $('#states-ddl-edit option:first').text(response.stateName);
                     $('#cities-ddl-edit option:first').text(response.cityName);
-                    $("#speciality-edit-multiSelect").val(response.speciality);
+                    $("#speciality-edit-multiSelect").val(response.speciliaties);
                 }, 300); // Delay for 1 second (1000 milliseconds)
             },
             error: function (error) {
@@ -535,6 +547,9 @@
             contentType: false,
             success: function (response) {
                 console.log(response);
+                $("#close-overview").trigger("click");
+                loadUserProfileOverview();
+                toastr.success('User profile updated successfully','Success !!');
                 // Handle success response
             },
             error: function (error) {
