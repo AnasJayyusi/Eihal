@@ -12,7 +12,6 @@ namespace Eihal.Controllers
     [Authorize(Roles = "Administrator")]
     public class AdminController : BaseController
     {
-
         public AdminController(ApplicationDbContext dbContext) : base(dbContext)
         {
         }
