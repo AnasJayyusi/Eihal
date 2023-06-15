@@ -882,7 +882,162 @@ namespace Eihal.Controllers
         }
         #endregion
 
-     
+        #region Services
+        [Route("MasterList/Services")]
+        public IActionResult Services()
+        {
+            // Retrieve the value from TempData
+            bool? isFromDeleteRequest = TempData["isFromDeleteRequest"] as bool?;
+            bool? isSuccessDelete = TempData["isSuccessDelete"] as bool?;
+
+            if (isFromDeleteRequest != null && isSuccessDelete != null)
+            {
+                // Clear the TempData value to avoid persisting it across subsequent requests
+                TempData.Remove("isFromDeleteRequest");
+                TempData.Remove("isSuccessDelete");
+
+                // Use the value as needed
+                ViewBag.SuccessMessage = isSuccessDelete;
+            }
+
+            return View(_dbContext.Services.ToList());
+        }
+
+
+        [Route("GetServices")]
+        public IActionResult ServicesList()
+        {
+            var services = _dbContext.Services.ToList();
+            return PartialView("ServicesList", services);
+        }
+
+        [HttpPost]
+        [Route("AddService")]
+        public IActionResult AddService([FromBody] Services service)
+        {
+            if (service == null || string.IsNullOrEmpty(service.TitleEn) || string.IsNullOrEmpty(service.TitleAr))
+            {
+                return BadRequest("Please fill all fields.");
+            }
+
+            bool isDuplicate = _dbContext.Services
+                                         .Any(w => (w.TitleEn == service.TitleEn && w.TitleAr == service.TitleAr)
+                                        );
+            if (isDuplicate)
+            {
+                return BadRequest("The details for the Professional Rank have already been added.");
+            }
+
+            else
+            {
+                if (!string.IsNullOrEmpty(service.TitleAr) || !string.IsNullOrEmpty(service.TitleEn))
+                {
+                    _dbContext.Services.Add(service);
+                    _dbContext.SaveChanges();
+                }
+            }
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("UpdateService")]
+        public IActionResult UpdateService([FromBody] Services service)
+        {
+            if (service == null || string.IsNullOrEmpty(service.TitleEn) || string.IsNullOrEmpty(service.TitleAr))
+            {
+                return BadRequest("Please fill all fields.");
+            }
+
+            bool isDuplicate = _dbContext.Services
+                                        .Any(w => (w.TitleEn == service.TitleEn && w.TitleAr == service.TitleAr)
+                                      );
+            if (isDuplicate)
+            {
+                return BadRequest("The details for the Professional Rank have already been added.");
+            }
+
+            else
+            {
+                if (!string.IsNullOrEmpty(service.TitleAr) || !string.IsNullOrEmpty(service.TitleEn))
+                {
+                    _dbContext.Services.Update(service);
+                    _dbContext.SaveChanges();
+                }
+            }
+
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("UpdateServiceStatus/{id}/{isActive}")]
+        public IActionResult UpdateServiceStatus(int id, bool isActive)
+        {
+            // Logic to update the status of the practitioner type with the given ID
+            try
+            {
+                var service = _dbContext.Services.SingleOrDefault(p => p.Id == id);
+                if (service == null)
+                {
+                    return NotFound();
+                }
+
+                service.IsActive = isActive;
+                _dbContext.SaveChanges();
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while updating the status.");
+            }
+        }
+
+        [HttpGet]
+        [Route("DeleteService/{id}")]
+        public IActionResult DeleteService(int id)
+        {
+
+            //bool isLinked = _dbContext.Services.Any(w => w.Id == id);
+            //if (isLinked)
+            //{
+            //    return BadRequest("You cannot delete this item as it is linked to users in the system.");
+            //}
+
+            //else
+            //{
+                // Retrieve the practitioner type from the database using the id
+                var service = _dbContext.Services.Find(id);
+
+
+                if (service == null)
+                {
+                    // Handle the case where the practitioner type doesn't exist
+                    TempData["isSuccessDelete"] = false;
+                }
+
+                // Remove the practitioner type from the DbSet
+                _dbContext.Services.Remove(service);
+
+                // Save the changes to the database
+                _dbContext.SaveChanges();
+                TempData["isSuccessDelete"] = true;
+            //}
+            // Set the value in TempData
+            TempData["isFromDeleteRequest"] = true;
+            return RedirectToAction("Services");
+        }
+
+
+        [HttpGet]
+        [Route("GetService/{id}")]
+        public Services GetService(int id)
+        {
+            var services = _dbContext.Services.Single(w => w.Id == id);
+            return services;
+        }
+        #endregion
+
 
         #region Helper
         private int? GetCountryId(int? stateId)
