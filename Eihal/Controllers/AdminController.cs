@@ -954,7 +954,7 @@ namespace Eihal.Controllers
                                       );
             if (isDuplicate)
             {
-                return BadRequest("The details for the Professional Rank have already been added.");
+                return BadRequest("The details for the services have already been added.");
             }
 
             else

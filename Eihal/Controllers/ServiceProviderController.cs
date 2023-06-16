@@ -32,6 +32,80 @@ namespace Eihal.Controllers
             return View();
         }
 
+        [Route("AddServices")]
+        public IActionResult AddServices()
+        {
+            var currentUserId = GetUserId();
+            var currentUserServices = _dbContext.UserServices.Where(a => a.Status != Enums.ServicesStatusEnum.Deleted).Select(a=>a.ServiceId);
+            var services = _dbContext.Services.Where(a => a.IsActive && !currentUserServices.Contains(a.Id)).ToList();
+            //var services = _dbContext.Services.Where(a => a.IsActive).ToList();
+            return View(services);
+        }
+
+        [Route("MyServiceCardPartial")]
+
+        public ActionResult MyServiceCardPartial()
+        {
+            // Assuming you have a list of items to pass to the view
+            List<UserServices> model = _dbContext.UserServices.Where(a => a.Status != Enums.ServicesStatusEnum.Deleted).ToList(); // Replace with your logic to fetch the items
+
+            // Render the partial view and return it as HTML content
+            //string htmlContent = RenderPartialToString("_CardPartial", model); // Replace with the name of your partial view
+
+            return PartialView("_ServiceCardPartial", model); // Replace with the name of your partial view
+        }
+                [Route("AllServiceCardPartial")]
+
+        public ActionResult AllServiceCardPartial()
+        {
+            // Assuming you have a list of items to pass to the view
+            var currentUserId = GetUserId();
+            var currentUserServices = _dbContext.UserServices.Where(a => a.Status != Enums.ServicesStatusEnum.Deleted).Select(a => a.ServiceId);
+            var services = _dbContext.Services.Where(a => a.IsActive && !currentUserServices.Contains(a.Id)).ToList();
+            // Render the partial view and return it as HTML content
+            //string htmlContent = RenderPartialToString("_CardPartial", model); // Replace with the name of your partial view
+
+            return PartialView("_AllServiceCardPartial", services); // Replace with the name of your partial view
+        }
+        [Route("DeleteUserService")]
+        public ActionResult DeleteUserService(int Id)
+        {
+            // Assuming you have a list of items to pass to the view
+            var currentUserId = GetUserId();
+            var userService = _dbContext.UserServices.Where(a => a.UserId == currentUserId && a.Id==Id).FirstOrDefault();
+            if (userService != null)
+            {
+                _dbContext.UserServices.Remove(userService);
+                _dbContext.SaveChanges();
+            }
+            // Render the partial view and return it as HTML content
+            //string htmlContent = RenderPartialToString("_CardPartial", model); // Replace with the name of your partial view
+
+            return Ok(); // Replace with the name of your partial view
+        }
+
+        [Route("AddUserService")]
+        [HttpPost]
+        public IActionResult AddUserService(int serviceId,double price)
+        {
+            var service = _dbContext.Services.Where(a =>a.Id == serviceId && a.IsActive).FirstOrDefault();
+            if (service == null)
+                throw new Exception("service not available");
+
+            UserServices userServices = new UserServices();
+            userServices.UserId = GetUserId() ;
+            userServices.TitleEn = service.TitleEn ;
+            userServices.TitleAr = service.TitleAr ;
+            userServices.Status = Enums.ServicesStatusEnum.Pending;
+            userServices.ServiceId = service.Id;
+            userServices.Price = price;
+            userServices.Fee = service.Fee;
+            userServices.CreatedOn = DateTime.Now;
+            _dbContext.UserServices.Add(userServices);
+            _dbContext.SaveChanges();
+            return Ok();
+        }
+
         [HttpGet]
         [Route("GetUserProfileInfo")]
         public ActionResult GetUserProfileInfo()

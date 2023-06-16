@@ -61,6 +61,7 @@
             <th>#</th>
             <th>Title (English)</th>
             <th>Title (Arabic)</th>
+            <th>Fee</th>
             <th>Status</th>
             <th>Actions</th>
         </tr>
@@ -74,6 +75,7 @@
                 @*<td>@services.PractitionerType.TitleEn</td>*@
                 <td>@services.TitleEn</td>
                 <td>@services.TitleAr</td>
+                <td>@services.Fee</td>
                 <td>
                     <div class="custom-control custom-switch">
                         <input type="checkbox" class="custom-control-input" id="statusToggle_@services.Id" @(services.IsActive ? "checked" : "") data-id="@services.Id">
@@ -135,6 +137,10 @@
                         <input hidden type="text" class="form-control" id="titleId">
                         <label style="font-weight:bold;color:#00768c" for="titleArInputEdit">Title (Arabic):</label>
                         <input type="text" class="form-control" id="titleArInputEdit" required>
+                    </div> <div class="form-group">
+                        <input hidden type="text" class="form-control" id="feeId">
+                        <label style="font-weight:bold;color:#00768c" for="feeInputEdit">Title (Arabic):</label>
+                        <input type="number" class="form-control" id="feeInputEdit" required>
                     </div>
                  @*   <div class="form-group">
                         <label for="practitionerTypes-ddl-edit" style="font-weight:bold;color:#00768c">Practitioner Type:</label>
@@ -241,6 +247,7 @@
 
                     // Perform further operations with the returned data as needed
                     // For example, you can update HTML elements with the received values
+                $('#feeInputEdit').val(data.fee);
                 $('#titleArInputEdit').val(data.titleAr);
                 $('#titleEnInputEdit').val(data.titleEn);
                 //$('#practitionerTypes-ddl-edit').val(data.practitionerTypeId);
@@ -257,6 +264,7 @@
     $('#edit-Services').click(function () {
         var services = {
             TitleAr: $('#titleArInputEdit').val(),
+            Fee: $('#feeInputEdit').val(),
             TitleEn: $('#titleEnInputEdit').val(),
             //PractitionerTypeId: $('#practitionerTypes-ddl-edit').val(),
             IsActive:true,

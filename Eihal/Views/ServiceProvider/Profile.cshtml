@@ -227,7 +227,36 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
+             function deleteService(id){
+  $.ajax({
+    url: '/ServiceProvider/DeleteUserService?Id='+id, // Replace with the actual URL and action method to fetch the partial view
+    type: 'GET',
+    success: function(response) {
+      //serviceContainer.html(response);
+      GetMyService();
+    },
+    error: function(xhr, status, error) {
+      console.error('Error:', error);
+    }
+  });
+    }
+           function GetMyService()
+    {
+         var serviceContainer = $('#serviceContainer');
+
+  $.ajax({
+    url: '/ServiceProvider/MyServiceCardPartial', // Replace with the actual URL and action method to fetch the partial view
+    type: 'GET',
+    success: function(response) {
+      serviceContainer.html(response);
+    },
+    error: function(xhr, status, error) {
+      console.error('Error:', error);
+    }
+  });
+    }
         $(document).ready(function () {
+            GetMyService();
             // Get the current URL
             var currentUrl = window.location.href;
 
