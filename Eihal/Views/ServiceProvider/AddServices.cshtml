@@ -2,9 +2,33 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 <style>
+         .no-results-section {
+    width:100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: 20px;
+  padding: 20px;
+  font-size: 18px;
+}
+
+.no-results-section img {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 10px;
+}
+
+.no-results-section p {
+  margin: 0;
+}
     .margin-15-position-obselete {
         position: absolute;
-        margin: 15px;
+        margin: 10px;
+            width: 95%;
+    margin-left: 35px;
+    margin-bottom:20px;
     }
 
     .service-card {
@@ -236,6 +260,10 @@
                                         <div class="container">
                                             <div class="row" id="allServiceContainer">
                                             </div>
+                                                            <div class="no-results-section" style="display:none">
+  <img src="~/images/NoResult.png"  alt="No Results Found Icon">
+  <p>No results found.</p>
+</div>
                                         </div>
                                     </div>
 
@@ -420,12 +448,25 @@
             GetAllService();
             // Get the current URL
             var currentUrl = window.location.href;
+              var resultCount = 0; // Variable to keep track of the number of results
             // Filter the service cards based on the title
             $('#filterInput').on('keyup', function () {
                 var value = $(this).val().toLowerCase();
                 $('.service-card-title').filter(function () {
-                    $(this).parent().parent().parent().toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                 var isMatch = $(this).text().toLowerCase().indexOf(value) > -1;
+    $(this).parent().parent().parent().toggle(isMatch);
+                 if (isMatch === true) {
+                     resultCount++;
+  } else {
+  }
+  
                 });
+                   if (resultCount <=0) {
+  $('.no-results-section').show(); // Assuming you have a "no-results" element to display the message
+  } else {
+    $('.no-results-section').hide();
+  }
+  resultCount=0;
             });
             // Check if the URL contains a specific segment
             if (currentUrl.includes("Services")) {
