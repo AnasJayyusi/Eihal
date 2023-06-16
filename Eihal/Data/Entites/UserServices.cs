@@ -6,7 +6,9 @@ namespace Eihal.Data.Entites
     public class UserServices
     {
         public int Id { get; set; }
+        [ForeignKey(nameof(UserProfile))]
         public int UserId { get; set; }
+        public UserProfile UserProfile { get; set; }
         [ForeignKey(nameof(Service))]
         public int ServiceId { get; set; }
         public Services Service { get; set; }

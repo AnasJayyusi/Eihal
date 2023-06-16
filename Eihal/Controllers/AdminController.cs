@@ -478,6 +478,7 @@ namespace Eihal.Controllers
             return specialty;
         }
         #endregion
+
         #region UserServices
         [Route("MasterList/UserServices")]
         public IActionResult UserServices()
@@ -496,13 +497,13 @@ namespace Eihal.Controllers
                 ViewBag.SuccessMessage = isSuccessDelete;
             }
 
-            return View(_dbContext.UserServices.Where(a => a.Status == Enums.ServicesStatusEnum.Pending).ToList());
+            return View(_dbContext.UserServices.Where(a => a.Status == Enums.ServicesStatusEnum.Pending).Include(a => a.UserProfile).ToList());
         }
 
         [Route("GetUserServices")]
         public IActionResult UserServicesList()
         {
-            var userServices = _dbContext.UserServices.Where(a => a.Status == Enums.ServicesStatusEnum.Pending).ToList();
+            var userServices = _dbContext.UserServices.Where(a => a.Status == Enums.ServicesStatusEnum.Pending).Include(a=>a.UserProfile).ToList();
             return PartialView("UserServicesList", userServices);
         }
 
