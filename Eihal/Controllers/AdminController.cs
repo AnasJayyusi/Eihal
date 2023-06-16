@@ -478,6 +478,233 @@ namespace Eihal.Controllers
             return specialty;
         }
         #endregion
+        #region UserServices
+        [Route("MasterList/UserServices")]
+        public IActionResult UserServices()
+        {
+            // Retrieve the value from TempData
+            bool? isFromDeleteRequest = TempData["isFromDeleteRequest"] as bool?;
+            bool? isSuccessDelete = TempData["isSuccessDelete"] as bool?;
+
+            if (isFromDeleteRequest != null && isSuccessDelete != null)
+            {
+                // Clear the TempData value to avoid persisting it across subsequent requests
+                TempData.Remove("isFromDeleteRequest");
+                TempData.Remove("isSuccessDelete");
+
+                // Use the value as needed
+                ViewBag.SuccessMessage = isSuccessDelete;
+            }
+
+            return View(_dbContext.UserServices.Where(a => a.Status == Enums.ServicesStatusEnum.Pending).ToList());
+        }
+
+        [Route("GetUserServices")]
+        public IActionResult UserServicesList()
+        {
+            var userServices = _dbContext.UserServices.Where(a => a.Status == Enums.ServicesStatusEnum.Pending).ToList();
+            return PartialView("UserServicesList", userServices);
+        }
+
+        [HttpPost]
+        [Route("AddUserServices")]
+        public IActionResult AddUserServices([FromBody] UserServices userServices)
+        {
+            if (userServices == null || string.IsNullOrEmpty(userServices.TitleEn) || string.IsNullOrEmpty(userServices.TitleAr))
+            {
+                return BadRequest("Please fill all fields.");
+            }
+
+            bool isDuplicate = _dbContext.UserServices.Any(w => w.TitleEn == userServices.TitleEn && w.TitleAr == userServices.TitleAr);
+            if (isDuplicate)
+            {
+                return BadRequest("The details for the Practitioner Type have already been added.");
+            }
+
+            else
+            {
+                if (!string.IsNullOrEmpty(userServices.TitleAr) || !string.IsNullOrEmpty(userServices.TitleEn))
+                {
+                    _dbContext.UserServices.Add(userServices);
+                    _dbContext.SaveChanges();
+                }
+            }
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("UpdateUserServices")]
+        public IActionResult UpdateUserServices([FromBody] UserServices userServices)
+        {
+            if (userServices == null || string.IsNullOrEmpty(userServices.TitleEn) || string.IsNullOrEmpty(userServices.TitleAr))
+            {
+                return BadRequest("Please fill all fields.");
+            }
+
+            bool isDuplicate = _dbContext.UserServices.Any(w => w.TitleEn == userServices.TitleEn && w.TitleAr == userServices.TitleAr);
+            if (isDuplicate)
+            {
+                return BadRequest("The details for the Practitioner Type have already been added.");
+            }
+
+            else
+            {
+                if (!string.IsNullOrEmpty(userServices.TitleAr) || !string.IsNullOrEmpty(userServices.TitleEn))
+                {
+                    _dbContext.UserServices.Update(userServices);
+                    _dbContext.SaveChanges();
+                }
+            }
+
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("UpdateUserServicesStatus/{id}/{isActive}")]
+        public IActionResult UpdateUserServicesStatus(int id, bool isActive)
+        {
+            // Logic to update the status of the practitioner type with the given ID
+            try
+            {
+                var practitionerType = _dbContext.UserServices.SingleOrDefault(p => p.Id == id);
+                if (practitionerType == null)
+                {
+                    return NotFound();
+                }
+
+                //practitionerType.IsActive = isActive;
+                _dbContext.SaveChanges();
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while updating the status.");
+            }
+        }
+
+        [HttpGet]
+        [Route("DeleteUserServices/{id}")]
+        public IActionResult DeleteUserServices(int id)
+        {
+
+            bool isLinked = _dbContext.ApplicationUsers.Any(w => w.PractitionerTypeId == id);
+            if (isLinked)
+            {
+                return BadRequest("You cannot delete this item as it is linked to users in the system.");
+            }
+
+            else
+            {
+                // Retrieve the practitioner type from the database using the id
+                var userServices = _dbContext.UserServices.Find(id);
+
+
+                if (userServices == null)
+                {
+                    // Handle the case where the practitioner type doesn't exist
+                    TempData["isSuccessDelete"] = false;
+                }
+
+                // Remove the practitioner type from the DbSet
+                _dbContext.UserServices.Remove(userServices);
+
+                // Save the changes to the database
+                _dbContext.SaveChanges();
+                TempData["isSuccessDelete"] = true;
+            }
+            // Set the value in TempData
+            TempData["isFromDeleteRequest"] = true;
+
+
+
+            return RedirectToAction("UserServices");
+        }
+        [HttpGet]
+        [Route("ApproveUserServices/{id}")]
+        public IActionResult ApproveUserServices(int id)
+        {
+
+            //bool isLinked = _dbContext.ApplicationUsers.Any(w => w.PractitionerTypeId == id);
+            //if (isLinked)
+            //{
+            //    return BadRequest("You cannot delete this item as it is linked to users in the system.");
+            //}
+
+            //else
+            //{
+            // Retrieve the practitioner type from the database using the id
+            var userServices = _dbContext.UserServices.Find(id);
+            if (userServices != null && userServices.Status == Enums.ServicesStatusEnum.Pending)
+                userServices.Status = Enums.ServicesStatusEnum.Approved;
+            _dbContext.SaveChanges();
+            //    if (userServices == null)
+            //    {
+            //        // Handle the case where the practitioner type doesn't exist
+            //        TempData["isSuccessDelete"] = false;
+            //    }
+
+            //    // Remove the practitioner type from the DbSet
+            //    _dbContext.UserServices.Remove(userServices);
+
+            //    // Save the changes to the database
+            //    _dbContext.SaveChanges();
+            //    TempData["isSuccessDelete"] = true;
+            ////}
+            //// Set the value in TempData
+            //TempData["isFromDeleteRequest"] = true;
+
+
+
+            return RedirectToAction("UserServices");
+        }
+        [HttpGet]
+        [Route("RejectUserServices/{id}")]
+        public IActionResult RejectUserServices(int id)
+        {
+
+            //bool isLinked = _dbContext.ApplicationUsers.Any(w => w.PractitionerTypeId == id);
+            //if (isLinked)
+            //{
+            //    return BadRequest("You cannot delete this item as it is linked to users in the system.");
+            //}
+
+            //else
+            //{
+            // Retrieve the practitioner type from the database using the id
+            var userServices = _dbContext.UserServices.Find(id);
+            if (userServices != null && userServices.Status == Enums.ServicesStatusEnum.Pending)
+                userServices.Status = Enums.ServicesStatusEnum.Rejected;
+            _dbContext.SaveChanges();
+            //    if (userServices == null)
+            //    {
+            //        // Handle the case where the practitioner type doesn't exist
+            //        TempData["isSuccessDelete"] = false;
+            //    }
+
+            //    // Remove the practitioner type from the DbSet
+            //    _dbContext.UserServices.Remove(userServices);
+
+            //    // Save the changes to the database
+            //    _dbContext.SaveChanges();
+            //    TempData["isSuccessDelete"] = true;
+            ////}
+            //// Set the value in TempData
+            //TempData["isFromDeleteRequest"] = true;
+
+
+
+            return RedirectToAction("UserServices");
+        }
+        [HttpGet]
+        [Route("GetUserServices/{id}")]
+        public UserServices GetUserServices(int id)
+        {
+            var userServices = _dbContext.UserServices.Single(w => w.Id == id);
+            return userServices;
+        }
+        #endregion
 
         #region Countries
         [Route("MasterList/Countries")]
@@ -1006,22 +1233,22 @@ namespace Eihal.Controllers
 
             //else
             //{
-                // Retrieve the practitioner type from the database using the id
-                var service = _dbContext.Services.Find(id);
+            // Retrieve the practitioner type from the database using the id
+            var service = _dbContext.Services.Find(id);
 
 
-                if (service == null)
-                {
-                    // Handle the case where the practitioner type doesn't exist
-                    TempData["isSuccessDelete"] = false;
-                }
+            if (service == null)
+            {
+                // Handle the case where the practitioner type doesn't exist
+                TempData["isSuccessDelete"] = false;
+            }
 
-                // Remove the practitioner type from the DbSet
-                _dbContext.Services.Remove(service);
+            // Remove the practitioner type from the DbSet
+            _dbContext.Services.Remove(service);
 
-                // Save the changes to the database
-                _dbContext.SaveChanges();
-                TempData["isSuccessDelete"] = true;
+            // Save the changes to the database
+            _dbContext.SaveChanges();
+            TempData["isSuccessDelete"] = true;
             //}
             // Set the value in TempData
             TempData["isFromDeleteRequest"] = true;
