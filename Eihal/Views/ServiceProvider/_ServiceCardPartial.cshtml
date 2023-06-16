@@ -160,7 +160,9 @@
 .no-results p {
   margin: 0;
 }
-
+ .service-weight-700{
+        color:#00768c;font-weight: 700;
+    }
 
 </style>
 
@@ -169,10 +171,10 @@
                                                     <div class="col-md-4 padding-top-25">
                                                         <div class="service-card">
                                                             <div class="service-card-body">
-                                                                <h5 class="my-service-card-title">@item.TitleEn</h5>
-                                                                <p class="service-card-text">Price: @item.Price $  </p>
-                                                                <p class="service-card-text">Fee: @item.Fee </p>
-                                                                <p class="service-card-text">Status: @item.Status.ToString()</p>
+                                                                <h5 class="My-service-card-title"><strong> @item.TitleEn</strong></h5>
+                                                                <p class="service-card-text"><span class="service-weight-700">Price:</span> @item.Price $  </p>
+                                                                <p class="service-card-text"><span class="service-weight-700">Fee:</span> @item.Fee $</p>
+                                                                <p class="service-card-text"><span class="service-weight-700">Status:</span> @item.Status.ToString()</p>
                                                                 <div class="dots-container">
                                                                     <button class=" dots-button" onclick="deleteService('@item.Id')"><i style="color:#00768c" class="fa fa-remove" aria-hidden="true"></i></button>
                                                                 </div>
