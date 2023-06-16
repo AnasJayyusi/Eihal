@@ -15,14 +15,10 @@
 </head>
 
 <div id="page-top" style="margin-top:50px">
-
     <div id="wrapper">
-
         <!-- Sidebar -->
         @Html.Partial("_Sidebar")
-
         <div id="content-wrapper" class="d-flex flex-column">
-
             <!-- Main Content -->
             <div id="content">
 
@@ -41,12 +37,9 @@
                                 <label style="font-weight:bold;color:#00768c ">Administrator</label>
                                 <img src="~/users/images/Default-User-Profile.jpg" width="40" height="40" alt="user-profile">
                             </a>
-
                             <div class="dropdown-content">
                                 <a class="nav-link text-dark  linkButton" asp-area="" asp-controller="Doctor" asp-action="Index">My Profile </a>
                                 <a class="nav-link text-dark linkButton" asp-area="" asp-controller="Doctor" asp-action="Index">My Order </a>
-
-
                                 <a  type="submit" style="text-transform: none;" class="my-profile-button" asp-area="Identity" asp-page="/Account/Logout">
                                     Logout
                                     <span>
@@ -63,24 +56,16 @@
                     @Html.Partial("ProfileReviewsOrders")
                     <!-- Content Row -->
                     @Html.Partial("ServicesReviewsOrders")
-                  
                 </div>
-
             </div>
-
         </div>
         <!-- End of Content Wrapper -->
-
     </div>
     <!-- End of Page Wrapper -->
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-
- 
-
-
 </div>
 
 @section Scripts {
@@ -101,5 +86,3 @@
     <script src="~/js/demo/datatables-demo.js"></script>
 
 }
-
-
