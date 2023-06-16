@@ -150,12 +150,13 @@
             <div class="col-md-12">
                 <h5 class="font-weight-bold">Certifications</h5>
                 <span id="certifications-label" class="text-black"></span>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AttachCertificationsModal">
-                    <i class="fa fa-upload" aria-hidden="true"></i> Attach
+                <button onclick="getDegrees()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#AttachCertificationsModal">
+                    <i onclick="getDegrees()" class="fa fa-upload" aria-hidden="true"></i> Attach
                 </button>
             </div>
+
         </div>
-        <div class="row">
+        <div class="row mt-3">
             <div class="col-md-12">
                 <div id="certifications-list"></div>
             </div>
@@ -313,16 +314,18 @@
 
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label style="font-weight:bold;color:#00768c" for="university">Degree</label>
-                            <input type="text" id="university" name="university" class="form-control" required>
+                            <label for="degrees-ddl" style="font-weight:bold;color:#00768c">Degree</label>
+                            <select id="degrees-ddl" name="degrees-ddl" class="form-control" required>
+                                <option value="">Select Degree</option>
+                            </select>
                         </div>
                         <div class="form-group col-md-6">
-                            <label  style="font-weight:bold;color:#00768c" for="degree">University Name In English </label>
-                            <input type="text" id="degree" name="degree" class="form-control" required>
+                            <label for="universityName-english" style="font-weight:bold;color:#00768c">University Name In English </label>
+                            <input type="text" id="universityName-english" name="universityName-english" class="form-control" required>
                         </div>
-                          <div class="form-group col-md-6">
-                            <label  style="font-weight:bold;color:#00768c" for="degree">University Name In Arabic</label>
-                            <input type="text" id="degree" name="degree" class="form-control" required>
+                        <div class="form-group col-md-6">
+                            <label for="universityName-arabic" style="font-weight:bold;color:#00768c">University Name In Arabic</label>
+                            <input type="text" id="universityName-arabic" name="universityName-arabic" class="form-control" required>
                         </div>
                     </div>
 
@@ -336,7 +339,7 @@
 
             <div class="modal-footer">
                 <button id="close-attachment-modal" type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                <button onclick="uploadAttachment()" type="button" class="btn btn-success" style="background-color:#00768c">Upload</button>
+                <button onclick="uploadCertification()" type="button" class="btn btn-success" style="background-color:#00768c">Upload</button>
             </div>
         </div>
     </div>
@@ -400,7 +403,7 @@
                 $("#bio-label").text(response.bio);
                 $("#speciality-label").text(response.speciality);
                 $("#certifications-label").text(response.certifactions);
-
+                setProfileStatus(response.profileStatus);
                 if (response.profilePicturePath != null || response.profilePicturePath != undefined)
                     $('[id^="user-image"]').attr('src', response.profilePicturePath);
             },
@@ -644,11 +647,33 @@
     }
 
 
-    function uploadAttachment() {
+    function uploadCertification() {
         var fileInput = document.getElementById('attachments-uploader');
         var file = fileInput.files[0];
+
+        // Check if file is selected
+        if (!file) {
+            toastr.error('Please select a file.', 'Error !!');
+            return;
+        }
+
         var formData = new FormData();
         formData.append('file', file);
+
+        var degreeId = $('#degrees-ddl').val();
+        var universityNameArabic = $('#universityName-arabic').val();
+        var universityNameEnglish = $('#universityName-english').val();
+
+        // Check if any of the required fields is empty
+        if (!degreeId || !universityNameArabic || !universityNameEnglish) {
+            toastr.error('Please fill in all the required fields.', 'Error !!');
+            return;
+        }
+
+        // Append the additional fields to the FormData object
+        formData.append('DegreeId', degreeId);
+        formData.append('UniversityNameAr', universityNameArabic);
+        formData.append('UniversityNameEn', universityNameEnglish);
 
         $.ajax({
             url: '/File/UploadFile', // Replace with your API endpoint URL
@@ -660,7 +685,7 @@
                 // Handle the success response
                 $("#close-attachment-modal").trigger("click");
                 getCertifications();
-                toastr.success('Certification Upload successfully', 'Success !!');
+                toastr.success('Certification uploaded successfully', 'Success !!');
             },
             error: function (xhr, status, error) {
                 // Handle the error response
@@ -677,8 +702,10 @@
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-                if (data.length == 0)
+                if (data.length == 0) {
+                    $("#certifications-label").text("No Certifications added yet.");
                     $("#certifications-label").show();
+                }
                 else {
                     $("#certifications-label").text("You have " + data.length + " certificates added ");
                     linksContainer.empty(); // Clear the div before appending new links
@@ -688,6 +715,7 @@
                             .attr('target', '_blank')
                             .text(item.name.trim());
 
+                        var fileLabel = '<span style="color:black">' + item.degree.titleEn + '</span>' + ' from ' + '<span style="color:black">' + item.universityNameEn + '</span>';
 
                         // Define the corresponding icon class based on the file extension
                         var iconClass = '';
@@ -741,7 +769,8 @@
                                 removeCertificate(certificateId);
                             }); // Attach onclick event handler
 
-                        linksContainer.append(icon).append('&nbsp;&nbsp;').append(link).append(space).append(removeIcon).append('<br>');
+                        linksContainer.append(fileLabel).append('&nbsp;&nbsp;').append(icon).append('&nbsp;&nbsp;').append(link).append(space).append(removeIcon).append('<br>');
+
                     });
 
                 }
@@ -773,6 +802,30 @@
             }
         });
     }
+
+    function getDegrees() {
+        // Reset the form fields
+        $('#degrees-ddl').val('');
+        $('#universityName-english').val('');
+        $('#universityName-arabic').val('');
+        // Make an AJAX call to retrieve the data from the API
+        $.ajax({
+            url: '@Url.Action("GetDegrees", "ServiceProvider")',  // Replace 'your-api-url' with the actual API endpoint URL
+            method: 'GET',
+            success: function (response) {
+                // On success, loop through the response data and populate the dropdown options
+                var dropdown = $('#degrees-ddl');
+                dropdown.empty();
+                $.each(response, function (index, degree) {
+                    dropdown.append($('<option>').text(degree.titleEn).val(degree.id));
+                });
+            },
+            error: function () {
+                console.log('Error occurred while retrieving degree data.');
+            }
+        });
+    }
+
 
 </script>
 

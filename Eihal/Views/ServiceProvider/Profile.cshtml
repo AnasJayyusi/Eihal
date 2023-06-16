@@ -5,6 +5,10 @@
 
 <style>
 
+    .hide {
+        display: none;
+    }
+
     .activeLink {
         color: #00768c;
         font-weight: bold;
@@ -75,28 +79,14 @@
                         </a>*@
                     </div>
                     <!-- Content Row -->
-                
-                    
+
+
                     <div class="row">
-                            @Html.Partial("_Sidebar")
+                        @Html.Partial("_Sidebar")
                         <div class="col-xl-8 col-lg-8 ">
-                            <div class="card bg-info text-white shadow d-flex flex-row">
-                             @*   <div class="card-body d-flex align-items-center" style="padding:10px;display:none">
-                                    <div>
-                                        Profile Status: Under Review.
-                                    </div>
-                                </div>*@
 
-                                <div id="system-msg" class="card-body d-flex align-items-center" style="padding: 10px; background-color: rebeccapurple">
-                                    <div>
-                                        Please Complete Your Profile. Then <a id="reviewLink" href="#" style="color: white; text-decoration: underline; font-weight: bold;">click here</a> to send your profile to review.
-                                    </div>
-                                    <div  data-toggle="modal" data-target="#helpModal" style="color: white; margin-left: auto;cursor:pointer">
-                                        <i class="fas fa-question-circle"></i>
-                                    </div>
-                                </div>
+                            <div id="profile-status-container" style="color:white"></div>
 
-                            </div>
                             <br />
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
@@ -118,7 +108,7 @@
                                 <div class="card-body">
                                     @Html.Partial("Overview")
                                     @Html.Partial("Services")
-                                 
+
 
                                     <div id="tab3" class="tab-content" style="display: none;">
                                         <div style="text-align: end; cursor:pointer">
@@ -216,7 +206,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p style="text-transform:none">This message appear to complete your profile by adding Certifications by using attach button below to add new Certification. After that return to this message and press on click here</p>
+                <p id="help-msg" style="text-transform:none">This message appear to complete your profile by adding Certifications by using attach button below to add new Certification. After that return to this message and press on click here</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
@@ -234,34 +224,32 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
-             function deleteService(id){
-  $.ajax({
-    url: '/ServiceProvider/DeleteUserService?Id='+id, // Replace with the actual URL and action method to fetch the partial view
-    type: 'GET',
-    success: function(response) {
-      //serviceContainer.html(response);
-      GetMyService();
-    },
-    error: function(xhr, status, error) {
-      console.error('Error:', error);
-    }
-  });
-    }
-           function GetMyService()
-    {
-         var serviceContainer = $('#serviceContainer');
+        function deleteService(id) {
+            $.ajax({
+                url: '/ServiceProvider/DeleteUserService?Id=' + id, // Replace with the actual URL and action method to fetch the partial view
+                type: 'GET',
+                success: function (response) {
+                    //serviceContainer.html(response);
+                    GetMyService();
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
+        function GetMyService() {
+            var serviceContainer = $('#serviceContainer');
 
-  $.ajax({
-    url: '/ServiceProvider/MyServiceCardPartial', // Replace with the actual URL and action method to fetch the partial view
-    type: 'GET',
-    success: function(response) {
-      serviceContainer.html(response);
-    },
-    error: function(xhr, status, error) {
-      console.error('Error:', error);
-    }
-  });
-    }
+            $.ajax({
+                url: '/ServiceProvider/MyServiceCardPartial', // Replace with the actual URL and action method to fetch the partial view
+                type: 'GET',
+                success: function (response) {
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
         $(document).ready(function () {
             GetMyService();
             // Get the current URL
@@ -311,9 +299,70 @@
             document.getElementById(tabName).style.display = "block";
             evt.currentTarget.className += " active";
         }
-    </script>
-  
 
+        function sendToReview() {
+            $.ajax({
+                url: '/ServiceProvider/SendProfileToReview',
+                type: 'Get',
+                success: function (response) {
+                    debugger;
+                    setProfileStatus(response)
+                    toastr.success('Your profile send to review successfully', 'Success !!');
+
+                },
+                error: function (xhr, status, error) {
+                    toastr.error('Error occurred.', 'Failed !!');
+                }
+            });
+        }
+
+
+        function setProfileStatus(profileStatus) {
+            // Remove any existing profile status elements
+            $('#profile-status-container').empty();
+
+            var profileStatusElement = $('<div>').addClass('card-body d-flex align-items-center').css({
+                'padding': '10px',
+            });
+
+            var statusText = '';
+            if (profileStatus === 'UnCompleted') {
+                profileStatusElement.css('background-color', 'rebeccapurple');
+                statusText = '<span style="font-weight: bold;">  Profile Status: UnCompleted </span> </br> Please complete your profile. Then <a id="reviewLink" href="#" onclick=sendToReview()  style="color: white; text-decoration: underline; font-weight: bold;">click here</a> to send your profile for review.';
+            } else if (profileStatus === 'UnderReview') {
+                profileStatusElement.css('background-color', 'darkcyan');
+                statusText = '<span style="font-weight: bold;"> Profile Status: Under Review</span>';
+            } else if (profileStatus === 'Rejected') {
+                profileStatusElement.css('background-color', 'firebrick');
+                statusText = '<span style="font-weight: bold;"> Profile Status: Rejected</span>  to send your profile for review again. <a id="reviewLink" href="#" onclick=sendToReview()  style="color: white; text-decoration: underline; font-weight: bold;">Click here</a>';
+            } else if (profileStatus === 'Active') {
+                profileStatusElement.css('background-color', 'dodgerblue');
+                statusText = '<span style="font-weight: bold;"> Profile Status: Active</span>';
+            }
+
+            var statusDiv = $('<div>').append($('<span>').html(statusText));
+            profileStatusElement.append(statusDiv);
+
+            var helpModalIcon = $('<div>').attr({
+                'data-toggle': 'modal',
+                'data-target': '#helpModal'
+            }).css({
+                'color': 'white',
+                'margin-left': 'auto',
+                'cursor': 'pointer'
+            }).html('<i style="font-size: larger;" class="fas fa-question-circle"></i>');
+
+            profileStatusElement.append(helpModalIcon);
+
+            // Append the profile status element to the container
+            $('#profile-status-container').append(profileStatusElement);
+        }
+
+
+
+
+
+    </script>
 }
 
 

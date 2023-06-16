@@ -35,8 +35,8 @@ namespace Eihal.Controllers
         [Route("AddServices")]
         public IActionResult AddServices()
         {
-            var currentUserId = GetUserId();
-            var currentUserServices = _dbContext.UserServices.Where(a => a.Status != Enums.ServicesStatusEnum.Deleted).Select(a=>a.ServiceId);
+            var currentUserId = GetUserProfileId();
+            var currentUserServices = _dbContext.UserServices.Where(a => a.Status != Enums.ServicesStatusEnum.Deleted).Select(a => a.ServiceId);
             var services = _dbContext.Services.Where(a => a.IsActive && !currentUserServices.Contains(a.Id)).ToList();
             //var services = _dbContext.Services.Where(a => a.IsActive).ToList();
             return View(services);
@@ -54,12 +54,12 @@ namespace Eihal.Controllers
 
             return PartialView("_ServiceCardPartial", model); // Replace with the name of your partial view
         }
-                [Route("AllServiceCardPartial")]
+        [Route("AllServiceCardPartial")]
 
         public ActionResult AllServiceCardPartial()
         {
             // Assuming you have a list of items to pass to the view
-            var currentUserId = GetUserId();
+            var currentUserId = GetUserProfileId();
             var currentUserServices = _dbContext.UserServices.Where(a => a.Status != Enums.ServicesStatusEnum.Deleted).Select(a => a.ServiceId);
             var services = _dbContext.Services.Where(a => a.IsActive && !currentUserServices.Contains(a.Id)).ToList();
             // Render the partial view and return it as HTML content
@@ -71,8 +71,8 @@ namespace Eihal.Controllers
         public ActionResult DeleteUserService(int Id)
         {
             // Assuming you have a list of items to pass to the view
-            var currentUserId = GetUserId();
-            var userService = _dbContext.UserServices.Where(a => a.UserId == currentUserId && a.Id==Id).FirstOrDefault();
+            var currentUserId = GetUserProfileId();
+            var userService = _dbContext.UserServices.Where(a => a.UserId == currentUserId && a.Id == Id).FirstOrDefault();
             if (userService != null)
             {
                 _dbContext.UserServices.Remove(userService);
@@ -86,16 +86,16 @@ namespace Eihal.Controllers
 
         [Route("AddUserService")]
         [HttpPost]
-        public IActionResult AddUserService(int serviceId,double price)
+        public IActionResult AddUserService(int serviceId, double price)
         {
-            var service = _dbContext.Services.Where(a =>a.Id == serviceId && a.IsActive).FirstOrDefault();
+            var service = _dbContext.Services.Where(a => a.Id == serviceId && a.IsActive).FirstOrDefault();
             if (service == null)
                 throw new Exception("service not available");
 
             UserServices userServices = new UserServices();
-            userServices.UserId = GetUserId() ;
-            userServices.TitleEn = service.TitleEn ;
-            userServices.TitleAr = service.TitleAr ;
+            userServices.UserId = GetUserProfileId();
+            userServices.TitleEn = service.TitleEn;
+            userServices.TitleAr = service.TitleAr;
             userServices.Status = Enums.ServicesStatusEnum.Pending;
             userServices.ServiceId = service.Id;
             userServices.Price = price;
@@ -110,8 +110,8 @@ namespace Eihal.Controllers
         [Route("GetUserProfileInfo")]
         public ActionResult GetUserProfileInfo()
         {
-            _loggedUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var userProfile = _dbContext.UserProfiles.FirstOrDefault(w => w.UserId == _loggedUserId);
+
+            var userProfile = _dbContext.UserProfiles.FirstOrDefault(w => w.UserId == GetAspNetUserId());
             // Your logic to retrieve the necessary data
             List<int> specialityIds = userProfile.SpecialtiesIds.Split(',').Select(int.Parse).ToList();
             var specialityNames = "";
@@ -133,8 +133,8 @@ namespace Eihal.Controllers
                 insurance = userProfile.InsuranceAccepted ?? false,
                 bio = userProfile.Bio ?? "No Bio yet.",
                 speciality = specialityNames ?? "No Speciality added yet.",
-                certifactions = userProfile.Certifications ?? "No Certifications added yet.",
-                profilePicturePath = userProfile.ProfilePicturePath
+                profilePicturePath = userProfile.ProfilePicturePath,
+                profileStatus = userProfile.ProfileStatus.ToString()
             };
 
             return Json(data);
@@ -144,8 +144,8 @@ namespace Eihal.Controllers
         [Route("GetFullUserProfileInfo")]
         public ActionResult GetFullUserProfileInfo()
         {
-            _loggedUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var userProfile = _dbContext.UserProfiles.Include(i => i.State).Include(i => i.City).FirstOrDefault(w => w.UserId == _loggedUserId);
+            _loggedAspNetUserId =  GetAspNetUserId();
+            var userProfile = _dbContext.UserProfiles.Include(i => i.State).Include(i => i.City).FirstOrDefault(w => w.UserId == GetAspNetUserId());
 
             // Your logic to retrieve the necessary data
             var data = new
@@ -175,9 +175,9 @@ namespace Eihal.Controllers
         [Route("GetUserProfessionalRanksDDL")]
         public ActionResult GetUserProfessionalRanksDDL()
         {
-            _loggedUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            _loggedAspNetUserId =  GetAspNetUserId();
             var practitionerTypeId = _dbContext.UserProfiles
-                                                .Where(u => u.UserId == _loggedUserId)
+                                                .Where(u => u.UserId == GetAspNetUserId())
                                                 .Select(u => u.PractitionerTypeId);
 
             var professionalRanks = _dbContext.ProfessionalRanks
@@ -191,9 +191,9 @@ namespace Eihal.Controllers
         [Route("GetUserSpecialtiesDDL")]
         public ActionResult GetUserSpecialtiesDDL()
         {
-            _loggedUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            _loggedAspNetUserId =  GetAspNetUserId();
             var practitionerTypeId = _dbContext.UserProfiles
-                                                .Where(u => u.UserId == _loggedUserId)
+                                                .Where(u => u.UserId == GetAspNetUserId())
                                                 .Select(u => u.PractitionerTypeId);
 
             var Specialties = _dbContext.Specialties
@@ -226,6 +226,16 @@ namespace Eihal.Controllers
             return Json(cities);
         }
 
+        [HttpGet]
+        [Route("SendProfileToReview")]
+        public ActionResult SendProfileToReview()
+        {
+            var userProfile = _dbContext.UserProfiles.Single(w => w.UserId == GetAspNetUserId());
+            userProfile.ProfileStatus = ProfileStatus.UnderReview;
+            _dbContext.UserProfiles.Update(userProfile);
+            _dbContext.SaveChanges();
+            return Json(ProfileStatus.UnderReview.ToString());
+        }
 
         [HttpPost]
         public JsonResult Index(string kw)
@@ -250,8 +260,8 @@ namespace Eihal.Controllers
         [Route("UpdateUserProfile")]
         public IActionResult UpdateUserProfile(IFormCollection form)
         {
-            _loggedUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var userProfile = _dbContext.UserProfiles.Single(w => w.UserId == _loggedUserId);
+            _loggedAspNetUserId =  GetAspNetUserId();
+            var userProfile = _dbContext.UserProfiles.Single(w => w.UserId == GetAspNetUserId());
 
 
             // Handle image file
@@ -286,13 +296,13 @@ namespace Eihal.Controllers
             return Ok("Updated successfully.");
         }
 
-
+        #region Certifications
         [HttpGet]
         [Route("GetCertifications")]
         public ActionResult GetCertifications()
         {
-            var userId = GetUserId();
-            var attachments = _dbContext.Certifications.Where(w => w.UserProfileId == userId).ToList();
+            var userId = GetUserProfileId();
+            var attachments = _dbContext.Certifications.Include(i => i.Degree).Where(w => w.UserProfileId == userId).ToList();
             return Json(attachments);
         }
         private string StoreImageFilePathInDatabase(IFormFile profileImage)
@@ -312,7 +322,7 @@ namespace Eihal.Controllers
             Directory.CreateDirectory(uploadPath);
 
             // Generate a unique filename for the image (you can use your own logic here)
-            string uniqueFileName = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            string uniqueFileName =  GetAspNetUserId();
 
             // Combine the upload path with the unique filename
             string filePath = Path.Combine(uploadPath, uniqueFileName) + extension;
@@ -326,6 +336,15 @@ namespace Eihal.Controllers
             // Path To Save In Database
             return $"/users/images/{uniqueFileName}{extension}";
         }
+
+        [HttpGet]
+        [Route("GetDegrees")]
+        public ActionResult GetDegrees()
+        {
+            var degrees = _dbContext.Degrees.Where(w => w.IsActive).ToList();
+            return Json(degrees);
+        }
+        #endregion
 
     }
 }

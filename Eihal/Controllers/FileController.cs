@@ -41,11 +41,16 @@ namespace Eihal.Controllers
 
         [HttpPost]
         [Route("UploadFile")]
-        public async Task<IActionResult> UploadFile(IFormFile file)
+        public async Task<IActionResult> UploadFile(IFormFile file, int degreeId, string universityNameAr, string universityNameEn)
         {
             if (file == null || file.Length == 0)
             {
                 return BadRequest("No file uploaded.");
+            }
+
+            if (degreeId < -1 || string.IsNullOrEmpty(universityNameAr) || string.IsNullOrEmpty(universityNameEn))
+            {
+                return BadRequest("Please provide the degree and university names.");
             }
 
             try
@@ -76,7 +81,10 @@ namespace Eihal.Controllers
                     UserProfileId = GetUserId(),
                     Name = fileName,
                     Extension = fileExtension,
-                    Path = $"/users/attachments/{currentUserId}/{uniqueFileName}"
+                    Path = $"/users/attachments/{currentUserId}/{uniqueFileName}",
+                    DegreeId = degreeId,
+                    UniversityNameAr = universityNameAr,
+                    UniversityNameEn = universityNameEn
                 };
 
                 _dbContext.Certifications.Add(attachment);

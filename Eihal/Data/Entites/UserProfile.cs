@@ -5,7 +5,7 @@ namespace Eihal.Data.Entites
 {
     public class UserProfile
     {
-        
+
         public int Id { get; set; }
         #region  Synced With AspNetUser
         public string? UserId { get; set; }
@@ -29,7 +29,7 @@ namespace Eihal.Data.Entites
         [ForeignKey(nameof(City))]
         public int? CityId { get; set; }
         #endregion
-       
+
         #region Editable Fields
         public string? ProfilePicturePath { get; set; }
 
@@ -41,8 +41,6 @@ namespace Eihal.Data.Entites
         public int? NumOfPatients { get; set; }
         public int? Reviews { get; set; }
         public bool? InsuranceAccepted { get; set; }
-        [MaxLength(4096)]
-        public string? Certifications { get; set; }
         #endregion
 
         #region Navigations 
@@ -50,6 +48,7 @@ namespace Eihal.Data.Entites
         public Country? Country { get; set; }
         public State? State { get; set; }
         public City? City { get; set; }
+        public List<Certification> Certifications { get; set; }
         #endregion
 
         #region MultiSelection
@@ -58,7 +57,16 @@ namespace Eihal.Data.Entites
         public string? SpecialtiesTitlesEn { get; set; }
         #endregion
 
-        public List<Certification> Attachments { get; set; }
+        public ProfileStatus ProfileStatus { get; set; }
+
 
     }
+}
+
+public enum ProfileStatus
+{
+    UnCompleted = 0,
+    UnderReview = 1,
+    Rejected = 2,
+    Active = 3
 }

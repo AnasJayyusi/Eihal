@@ -122,13 +122,13 @@ namespace Eihal.Areas.Identity.Pages.Account
                     AccountTypeId = account_type,
                     PractitionerTypeId = practitioner_type,
                     ProfessionalRankId = professional_Rank,
-                    FullName=Input.FullName,
+                    FullName = Input.FullName,
                     EmailConfirmed = true
                 };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                   
+
                     debug = "Succeeded";
 
                     _logger.LogInformation("User created a new account with password.");
@@ -164,7 +164,7 @@ namespace Eihal.Areas.Identity.Pages.Account
                         return LocalRedirect(returnUrl);
                     }
 
-                
+
 
                 }
                 foreach (var error in result.Errors)
@@ -231,18 +231,19 @@ namespace Eihal.Areas.Identity.Pages.Account
 
         private void CreateUserProfileData(string userId)
         {
-                var applicationUser = _dbContext.ApplicationUsers.Single(x => x.Id == userId);
-                var obj = new UserProfile()
-                {
-                    UserId = userId,
-                    FullName = applicationUser.FullName,
-                    AccountTypeId = applicationUser.AccountTypeId,
-                    PractitionerTypeId = applicationUser.PractitionerTypeId,
-                    PhoneNumber = applicationUser.PhoneNumber,
-                    Email = applicationUser.Email,
-                };
-                _dbContext.UserProfiles.Add(obj);
-                _dbContext.SaveChanges();
+            var applicationUser = _dbContext.ApplicationUsers.Single(x => x.Id == userId);
+            var obj = new UserProfile()
+            {
+                UserId = userId,
+                FullName = applicationUser.FullName,
+                AccountTypeId = applicationUser.AccountTypeId,
+                PractitionerTypeId = applicationUser.PractitionerTypeId,
+                PhoneNumber = applicationUser.PhoneNumber,
+                Email = applicationUser.Email,
+                ProfileStatus = ProfileStatus.UnCompleted
+            };
+            _dbContext.UserProfiles.Add(obj);
+            _dbContext.SaveChanges();
         }
     }
 }
