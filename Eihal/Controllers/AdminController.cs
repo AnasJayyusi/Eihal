@@ -1266,7 +1266,6 @@ namespace Eihal.Controllers
         }
         #endregion
 
-
         #region Helper
         private int? GetCountryId(int? stateId)
         {

@@ -115,13 +115,15 @@ namespace Eihal.Controllers
             // Your logic to retrieve the necessary data
             List<int> specialityIds = userProfile.SpecialtiesIds.Split(',').Select(int.Parse).ToList();
             var specialityNames = "";
-            if (specialityIds != null) {
+            // This Code Temp We Should Depnd On Select2 
+            if (specialityIds != null)
+            {
                 var specialities = _dbContext.Specialties
-                               .Where(t => specialityIds.Contains(t.Id)).Select(a=> new
+                               .Where(t => specialityIds.Contains(t.Id)).Select(a => new
                                {
                                    a.TitleEn
                                }).ToList();
-                specialityNames = String.Join(",", specialities.Select(a=>a.TitleEn));
+                specialityNames = String.Join(",", specialities.Select(a => a.TitleEn));
             }
             var data = new
             {
@@ -159,7 +161,7 @@ namespace Eihal.Controllers
                 StateId = userProfile.StateId,
                 StateName = userProfile?.State?.TitleEn,
                 CityId = userProfile.CityId,
-                CityName= userProfile?.City?.TitleEn,
+                CityName = userProfile?.City?.TitleEn,
                 SpecialtiesTitlesEn = userProfile.SpecialtiesTitlesEn,
                 ProfilePicturePath = userProfile.ProfilePicturePath,
                 speciliaties = userProfile.SpecialtiesIds
@@ -284,6 +286,15 @@ namespace Eihal.Controllers
             return Ok("Updated successfully.");
         }
 
+
+        [HttpGet]
+        [Route("GetCertifications")]
+        public ActionResult GetCertifications()
+        {
+            var userId = GetUserId();
+            var attachments = _dbContext.Attachments.Where(w => w.UserProfileId == userId).ToList();
+            return Json(attachments);
+        }
         private string StoreImageFilePathInDatabase(IFormFile profileImage)
         {
             // File extension

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
+using NuGet.Packaging.Signing;
 using System.Data;
 using System.Security.Claims;
 
@@ -59,7 +60,7 @@ namespace Eihal.Controllers
                 // Generate a unique file name
                 string fileName = Path.GetFileNameWithoutExtension(file.FileName);
                 string fileExtension = Path.GetExtension(file.FileName);
-                string uniqueFileName = fileName + "_" + Path.GetRandomFileName() + fileExtension;
+                string uniqueFileName = fileName + fileExtension;
 
                 // Combine the directory and unique file name
                 string filePath = Path.Combine(uploadPath, uniqueFileName);
@@ -71,13 +72,15 @@ namespace Eihal.Controllers
                 }
                 var attachment = new Attachment()
                 {
+                    UserId = currentUserId,
                     UserProfileId = GetUserId(),
-                    Name = file.FileName,
+                    Name = fileName,
                     Extension = fileExtension,
-                    Path = Path.GetFileNameWithoutExtension(file.FileName),
+                    Path = $"/users/attachments/{currentUserId}/{uniqueFileName}"
                 };
 
                 _dbContext.Attachments.Add(attachment);
+                _dbContext.SaveChanges();
 
                 // File uploaded successfully
                 return Ok("File uploaded successfully.");
@@ -86,6 +89,35 @@ namespace Eihal.Controllers
             {
                 // Handle the error
                 return StatusCode(StatusCodes.Status500InternalServerError, $"File upload failed: {ex.Message}");
+            }
+        }
+
+
+        [HttpPost]
+        [Route("DeleteFile/{id}")]
+        public IActionResult DeleteFile(Guid id)
+        {
+            try
+            {
+                // Remove From Database
+                var attachment = _dbContext.Attachments.Find(id);
+                _dbContext.Attachments.Remove(attachment);
+                _dbContext.SaveChanges();
+
+                // Remove From Disk Storage 
+                string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                string webRootPath = _webHostEnvironment.WebRootPath;
+                string attachmentsPath = Path.Combine("users", "attachments");
+                string uploadPath = Path.Combine(webRootPath, attachmentsPath, currentUserId);
+                string filePath = Path.Combine(uploadPath, attachment.Name + attachment.Extension);
+                System.IO.File.Delete(filePath);
+
+                return Ok("File Deleted successfully.");
+            }
+            catch (Exception ex)
+            {
+                // Handle the error
+                return StatusCode(StatusCodes.Status500InternalServerError, $"File delete failed: {ex.Message}");
             }
         }
 

@@ -2,12 +2,36 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
 <style>
-.toast {
-    margin-top: 50px !important;
-}
-    .toast-success { 
-  background-color: #00333f; 
-}
+
+    .text-black
+    {
+        color:black;
+    }
+    /* attachment Icon */
+    .pdf-link .far.fa-file-pdf {
+        color: red;
+    }
+
+    .pptx-link .far.fa-file-powerpoint {
+        color: orange;
+    }
+
+    .docx-link .far.fa-file-word {
+        color: blue;
+    }
+
+    #certifications-list a {
+        font-family: "Helvetica", Arial, sans-serif;
+    }
+
+    .toast {
+        margin-top: 50px !important;
+    }
+
+    .toast-success {
+        background-color: #00333f;
+    }
+
     .drop-container {
         position: relative;
         display: flex;
@@ -66,10 +90,10 @@
                 background: #0d45a5;
             }
 </style>
-
+<!-- OverView -->
 <div id="tab1" class="tab-content" style="color:#00768c">
     <div style="text-align: end; cursor:pointer">
-        <button onclick="getFullUserProfileInfo()" type="button" style="background-color:#00768c" class="btn btn-success" data-toggle="modal" data-target="#EditProfileModal">
+        <button onclick="getFullUserProfileInfo()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#EditProfileModal">
             <i style="font-size:25px" class="fas fa-edit"></i> Edit Profile
         </button>
     </div>
@@ -106,30 +130,38 @@
     </table>
     <hr>
 
-    <table cellpadding="10">
-        <tr>
-            <td style="font-weight:bold">Bio</td>
-        </tr>
-        <tr style="color:black">
-            <td><span id="bio-label"></span></td>
-        </tr>
-        <tr>
-            <td style="font-weight:bold">Speciality</td>
-            <td style="color:black"><span id="speciality-label"></span></td>
-        </tr>
-
-        <tr>
-            <td style="font-weight:bold">Certifactions</td>
-            <td style="color:black">
-                <span id="certifactions-label"></span>
-                <button type="button" style="background-color:#00768c; padding: 5px 45px; font-size: 14px;" class="btn btn-success" data-toggle="modal" data-target="#AttachCertifactionsModal">
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <h5 class="font-weight-bold">Bio</h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <span id="bio-label" class="text-black"></span>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <h5 class="font-weight-bold">Speciality</h5>
+                <span id="speciality-label" class="text-black"></span>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <h5 class="font-weight-bold">Certifications</h5>
+                <span id="certifications-label" class="text-black"></span>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AttachCertificationsModal">
                     <i class="fa fa-upload" aria-hidden="true"></i> Attach
                 </button>
-            </td>
-
-
-        </tr>
-    </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div id="certifications-list"></div>
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -257,7 +289,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal" id="close-overview">Cancel</button>
-                <button onclick="updateProfile()" type="button" class="btn btn-success" style="background-color:#00768c" >Update</button>
+                <button onclick="updateProfile()" type="button" class="btn btn-success" style="background-color:#00768c">Update</button>
             </div>
         </div>
     </div>
@@ -267,11 +299,11 @@
 
 <!------------------------------ Attachment -------------------->
 
-<div class="modal fade" id="AttachCertifactionsModal" tabindex="-1" role="dialog" aria-labelledby="AttachCertifactionsModal" aria-hidden="true">
+<div class="modal fade" id="AttachCertificationsModal" tabindex="-1" role="dialog" aria-labelledby="AttachCertificationsModal" aria-hidden="true">
     <div class="modal-dialog custom-modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="AttachCertifactionsModal">Attach Certifactions</h5>
+                <h5 class="modal-title" id="AttachCertificationsModal">Attach Certifications</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -287,7 +319,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button id="close-attachment-modal" type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
                 <button onclick="uploadAttachment()" type="button" class="btn btn-success" style="background-color:#00768c">Upload</button>
             </div>
         </div>
@@ -339,8 +371,8 @@
         }
     });
 
-    function loadUserProfileOverview(){
-                $.ajax({
+    function loadUserProfileOverview() {
+        $.ajax({
 
             url: "/ServiceProvider/GetUserProfileInfo",
             method: "GET",
@@ -351,7 +383,7 @@
                 $("#insurance-label").text(response.insurance == "true" ? "Yes" : "No");
                 $("#bio-label").text(response.bio);
                 $("#speciality-label").text(response.speciality);
-                $("#certifactions-label").text(response.certifactions);
+                $("#certifications-label").text(response.certifactions);
 
                 if (response.profilePicturePath != null || response.profilePicturePath != undefined)
                     $('[id^="user-image"]').attr('src', response.profilePicturePath);
@@ -360,6 +392,8 @@
                 console.log(error);
             }
         });
+
+        getCertifications();
 
     }
     function getFullUserProfileInfo() {
@@ -371,7 +405,7 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
-           var select = $('#speciality-edit-multiSelect');
+                    var select = $('#speciality-edit-multiSelect');
                     $.each(data, function (index, item) {
                         select.append($('<option></option>').val(item.id).text(item.titleEn));
                     });
@@ -486,7 +520,6 @@
     }
 
     function getStates(countryId) {
-        debugger;
         $.ajax({
             url: '@Url.Action("GetStatesDDL", "ServiceProvider")' + '?countryId=' + countryId,
             type: 'GET',
@@ -524,7 +557,6 @@
     }
 
     function updateProfile() {
-        debugger;
         var formData = new FormData();
         formData.append('FullName', $('#full-name-edit-input').val());
         formData.append('Bio', $('#bio-edit-input').val());
@@ -547,11 +579,11 @@
                 console.log(response);
                 $("#close-overview").trigger("click");
                 loadUserProfileOverview();
-                toastr.success('User profile updated successfully','Success !!');
+                toastr.success('User profile updated successfully', 'Success !!');
                 // Handle success response
             },
             error: function (error) {
-                console.log(error);
+                toastr.error('Error occurred', 'Failed !!');
                 // Handle error response
             }
         });
@@ -610,11 +642,118 @@
             contentType: false,
             success: function (response) {
                 // Handle the success response
-                console.log('File uploaded successfully.');
+                $("#close-attachment-modal").trigger("click");
+                getCertifications();
+                toastr.success('Certification Upload successfully', 'Success !!');
             },
             error: function (xhr, status, error) {
                 // Handle the error response
-                console.log('File upload failed.');
+                toastr.error('Error occurred', 'Failed !!');
+            }
+        });
+    }
+
+    function getCertifications() {
+          var linksContainer = $('#certifications-list');
+        linksContainer.empty();
+        $.ajax({
+            url: '@Url.Action("GetCertifications", "ServiceProvider")',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                if (data.length == 0)
+                    $("#certifications-label").show();
+                else {
+                    $("#certifications-label").text("You have " + data.length + " certificates added ");
+                    linksContainer.empty(); // Clear the div before appending new links
+                    data.forEach(function (item) {
+                        var link = $('<a>')
+                            .attr('href', item.path)
+                            .attr('target', '_blank')
+                            .text(item.name.trim());
+
+
+                        // Define the corresponding icon class based on the file extension
+                        var iconClass = '';
+                        switch (item.extension.replace(".", "")) {
+                            case 'pdf':
+                                iconClass = 'far fa-file-pdf';
+                                linkClass = 'pdf-link';
+                                break;
+                            case 'pptx':
+                            case 'ppt':
+                                iconClass = 'far fa-file-powerpoint';
+                                linkClass = 'pptx-link';
+                                break;
+                            case 'docx':
+                            case 'doc':
+                                iconClass = 'far fa-file-word';
+                                linkClass = 'docx-link';
+                                break;
+                            case 'xlsx':
+                            case 'xls':
+                                iconClass = 'far fa-file-excel';
+                                linkClass = 'xlsx-link';
+                                break;
+                            case 'jpg':
+                            case 'jpeg':
+                            case 'png':
+                            case 'gif':
+                                iconClass = 'far fa-file-image';
+                                linkClass = 'image-link';
+                                break;
+                            // Add more cases for other file extensions and their corresponding Font Awesome classes and link classes
+                            default:
+                                iconClass = 'far fa-file';
+                                linkClass = 'default-link';
+                                break;
+                        }
+
+                        // Create a span element with the file icon class
+                        var icon = $('<span>').addClass(iconClass);
+                        var space = $('<span>').html('&nbsp;&nbsp;'); // Add space between the name and the remove icon
+                        var removeIcon = $('<i>')
+                            .addClass('fa fa-remove')
+                            .css({
+                                color: 'red',
+                                cursor: 'pointer' // Add cursor style
+                            })
+                            .attr('aria-hidden', 'true')
+                            .attr('data-certificate-id', item.id) // Set a data attribute for the certificate ID
+                            .click(function () {
+                                var certificateId = $(this).data('certificate-id');
+                                removeCertificate(certificateId);
+                            }); // Attach onclick event handler
+
+                        linksContainer.append(icon).append('&nbsp;&nbsp;').append(link).append(space).append(removeIcon).append('<br>');
+                    });
+
+                }
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function removeCertificate(fileId) {
+        debugger;
+        // Perform an AJAX request to delete the certificate
+        $.ajax({
+            url: '/File/DeleteFile/' + fileId, // Replace with the actual URL to delete the certificate
+            type: 'POST', // Use the appropriate HTTP method (e.g., POST, DELETE) for deleting the certificate
+            success: function (response) {
+                // Certificate deleted successfully, you can perform any additional actions here
+                getCertifications();
+                toastr.success('Certificate deleted successfully', 'Success !!');
+                // Refresh the certifications list or perform any other necessary updates
+
+
+            },
+            error: function (error) {
+                // Handle the AJAX error
+                toastr.error('Failed to delete certificate:', response.error);
+                console.error('AJAX error:', error);
             }
         });
     }

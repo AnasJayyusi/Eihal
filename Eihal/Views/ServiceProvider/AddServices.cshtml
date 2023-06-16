@@ -2,10 +2,11 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 <style>
-    .margin-15-position-obselete{
-    position: absolute;
-    margin: 15px;
+    .margin-15-position-obselete {
+        position: absolute;
+        margin: 15px;
     }
+
     .service-card {
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         position: relative;
@@ -165,35 +166,13 @@
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4" style="margin-top:125px;">
                         @*  <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-                            <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
-                            </a>*@
+                        <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
+                        </a>*@
                     </div>
                     <!-- Content Row -->
                     <div class="row">
-                        <div class="col-xl-2 col-lg-2 offset-xl-1 offset-lg-1 card shadow mb-4 " style="height:5%;padding:1%">
-                            @*   <div style="background-color:#fff">
-                                <ul id="menu" class="navbar-nav">
-                                <li class=" tab-button">
-                                <a class="nav-link " href="#">Home</a>
-                                </li>
-                                <li class=" tab-button">
-                                <a class="nav-link" href="#">About</a>
-                                </li>
-                                <li class=" tab-button">
-                                <a class="nav-link" href="#">Info</a>
-                                </li>
-                                <li class=" tab-button">
-                                <a class="nav-link" href="#">Contact</a>
-                                </li>
-                                <li class=" tab-button">
-                                <a class="nav-link" href="https://erikterwan.com/" target="_blank">Show me more</a>
-                                </li>
-                                </ul>
-                                </div>*@
+                        @Html.Partial("_Sidebar")
 
-                            @Html.Partial("_Sidebar")
-
-                        </div>
 
 
                         <div class="col-xl-8 col-lg-8 ">
@@ -225,8 +204,6 @@
                                     <div id="tab2" class="tab-content">
                                         <div class="container">
                                             <div class="row" id="serviceContainer">
-                                              
-
                                             </div>
                                         </div>
                                     </div>
@@ -245,14 +222,14 @@
                                         </a>
 
                                     </h6>
-                                  
+
                                 </div>
-                                  <div class="row">
-                                        <div class="form-group mr-2">
-                                            <input type="text" class="form-control margin-15-position-obselete" id="filterInput" name="search" placeholder="Search" value="">
-                                        </div>
-                                   
+                                <div class="row">
+                                    <div class="form-group mr-2">
+                                        <input type="text" class="form-control margin-15-position-obselete" id="filterInput" name="search" placeholder="Search" value="">
                                     </div>
+
+                                </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
                                     <div id="tab2" class="tab-content">
@@ -345,145 +322,144 @@
 
 
 @section Scripts {
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-<script>
-     function deleteService(id){
-  $.ajax({
-    url: '/ServiceProvider/DeleteUserService?Id='+id, // Replace with the actual URL and action method to fetch the partial view
-    type: 'GET',
-    success: function(response) {
-      //serviceContainer.html(response);
-      GetAllService();
-      GetMyService();
-    },
-    error: function(xhr, status, error) {
-      console.error('Error:', error);
-    }
-  });
-    }
-    function GetMyService()
-    {
-         var serviceContainer = $('#serviceContainer');
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        function deleteService(id) {
+            $.ajax({
+                url: '/ServiceProvider/DeleteUserService?Id=' + id, // Replace with the actual URL and action method to fetch the partial view
+                type: 'GET',
+                success: function (response) {
+                    //serviceContainer.html(response);
+                    GetAllService();
+                    GetMyService();
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
+        function GetMyService() {
+            var serviceContainer = $('#serviceContainer');
 
-  $.ajax({
-    url: '/ServiceProvider/MyServiceCardPartial', // Replace with the actual URL and action method to fetch the partial view
-    type: 'GET',
-    success: function(response) {
-      serviceContainer.html(response);
-    },
-    error: function(xhr, status, error) {
-      console.error('Error:', error);
-    }
-  });
-    }
-    function GetAllService(){
-         var serviceContainer = $('#allServiceContainer');
+            $.ajax({
+                url: '/ServiceProvider/MyServiceCardPartial', // Replace with the actual URL and action method to fetch the partial view
+                type: 'GET',
+                success: function (response) {
+                    serviceContainer.html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
+        function GetAllService() {
+            var serviceContainer = $('#allServiceContainer');
 
-  $.ajax({
-    url: '/ServiceProvider/AllServiceCardPartial', // Replace with the actual URL and action method to fetch the partial view
-    type: 'GET',
-    success: function(response) {
-      serviceContainer.html(response);
-    },
-    error: function(xhr, status, error) {
-      console.error('Error:', error);
-    }
-  });
-    }
+            $.ajax({
+                url: '/ServiceProvider/AllServiceCardPartial', // Replace with the actual URL and action method to fetch the partial view
+                type: 'GET',
+                success: function (response) {
+                    serviceContainer.html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
 
-          function fillAddServicePage(serviceId,titleAr,titleEn,fee){
-                                  $("#service-id-input").val(serviceId);
-                                  $("#service-namear-input").val(titleEn);
+        function fillAddServicePage(serviceId, titleAr, titleEn, fee) {
+            $("#service-id-input").val(serviceId);
+            $("#service-namear-input").val(titleEn);
 
-              $("#fee-input").val(fee);
-          }
-                function sendServiceForReview(){
-                                var serviceId=  $("#service-id-input").val();
-                                  var price =$("#price-input").val();
+            $("#fee-input").val(fee);
+        }
+        function sendServiceForReview() {
+            var serviceId = $("#service-id-input").val();
+            var price = $("#price-input").val();
 
-                                   $.ajax({
-            url: '/ServiceProvider/AddUserService?serviceId='+serviceId+'&price='+price,
-            type: 'POST',
-            data: jQuery.param({ serviceId: serviceId, price : price}),
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                console.log(response);
-                $("#close-add-service").trigger("click");
-                //loadUserProfileOverview();
-                toastr.success('Service sent for reveiew successfully','Success !!');
-                GetMyService();
-                GetAllService();
-                // Handle success response
-            },
-            error: function (error) {
-                console.log(error);
-                // Handle error response
+            $.ajax({
+                url: '/ServiceProvider/AddUserService?serviceId=' + serviceId + '&price=' + price,
+                type: 'POST',
+                data: jQuery.param({ serviceId: serviceId, price: price }),
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    console.log(response);
+                    $("#close-add-service").trigger("click");
+                    //loadUserProfileOverview();
+                    toastr.success('Service sent for reveiew successfully', 'Success !!');
+                    GetMyService();
+                    GetAllService();
+                    // Handle success response
+                },
+                error: function (error) {
+                    console.log(error);
+                    // Handle error response
+                }
+            });
+        }
+
+        function search() {
+            // Find all the service card titles
+            var titles = $('.service-card-title');
+            titles.each(function () {
+                var titleText = $("#searchInput").text();
+                console.log(titleText);
+            });
+
+            // Find all the service card texts
+            var texts = $('.service-card-text');
+            texts.each(function () {
+                var text = $(this).text();
+                console.log(text);
+            });
+        }
+        $(document).ready(function () {
+            GetMyService();
+            GetAllService();
+            // Get the current URL
+            var currentUrl = window.location.href;
+            // Filter the service cards based on the title
+            $('#filterInput').on('keyup', function () {
+                var value = $(this).val().toLowerCase();
+                $('.service-card-title').filter(function () {
+                    $(this).parent().parent().parent().toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+            // Check if the URL contains a specific segment
+            if (currentUrl.includes("Services")) {
+                // Perform an action when the URL contains "something"
+                $("#myServices-li").addClass("activeLink");
+                $("#myServices-text").addClass("activeLink");
+                $("#myProfile-li").removeClass("activeLink");
+                $("#myProfile-text").removeClass("activeLink");
+                $("#myReferrals-li").removeClass("activeLink");
+                $("#myReferrals-text").removeClass("activeLink");
+            } else {
+                // Perform a different action when the URL doesn't contain "something"
+                console.log("The URL does not contain 'Services'.");
             }
-        });
-          }
+            //$("#companyAutoComplete").autocomplete({
+            //    source: function (request, response) {
+            //        $.ajax({
+            //            url: "/Doctor/Index",
+            //            type: "POST",
+            //            dataType: "json",
+            //            data: { kw: request.term },
+            //            success: function (data) {
+            //                response($.map(data, function (item) {
+            //                    return { label: item.nameEn + ' - ' + item.nameAr, value: item.nameEn + ' - ' + item.nameAr };
+            //                }))
+            //            }
+            //        })
+            //    },
 
-          function search(){
-              // Find all the service card titles
-    var titles = $('.service-card-title');
-    titles.each(function() {
-      var titleText = $("#searchInput").text();
-      console.log(titleText);
-    });
-
-    // Find all the service card texts
-    var texts = $('.service-card-text');
-    texts.each(function() {
-      var text = $(this).text();
-      console.log(text);
-    });
-          }
-          $(document).ready(function () {
-              GetMyService();
-              GetAllService();
-              // Get the current URL
-              var currentUrl = window.location.href;
-                // Filter the service cards based on the title
-    $('#filterInput').on('keyup', function() {
-      var value = $(this).val().toLowerCase();
-      $('.service-card-title').filter(function() {
-        $(this).parent().parent().parent().toggle($(this).text().toLowerCase().indexOf(value) > -1);
-      });
-    });
-              // Check if the URL contains a specific segment
-              if (currentUrl.includes("Services")) {
-                  // Perform an action when the URL contains "something"
-                  $("#myServices-li").addClass("activeLink");
-                  $("#myServices-text").addClass("activeLink");
-                  $("#myProfile-li").removeClass("activeLink");
-                  $("#myProfile-text").removeClass("activeLink");
-                   $("#myReferrals-li").removeClass("activeLink");
-                  $("#myReferrals-text").removeClass("activeLink");
-              } else {
-                  // Perform a different action when the URL doesn't contain "something"
-                  console.log("The URL does not contain 'Services'.");
-              }
-              //$("#companyAutoComplete").autocomplete({
-              //    source: function (request, response) {
-              //        $.ajax({
-              //            url: "/Doctor/Index",
-              //            type: "POST",
-              //            dataType: "json",
-              //            data: { kw: request.term },
-              //            success: function (data) {
-              //                response($.map(data, function (item) {
-              //                    return { label: item.nameEn + ' - ' + item.nameAr, value: item.nameEn + ' - ' + item.nameAr };
-              //                }))
-              //            }
-              //        })
-              //    },
-
-              //});
-          })
+            //});
+        })
 
 
-</script>
+    </script>
 
 
 }
