@@ -3,9 +3,8 @@
 
 <style>
 
-    .text-black
-    {
-        color:black;
+    .text-black {
+        color: black;
     }
     /* attachment Icon */
     .pdf-link .far.fa-file-pdf {
@@ -311,13 +310,30 @@
             <div class="modal-body">
                 <form>
                     <!-- Add your modal content here -->
-                    <label for="images" class="drop-container">
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label style="font-weight:bold;color:#00768c" for="university">Degree</label>
+                            <input type="text" id="university" name="university" class="form-control" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label  style="font-weight:bold;color:#00768c" for="degree">University Name In English </label>
+                            <input type="text" id="degree" name="degree" class="form-control" required>
+                        </div>
+                          <div class="form-group col-md-6">
+                            <label  style="font-weight:bold;color:#00768c" for="degree">University Name In Arabic</label>
+                            <input type="text" id="degree" name="degree" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <label for="attachments-uploader" class="drop-container">
                         <span class="drop-title">Drop files here</span>
                         or
                         <input type="file" id="attachments-uploader" required>
                     </label>
                 </form>
             </div>
+
             <div class="modal-footer">
                 <button id="close-attachment-modal" type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
                 <button onclick="uploadAttachment()" type="button" class="btn btn-success" style="background-color:#00768c">Upload</button>
@@ -654,7 +670,7 @@
     }
 
     function getCertifications() {
-          var linksContainer = $('#certifications-list');
+        var linksContainer = $('#certifications-list');
         linksContainer.empty();
         $.ajax({
             url: '@Url.Action("GetCertifications", "ServiceProvider")',

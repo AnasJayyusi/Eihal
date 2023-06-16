@@ -1,4 +1,4 @@
-﻿@model List<Eihal.Data.Entites.UserServices>
+﻿@model List<Eihal.Data.Entites.Degree>
 <head>
     <!-- Custom styles for this template-->
     <link href="~/css/sb-admin-2.css" rel="stylesheet">
@@ -34,7 +34,7 @@
 <!-- Toaster -->
 <div id="toast-container" class="toast-container toast-center">
     <div class="alert alert-success hidden" role="alert">
-        The User Services Added/Updated Successfully!
+        The Degree Added/Updated Successfully!
     </div>
 
     @if (@ViewBag.SuccessMessage != null)
@@ -43,7 +43,7 @@
         {
             <text>
                 <div class="alert alert-success" role="alert">
-                    User services deleted successfully!
+                   Degree type deleted successfully!
                 </div>
             </text>
         }
@@ -78,7 +78,7 @@
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h6 style="font-weight:bold;color:#00768c " class="h6 mb-0 ">  Master List  &#8658; Users Services</h6>
+                        <h6 style="font-weight:bold;color:#00768c " class="h6 mb-0 ">  Master List  &#8658; Degress</h6>
 
 
                         <!--ToDo:Move To Partial View -->
@@ -134,8 +134,10 @@
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
                                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Users Services</h6>
-                             
+                                    <h6 class="m-0 font-weight-bold text-primary">Degrees</h6>
+                                    <div style="text-align: end; cursor:pointer">
+                                        <button id="openNewPractitionerModal" type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#AddNewDegree">  <i class="fa fa-plus text-white-50"></i>  </button>
+                                    </div>
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
@@ -143,7 +145,7 @@
                                     <br />
 
                                     <div class="table-responsive" id="dataTableContainer">
-                                        @Html.Partial("UserServicesList", Model)
+                                        @Html.Partial("DegreesList", Model)
 
                                     </div>
                                 </div>
@@ -169,11 +171,11 @@
 </div>
 
 
-<div class="modal fade" id="AddNewUserServices" tabindex="-1" role="dialog" aria-labelledby="AddNewUserServicesModal" aria-hidden="true">
+<div class="modal fade" id="AddNewDegree" tabindex="-1" role="dialog" aria-labelledby="AddNewDegreeModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="AddNewUserServicesModal">Add</h5>
+                <h5 class="modal-title" id="AddNewDegreeModal">Add</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -195,8 +197,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button id="close-add-UserServices" type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                <button id="add-UserServices" type="button" class="btn btn-success" style="background-color:#00768c">Save</button>
+                <button id="close-add-Degree" type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button id="add-Degree" type="button" class="btn btn-success" style="background-color:#00768c">Save</button>
             </div>
         </div>
     </div>
@@ -214,30 +216,30 @@
             setTimeout(function () {
                 $('.alert-success').fadeOut();
             }, 3000);
-          
-            $('#openNewUserServicesModal').click(function () {
+
+            $('#openNewPractitionerModal').click(function () {
                 $('#titleArInput').val("");
                 $('#titleEnInput').val("");
             });
 
-            $('#add-UserServices').click(function () {
-                var userServices = {
+            $('#add-Degree').click(function () {
+                var degree = {
                     TitleAr: $('#titleArInput').val(),
                     TitleEn: $('#titleEnInput').val(),
                     IsActive: true,
                 };
 
                 $.ajax({
-                    url: '/Admin/AddUserServices', // Replace with your actual API endpoint URL
+                    url: '/Admin/AddDegree', // Replace with your actual API endpoint URL
                     type: 'POST',
-                    data: JSON.stringify(userServices),
+                    data: JSON.stringify(degree),
                     contentType: 'application/json',
                     success: function (response) {
                         // Show the success message
                         $('.alert-success').removeClass('hidden').hide().fadeIn();
                         // Close the modal after the success message fades out
-                        $("#close-add-UserServices").trigger("click");
-                        $('#dataTableContainer').load('/Admin/GetUserServices');
+                        $("#close-add-Degree").trigger("click");
+                        $('#dataTableContainer').load('/Admin/GetDegrees');
 
                         // Hide the success message after 2 seconds
                         setTimeout(function () {

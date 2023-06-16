@@ -70,7 +70,7 @@ namespace Eihal.Controllers
                     // Copy the file to the specified path
                     await file.CopyToAsync(stream);
                 }
-                var attachment = new Attachment()
+                var attachment = new Certification()
                 {
                     UserId = currentUserId,
                     UserProfileId = GetUserId(),
@@ -79,7 +79,7 @@ namespace Eihal.Controllers
                     Path = $"/users/attachments/{currentUserId}/{uniqueFileName}"
                 };
 
-                _dbContext.Attachments.Add(attachment);
+                _dbContext.Certifications.Add(attachment);
                 _dbContext.SaveChanges();
 
                 // File uploaded successfully
@@ -100,8 +100,8 @@ namespace Eihal.Controllers
             try
             {
                 // Remove From Database
-                var attachment = _dbContext.Attachments.Find(id);
-                _dbContext.Attachments.Remove(attachment);
+                var attachment = _dbContext.Certifications.Find(id);
+                _dbContext.Certifications.Remove(attachment);
                 _dbContext.SaveChanges();
 
                 // Remove From Disk Storage 

@@ -292,7 +292,7 @@ namespace Eihal.Controllers
         public ActionResult GetCertifications()
         {
             var userId = GetUserId();
-            var attachments = _dbContext.Attachments.Where(w => w.UserProfileId == userId).ToList();
+            var attachments = _dbContext.Certifications.Where(w => w.UserProfileId == userId).ToList();
             return Json(attachments);
         }
         private string StoreImageFilePathInDatabase(IFormFile profileImage)

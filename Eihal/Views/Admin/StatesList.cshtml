@@ -55,7 +55,7 @@
 
 
 
-<table class="table table-bordered" id="dataTable-States" width="100%" cellspacing="0">
+<table class="table table-striped" id="dataTable-States" width="100%" cellspacing="0">
     <thead>
         <tr>
             <th>#</th>
@@ -76,12 +76,12 @@
                 <td>@state.TitleAr</td>
                 <td>
                     <li class="list-inline-item">
-                        <button onclick="getState(@state.Id)" href="#" class="btn btn-success btn-sm rounded-0" type="button" data-toggle="modal" data-target="#EditState" data-placement="top" title="Edit">
+                        <button onclick="getState(@state.Id)" href="#" class="btn btn-success btn-sm rounded-pill" type="button" data-toggle="modal" data-target="#EditState" data-placement="top" title="Edit">
                             <i class="fa fa-edit"></i>
                         </button>
                     </li>
                     <li class="list-inline-item">
-                        <a href="#" class="btn btn-danger btn-sm rounded-0" data-toggle="modal" data-target="#confirmDeleteModal_@state.Id"><i class="fa fa-trash"></i></a>
+                        <a href="#" class="btn btn-danger btn-sm rounded-pill" data-toggle="modal" data-target="#confirmDeleteModal_@state.Id"><i class="fa fa-trash"></i></a>
                     </li>
                     <!-- Confirm Delete Modal -->
                     <div class="modal fade" id="confirmDeleteModal_@state.Id" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">

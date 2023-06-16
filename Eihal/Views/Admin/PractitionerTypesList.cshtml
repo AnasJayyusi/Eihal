@@ -55,7 +55,7 @@
 
 
 
-<table class="table table-bordered" id="dataTable-PractitionerTypes" width="100%" cellspacing="0">
+<table class="table table-striped" id="dataTable-PractitionerTypes" width="100%" cellspacing="0">
     <thead>
         <tr>
             <th>#</th>
@@ -81,13 +81,14 @@
                 </td>
                 <td>
                     <li class="list-inline-item">
-                        <button onclick="getPractitionerType(@practitionerType.Id)" href="#" class="btn btn-success btn-sm rounded-0" type="button" data-toggle="modal" data-target="#EditPractitionerType" data-placement="top" title="Edit">
+                        <button onclick="getPractitionerType(@practitionerType.Id)" href="#" class="btn btn-success btn-sm rounded-pill" type="button" data-toggle="modal" data-target="#EditPractitionerType" data-placement="top" title="Edit">
                             <i class="fa fa-edit"></i>
                         </button>
                     </li>
                     <li class="list-inline-item">
-                        <a href="#" class="btn btn-danger btn-sm rounded-0" data-toggle="modal" data-target="#confirmDeleteModal_@practitionerType.Id">
-                            <i class="fa fa-trash"></i></a>
+                        <a href="#" class="btn btn-danger btn-sm rounded-pill" data-toggle="modal" data-target="#confirmDeleteModal_@practitionerType.Id">
+                            <i class="fa fa-trash"></i>
+                        </a>
                     </li>
                     <!-- Confirm Delete Modal -->
                     <div class="modal fade" id="confirmDeleteModal_@practitionerType.Id" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
@@ -235,6 +236,7 @@
         var practitionerType = {
             TitleAr: $('#titleArInputEdit').val(),
             TitleEn: $('#titleEnInputEdit').val(),
+            IsActive: true,
             Id: $('#titleId').val(),
         };
 

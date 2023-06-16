@@ -480,8 +480,8 @@ namespace Eihal.Controllers
         #endregion
 
         #region UserServices
-        [Route("MasterList/UserServices")]
-        public IActionResult UserServices()
+        [Route("Users/ProfileReviewRequests")]
+        public IActionResult ProfileReviewRequests()
         {
             // Retrieve the value from TempData
             bool? isFromDeleteRequest = TempData["isFromDeleteRequest"] as bool?;
@@ -503,7 +503,7 @@ namespace Eihal.Controllers
         [Route("GetUserServices")]
         public IActionResult UserServicesList()
         {
-            var userServices = _dbContext.UserServices.Where(a => a.Status == Enums.ServicesStatusEnum.Pending).Include(a=>a.UserProfile).ToList();
+            var userServices = _dbContext.UserServices.Where(a => a.Status == Enums.ServicesStatusEnum.Pending).Include(a => a.UserProfile).ToList();
             return PartialView("UserServicesList", userServices);
         }
 
@@ -620,7 +620,7 @@ namespace Eihal.Controllers
 
 
 
-            return RedirectToAction("UserServices");
+            return RedirectToAction("ProfileReviewRequests");
         }
         [HttpGet]
         [Route("ApproveUserServices/{id}")]
@@ -658,7 +658,7 @@ namespace Eihal.Controllers
 
 
 
-            return RedirectToAction("UserServices");
+            return RedirectToAction("ProfileReviewRequests");
         }
         [HttpGet]
         [Route("RejectUserServices/{id}")]
@@ -696,7 +696,7 @@ namespace Eihal.Controllers
 
 
 
-            return RedirectToAction("UserServices");
+            return RedirectToAction("ProfileReviewRequests");
         }
         [HttpGet]
         [Route("GetUserServices/{id}")]
@@ -1263,6 +1263,146 @@ namespace Eihal.Controllers
         {
             var services = _dbContext.Services.Single(w => w.Id == id);
             return services;
+        }
+        #endregion
+
+        #region Degrees
+        [Route("MasterList/Degrees")]
+        public IActionResult Degrees()
+        {
+            // Retrieve the value from TempData
+            bool? isFromDeleteRequest = TempData["isFromDeleteRequest"] as bool?;
+            bool? isSuccessDelete = TempData["isSuccessDelete"] as bool?;
+
+            if (isFromDeleteRequest != null && isSuccessDelete != null)
+            {
+                // Clear the TempData value to avoid persisting it across subsequent requests
+                TempData.Remove("isFromDeleteRequest");
+                TempData.Remove("isSuccessDelete");
+
+                // Use the value as needed
+                ViewBag.SuccessMessage = isSuccessDelete;
+            }
+
+            return View(_dbContext.Degrees.ToList());
+        }
+
+        [Route("GetDegrees")]
+        public IActionResult DegreesList()
+        {
+            var degrees = _dbContext.Degrees.ToList();
+            return PartialView("DegreesList", degrees);
+        }
+
+        [HttpPost]
+        [Route("AddDegree")]
+        public IActionResult AddDegree([FromBody] Degree degree)
+        {
+            if (degree == null || string.IsNullOrEmpty(degree.TitleEn) || string.IsNullOrEmpty(degree.TitleAr))
+            {
+                return BadRequest("Please fill all fields.");
+            }
+
+            bool isDuplicate = _dbContext.Degrees.Any(w => w.TitleEn == degree.TitleEn && w.TitleAr == degree.TitleAr);
+            if (isDuplicate)
+            {
+                return BadRequest("The details for the Degree have already been added.");
+            }
+
+            else
+            {
+                if (!string.IsNullOrEmpty(degree.TitleAr) || !string.IsNullOrEmpty(degree.TitleEn))
+                {
+                    _dbContext.Degrees.Add(degree);
+                    _dbContext.SaveChanges();
+                }
+            }
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("UpdateDegree")]
+        public IActionResult UpdateDegree([FromBody] Degree degree)
+        {
+            if (degree == null || string.IsNullOrEmpty(degree.TitleEn) || string.IsNullOrEmpty(degree.TitleAr))
+            {
+                return BadRequest("Please fill all fields.");
+            }
+
+            bool isDuplicate = _dbContext.Degrees.Any(w => w.TitleEn == degree.TitleEn && w.TitleAr == degree.TitleAr);
+            if (isDuplicate)
+            {
+                return BadRequest("The details for the Degree have already been added.");
+            }
+
+            else
+            {
+                if (!string.IsNullOrEmpty(degree.TitleAr) || !string.IsNullOrEmpty(degree.TitleEn))
+                {
+                    _dbContext.Degrees.Update(degree);
+                    _dbContext.SaveChanges();
+                }
+            }
+
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("UpdateDegreeStatus/{id}/{isActive}")]
+        public IActionResult UpdateDegreeStatus(int id, bool isActive)
+        {
+            // Logic to update the status of the practitioner type with the given ID
+            try
+            {
+                var degree = _dbContext.Degrees.SingleOrDefault(p => p.Id == id);
+                if (degree == null)
+                {
+                    return NotFound();
+                }
+
+                degree.IsActive = isActive;
+                _dbContext.SaveChanges();
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while updating the status.");
+            }
+        }
+
+        [HttpGet]
+        [Route("DeleteDegree/{id}")]
+        public IActionResult DeleteDegree(int id)
+        {
+            // Retrieve the practitioner type from the database using the id
+            var degree = _dbContext.Degrees.Find(id);
+
+            if (degree == null)
+            {
+                // Handle the case where the practitioner type doesn't exist
+                TempData["isSuccessDelete"] = false;
+            }
+
+            // Remove the practitioner type from the DbSet
+            _dbContext.Degrees.Remove(degree);
+
+            // Save the changes to the database
+            _dbContext.SaveChanges();
+            TempData["isSuccessDelete"] = true;
+            // Set the value in TempData
+            TempData["isFromDeleteRequest"] = true;
+            return RedirectToAction("Degrees");
+        }
+
+
+        [HttpGet]
+        [Route("GetDegree/{id}")]
+        public Degree GetDegree(int id)
+        {
+            var degrees = _dbContext.Degrees.Single(w => w.Id == id);
+            return degrees;
         }
         #endregion
 
