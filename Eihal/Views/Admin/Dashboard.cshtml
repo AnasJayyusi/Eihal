@@ -1,8 +1,6 @@
-﻿
+﻿<head>
 
-<head>
-
-    <meta charset="utf-8">
+<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
@@ -32,7 +30,7 @@
                 <div class="container-fluid" style="margin-top:50px">
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+                        <h1 style="font-weight:bold;color:#00768c " class="h3 mb-0 text-gray-800">Dashboard</h1>
                       @*  <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
                             <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
                         </a>*@
@@ -52,129 +50,23 @@
                                 <a  type="submit" style="text-transform: none;" class="my-profile-button" asp-area="Identity" asp-page="/Account/Logout">
                                     Logout
                                     <span>
-                                      @*  <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                                            <button style="text-transform: none;" class="my-profile-button" type="submit"></button>
-                                        </form>
-*@
                                         <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
                                             <button style="text-transform: none;" class="my-profile-button" type="submit"></button>
                                         </form>
                                     </span>
-
                                 </a>
-
-                              
                             </div>
                         </div>
-
-                    @*    <a asp-area="Identity" asp-page="/Account/Logout" class="drop-name">
-                            <span>
-
-                                <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                                    <i style="color:white" class='fas fa-sign-out-alt'></i>
-                                    <button type="submit" style="background-color:#0D6EFD" class="badge badge-primary">LOGOUT</button>
-                                </form>
-
-                            </span>
-
-                        </a>*@
-
-
 
                     </div>
                     <!-- Content Row -->
-                    <div class="row">
-                        <!-- Area Chart -->
-                        <div class="col-xl-12 col-lg-12">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
-                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Recent Profile Reviews Orders</h6>
-
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table table-striped" id="dataTable-RecentOrder" width="100%" cellspacing="0">
-                                            <thead>
-                                                <tr>
-                                                    <th>Beneficiary </th>
-                                                    <th>Chronic Disase </th>
-                                                    <th>Service </th>
-                                                    <th>Invoice </th>
-                                                    <th>Price </th>
-                                                    <th>Status</th>
-                                                    <th>Actions</th>
-                                                </tr>
-                                            </thead>
-
-                                            <tbody>
-                                                <tr>
-                                                    <td>Anas</td>
-                                                    <td>Tubercrosle</td>
-                                                    <td>Tooth</td>
-                                                    <td>#0000</td>
-                                                    <td>500</td>
-                                                    <td>InProgress</td>
-                                                    <td><i class="fa fa-eye"></i></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Pie Chart -->
-                       
-                    </div>
+                    @Html.Partial("ProfileReviewsOrders")
                     <!-- Content Row -->
-                    <div class="row">
-                        <div class="col-xl-12 col-lg-12">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
-                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Recent Adding Services Orders</h6>
-
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table table-striped" id="dataTable-RecentDoctor" width="100%" cellspacing="0">
-                                            <thead>
-                                                <tr>
-                                                    <th>Name </th>
-                                                    <th>Email</th>
-                                                    <th>Phone </th>
-                                                    <th>PractitionerTypes</th>
-                                                    <th>Address </th>
-                                                    <th>Status</th>
-                                                </tr>
-                                            </thead>
-
-                                            <tbody>
-                                                <tr>
-                                                    <td>Ibrahemm</td>
-                                                    <td>Ibrahemm@eihal.com</td>
-                                                    <td>055554499</td>
-                                                    <td>Dentist</td>
-                                                    <td>Riyad,Saudi Arabic</td>
-                                                    <td>Active</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @Html.Partial("ServicesReviewsOrders")
+                  
                 </div>
-                <!-- /.container-fluid -->
 
             </div>
-            <!-- End of Main Content -->
-            <!-- Footer -->
-            <!-- End of Footer -->
 
         </div>
         <!-- End of Content Wrapper -->
