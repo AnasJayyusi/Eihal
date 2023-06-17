@@ -1,4 +1,25 @@
-﻿
+﻿<style>
+    .uncompleted {
+        color: rebeccapurple
+    }
+
+    .underreview {
+        color: darkcyan
+    }
+
+    .rejected {
+        color: firebrick
+    }
+
+    .active {
+        color: dodgerblue
+    }
+
+    .status-text {
+        font-weight: bold;
+    }
+
+</style>
 
 <div class="row">
     <!-- Area Chart -->
@@ -16,31 +37,21 @@
                     <table class="table table-striped" id="dataTable-RecentOrder" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th>Beneficiary </th>
-                                <th>Chronic Disase </th>
-                                <th>Service </th>
-                                <th>Invoice </th>
-                                <th>Price </th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Practitioner Type</th>
                                 <th>Status</th>
-                                <th>Actions</th>
+                                <th>View</th>
                             </tr>
                         </thead>
-
                         <tbody>
-                            <tr>
-                                <td>Anas</td>
-                                <td>Tubercrosle</td>
-                                <td>Tooth</td>
-                                <td>#0000</td>
-                                <td>500</td>
-                                <td>InProgress</td>
-                                <td><i class="fa fa-eye"></i></td>
-                            </tr>
+                            <!-- Table rows will be dynamically added here -->
                         </tbody>
                     </table>
                 </div>
             </div>
-       
+
 
         </div>
     </div>
@@ -48,3 +59,252 @@
     <!-- Pie Chart -->
 
 </div>
+<div class="modal fade" id="ViewProfile" tabindex="-1" role="dialog" aria-labelledby="ViewProfileModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" style="max-width: 580px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ViewProfileModal">View Certifications</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Add your modal content here -->
+                <table id="certifications-table" class="table">
+                    <thead>
+                        <tr>
+                            <th>Degree</th>
+                            <th>University Name</th>
+                            <th>Certification File</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <div class="alert alert-danger hidden sm" role="alert">
+                    <span id="error-msg-add"></span>
+                </div>
+                <div id="rejectReasonContainer" style="display: none;">
+                    <label for="rejectReason">Reason:</label>
+                    <input type="text" id="rejectReason" class="form-control">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="approve()" id="approve" type="button" class="btn btn-success">
+                    <i class="fas fa-check-circle"></i> Approve
+                </button>
+                <button onclick="reject()" id="reject" type="button" class="btn btn-danger">
+                    <i class="fas fa-times-circle"></i> Reject
+                </button>
+                <button id="close-ProfileModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+        getProfileReviewsOrders()
+    });
+
+    function getProfileReviewsOrders() {
+        $.ajax({
+            url: '/Admin/GetProfileReviewsOrders', // Replace with your API endpoint
+            method: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                // Assuming response is an array of objects containing the data for each row
+                var table = $('#dataTable-RecentOrder tbody');
+
+                // Clear existing rows
+                table.empty();
+
+                // Loop through the response and append rows to the table
+                $.each(response, function (index, row) {
+                    var newRow = $('<tr>');
+                    newRow.append($('<td>').text(row.fullName));
+                    newRow.append($('<td>').text(row.email));
+                    newRow.append($('<td>').text(row.phoneNumber));
+                    newRow.append($('<td>').text(row.practitionerType.titleEn));
+
+                    var statusText;
+                    if (row.profileStatus === 0) {
+                        statusText = 'UnCompleted';
+                    } else if (row.profileStatus === 1) {
+                        statusText = 'Under Review';
+                    } else if (row.profileStatus === 2) {
+                        statusText = 'Rejected';
+                    } else if (row.profileStatus === 3) {
+                        statusText = 'Active';
+                    }
+
+                    var statusCell = $('<td>').addClass('status-cell');
+                    statusCell.append($('<span>').append('&nbsp;&nbsp;').addClass('status-text').append('&nbsp;&nbsp;').text(statusText)).append('&nbsp;&nbsp;');
+                    if (row.profileStatus === 0) {
+                        statusCell.addClass('uncompleted');
+                        statusCell.append($('<i>').addClass('fa fa-unlock'));
+                    } else if (row.profileStatus === 1) {
+                        statusCell.addClass('underreview');
+                        statusCell.append($('<i>').addClass('fa fa-clock'));
+                    } else if (row.profileStatus === 2) {
+                        statusCell.addClass('rejected');
+                        statusCell.append($('<i>').addClass('fa fa-times-circle'));
+                    } else if (row.profileStatus === 3) {
+                        statusCell.addClass('active');
+                        statusCell.append($('<i>').addClass('fa fa-check-circle'));
+                    }
+
+                    newRow.append(statusCell);
+                    newRow.append($('<td>').html('<img style="cursor:pointer" data-toggle="modal" data-target="#ViewProfile" href="#" title="View Profile" src="/icon/view-certifications-icon.png" alt="" width="40" height="40" onclick="viewProfile(' + row.id + ',' + row.profileStatus + ')">'));
+
+
+                    table.append(newRow);
+                });
+            },
+            error: function (xhr, status, error) {
+                console.log('AJAX Error: ' + status + ' - ' + error);
+            }
+
+        });
+    }
+
+    function viewProfile(id, profileStatusId) {
+        $("#approve").show();
+        $("#rejectReasonContainer").hide();
+        $.ajax({
+            url: '/Admin/GetUserCertifications/' + id, // Replace with your API endpoint
+            method: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                var table = $('#certifications-table tbody');
+
+                if (profileStatusId == 3) {
+                    $("#approve").hide()
+                    $("#reject").hide()
+                }
+                else 
+                {
+                    $("#approve").show()
+                    $("#reject").show()
+                }
+                // Clear existing rows
+                table.empty();
+
+                // Loop through the response and append rows to the table
+                $.each(response, function (index, row) {
+                    var newRow = $('<tr>');
+                    newRow.append($('<td hidden id="userProfileId">').text(row.userProfileId));
+                    newRow.append($('<td>').text(row.degree.titleEn));
+                    newRow.append($('<td>').text(row.universityNameEn));
+
+                    var iconClass = '';
+                    var linkClass = '';
+                    switch (row.extension.replace(".", "")) {
+                        case 'pdf':
+                            iconClass = 'far fa-file-pdf';
+                            linkClass = 'pdf-link';
+                            break;
+                        case 'pptx':
+                        case 'ppt':
+                            iconClass = 'far fa-file-powerpoint';
+                            linkClass = 'pptx-link';
+                            break;
+                        case 'docx':
+                        case 'doc':
+                            iconClass = 'far fa-file-word';
+                            linkClass = 'docx-link';
+                            break;
+                        case 'xlsx':
+                        case 'xls':
+                            iconClass = 'far fa-file-excel';
+                            linkClass = 'xlsx-link';
+                            break;
+                        case 'jpg':
+                        case 'jpeg':
+                        case 'png':
+                        case 'gif':
+                            iconClass = 'far fa-file-image';
+                            linkClass = 'image-link';
+                            break;
+                        // Add more cases for other file extensions and their corresponding Font Awesome classes and link classes
+                        default:
+                            iconClass = 'far fa-file';
+                            linkClass = 'default-link';
+                            break;
+                    }
+
+                    var linkElement = $('<a>')
+                        .attr('href', row.path)
+                        .attr('target', '_blank')
+                        .addClass(linkClass)
+                        .html('&nbsp;&nbsp;' + row.name);
+                    var iconElement = $('<i>').addClass(iconClass);
+                    linkElement.prepend(iconElement);
+                    newRow.append($('<td>').append(linkElement));
+
+                    table.append(newRow);
+                });
+            },
+            error: function (xhr, status, error) {
+                console.log('AJAX Error: ' + status + ' - ' + error);
+            }
+        });
+    }
+
+    function reject() {
+        var rejectReason = $("#rejectReason").val();
+        if (rejectReason == "" || rejectReason == null || rejectReason == undefined) {
+            // Add red color to the input field
+            $("#rejectReason").addClass("is-invalid");
+
+            // Add reject reason message
+            $("#rejectReasonError").text("Please add reject reason");
+            $("#approve").hide(); // Hide the "Approve" button
+            $("#rejectReasonContainer").show();
+        }
+        else {
+            var userProfileId = parseInt($("#userProfileId").text(), 10);
+            var rejectReason =$("#rejectReason").val();
+            $("#close-ProfileModal").trigger("click");
+
+            $.ajax({
+                url: '/Admin/RejectUserProfile/' + userProfileId + '/' + rejectReason,
+                method: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    // Handle the success response here
+                    console.log('User status updated successfully:', response);
+                    getProfileReviewsOrders();
+                },
+                error: function (xhr, status, error) {
+                    // Handle the error response here
+                    console.log('AJAX Error: ' + status + ' - ' + error);
+                }
+            });
+        }
+    }
+
+    function approve() {
+        var userProfileId = parseInt($("#userProfileId").text(), 10);
+        $("#close-ProfileModal").trigger("click");
+
+        $.ajax({
+            url: '/Admin/ApproveUserProfile/' + userProfileId,
+            method: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                // Handle the success response here
+                console.log('User status updated successfully:', response);
+                getProfileReviewsOrders();
+            },
+            error: function (xhr, status, error) {
+                // Handle the error response here
+                console.log('AJAX Error: ' + status + ' - ' + error);
+            }
+        });
+    }
+
+   
+</script>
+

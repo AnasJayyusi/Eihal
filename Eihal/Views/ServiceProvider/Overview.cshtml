@@ -2,7 +2,10 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
 <style>
-
+    .wide-button {
+        width: 150px; /* Set the desired width for the button */
+        width: 100px;
+    }
     .text-black {
         color: black;
     }
@@ -99,7 +102,7 @@
     <table cellpadding="10">
         <tr>
             <td>
-                <img id="user-image" src="~/users/images/Default-User-Profile.jpg" width="150" height="150" />
+                <img id="user-image"  style="border-radius:30%" src="~/users/images/Default-User-Profile.jpg" width="150" height="150" />
             </td>
             <td>
                 Welcome!
@@ -150,15 +153,28 @@
             <div class="col-md-12">
                 <h5 class="font-weight-bold">Certifications</h5>
                 <span id="certifications-label" class="text-black"></span>
-                <button onclick="getDegrees()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#AttachCertificationsModal">
+                <button onclick="getDegrees()" type="button" class="btn btn-primary wide-button" data-toggle="modal" data-target="#AttachCertificationsModal">
                     <i onclick="getDegrees()" class="fa fa-upload" aria-hidden="true"></i> Attach
                 </button>
             </div>
 
         </div>
         <div class="row mt-3">
-            <div class="col-md-12">
-                <div id="certifications-list"></div>
+            <div class="col-md-6">
+                <div id="certifications-container">
+                    <table id="certifications-table" class="table">
+                        <thead>
+                            <tr>
+                                <th>Degree</th>
+                                <th>University Name</th>
+                                <th>Certifications File</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="certifications-list"></tbody>
+                    </table>
+                    <p id="certifications-label"></p>
+                </div>
             </div>
         </div>
     </div>
@@ -184,7 +200,7 @@
                         <tr>
                             <td>
                                 <label for="image-upload">
-                                    <img title="Click here to upload new image" id="user-image-edit" style="cursor: pointer;" src="~/users/images/Default-User-Profile.jpg" id="preview-image" width="150" height="150" />
+                                    <img title="Click here to upload new image" id="user-image-edit" style="cursor: pointer;border-radius:30% " src="~/users/images/Default-User-Profile.jpg" id="preview-image" width="150" height="150" />
                                 </label>
                                 <input type="file" accept="image/*" id="image-upload" onchange="loadImage(event)" style="display: none;" />
                             </td>
@@ -393,9 +409,11 @@
     function loadUserProfileOverview() {
         $.ajax({
 
+
             url: "/ServiceProvider/GetUserProfileInfo",
             method: "GET",
             success: function (response) {
+                debugger
                 $("#fullname-label").text(response.fullname);
                 $("#number-patients-label").text(response.numberPatients);
                 $("#review-label").text("(" + response.review + ")");
@@ -403,6 +421,8 @@
                 $("#bio-label").text(response.bio);
                 $("#speciality-label").text(response.speciality);
                 $("#certifications-label").text(response.certifactions);
+                if (response.profileStatus == "Rejected")
+                    $("#help-msg").text("Rejection Reason Is :" + response.rejectionReason)
                 setProfileStatus(response.profileStatus);
                 if (response.profilePicturePath != null || response.profilePicturePath != undefined)
                     $('[id^="user-image"]').attr('src', response.profilePicturePath);
@@ -695,8 +715,8 @@
     }
 
     function getCertifications() {
-        var linksContainer = $('#certifications-list');
-        linksContainer.empty();
+        var tableBody = $('#certifications-list');
+        tableBody.empty();
         $.ajax({
             url: '@Url.Action("GetCertifications", "ServiceProvider")',
             type: 'GET',
@@ -705,74 +725,73 @@
                 if (data.length == 0) {
                     $("#certifications-label").text("No Certifications added yet.");
                     $("#certifications-label").show();
-                }
-                else {
+                } else {
                     $("#certifications-label").text("You have " + data.length + " certificates added ");
-                    linksContainer.empty(); // Clear the div before appending new links
+                    tableBody.empty(); // Clear the table body before appending new rows
                     data.forEach(function (item) {
-                        var link = $('<a>')
-                            .attr('href', item.path)
-                            .attr('target', '_blank')
-                            .text(item.name.trim());
+                        var row = $('<tr>');
+                        var degreeCell = $('<td>').text(item.degree.titleEn);
+                        var universityCell = $('<td>').text(item.universityNameEn);
 
-                        var fileLabel = '<span style="color:black">' + item.degree.titleEn + '</span>' + ' from ' + '<span style="color:black">' + item.universityNameEn + '</span>';
-
-                        // Define the corresponding icon class based on the file extension
                         var iconClass = '';
+                        var iconColor = '';
                         switch (item.extension.replace(".", "")) {
                             case 'pdf':
                                 iconClass = 'far fa-file-pdf';
-                                linkClass = 'pdf-link';
+                                iconColor = 'red';
                                 break;
                             case 'pptx':
                             case 'ppt':
                                 iconClass = 'far fa-file-powerpoint';
-                                linkClass = 'pptx-link';
+                                iconColor = 'orange';
                                 break;
                             case 'docx':
                             case 'doc':
                                 iconClass = 'far fa-file-word';
-                                linkClass = 'docx-link';
+                                iconColor = 'blue';
                                 break;
                             case 'xlsx':
                             case 'xls':
                                 iconClass = 'far fa-file-excel';
-                                linkClass = 'xlsx-link';
+                                iconColor = 'green';
                                 break;
                             case 'jpg':
                             case 'jpeg':
                             case 'png':
                             case 'gif':
                                 iconClass = 'far fa-file-image';
-                                linkClass = 'image-link';
+                                iconColor = 'purple';
                                 break;
-                            // Add more cases for other file extensions and their corresponding Font Awesome classes and link classes
                             default:
                                 iconClass = 'far fa-file';
-                                linkClass = 'default-link';
                                 break;
                         }
 
-                        // Create a span element with the file icon class
-                        var icon = $('<span>').addClass(iconClass);
-                        var space = $('<span>').html('&nbsp;&nbsp;'); // Add space between the name and the remove icon
+                        var link = $('<a>')
+                            .attr('href', item.path)
+                            .attr('target', '_blank')
+                            .append($('<span>').addClass(iconClass).css('color', iconColor)) // Add the icon span with color
+                            .append('&nbsp;') // Add space between the icon and the name
+                            .append($('<span>').text(item.name.trim())); // Add the certification name
+                        var fileCell = $('<td>').append(link);
+
                         var removeIcon = $('<i>')
                             .addClass('fa fa-remove')
                             .css({
                                 color: 'red',
-                                cursor: 'pointer' // Add cursor style
+                                cursor: 'pointer'
                             })
                             .attr('aria-hidden', 'true')
-                            .attr('data-certificate-id', item.id) // Set a data attribute for the certificate ID
+                            .attr('data-certificate-id', item.id)
                             .click(function () {
                                 var certificateId = $(this).data('certificate-id');
                                 removeCertificate(certificateId);
-                            }); // Attach onclick event handler
+                            });
+                        var actionsCell = $('<td>').append(removeIcon);
 
-                        linksContainer.append(fileLabel).append('&nbsp;&nbsp;').append(icon).append('&nbsp;&nbsp;').append(link).append(space).append(removeIcon).append('<br>');
-
+                        row.append(degreeCell).append(universityCell).append(fileCell).append(actionsCell);
+                        tableBody.append(row);
                     });
-
                 }
             },
             error: function (error) {
@@ -780,6 +799,7 @@
             }
         });
     }
+
 
     function removeCertificate(fileId) {
         debugger;

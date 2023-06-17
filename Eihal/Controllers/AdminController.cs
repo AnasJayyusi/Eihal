@@ -20,7 +20,7 @@ namespace Eihal.Controllers
         [Route("Dashboard")]
         public IActionResult Dashboard()
         {
-            var services=_dbContext.UserServices.Where(a => a.Status == Enums.ServicesStatusEnum.Pending).Include(a => a.UserProfile).ToList();
+            var services = _dbContext.UserServices.Where(a => a.Status == Enums.ServicesStatusEnum.Pending).Include(a => a.UserProfile).ToList();
             return View(services);
         }
         #endregion
@@ -1472,6 +1472,44 @@ namespace Eihal.Controllers
         private int? GetCountryId(int? stateId)
         {
             return _dbContext.States.SingleOrDefault(x => x.Id == stateId)?.CountryId;
+        }
+        #endregion
+
+        #region Recent Profile Reviews Orders 
+        [Route("GetProfileReviewsOrders")]
+        public IActionResult GetProfileReviewsOrders()
+        {
+            return Json(_dbContext.UserProfiles.Include(i => i.PractitionerType).ToList());
+        }
+
+        [HttpGet]
+        [Route("GetUserCertifications/{id}")]
+        public IActionResult GetUserCertifications(int id)
+        {
+            return Json(_dbContext.Certifications.Where(x => x.UserProfileId == id).Include(i => i.Degree).ToList());
+        }
+
+        [HttpGet]
+        [Route("RejectUserProfile/{id}/{rejectionReason}")]
+        public ActionResult UpdateUserStatus(int id, string rejectionReason)
+        {
+            var userProfile = _dbContext.UserProfiles.Single(w => w.Id == id);
+            userProfile.ProfileStatus = ProfileStatus.Rejected;
+            userProfile.RejectionReason = rejectionReason;
+            _dbContext.UserProfiles.Update(userProfile);
+            _dbContext.SaveChanges();
+            return Json(ProfileStatus.UnderReview.ToString());
+        }
+
+        [HttpGet]
+        [Route("ApproveUserProfile/{id}")]
+        public ActionResult ApproveUserProfile(int id)
+        {
+            var userProfile = _dbContext.UserProfiles.Single(w => w.Id == id);
+            userProfile.ProfileStatus = ProfileStatus.Active;
+            _dbContext.UserProfiles.Update(userProfile);
+            _dbContext.SaveChanges();
+            return Json(ProfileStatus.UnderReview.ToString());
         }
         #endregion
     }

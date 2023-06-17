@@ -365,10 +365,12 @@
             } else if (profileStatus === 'Rejected') {
                 profileStatusElement.css('background-color', 'firebrick');
                 statusText = '<span style="font-weight: bold;"> Profile Status: Rejected</span>  to send your profile for review again. <a id="reviewLink" href="#" onclick=sendToReview()  style="color: white; text-decoration: underline; font-weight: bold;">Click here</a>';
+               
             } else if (profileStatus === 'Active') {
                 profileStatusElement.css('background-color', 'dodgerblue');
                 statusText = '<span style="font-weight: bold;"> Profile Status: Active</span>';
             }
+
 
             var statusDiv = $('<div>').append($('<span>').html(statusText));
             profileStatusElement.append(statusDiv);

@@ -141,7 +141,8 @@ namespace Eihal.Controllers
                 bio = userProfile.Bio ?? "No Bio yet.",
                 speciality = specialityNames ?? "No Speciality added yet.",
                 profilePicturePath = userProfile.ProfilePicturePath,
-                profileStatus = userProfile.ProfileStatus.ToString()
+                profileStatus = userProfile.ProfileStatus.ToString(),
+                rejectionReason = userProfile.RejectionReason
             };
 
             return Json(data);

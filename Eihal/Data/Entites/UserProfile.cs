@@ -11,7 +11,7 @@ namespace Eihal.Data.Entites
         public string? UserId { get; set; }
         public string? FullName { get; set; }
         public int? AccountTypeId { get; set; }
-        public int? PractitionerTypeId { get; set; }
+
         public string? PhoneNumber { get; set; }
         public string? Email { get; set; }
         #endregion
@@ -28,6 +28,8 @@ namespace Eihal.Data.Entites
 
         [ForeignKey(nameof(City))]
         public int? CityId { get; set; }
+        [ForeignKey(nameof(PractitionerType))]
+        public int? PractitionerTypeId { get; set; }
         #endregion
 
         #region Editable Fields
@@ -45,6 +47,7 @@ namespace Eihal.Data.Entites
 
         #region Navigations 
         public ProfessionalRank? ProfessionalRank { get; set; }
+        public PractitionerType? PractitionerType { get; set; }
         public Country? Country { get; set; }
         public State? State { get; set; }
         public City? City { get; set; }
@@ -58,6 +61,7 @@ namespace Eihal.Data.Entites
         #endregion
 
         public ProfileStatus ProfileStatus { get; set; }
+        public string? RejectionReason { get; set; }
 
 
     }
