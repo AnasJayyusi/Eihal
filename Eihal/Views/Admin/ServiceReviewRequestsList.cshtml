@@ -80,11 +80,7 @@
                 <td>@userServices.Price</td>
               
                 <td>
-                  @*  <li class="list-inline-item">
-                        <button onclick="getUserServices(@userServices.Id)" href="#" class="btn btn-success btn-sm rounded-pill" type="button" data-toggle="modal" data-target="#EditUserServices" data-placement="top" title="Edit">
-                            <i class="fa fa-edit"></i>
-                        </button>
-                    </li>*@
+ 
                     <li class="list-inline-item">
                         <a href="#" class="btn btn-success btn-sm rounded-pill" data-toggle="modal" data-target="#confirmApproveModal_@userServices.Id">
                             Approve</a>        
@@ -107,7 +103,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                    <a href="/Admin/ApproveUserServices/@userServices.Id" class="btn btn-success" id="deleteButton">Approve</a>
+                                    <a href="/Admin/ApproveDashboardUserServices/@userServices.Id" class="btn btn-success" id="deleteButton">Approve</a>
                                 </div>
                             </div>
                         </div>
@@ -128,7 +124,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                    <a href="/Admin/RejectUserServices/@userServices.Id" class="btn btn-danger" id="rejectButton">Reject</a>
+                                    <a href="/Admin/RejectDashboardUserServices/@userServices.Id" class="btn btn-danger" id="rejectButton">Reject</a>
                                 </div>
                             </div>
                         </div>

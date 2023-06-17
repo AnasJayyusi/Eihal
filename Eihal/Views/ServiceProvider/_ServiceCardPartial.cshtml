@@ -200,13 +200,13 @@
                                                                     <div class="col-8">
                                                                         <span class="service-sub-title">Price</span> 
                                                                     </div>
-                                                                    <div class="col-4">@item.Price   </div>
+                                                                    <div class="col-4"> <strong>@item.Price </strong>  </div>
                                                                 </div>
                                                                    <div class="row col-12  padding-bottom-10">
                                                                     <div class="col-8">
                                                                         <span class="service-sub-title">Fee</span> 
                                                                     </div>
-                                                                    <div class="col-4">@item.Fee   </div>
+                                                                    <div class="col-4"><strong>@item.Fee  </strong> </div>
                                                                 </div>
                                                                    <div class="row col-12  padding-bottom-10">
                                                                     <div class="col-8">
@@ -216,13 +216,13 @@
                     {
                         <div class="col-4 status status-warning">@item.Status </div>
                     }else if(item.Status == Eihal.Enums.ServicesStatusEnum.Approved){
-                        <div class="col-4 status status-success">@item.Status </div>
+                        <div class="col-4 status status-success"><strong>@item.Status</strong> </div>
 
                     }else if(item.Status == Eihal.Enums.ServicesStatusEnum.Rejected){
-                        <div class="col-4 status status-error">@item.Status </div>
+                        <div class="col-4 status status-error"><strong> @item.Status </strong></div>
 
                     }else{
-                        <div class="col-4">@item.Status </div>
+                        <div class="col-4"><strong> @item.Status </strong> </div>
 
                     }
                 </div>

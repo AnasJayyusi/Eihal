@@ -1,7 +1,17 @@
 ﻿@model List<Eihal.Data.Entites.Services>
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
 <style>
+       .toast {
+        margin-top: 50px !important;
+    }
+
+    .toast-success {
+        background-color: #00333f;
+    }
+
          .no-results-section {
     width:100%;
   display: flex;
@@ -176,6 +186,25 @@ input[type=number] {
     .tab-content {
         background-color: #fff;
     }
+    .search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.search-container input {
+  padding-right: 30px; /* Add space for the search icon */
+}
+
+.search-container i {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+}
+
 </style>
 
 <div id="page-top">
@@ -250,12 +279,14 @@ input[type=number] {
                                     </h6>
 
                                 </div>
-                                <div class="row">
-                                    <div class="form-group mr-2">
-                                        <input type="text" class="form-control margin-15-position-obselete" id="filterInput" name="search" placeholder="Search" value="">
-                                    </div>
-
-                                </div>
+                            <div class="row">
+  <div class="form-group mr-2 search-container">
+    <input type="text" class="form-control margin-15-position-obselete" id="filterInput" name="search" style="margin-top:75px" placeholder="Search" value="">
+    <i class="fas fa-search" style="margin-top: 28px;
+    margin-right: 2.5%;
+"></i> <!-- Assuming you're using Font Awesome for the search icon -->
+  </div>
+</div>
                                 <!-- Card Body -->
                                 <div class="card-body">
                                     <div id="tab2" class="tab-content">
@@ -370,6 +401,7 @@ input[type=number] {
                 type: 'GET',
                 success: function (response) {
                     //serviceContainer.html(response);
+                    toastr.success('Service removed successfully', 'Removed !!');
                     GetAllService();
                     GetMyService();
                 },
@@ -386,6 +418,7 @@ input[type=number] {
                 type: 'GET',
                 success: function (response) {
                     serviceContainer.html(response);
+
                 },
                 error: function (xhr, status, error) {
                     console.error('Error:', error);
@@ -425,6 +458,7 @@ input[type=number] {
                 processData: false,
                 contentType: false,
                 success: function (response) {
+                    debugger;
                     console.log(response);
                     $("#close-add-service").trigger("click");
                     //loadUserProfileOverview();
