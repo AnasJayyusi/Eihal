@@ -18,9 +18,12 @@
         background-color: #f8f9fa;
         padding: 20px;
     }
-    .service-weight-700{
-        color:#00768c;font-weight: 700;
+
+    .service-weight-700 {
+        color: #00768c;
+        font-weight: 700;
     }
+
     .service-card-title {
         color: #00768c;
         font-size: 18px;
@@ -141,54 +144,56 @@
     .tab-content {
         background-color: #fff;
     }
-         .no-results {
-    width:100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  margin-top: 20px;
-  padding: 20px;
-  font-size: 18px;
-}
 
-.no-results img {
-  width: 80px;
-  height: 80px;
-  margin-bottom: 10px;
-}
+    .no-results {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        margin-top: 20px;
+        padding: 20px;
+        font-size: 18px;
+    }
 
-.no-results p {
-  margin: 0;
-}
+        .no-results img {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 10px;
+        }
+
+        .no-results p {
+            margin: 0;
+        }
 </style>
 
-  @foreach (var item in Model)
-                                                {
+@foreach (var item in Model)
+{
     <div class="col-md-4 padding-top-25">
-                                                        <div class="service-card">
-                                                            <div class="service-card-body">
-                                                                <h5 class="service-card-title" style="color:black"><strong> @item.TitleEn</strong></h5>
-                                                                    <div class="row col-12" style="padding:25px">
-                                                                    <div class="col-8">
-                                                                        <span class="service-sub-title">Fee</span> 
-                                                                    </div>
-                                                                    <div class="col-4">@item.Fee   </div>
-                                                                </div>
+        <div class="service-card">
+            <div class="service-card-body">
+                <h5 class="service-card-title" style="color:black"><strong> @item.TitleEn</strong></h5>
+                <div class="row col-12" style="padding:25px">
+                    <div class="col-8">
+                        <span class="service-sub-title">Fee</span>
+                    </div>
+                    <div class="col-4">@item.Fee   </div>
+                </div>
 
-                                                                @*<p class="service-card-text"><span class="service-weight-700" >Fee:</span>  @item.Fee $</p>*@
-                                                                <div class="dots-container">
-                                                                    <button class="dots-button" data-toggle="modal" onclick="fillAddServicePage('@item.Id','@item.TitleAr','@item.TitleEn','@item.Fee')" data-target="#AddServiceModal"><i style="color:#00768c" class="fa fa-add" aria-hidden="true"></i></button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                }
-                                                                                           @if(Model.Count <=0){
-                <div class="no-results">
-  <img src="~/images/NoResult.png"  alt="No Results Found Icon">
-  <p>No results found.</p>
-</div>
+                @*<p class="service-card-text"><span class="service-weight-700" >Fee:</span>  @item.Fee $</p>*@
+                <div class="dots-container">
+                    <button class="dots-button" data-toggle="modal" onclick="fillAddServicePage('@item.Id','@item.TitleAr','@item.TitleEn','@item.Fee')" data-target="#AddServiceModal"><i style="color:#00768c" class="fa fa-add" aria-hidden="true"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (Model.Count <= 0)
+{
+    <div class="no-results">
+        <img src="~/images/NoResult.png" alt="No Results Found Icon">
+        <p>No Services Add Yet.</p>
+    </div>
 
-                                                }
+}
