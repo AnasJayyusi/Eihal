@@ -244,6 +244,8 @@
                 url: '/ServiceProvider/MyServiceCardPartial', // Replace with the actual URL and action method to fetch the partial view
                 type: 'GET',
                 success: function (response) {
+                    serviceContainer.html(response);
+
                 },
                 error: function (xhr, status, error) {
                     console.error('Error:', error);
