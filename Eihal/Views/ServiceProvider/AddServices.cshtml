@@ -11,7 +11,8 @@
         cursor: not-allowed;
         background-color: whitesmoke
     }
-       .toast {
+
+    .toast {
         margin-top: 50px !important;
     }
 
@@ -19,42 +20,45 @@
         background-color: #00333f;
     }
 
-         .no-results-section {
-    width:100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  margin-top: 20px;
-  padding: 20px;
-  font-size: 18px;
-}
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
+    .no-results-section {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        margin-top: 20px;
+        padding: 20px;
+        font-size: 18px;
+    }
 
-/* Firefox */
-input[type=number] {
-  -moz-appearance: textfield;
-}
-.no-results-section img {
-  width: 80px;
-  height: 80px;
-  margin-bottom: 10px;
-}
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
 
-.no-results-section p {
-  margin: 0;
-}
+    /* Firefox */
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+
+    .no-results-section img {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 10px;
+    }
+
+    .no-results-section p {
+        margin: 0;
+    }
+
     .margin-15-position-obselete {
         position: absolute;
         margin: 10px;
-            width: 95%;
-    margin-left: 35px;
-    margin-bottom:20px;
+        width: 95%;
+        margin-left: 35px;
+        margin-bottom: 20px;
     }
 
     .service-card {
@@ -146,7 +150,7 @@ input[type=number] {
             top: 46%;
         }
 
-  .activeLink {
+    .activeLink {
         color: #00768c;
         font-weight: bold;
         pointer-events: none;
@@ -154,7 +158,7 @@ input[type=number] {
         background-color: whitesmoke
     }
 
-  #menu .nav-item:hover {
+    #menu .nav-item:hover {
         /* Add your desired styles for hover state */
         background-color: #e0e0e0;
         color: #333;
@@ -193,24 +197,25 @@ input[type=number] {
     .tab-content {
         background-color: #fff;
     }
+
     .search-container {
-  position: relative;
-  display: flex;
-  align-items: center;
-  width: 100%;
-}
+        position: relative;
+        display: flex;
+        align-items: center;
+        width: 100%;
+    }
 
-.search-container input {
-  padding-right: 30px; /* Add space for the search icon */
-}
+        .search-container input {
+            padding-right: 30px; /* Add space for the search icon */
+        }
 
-.search-container i {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #888;
-}
+        .search-container i {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+        }
 
 </style>
 
@@ -244,7 +249,7 @@ input[type=number] {
 
 
                         <div class="col-xl-8 col-lg-8 ">
-                 
+
                             <br />
 
 
@@ -286,24 +291,22 @@ input[type=number] {
                                     </h6>
 
                                 </div>
-                            <div class="row">
-  <div class="form-group mr-2 search-container">
-    <input type="text" class="form-control margin-15-position-obselete" id="filterInput" name="search" style="margin-top:75px" placeholder="Search" value="">
-    <i class="fas fa-search" style="margin-top: 28px;
-    margin-right: 2.5%;
-"></i> <!-- Assuming you're using Font Awesome for the search icon -->
-  </div>
-</div>
+                                <div class="row">
+                                    <div class="form-group mr-2 search-container">
+                                        <input type="text" class="form-control margin-15-position-obselete" id="filterInput" name="search" style="margin-top: 75px; background-color: #f2f2f2;" placeholder="Search" value="">
+                                        <i class="fas fa-search" style="margin-top: 28px; margin-right: 2.5%; color: #00768c;cursor:pointer" onclick="search()"></i>
+                                    </div>
+                                </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
                                     <div id="tab2" class="tab-content">
                                         <div class="container">
                                             <div class="row" id="allServiceContainer">
                                             </div>
-                                                            <div class="no-results-section" style="display:none">
-  <img src="~/images/NoResult.png"  alt="No Results Found Icon">
-  <p>No results found.</p>
-</div>
+                                            <div class="no-results-section" style="display:none">
+                                                <img src="~/images/NoResult.png" alt="No Results Found Icon">
+                                                <p>No Services Added Yet.</p>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -331,7 +334,7 @@ input[type=number] {
 
 <!------------------------------ Add Service -------------------->
 <div class="modal fade" id="AddServiceModal" tabindex="-1" role="dialog" aria-labelledby="AddServiceModal" aria-hidden="true">
-    <div class="modal-dialog custom-modal-dialog" role="document">
+    <div class="modal-dialog custom-modal-dialog" style="max-width: 400px;" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="EditUserProfileModal">Add Service</h5>
@@ -342,42 +345,28 @@ input[type=number] {
             <div class="modal-body">
                 <form>
                     <!-- Add your modal content here -->
-                    <table cellpadding="10">
+                    <div style="padding: 10px; display: flex; justify-content: center;">
+                        <div style="max-width: 300px;">
+                            <div class="form-group">
+                                <label style="font-weight: bold; color: #00768c;" for="service-namear-input">Service Name:</label>
+                                <input disabled type="text" class="form-control" id="service-namear-input" value="Test" required>
+                                <input disabled type="hidden" id="service-id-input" value="0" required>
+                            </div>
 
-                        <tr>
-                            <td>
-                                <div class="form-group" style="width:450px">
-                                    <label style="font-weight:bold;color:#00768c" for="service-namear-input">Service Name:</label>
-                                    <input disabled type="text" class="form-control" id="service-namear-input" value="Test" required>
-                                    <input disabled type="hidden" id="service-id-input" value="0" required>
-                                </div>
-                            </td>
+                            <div class="form-group">
+                                <label style="font-weight: bold; color: #00768c;" for="fee-input">Fee:</label>
+                                <input disabled type="text" class="form-control" id="fee-input" value="10%" required>
+                            </div>
 
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="form-group">
-                                    <label style="font-weight:bold;color:#00768c" for="fee-input">Fee:</label>
-                                    <input disabled type="text" class="form-control" id="fee-input" value="10%" required>
-                                </div>
-                            </td>
-
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="form-group">
-                                    <label style="font-weight:bold;color:#00768c" for="price-input">Price:</label>
-                                    <input type="number" class="form-control" id="price-input" value="10%" min="0" required onkeyup="if(this.value.length > 0) document.getElementById('send-for-review-btn').disabled = false; else document.getElementById('send-for-review-btn').disabled = true;">
-                                </div>
-                            </td>
-
-                        </tr>
-
-
-
-                    </table>
+                            <div class="form-group">
+                                <label style="font-weight: bold; color: #00768c;" for="price-input">Your Price:</label>
+                                <input type="number" class="form-control" id="price-input" value="10%" min="0" required onkeyup="if(this.value.length > 0) document.getElementById('send-for-review-btn').disabled = false; else document.getElementById('send-for-review-btn').disabled = true;">
+                            </div>
+                        </div>
+                    </div>
                 </form>
             </div>
+
             <div class="modal-footer" style="text-align:center">
                 <button type="button" class="btn btn-danger" data-dismiss="modal" id="close-add-service">Cancel</button>
                 <button onclick="sendServiceForReview()" type="button" class="btn btn-success" id="send-for-review-btn" style="background-color:#00768c" disabled>Add</button>
@@ -394,21 +383,21 @@ input[type=number] {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
 
-// Function to get the value of a cookie
-function getCookie(name) {
-  var nameEQ = name + "=";
-  var cookies = document.cookie.split(';');
-  for (var i = 0; i < cookies.length; i++) {
-    var cookie = cookies[i];
-    while (cookie.charAt(0) === ' ') {
-      cookie = cookie.substring(1, cookie.length);
-    }
-    if (cookie.indexOf(nameEQ) === 0) {
-      return cookie.substring(nameEQ.length, cookie.length);
-    }
-  }
-  return null;
-}
+        // Function to get the value of a cookie
+        function getCookie(name) {
+            var nameEQ = name + "=";
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i];
+                while (cookie.charAt(0) === ' ') {
+                    cookie = cookie.substring(1, cookie.length);
+                }
+                if (cookie.indexOf(nameEQ) === 0) {
+                    return cookie.substring(nameEQ.length, cookie.length);
+                }
+            }
+            return null;
+        }
         function deleteService(id) {
             $.ajax({
                 url: '/ServiceProvider/DeleteUserService?Id=' + id, // Replace with the actual URL and action method to fetch the partial view
@@ -437,27 +426,27 @@ function getCookie(name) {
                     console.error('Error:', error);
                 }
             });
-        } 
-        
-        function loadUserImage() {
-                    var image = document.getElementById('user-image-layout');
-                    var imagePath=getCookie("userImagePath");
-                    if(imagePath==null){
-                        loadUserImageFromServer();
-                    }else{
-
-                     image.src = imagePath;
-                    }
         }
 
-             function loadUserImageFromServer() {
-                    var image = document.getElementById('user-image-layout');
+        function loadUserImage() {
+            var image = document.getElementById('user-image-layout');
+            var imagePath = getCookie("userImagePath");
+            if (imagePath == null) {
+                loadUserImageFromServer();
+            } else {
+
+                image.src = imagePath;
+            }
+        }
+
+        function loadUserImageFromServer() {
+            var image = document.getElementById('user-image-layout');
             $.ajax({
                 url: '/ServiceProvider/GetUserImage', // Replace with the actual URL and action method to fetch the partial view
                 type: 'GET',
                 success: function (response) {
-                     image.src = response;
-                     setCookie("userImagePath", response, 7); // Set the cookie for 7 days
+                    image.src = response;
+                    setCookie("userImagePath", response, 7); // Set the cookie for 7 days
 
 
                 },
@@ -499,7 +488,7 @@ function getCookie(name) {
                 processData: false,
                 contentType: false,
                 success: function (response) {
-                      
+
                     console.log(response);
                     $("#close-add-service").trigger("click");
                     //loadUserProfileOverview();
@@ -536,25 +525,25 @@ function getCookie(name) {
             loadUserImage();
             // Get the current URL
             var currentUrl = window.location.href;
-              var resultCount = 0; // Variable to keep track of the number of results
+            var resultCount = 0; // Variable to keep track of the number of results
             // Filter the service cards based on the title
             $('#filterInput').on('keyup', function () {
                 var value = $(this).val().toLowerCase();
                 $('.service-card-title').filter(function () {
-                 var isMatch = $(this).text().toLowerCase().indexOf(value) > -1;
-    $(this).parent().parent().parent().toggle(isMatch);
-                 if (isMatch === true) {
-                     resultCount++;
-  } else {
-  }
-  
+                    var isMatch = $(this).text().toLowerCase().indexOf(value) > -1;
+                    $(this).parent().parent().parent().toggle(isMatch);
+                    if (isMatch === true) {
+                        resultCount++;
+                    } else {
+                    }
+
                 });
-                   if (resultCount <=0) {
-  $('.no-results-section').show(); // Assuming you have a "no-results" element to display the message
-  } else {
-    $('.no-results-section').hide();
-  }
-  resultCount=0;
+                if (resultCount <= 0) {
+                    $('.no-results-section').show(); // Assuming you have a "no-results" element to display the message
+                } else {
+                    $('.no-results-section').hide();
+                }
+                resultCount = 0;
             });
             // Check if the URL contains a specific segment
             if (currentUrl.includes("Services")) {

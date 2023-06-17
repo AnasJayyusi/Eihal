@@ -16,7 +16,6 @@
 
     .service-card-body {
         background-color: #f8f9fa;
-        padding: 20px;
     }
 
     .service-weight-700 {
@@ -170,20 +169,23 @@
 
 @foreach (var item in Model)
 {
-    <div class="col-md-4 padding-top-25">
+    <div class="col-md-3 padding-top-25">
         <div class="service-card">
             <div class="service-card-body">
-                <h5 class="service-card-title" style="color:black"><strong> @item.TitleEn</strong></h5>
-                <div class="row col-12" style="padding:25px">
+                <h5 class="service-card-title" style="color: black;"><strong>@item.TitleEn</strong></h5>
+                <div class="row col-12" >
                     <div class="col-8">
-                        <span class="service-sub-title">Fee</span>
+                        <span class="service-sub-title" style="display: inline-block;">Fee:</span>
+                        <span style="display: inline-block; margin-left: 5px;">@item.Fee</span>
                     </div>
-                    <div class="col-4" style="font-size:12px"><strong> @item.Fee   </strong></div>
                 </div>
                 <div class="dots-container">
-                    <button class="dots-button" data-toggle="modal" onclick="fillAddServicePage('@item.Id','@item.TitleAr','@item.TitleEn','@item.Fee')" data-target="#AddServiceModal"><i style="color:#00768c" class="fa fa-add" aria-hidden="true"></i></button>
+                    <button class="dots-button" data-toggle="modal" onclick="fillAddServicePage('@item.Id','@item.TitleAr','@item.TitleEn','@item.Fee')" data-target="#AddServiceModal">
+                        <i class="fas fa-plus" style="font-size: 18px;"></i>
+                    </button>
                 </div>
             </div>
+
         </div>
     </div>
 }
@@ -191,7 +193,7 @@
 {
     <div class="no-results">
         <img src="~/images/NoResult.png" alt="No Results Found Icon">
-        <p>No Services Add Yet.</p>
+        <p>No Services Added Yet.</p>
     </div>
 
 }

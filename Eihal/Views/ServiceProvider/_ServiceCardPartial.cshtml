@@ -1,12 +1,36 @@
 ﻿@model List<Eihal.Data.Entites.UserServices>
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
+
 <style>
+    .close-icon {
+        font-size: 14px;
+        line-height: 14px;
+    }
+
+    .service-info-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .service-info-label {
+        width: 30%;
+        font-size: 12px;
+    }
+
+    .service-info-value {
+        width: 70%;
+        font-size: 12px;
+    }
+
     .service-card {
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         position: relative;
         cursor: pointer;
         transition: transform 0.3s ease;
+        border-radius: 15%;
+        height: 100%;
     }
 
         .service-card:hover {
@@ -17,20 +41,20 @@
     .service-card-body {
         background-color: #f8f9fa;
         padding: 20px;
+        border-radius: 15%;
     }
 
     .service-card-title {
         color: #333;
         font-size: 18px;
         margin-bottom: 10px;
-        color: #00768c
+        color: #00768c;
     }
 
     .service-card-text {
         color: #666;
         margin-bottom: 5px;
     }
-
 
     .dots-container {
         position: absolute;
@@ -96,15 +120,13 @@
         font-weight: bold;
         pointer-events: none;
         cursor: not-allowed;
-        background-color: whitesmoke
+        background-color: whitesmoke;
     }
 
     #menu .nav-item:hover {
-        /* Add your desired styles for hover state */
         background-color: #e0e0e0;
         color: #333;
     }
-
 
     .tab-header {
         display: flex;
@@ -133,7 +155,7 @@
 
         .tab-button.active {
             background-color: #00768c;
-            color: white
+            color: white;
         }
 
     .tab-content {
@@ -194,49 +216,45 @@
     }
 </style>
 
-  @foreach (var item in Model)
+@foreach (var item in Model)
 {
-    <div class="col-md-4 padding-top-25">
+    <div class="col-md-3 padding-top-25">
         <div class="service-card">
             <div class="service-card-body">
-                <h5 class="My-service-card-title"><strong> @item.TitleEn</strong></h5>
-                <div class="row col-12 padding-bottom-10">
-                    <div class="col-8">
-                        <span class="service-sub-title">Price</span>
-                    </div>
-                    <div class="col-4" style="font-size:12px"> <strong>@item.Price </strong>  </div>
+                <h5 class="service-card-title"><strong>@item.TitleEn</strong></h5>
+                <div class="service-info-row">
+                    <div class="service-info-label">Price:</div>
+                    <div class="service-info-value">@item.Price</div>
                 </div>
-                <div class="row col-12  padding-bottom-10">
-                    <div class="col-8">
-                        <span class="service-sub-title">Fee</span>
-                    </div>
-                    <div class="col-4" style="font-size:12px"><strong>@item.Fee  </strong> </div>
+                <div class="service-info-row">
+                    <div class="service-info-label">Fee:</div>
+                    <div class="service-info-value">@item.Fee</div>
                 </div>
-                <div class="row col-12  padding-bottom-10">
-                    <div class="col-8">
-                        <span class="service-sub-title">Status</span>
+                <div class="service-info-row">
+                    <div class="service-info-label">Status:</div>
+                    <div class="service-info-value">
+                        @if (item.Status == Eihal.Enums.ServicesStatusEnum.Pending)
+                        {
+                            <span class="status status-warning">@item.Status</span>
+                        }
+                        else if (item.Status == Eihal.Enums.ServicesStatusEnum.Approved)
+                        {
+                            <span class="status status-success">@item.Status</span>
+                        }
+                        else if (item.Status == Eihal.Enums.ServicesStatusEnum.Rejected)
+                        {
+                            <span class="status status-error">@item.Status</span>
+                        }
+                        else
+                        {
+                            <span>@item.Status</span>
+                        }
                     </div>
-                    @if (item.Status == Eihal.Enums.ServicesStatusEnum.Pending)
-                    {
-                        <div class="col-4 status status-warning" >@item.Status </div>
-                    }
-                    else if (item.Status == Eihal.Enums.ServicesStatusEnum.Approved)
-                    {
-                        <div class="col-4 status status-success">@item.Status </div>
-
-                    }
-                    else if (item.Status == Eihal.Enums.ServicesStatusEnum.Rejected)
-                    {
-                        <div class="col-4 status status-error"> @item.Status </div>
-
-                    }
-                    else
-                    {
-                        <div class="col-4"> @item.Status  </div>
-                    }
                 </div>
                 <div class="dots-container">
-                    <button class=" dots-button" onclick="deleteService('@item.Id')"><i style="color:#00768c" class="fa fa-remove" aria-hidden="true"></i></button>
+                    <button class="dots-button" onclick="deleteService('@item.Id')">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
                 </div>
             </div>
         </div>
@@ -247,22 +265,6 @@
 {
     <div class="no-results">
         <img src="~/images/NoResult.png" alt="No Results Found Icon">
-        <p>No results found.</p>
+        <p>No Services Added Yet.</p>
     </div>
-
 }
-
-@*@section Scripts {
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script>
-
-
-
-    </script>
-
-
-    }*@
-
-
-

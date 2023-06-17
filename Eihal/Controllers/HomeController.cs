@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Globalization;
+using static Eihal.Areas.Identity.Pages.Account.LoginModel;
 
 namespace Eihal.Controllers
 {
@@ -16,10 +17,20 @@ namespace Eihal.Controllers
 
         public IActionResult Index()
         {
-           
-        
-                return View();
 
+            if (User.IsInRole(UserRolesEnum.Beneficiary.ToString()))
+            {
+                return RedirectToAction("Profile", "ServiceProvider");
+            }
+            if (User.IsInRole(UserRolesEnum.ServiceProvider.ToString()))
+            {
+                return RedirectToAction("Profile", "ServiceProvider");
+            }
+            if (User.IsInRole(UserRolesEnum.Administrator.ToString()))
+            {
+                return RedirectToAction("Dashboard", "Admin");
+            }
+            return View();
         }
 
         #region Culture
@@ -58,8 +69,6 @@ namespace Eihal.Controllers
         {
             return View();
         }
-
-
 
         public IActionResult AdminOnly()
         {
