@@ -386,15 +386,22 @@ input[type=number] {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
-//        $('#price-input').on('keypress keyup keydown', function () {
-            
-//  if ($('#price-input').val() == "" ) { 
-//    $('#send-for-review-btn').prop('disabled', true); 
-//  } 
-//  else {   
-//    $('#send-for-review-btn').prop('disabled', false); 
-//  } 
-//});
+
+// Function to get the value of a cookie
+function getCookie(name) {
+  var nameEQ = name + "=";
+  var cookies = document.cookie.split(';');
+  for (var i = 0; i < cookies.length; i++) {
+    var cookie = cookies[i];
+    while (cookie.charAt(0) === ' ') {
+      cookie = cookie.substring(1, cookie.length);
+    }
+    if (cookie.indexOf(nameEQ) === 0) {
+      return cookie.substring(nameEQ.length, cookie.length);
+    }
+  }
+  return null;
+}
         function deleteService(id) {
             $.ajax({
                 url: '/ServiceProvider/DeleteUserService?Id=' + id, // Replace with the actual URL and action method to fetch the partial view
@@ -418,6 +425,33 @@ input[type=number] {
                 type: 'GET',
                 success: function (response) {
                     serviceContainer.html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        } 
+        
+        function loadUserImage() {
+                    var image = document.getElementById('user-image-layout');
+                    var imagePath=getCookie("userImagePath");
+                    if(imagePath==null){
+                        loadUserImageFromServer();
+                    }else{
+
+                     image.src = imagePath;
+                    }
+        }
+
+             function loadUserImageFromServer() {
+                    var image = document.getElementById('user-image-layout');
+            $.ajax({
+                url: '/ServiceProvider/GetUserImage', // Replace with the actual URL and action method to fetch the partial view
+                type: 'GET',
+                success: function (response) {
+                     image.src = response;
+                     setCookie("userImagePath", response, 7); // Set the cookie for 7 days
+
 
                 },
                 error: function (xhr, status, error) {
@@ -492,6 +526,7 @@ input[type=number] {
         $(document).ready(function () {
             GetMyService();
             GetAllService();
+            loadUserImage();
             // Get the current URL
             var currentUrl = window.location.href;
               var resultCount = 0; // Variable to keep track of the number of results

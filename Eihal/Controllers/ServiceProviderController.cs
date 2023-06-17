@@ -26,7 +26,14 @@ namespace Eihal.Controllers
         {
             return View();
         }
-
+        [HttpGet]
+        [Route("GetUserImage")]
+        public ActionResult GetUserImage()
+        {
+            var userId = GetUserProfileId();
+            var userProfilePath = _dbContext.UserProfiles.Where(w => w.Id == userId).Select(a=>a.ProfilePicturePath).FirstOrDefault();
+            return Ok(userProfilePath);
+        }
         public IActionResult Referrals()
         {
             return View();

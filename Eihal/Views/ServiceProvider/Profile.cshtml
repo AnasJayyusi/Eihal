@@ -251,7 +251,36 @@
                 }
             });
         }
+
+        function setCookie(name, value, days) {
+  var expires = "";
+  if (days) {
+    var date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    expires = "; expires=" + date.toUTCString();
+  }
+  document.cookie = name + "=" + value + expires + "; path=/";
+}
+
+       function LoadUserImage() {
+                    var image = document.getElementById('user-image-layout');
+            $.ajax({
+                url: '/ServiceProvider/GetUserImage', // Replace with the actual URL and action method to fetch the partial view
+                type: 'GET',
+                success: function (response) {
+                    debugger;
+                     image.src = response;
+                     setCookie("userImagePath", response, 7); // Set the cookie for 7 days
+
+
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
         $(document).ready(function () {
+            LoadUserImage();
             GetMyService();
             // Get the current URL
             var currentUrl = window.location.href;
