@@ -413,7 +413,6 @@
             url: "/ServiceProvider/GetUserProfileInfo",
             method: "GET",
             success: function (response) {
-                debugger
                 $("#fullname-label").text(response.fullname);
                 $("#number-patients-label").text(response.numberPatients);
                 $("#review-label").text("(" + response.review + ")");
@@ -554,6 +553,7 @@
     }
 
     function loadImage(event) {
+          
         var image = document.getElementById('user-image-edit');
         image.src = URL.createObjectURL(event.target.files[0]);
     }
@@ -725,7 +725,9 @@
                 if (data.length == 0) {
                     $("#certifications-label").text("No Certifications added yet.");
                     $("#certifications-label").show();
+                    $("#certifications-container").hide();
                 } else {
+                    $("#certifications-container").show();
                     $("#certifications-label").text("You have " + data.length + " certificates added ");
                     tableBody.empty(); // Clear the table body before appending new rows
                     data.forEach(function (item) {
@@ -802,7 +804,7 @@
 
 
     function removeCertificate(fileId) {
-        debugger;
+          
         // Perform an AJAX request to delete the certificate
         $.ajax({
             url: '/File/DeleteFile/' + fileId, // Replace with the actual URL to delete the certificate

@@ -31,7 +31,11 @@ namespace Eihal.Controllers
         public ActionResult GetUserImage()
         {
             var userId = GetUserProfileId();
-            var userProfilePath = _dbContext.UserProfiles.Where(w => w.Id == userId).Select(a=>a.ProfilePicturePath).FirstOrDefault();
+            var userProfilePath = _dbContext.UserProfiles.Where(w => w.Id == userId).Select(a => a.ProfilePicturePath).FirstOrDefault();
+            if (userProfilePath == null)
+            {
+                return Ok("/users/images/Default-User-Profile.jpg");
+            }
             return Ok(userProfilePath);
         }
         public IActionResult Referrals()
@@ -119,19 +123,25 @@ namespace Eihal.Controllers
         {
 
             var userProfile = _dbContext.UserProfiles.FirstOrDefault(w => w.UserId == GetAspNetUserId());
-            // Your logic to retrieve the necessary data
-            List<int> specialityIds = userProfile.SpecialtiesIds.Split(',').Select(int.Parse).ToList();
             var specialityNames = "";
-            // This Code Temp We Should Depnd On Select2 
-            if (specialityIds != null)
+            // Your logic to retrieve the necessary data
+            if (userProfile.SpecialtiesIds != null)
             {
-                var specialities = _dbContext.Specialties
-                               .Where(t => specialityIds.Contains(t.Id)).Select(a => new
-                               {
-                                   a.TitleEn
-                               }).ToList();
-                specialityNames = String.Join(",", specialities.Select(a => a.TitleEn));
+                List<int> specialityIds = userProfile.SpecialtiesIds.Split(',').Select(int.Parse).ToList();
+              
+                // This Code Temp We Should Depnd On Select2 
+                if (specialityIds != null)
+                {
+                    var specialities = _dbContext.Specialties
+                                   .Where(t => specialityIds.Contains(t.Id)).Select(a => new
+                                   {
+                                       a.TitleEn
+                                   }).ToList();
+                    if (specialities.Any())
+                        specialityNames = String.Join(",", specialities.Select(a => a.TitleEn));
+                }
             }
+           
             var data = new
             {
                 fullname = userProfile?.FullName,
@@ -152,7 +162,7 @@ namespace Eihal.Controllers
         [Route("GetFullUserProfileInfo")]
         public ActionResult GetFullUserProfileInfo()
         {
-            _loggedAspNetUserId =  GetAspNetUserId();
+            _loggedAspNetUserId = GetAspNetUserId();
             var userProfile = _dbContext.UserProfiles.Include(i => i.State).Include(i => i.City).FirstOrDefault(w => w.UserId == GetAspNetUserId());
 
             // Your logic to retrieve the necessary data
@@ -183,7 +193,7 @@ namespace Eihal.Controllers
         [Route("GetUserProfessionalRanksDDL")]
         public ActionResult GetUserProfessionalRanksDDL()
         {
-            _loggedAspNetUserId =  GetAspNetUserId();
+            _loggedAspNetUserId = GetAspNetUserId();
             var practitionerTypeId = _dbContext.UserProfiles
                                                 .Where(u => u.UserId == GetAspNetUserId())
                                                 .Select(u => u.PractitionerTypeId);
@@ -199,7 +209,7 @@ namespace Eihal.Controllers
         [Route("GetUserSpecialtiesDDL")]
         public ActionResult GetUserSpecialtiesDDL()
         {
-            _loggedAspNetUserId =  GetAspNetUserId();
+            _loggedAspNetUserId = GetAspNetUserId();
             var practitionerTypeId = _dbContext.UserProfiles
                                                 .Where(u => u.UserId == GetAspNetUserId())
                                                 .Select(u => u.PractitionerTypeId);
@@ -268,7 +278,7 @@ namespace Eihal.Controllers
         [Route("UpdateUserProfile")]
         public IActionResult UpdateUserProfile(IFormCollection form)
         {
-            _loggedAspNetUserId =  GetAspNetUserId();
+            _loggedAspNetUserId = GetAspNetUserId();
             var userProfile = _dbContext.UserProfiles.Single(w => w.UserId == GetAspNetUserId());
 
 
@@ -330,7 +340,7 @@ namespace Eihal.Controllers
             Directory.CreateDirectory(uploadPath);
 
             // Generate a unique filename for the image (you can use your own logic here)
-            string uniqueFileName =  GetAspNetUserId();
+            string uniqueFileName = GetAspNetUserId();
 
             // Combine the upload path with the unique filename
             string filePath = Path.Combine(uploadPath, uniqueFileName) + extension;

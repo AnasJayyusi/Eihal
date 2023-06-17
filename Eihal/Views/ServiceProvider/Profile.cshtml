@@ -107,8 +107,6 @@
                                 <div class="card-body">
                                     @Html.Partial("Overview")
                                     @Html.Partial("Services")
-
-
                                     <div id="tab3" class="tab-content" style="display: none;">
                                         <div style="text-align: end; cursor:pointer">
                                             <button type="button" style="background-color:#00768c" class="btn btn-success">  <i style="font-size:25px" class="fas fa-edit"></i> Edit Clinic Info </button>
@@ -253,26 +251,24 @@
         }
 
         function setCookie(name, value, days) {
-  var expires = "";
-  if (days) {
-    var date = new Date();
-    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-    expires = "; expires=" + date.toUTCString();
-  }
-  document.cookie = name + "=" + value + expires + "; path=/";
-}
+            var expires = "";
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + value + expires + "; path=/";
+        }
 
-       function LoadUserImage() {
-                    var image = document.getElementById('user-image-layout');
+        function loadUserImage() {
+            var image = document.getElementById('user-image-layout');
             $.ajax({
                 url: '/ServiceProvider/GetUserImage', // Replace with the actual URL and action method to fetch the partial view
                 type: 'GET',
                 success: function (response) {
-                    debugger;
-                     image.src = response;
-                     setCookie("userImagePath", response, 7); // Set the cookie for 7 days
-
-
+                      
+                    image.src = response;
+                    setCookie("userImagePath", response, 7); // Set the cookie for 7 days
                 },
                 error: function (xhr, status, error) {
                     console.error('Error:', error);
@@ -280,7 +276,7 @@
             });
         }
         $(document).ready(function () {
-            LoadUserImage();
+            loadUserImage();
             GetMyService();
             // Get the current URL
             var currentUrl = window.location.href;
@@ -335,7 +331,7 @@
                 url: '/ServiceProvider/SendProfileToReview',
                 type: 'Get',
                 success: function (response) {
-                    debugger;
+                      
                     setProfileStatus(response)
                     toastr.success('Your profile send to review successfully', 'Success !!');
 
@@ -365,7 +361,7 @@
             } else if (profileStatus === 'Rejected') {
                 profileStatusElement.css('background-color', 'firebrick');
                 statusText = '<span style="font-weight: bold;"> Profile Status: Rejected</span>  to send your profile for review again. <a id="reviewLink" href="#" onclick=sendToReview()  style="color: white; text-decoration: underline; font-weight: bold;">Click here</a>';
-               
+
             } else if (profileStatus === 'Active') {
                 profileStatusElement.css('background-color', 'dodgerblue');
                 statusText = '<span style="font-weight: bold;"> Profile Status: Active</span>';

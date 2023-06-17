@@ -80,13 +80,13 @@
         <ul class="navbar-nav">
             <li id="myProfile-li" class="nav-item">
                 <a class="nav-link text-dark" asp-area="" asp-controller="ServiceProvider" asp-action="Profile">
-                    <i class="fas fa-user-alt"></i> <span id="myProfile-text">@Localizer["My Profile"]</span>
+                    <i id="myProfile-icon" class="fas fa-user-alt"></i> <span id="myProfile-text">@Localizer["My Profile"]</span>
                 </a>
             </li>
 
             <li id="myServices-li" class="nav-item">
                 <a class="nav-link text-dark" asp-area="" asp-controller="ServiceProvider" asp-action="AddServices">
-                    <i class="fas fa-medkit"></i> <span>@Localizer["My Services"]</span>
+                    <i id="myServices-icon"  class="fas fa-medkit"></i> <span id="myServices-text">@Localizer["My Services"]</span>
                 </a>
             </li>
 
