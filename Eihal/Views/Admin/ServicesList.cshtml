@@ -220,23 +220,6 @@
     }
 
         function getServices(id) {
-        //if ($('#practitionerTypes-ddl-edit').children().length == 0) 
-        //{
-        //    $.ajax({
-        //        url: '@Url.Action("GetPractitionerTypesDDL", "Common")',
-        //        type: 'GET',
-        //        dataType: 'json',
-        //        success: function (data) {
-        //            // Clear existing options
-        //            $('#practitionerTypes-ddl-edit').empty();
-        //            // Populate the dropdown list
-        //            var dropdown = $('#practitionerTypes-ddl-edit');
-        //            $.each(data, function (index, item) {
-        //                dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
-        //            });
-        //        }
-        //    });
-        //}
 
             $.ajax({
                 url: '/Admin/GetService/' + id,

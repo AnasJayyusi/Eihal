@@ -169,8 +169,15 @@
     <div class="col-md-4 padding-top-25">
                                                         <div class="service-card">
                                                             <div class="service-card-body">
-                                                                <h5 class="all-service-card-title" >@item.TitleEn</h5>
-                                                                <p class="service-card-text"><span class="service-weight-700" >Fee:</span>  @item.Fee $</p>
+                                                                <h5 class="service-card-title" style="color:black"><strong> @item.TitleEn</strong></h5>
+                                                                    <div class="row col-12" style="padding:25px">
+                                                                    <div class="col-8">
+                                                                        <span class="service-sub-title">Fee</span> 
+                                                                    </div>
+                                                                    <div class="col-4">@item.Fee   </div>
+                                                                </div>
+
+                                                                @*<p class="service-card-text"><span class="service-weight-700" >Fee:</span>  @item.Fee $</p>*@
                                                                 <div class="dots-container">
                                                                     <button class="dots-button" data-toggle="modal" onclick="fillAddServicePage('@item.Id','@item.TitleAr','@item.TitleEn','@item.Fee')" data-target="#AddServiceModal"><i style="color:#00768c" class="fa fa-add" aria-hidden="true"></i></button>
                                                                 </div>

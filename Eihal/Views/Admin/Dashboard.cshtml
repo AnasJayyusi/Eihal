@@ -1,4 +1,6 @@
-﻿<head>
+﻿@model List<Eihal.Data.Entites.UserServices>
+
+<head>
 
 <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -55,7 +57,7 @@
                     <!-- Content Row -->
                     @Html.Partial("ProfileReviewsOrders")
                     <!-- Content Row -->
-                    @Html.Partial("ServicesReviewsOrders")
+                    @Html.Partial("ServicesReviewsOrders",Model)
                 </div>
             </div>
         </div>

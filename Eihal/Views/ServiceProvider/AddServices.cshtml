@@ -13,7 +13,16 @@
   padding: 20px;
   font-size: 18px;
 }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
 .no-results-section img {
   width: 80px;
   height: 80px;
@@ -305,7 +314,7 @@
 
                         <tr>
                             <td>
-                                <div class="form-group">
+                                <div class="form-group" style="width:450px">
                                     <label style="font-weight:bold;color:#00768c" for="service-namear-input">Service Name:</label>
                                     <input disabled type="text" class="form-control" id="service-namear-input" value="Test" required>
                                     <input disabled type="hidden" id="service-id-input" value="0" required>
@@ -326,7 +335,7 @@
                             <td>
                                 <div class="form-group">
                                     <label style="font-weight:bold;color:#00768c" for="price-input">Price:</label>
-                                    <input type="number" class="form-control" id="price-input" value="10%" required>
+                                    <input type="number" class="form-control" id="price-input" value="10%" min="0" required onkeyup="if(this.value.length > 0) document.getElementById('send-for-review-btn').disabled = false; else document.getElementById('send-for-review-btn').disabled = true;">
                                 </div>
                             </td>
 
@@ -339,7 +348,7 @@
             </div>
             <div class="modal-footer" style="text-align:center">
                 <button type="button" class="btn btn-danger" data-dismiss="modal" id="close-add-service">Cancel</button>
-                <button onclick="sendServiceForReview()" type="button" class="btn btn-success" style="background-color:#00768c">Send for review</button>
+                <button onclick="sendServiceForReview()" type="button" class="btn btn-success" id="send-for-review-btn" style="background-color:#00768c" disabled>Send for review</button>
             </div>
         </div>
     </div>
@@ -352,6 +361,15 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
+//        $('#price-input').on('keypress keyup keydown', function () {
+            
+//  if ($('#price-input').val() == "" ) { 
+//    $('#send-for-review-btn').prop('disabled', true); 
+//  } 
+//  else {   
+//    $('#send-for-review-btn').prop('disabled', false); 
+//  } 
+//});
         function deleteService(id) {
             $.ajax({
                 url: '/ServiceProvider/DeleteUserService?Id=' + id, // Replace with the actual URL and action method to fetch the partial view
@@ -398,6 +416,7 @@
         function fillAddServicePage(serviceId, titleAr, titleEn, fee) {
             $("#service-id-input").val(serviceId);
             $("#service-namear-input").val(titleEn);
+            $("#price-input").val("0");
 
             $("#fee-input").val(fee);
         }

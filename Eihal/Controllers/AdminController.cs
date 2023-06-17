@@ -20,7 +20,8 @@ namespace Eihal.Controllers
         [Route("Dashboard")]
         public IActionResult Dashboard()
         {
-            return View();
+            var services=_dbContext.UserServices.Where(a => a.Status == Enums.ServicesStatusEnum.Pending).Include(a => a.UserProfile).ToList();
+            return View(services);
         }
         #endregion
 
@@ -480,8 +481,8 @@ namespace Eihal.Controllers
         #endregion
 
         #region UserServices
-        [Route("Users/ProfileReviewRequests")]
-        public IActionResult ProfileReviewRequests()
+        [Route("Users/ServiceReviewRequests")]
+        public IActionResult ServiceReviewRequests()
         {
             // Retrieve the value from TempData
             bool? isFromDeleteRequest = TempData["isFromDeleteRequest"] as bool?;
@@ -620,7 +621,7 @@ namespace Eihal.Controllers
 
 
 
-            return RedirectToAction("ProfileReviewRequests");
+            return RedirectToAction("ServiceReviewRequests");
         }
         [HttpGet]
         [Route("ApproveUserServices/{id}")]
@@ -658,7 +659,7 @@ namespace Eihal.Controllers
 
 
 
-            return RedirectToAction("ProfileReviewRequests");
+            return RedirectToAction("ServiceReviewRequests");
         }
         [HttpGet]
         [Route("RejectUserServices/{id}")]
@@ -696,7 +697,7 @@ namespace Eihal.Controllers
 
 
 
-            return RedirectToAction("ProfileReviewRequests");
+            return RedirectToAction("ServiceReviewRequests");
         }
         [HttpGet]
         [Route("GetUserServices/{id}")]

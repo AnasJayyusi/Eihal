@@ -160,10 +160,34 @@
 .no-results p {
   margin: 0;
 }
- .service-weight-700{
-        color:#00768c;font-weight: 700;
+ .service-sub-title{
+        color:#00768c;
     }
+    .status {
+        text-align:center;
+        font-size:10px;
+  padding: 5px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+}
 
+.status-success {
+  background-color: #4CAF50;
+  color: #ffffff;
+}
+
+.status-warning {
+  background-color: #FFC107;
+  color: #ffffff;
+}
+
+.status-error {
+  background-color: #FF0000;
+  color: #ffffff;
+}
+.padding-bottom-10{
+    padding-bottom:10px;
+}
 </style>
 
   @foreach (var item in Model)
@@ -172,9 +196,36 @@
                                                         <div class="service-card">
                                                             <div class="service-card-body">
                                                                 <h5 class="My-service-card-title"><strong> @item.TitleEn</strong></h5>
-                                                                <p class="service-card-text"><span class="service-weight-700">Price:</span> @item.Price $  </p>
-                                                                <p class="service-card-text"><span class="service-weight-700">Fee:</span> @item.Fee $</p>
-                                                                <p class="service-card-text"><span class="service-weight-700">Status:</span> @item.Status.ToString()</p>
+                                                                <div class="row col-12 padding-bottom-10" >
+                                                                    <div class="col-8">
+                                                                        <span class="service-sub-title">Price</span> 
+                                                                    </div>
+                                                                    <div class="col-4">@item.Price   </div>
+                                                                </div>
+                                                                   <div class="row col-12  padding-bottom-10">
+                                                                    <div class="col-8">
+                                                                        <span class="service-sub-title">Fee</span> 
+                                                                    </div>
+                                                                    <div class="col-4">@item.Fee   </div>
+                                                                </div>
+                                                                   <div class="row col-12  padding-bottom-10">
+                                                                    <div class="col-8">
+                                                                        <span class="service-sub-title">Status</span> 
+                                                                    </div>
+                    @if (item.Status == Eihal.Enums.ServicesStatusEnum.Pending)
+                    {
+                        <div class="col-4 status status-warning">@item.Status </div>
+                    }else if(item.Status == Eihal.Enums.ServicesStatusEnum.Approved){
+                        <div class="col-4 status status-success">@item.Status </div>
+
+                    }else if(item.Status == Eihal.Enums.ServicesStatusEnum.Rejected){
+                        <div class="col-4 status status-error">@item.Status </div>
+
+                    }else{
+                        <div class="col-4">@item.Status </div>
+
+                    }
+                </div>
                                                                 <div class="dots-container">
                                                                     <button class=" dots-button" onclick="deleteService('@item.Id')"><i style="color:#00768c" class="fa fa-remove" aria-hidden="true"></i></button>
                                                                 </div>
