@@ -413,6 +413,7 @@
             url: "/ServiceProvider/GetUserProfileInfo",
             method: "GET",
             success: function (response) {
+                
                 $("#fullname-label").text(response.fullname);
                 $("#number-patients-label").text(response.numberPatients);
                 $("#review-label").text("(" + response.review + ")");

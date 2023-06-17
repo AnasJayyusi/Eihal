@@ -179,7 +179,8 @@
             success: function (response) {
                 var table = $('#certifications-table tbody');
 
-                if (profileStatusId == 3) {
+                // Show Approve & Rejection Only If Profile Status Is UnderReview
+                if (profileStatusId != 1) {
                     $("#approve").hide()
                     $("#reject").hide()
                 }
