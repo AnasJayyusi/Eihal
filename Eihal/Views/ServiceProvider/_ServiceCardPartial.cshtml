@@ -139,120 +139,130 @@
     .tab-content {
         background-color: #fff;
     }
-     .no-results {
-    width:100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  margin-top: 20px;
-  padding: 20px;
-  font-size: 18px;
-}
 
-.no-results img {
-  width: 80px;
-  height: 80px;
-  margin-bottom: 10px;
-}
-
-.no-results p {
-  margin: 0;
-}
- .service-sub-title{
-        color:#00768c;
+    .no-results {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        margin-top: 20px;
+        padding: 20px;
+        font-size: 18px;
     }
+
+        .no-results img {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 10px;
+        }
+
+        .no-results p {
+            margin: 0;
+        }
+
+    .service-sub-title {
+        color: #00768c;
+    }
+
     .status {
-        text-align:center;
-        font-size:10px;
-  padding: 5px 8px;
-  border-radius: 4px;
-  font-weight: bold;
-}
+        text-align: center;
+        font-size: 8px;
+        padding: 5px 8px;
+        border-radius: 4px;
+        font-weight: bold;
+    }
 
-.status-success {
-  background-color: #4CAF50;
-  color: #ffffff;
-}
+    .status-success {
+        background-color: #4CAF50;
+        color: #ffffff;
+    }
 
-.status-warning {
-  background-color: #FFC107;
-  color: #ffffff;
-}
+    .status-warning {
+        background-color: #FFC107;
+        color: #ffffff;
+    }
 
-.status-error {
-  background-color: #FF0000;
-  color: #ffffff;
-}
-.padding-bottom-10{
-    padding-bottom:10px;
-}
+    .status-error {
+        background-color: #FF0000;
+        color: #ffffff;
+    }
+
+    .padding-bottom-10 {
+        padding-bottom: 10px;
+    }
 </style>
 
   @foreach (var item in Model)
-                                                {
-                                                    <div class="col-md-4 padding-top-25">
-                                                        <div class="service-card">
-                                                            <div class="service-card-body">
-                                                                <h5 class="My-service-card-title"><strong> @item.TitleEn</strong></h5>
-                                                                <div class="row col-12 padding-bottom-10" >
-                                                                    <div class="col-8">
-                                                                        <span class="service-sub-title">Price</span> 
-                                                                    </div>
-                                                                    <div class="col-4"> <strong>@item.Price </strong>  </div>
-                                                                </div>
-                                                                   <div class="row col-12  padding-bottom-10">
-                                                                    <div class="col-8">
-                                                                        <span class="service-sub-title">Fee</span> 
-                                                                    </div>
-                                                                    <div class="col-4"><strong>@item.Fee  </strong> </div>
-                                                                </div>
-                                                                   <div class="row col-12  padding-bottom-10">
-                                                                    <div class="col-8">
-                                                                        <span class="service-sub-title">Status</span> 
-                                                                    </div>
+{
+    <div class="col-md-4 padding-top-25">
+        <div class="service-card">
+            <div class="service-card-body">
+                <h5 class="My-service-card-title"><strong> @item.TitleEn</strong></h5>
+                <div class="row col-12 padding-bottom-10">
+                    <div class="col-8">
+                        <span class="service-sub-title">Price</span>
+                    </div>
+                    <div class="col-4" style="font-size:12px"> <strong>@item.Price </strong>  </div>
+                </div>
+                <div class="row col-12  padding-bottom-10">
+                    <div class="col-8">
+                        <span class="service-sub-title">Fee</span>
+                    </div>
+                    <div class="col-4" style="font-size:12px"><strong>@item.Fee  </strong> </div>
+                </div>
+                <div class="row col-12  padding-bottom-10">
+                    <div class="col-8">
+                        <span class="service-sub-title">Status</span>
+                    </div>
                     @if (item.Status == Eihal.Enums.ServicesStatusEnum.Pending)
                     {
-                        <div class="col-4 status status-warning">@item.Status </div>
-                    }else if(item.Status == Eihal.Enums.ServicesStatusEnum.Approved){
-                        <div class="col-4 status status-success"><strong>@item.Status</strong> </div>
-
-                    }else if(item.Status == Eihal.Enums.ServicesStatusEnum.Rejected){
-                        <div class="col-4 status status-error"><strong> @item.Status </strong></div>
-
-                    }else{
-                        <div class="col-4"><strong> @item.Status </strong> </div>
+                        <div class="col-4 status status-warning" >@item.Status </div>
+                    }
+                    else if (item.Status == Eihal.Enums.ServicesStatusEnum.Approved)
+                    {
+                        <div class="col-4 status status-success">@item.Status </div>
 
                     }
+                    else if (item.Status == Eihal.Enums.ServicesStatusEnum.Rejected)
+                    {
+                        <div class="col-4 status status-error"> @item.Status </div>
+
+                    }
+                    else
+                    {
+                        <div class="col-4"> @item.Status  </div>
+                    }
                 </div>
-                                                                <div class="dots-container">
-                                                                    <button class=" dots-button" onclick="deleteService('@item.Id')"><i style="color:#00768c" class="fa fa-remove" aria-hidden="true"></i></button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                }
+                <div class="dots-container">
+                    <button class=" dots-button" onclick="deleteService('@item.Id')"><i style="color:#00768c" class="fa fa-remove" aria-hidden="true"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 
-                                                @if(Model.Count <=0){
-                <div class="no-results">
-  <img src="~/images/NoResult.png"  alt="No Results Found Icon">
-  <p>No results found.</p>
-</div>
+@if (Model.Count <= 0)
+{
+    <div class="no-results">
+        <img src="~/images/NoResult.png" alt="No Results Found Icon">
+        <p>No results found.</p>
+    </div>
 
-                                                }
+}
 
 @*@section Scripts {
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-<script>
-    
-   
-
-</script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
 
 
-}*@
+
+    </script>
+
+
+    }*@
 
 
 
