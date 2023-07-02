@@ -685,39 +685,22 @@ namespace Eihal.Controllers
             return RedirectToAction("Dashboard");
         }
         [HttpGet]
-        [Route("RejectDashboardUserServices/{id}")]
-        public IActionResult RejectDashboardUserServices(int id)
+        [Route("RejectDashboardUserServices")]
+        public IActionResult RejectDashboardUserServices(int id,string rejectionReason)
         {
 
-            //bool isLinked = _dbContext.ApplicationUsers.Any(w => w.PractitionerTypeId == id);
-            //if (isLinked)
-            //{
-            //    return BadRequest("You cannot delete this item as it is linked to users in the system.");
-            //}
-
-            //else
-            //{
-            // Retrieve the practitioner type from the database using the id
+ 
             var userServices = _dbContext.UserServices.Find(id);
             if (userServices != null && userServices.Status == Enums.ServicesStatusEnum.Pending)
+            {
                 userServices.Status = Enums.ServicesStatusEnum.Rejected;
+                userServices.RejectionReason = rejectionReason;
+            }
+            else
+            {
+                userServices.RejectionReason = string.Empty;
+            }
             _dbContext.SaveChanges();
-            //    if (userServices == null)
-            //    {
-            //        // Handle the case where the practitioner type doesn't exist
-            //        TempData["isSuccessDelete"] = false;
-            //    }
-
-            //    // Remove the practitioner type from the DbSet
-            //    _dbContext.UserServices.Remove(userServices);
-
-            //    // Save the changes to the database
-            //    _dbContext.SaveChanges();
-            //    TempData["isSuccessDelete"] = true;
-            ////}
-            //// Set the value in TempData
-            //TempData["isFromDeleteRequest"] = true;
-
 
 
             return RedirectToAction("Dashboard");
