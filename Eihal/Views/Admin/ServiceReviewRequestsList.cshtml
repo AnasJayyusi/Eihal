@@ -119,12 +119,25 @@
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                                <div class="modal-body">
-                                    Are you sure you want to reject this service?
+                           
+                                    <div class="form-group">
+
+                           <div class="col-12">
+                             <div class="form-group">
+                                <label for="reason">
+                                    Rejection Reason:
+                                </label>
+
+                                <div class="form-data text-area">
+                                    <textarea name="reason" class="form-control" placeholder="write rejection reason" id="rejectionReason" cols="30" rows="10"></textarea>
                                 </div>
+                            </div>
+                            </div>
+                    </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                    <a href="/Admin/RejectDashboardUserServices/@userServices.Id" class="btn btn-danger" id="rejectButton">Reject</a>
+                                   <button onclick="rejectService(@userServices.Id)" type="button" class="btn btn-danger">Reject</button>
+
                                 </div>
                             </div>
                         </div>
@@ -204,7 +217,25 @@
             updateStatus(userServicesId, isChecked);
         });
     });
+    function rejectService(userServicesId){
+        debugger;
+        var reason = $('#rejectionReason').val();
+  $.ajax({
+            url: '/Admin/RejectDashboardUserServices?id='+userServicesId+'&rejectionReason='+reason,
+            type: 'GET',
+            data: null,
+            success: function (response) {
 
+    location.reload();
+
+
+            },
+            error: function (error) {
+                // Handle the error response if needed
+            }
+        });
+
+    }
     function updateStatus(userServicesId, isChecked) {
         // Perform the API call here to update the status based on the userServicesId and isChecked values
         // You can use $.ajax or any other method to make the API request

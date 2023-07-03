@@ -378,11 +378,14 @@
 
 
 
+
 @section Scripts {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
-
+             function fillRejectionReason(rejectionReason) {
+            $("#rejectionReason").text(rejectionReason);
+        }
         // Function to get the value of a cookie
         function getCookie(name) {
             var nameEQ = name + "=";

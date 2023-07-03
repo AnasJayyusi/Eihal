@@ -243,7 +243,7 @@
                         }
                         else if (item.Status == Eihal.Enums.ServicesStatusEnum.Rejected)
                         {
-                            <span class="status status-error">@item.Status</span>
+                            <span class="status status-error"  data-toggle="modal" onclick="fillRejectionReason('@item.RejectionReason')" data-target="#RejectionReasonModal">@item.Status</span>
                         }
                         else
                         {
@@ -268,3 +268,35 @@
         <p>No Services Added Yet.</p>
     </div>
 }
+
+<!------------------------------ Rejection Reason -------------------->
+<div class="modal fade" id="RejectionReasonModal" tabindex="-1" role="dialog" aria-labelledby="RejectionReasonModal" aria-hidden="true">
+    <div class="modal-dialog custom-modal-dialog" style="max-width: 400px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="RejectionReasonModal">Rejection Reason</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                    <!-- Add your modal content here -->
+                    <div style="padding: 10px; display: flex; justify-content: center;">
+                        <div style="max-width: 300px;">
+                            <div class="form-group">
+                                <label style="font-weight: bold; color: #00768c;" id="rejectionReason"></label>
+                              
+                            </div>
+
+                        </div>
+                    </div>
+            </div>
+
+            <div class="modal-footer" style="text-align:center">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="close-add-service">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
