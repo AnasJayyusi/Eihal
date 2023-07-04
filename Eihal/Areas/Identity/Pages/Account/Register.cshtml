@@ -54,7 +54,7 @@
                                                 <option value="@practitionerType.Id">@practitionerType.TitleEn</option>
                                             }
                                         </select>
-                                </div>
+                                    </div>
                                 </div>
 
                                 <div class="form-group" id="category_id_dropdown">
@@ -64,13 +64,13 @@
 
                                     <div id="category-id-div" class="form-data select-box professionalRank_div" style="width:75%">
                                         <select asp-for="Input.ProfessionalRankId" disabled style="cursor:not-allowed" class="form-control" name="professional_Rank" id="category-rank-ddl">
-                                                <option value="">Select Professional Rank Type</option>
-                                                @foreach (var professionalRank in Model.ProfessionalRanks)
-                                                {
-                                                    <option value="@professionalRank.Id">@professionalRank.TitleEn</option>
-                                                }
-                                            </select>
-                                        </div>
+                                            <option value="">Select Professional Rank Type</option>
+                                            @foreach (var professionalRank in Model.ProfessionalRanks)
+                                            {
+                                                <option value="@professionalRank.Id">@professionalRank.TitleEn</option>
+                                            }
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
 
@@ -180,7 +180,7 @@
         <p style='margin-top:0in;margin-right:0in;margin-bottom:8.0pt;margin-left:0in;line-height:107%;font-size:15px;font-family:"Calibri",sans-serif;'>WE DO NOT OFFER MEDICAL ADVICE, DIAGNOSIS OR TREATMENT. WE DO NOT ENDORSE NOR RECOMMEND YOU A SPECIFIC PROVIDER. WE DO NOT -AND DO NOT INTEND TO- PRACTICE MEDICINE. WE ONLY HELP YOU SEARCH, BOOK AND MAKE REFERRALS TO OTHER DOCTORS. THEREFORE, IT IS CRUCIAL THAT YOU EMPLOY THE SAME CAUTIOUSNESS AND PRUDENCE YOU WOULD HAVE EMPLOYED WITHOUT USING OUR SERVICES.</p>
         <div style="text-align:center">
             <div style="text-align:center">
-                <a itle="We Will Download for you Policies and conditions" href="/File/DownloadFileFromFolder?fileName=Elhal-terms-and-conditions.pdf">Read More..</a>
+                <a title="We Will Download for you Policies and conditions" href="/uploadfiles/Eihal-terms-and-conditions.pdf" target="_blank">Read More..</a>
             </div>
         </div>
     </div>
@@ -195,8 +195,7 @@
 
 <script>
 
-
-
+  
     function checkEmail() {
         var regExp = /^([\w\.\+]{1,})([^\W])(@@)([\w]{1,})(\.[\w]{1,})+$/;
 
