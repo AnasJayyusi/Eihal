@@ -45,7 +45,7 @@ namespace Eihal.Controllers
 
             // Pass the data to the view
             return Json(dropdownData);
-        }
+        }   
 
         [HttpGet]
         [Route("GetCountriesDDL")]

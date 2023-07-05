@@ -1,4 +1,4 @@
-﻿@model List<Eihal.Data.Entites.Subspecialty>
+﻿@model List<Eihal.Data.Entites.ClinicalSpeciality>
 
 @{
     var defaultPageSize = 5; // Default number of items per page
@@ -55,7 +55,7 @@
 
 
 
-<table class="table table-striped" id="dataTable-Subspecialities" width="100%" cellspacing="0">
+<table class="table table-striped" id="dataTable-ClinicalSpecialities" width="100%" cellspacing="0">
     <thead>
         <tr>
             <th>#</th>
@@ -69,29 +69,29 @@
     <tbody>
         @for (int i = 0; i < visibleItems.Count; i++)
         {
-            var subspeciality = visibleItems[i];
+            var clinicalSpeciality = visibleItems[i];
             <tr>
                 <td>@(startIndex + i + 1)</td>
-                <td>@subspeciality.Specialty.TitleEn</td>
-                <td>@subspeciality.TitleEn</td>
-                <td>@subspeciality.TitleAr</td>
+                <td>@clinicalSpeciality.PractitionerType.TitleEn</td>
+                <td>@clinicalSpeciality.TitleEn</td>
+                <td>@clinicalSpeciality.TitleAr</td>
                 <td>
                     <div class="custom-control custom-switch">
-                        <input type="checkbox" class="custom-control-input" id="statusToggle_@subspeciality.Id" @(subspeciality.IsActive ? "checked" : "") data-id="@subspeciality.Id">
-                        <label class="custom-control-label" for="statusToggle_@subspeciality.Id"></label>
+                        <input type="checkbox" class="custom-control-input" id="statusToggle_@clinicalSpeciality.Id" @(clinicalSpeciality.IsActive ? "checked" : "") data-id="@clinicalSpeciality.Id">
+                        <label class="custom-control-label" for="statusToggle_@clinicalSpeciality.Id"></label>
                     </div>
                 </td>
                 <td>
                     <li class="list-inline-item">
-                        <button onclick="getSubspeciality(@subspeciality.Id)" href="#" class="btn btn-success btn-sm rounded-pill" type="button" data-toggle="modal" data-target="#EditSubspeciality" data-placement="top" title="Edit">
+                        <button onclick="getClinicalSpeciality(@clinicalSpeciality.Id)" href="#" class="btn btn-success btn-sm rounded-pill" type="button" data-toggle="modal" data-target="#EditClinicalSpeciality" data-placement="top" title="Edit">
                             <i class="fa fa-edit"></i>
                         </button>
                     </li>
                     <li class="list-inline-item">
-                        <a href="#" class="btn btn-danger btn-sm rounded-pill" data-toggle="modal" data-target="#confirmDeleteModal_@subspeciality.Id"><i class="fa fa-trash"></i></a>
+                        <a href="#" class="btn btn-danger btn-sm rounded-pill" data-toggle="modal" data-target="#confirmDeleteModal_@clinicalSpeciality.Id"><i class="fa fa-trash"></i></a>
                     </li>
                     <!-- Confirm Delete Modal -->
-                    <div class="modal fade" id="confirmDeleteModal_@subspeciality.Id" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="confirmDeleteModal_@clinicalSpeciality.Id" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -101,11 +101,11 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    Are you sure you want to delete this Subspeciality?
+                                    Are you sure you want to delete this Clinical Speciality?
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                    <a href="/Admin/DeleteSubspeciality/@subspeciality.Id" class="btn btn-danger" id="deleteButton">Delete</a>
+                                    <a href="/Admin/DeleteClinicalSpeciality/@clinicalSpeciality.Id" class="btn btn-danger" id="deleteButton">Delete</a>
                                 </div>
                             </div>
                         </div>
@@ -116,11 +116,11 @@
     </tbody>
 </table>
 
-<div class="modal fade" id="EditSubspeciality" tabindex="-1" role="dialog" aria-labelledby="EditSubspecialityModal" aria-hidden="true">
+<div class="modal fade" id="EditClinicalSpeciality" tabindex="-1" role="dialog" aria-labelledby="EditClinicalSpecialityModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="EditSubspecialityModal">Edit</h5>
+                <h5 class="modal-title" id="EditClinicalSpecialityModal">Edit</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -138,9 +138,9 @@
                         <input type="text" class="form-control" id="titleArInputEdit" required>
                     </div>
                     <div class="form-group">
-                        <label for="specialities-ddl-edit" style="font-weight:bold;color:#00768c">Speciality:</label>
+                        <label for="practitionerTypes-ddl-edit" style="font-weight:bold;color:#00768c">Practitioner Type:</label>
                         <!-- Dropdown list HTML element -->
-                        <select class="form-control" id="specialities-ddl-edit"></select>
+                        <select class="form-control" id="practitionerTypes-ddl-edit"></select>
                     </div>
                 </form>
                 <div class="alert alert-danger hidden sm" role="alert">
@@ -148,8 +148,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button id="close-edit-Subspeciality" type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                <button id="edit-Subspeciality" type="button" class="btn btn-success" style="background-color:#00768c">Update</button>
+                <button id="close-edit-ClinicalSpeciality" type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button id="edit-ClinicalSpeciality" type="button" class="btn btn-success" style="background-color:#00768c">Update</button>
             </div>
         </div>
     </div>
@@ -183,19 +183,19 @@
         $('.custom-control-input').on('change', function () {
 
             var isChecked = $(this).is(':checked');
-            var subspecialityId = $(this).data('id');
+            var clinicalSpecialityId = $(this).data('id');
 
-            // Make an API call to update the status using the subspecialityId and isChecked values
-            updateStatus(subspecialityId, isChecked);
+            // Make an API call to update the status using the clinicalSpecialityId and isChecked values
+            updateStatus(clinicalSpecialityId, isChecked);
         });
     });
 
-    function updateStatus(subspecialityId, isChecked) {
-        // Perform the API call here to update the status based on the subspecialityId and isChecked values
+    function updateStatus(clinicalSpecialityId, isChecked) {
+        // Perform the API call here to update the status based on the clinicalSpecialityId and isChecked values
         // You can use $.ajax or any other method to make the API request
         // Example using $.ajax:
         $.ajax({
-            url: '/Admin/UpdateSubspecialityStatus/' + subspecialityId + '/' + isChecked,
+            url: '/Admin/UpdateClinicalSpecialityStatus/' + clinicalSpecialityId + '/' + isChecked,
             type: 'GET',
             data: { isActive: isChecked },
             success: function (response) {
@@ -214,17 +214,17 @@
         });
     }
 
-        function getSubspeciality(id) {
-        if ($('#specialities-ddl-edit').children().length == 0) {
+        function getClinicalSpeciality(id) {
+        if ($('#practitionerTypes-ddl-edit').children().length == 0) {
             $.ajax({
-                url: '@Url.Action("GetSpecialitiesDDL", "Common")',
+                url: '@Url.Action("GetPractitionerTypesDDL", "Common")',
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
                     // Clear existing options
-                    $('#specialities-ddl-edit').empty();
+                    $('#practitionerTypes-ddl-edit').empty();
                     // Populate the dropdown list
-                    var dropdown = $('#specialities-ddl-edit');
+                    var dropdown = $('#practitionerTypes-ddl-edit');
                     $.each(data, function (index, item) {
                         dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
                     });
@@ -233,7 +233,7 @@
         }
 
             $.ajax({
-                url: '/Admin/GetSubspeciality/' + id,
+                url: '/Admin/GetClinicalSpeciality/' + id,
                 type: 'GET',
                 success: function (data) {
                     // Handle the success response here
@@ -243,7 +243,7 @@
                     // For example, you can update HTML elements with the received values
                 $('#titleArInputEdit').val(data.titleAr);
                 $('#titleEnInputEdit').val(data.titleEn);
-                $('#specialities-ddl-edit').val(data.specialityId);
+                $('#practitionerTypes-ddl-edit').val(data.practitionerTypeId);
 
                 $('#titleId').val(data.id);
                 },
@@ -254,26 +254,26 @@
             });
         }
 
-    $('#edit-Subspeciality').click(function () {
-        var subspeciality = {
+    $('#edit-ClinicalSpeciality').click(function () {
+        var clinicalSpeciality = {
             TitleAr: $('#titleArInputEdit').val(),
             TitleEn: $('#titleEnInputEdit').val(),
-            SpecialityId: $('#specialities-ddl-edit').val(),
+            PractitionerTypeId: $('#practitionerTypes-ddl-edit').val(),
             IsActive:true,
             Id: $('#titleId').val(),
         };
 
         $.ajax({
-            url: '/Admin/UpdateSubspeciality', // Replace with your actual API endpoint URL
+            url: '/Admin/UpdateClinicalSpeciality', // Replace with your actual API endpoint URL
             type: 'POST',
-            data: JSON.stringify(subspeciality),
+            data: JSON.stringify(clinicalSpeciality),
             contentType: 'application/json',
             success: function (response) {
                 // Show the success message
                 $('.alert-success').removeClass('hidden').hide().fadeIn();
                 // Close the modal after the success message fades out
-                $("#close-edit-Subspeciality").trigger("click");
-                $('#dataTableContainer').load('/Admin/GetSubspecialities');
+                $("#close-edit-ClinicalSpeciality").trigger("click");
+                $('#dataTableContainer').load('/Admin/GetClinicalSpecialities');
 
                 // Hide the success message after 2 seconds
                 setTimeout(function () {

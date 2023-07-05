@@ -4,6 +4,7 @@ using Eihal.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Eihal.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230705213946_AddClinicalSpecialityTable")]
+    partial class AddClinicalSpecialityTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -135,8 +137,7 @@ namespace Eihal.Data.Migrations
                     b.Property<string>("LogoUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PractitionerTypeId")
-                        .IsRequired()
+                    b.Property<int?>("SpecialityId")
                         .HasColumnType("int");
 
                     b.Property<string>("TitleAr")
@@ -147,7 +148,7 @@ namespace Eihal.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PractitionerTypeId");
+                    b.HasIndex("SpecialityId");
 
                     b.ToTable("ClinicalSpecialities");
                 });
@@ -773,9 +774,7 @@ namespace Eihal.Data.Migrations
                 {
                     b.HasOne("Eihal.Data.Entites.PractitionerType", "PractitionerType")
                         .WithMany()
-                        .HasForeignKey("PractitionerTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SpecialityId");
 
                     b.Navigation("PractitionerType");
                 });

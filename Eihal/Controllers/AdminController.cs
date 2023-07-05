@@ -630,6 +630,157 @@ namespace Eihal.Controllers
             return PartialView("SubspecialitiesList", subspecialty);
         }
         #endregion
+        #region ClinicalSpecialities
+        [Route("MasterList/ClinicalSpecialities")]
+        public IActionResult ClinicalSpecialities()
+        {
+            // Retrieve the value from TempData
+            bool? isFromDeleteRequest = TempData["isFromDeleteRequest"] as bool?;
+            bool? isSuccessDelete = TempData["isSuccessDelete"] as bool?;
+
+            if (isFromDeleteRequest != null && isSuccessDelete != null)
+            {
+                // Clear the TempData value to avoid persisting it across subsequent requests
+                TempData.Remove("isFromDeleteRequest");
+                TempData.Remove("isSuccessDelete");
+
+                // Use the value as needed
+                ViewBag.SuccessMessage = isSuccessDelete;
+            }
+
+            return View(_dbContext.ClinicalSpecialities.Include(i => i.PractitionerType).ToList());
+        }
+
+
+        [Route("GetClinicalSpecialities")]
+        public IActionResult ClinicalSpecialitiesList()
+        {
+            var clinicalSpecialities = _dbContext.ClinicalSpecialities.Include(i => i.PractitionerType).ToList();
+            return PartialView("ClinicalSpecialitiesList", clinicalSpecialities);
+        }
+
+        [HttpPost]
+        [Route("AddClinicalSpeciality")]
+        public IActionResult AddClinicalSpeciality([FromBody] ClinicalSpeciality clinicalSpeciality)
+        {
+            if (clinicalSpeciality == null || string.IsNullOrEmpty(clinicalSpeciality.TitleEn) || string.IsNullOrEmpty(clinicalSpeciality.TitleAr))
+            {
+                return BadRequest("Please fill all fields.");
+            }
+
+            bool isDuplicate = _dbContext.ClinicalSpecialities
+                                         .Any(w => (w.TitleEn == clinicalSpeciality.TitleEn && w.TitleAr == clinicalSpeciality.TitleAr)
+                                         && w.PractitionerTypeId == clinicalSpeciality.PractitionerTypeId);
+            if (isDuplicate)
+            {
+                return BadRequest("The details for the Subspecialty have already been added.");
+            }
+
+            else
+            {
+                if (!string.IsNullOrEmpty(clinicalSpeciality.TitleAr) || !string.IsNullOrEmpty(clinicalSpeciality.TitleEn))
+                {
+                    _dbContext.ClinicalSpecialities.Add(clinicalSpeciality);
+                    _dbContext.SaveChanges();
+                }
+            }
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("UpdateClinicalSpeciality")]
+        public IActionResult UpdateClinicalSpeciality([FromBody] ClinicalSpeciality clinicalSpeciality)
+        {
+            if (clinicalSpeciality == null || string.IsNullOrEmpty(clinicalSpeciality.TitleEn) || string.IsNullOrEmpty(clinicalSpeciality.TitleAr))
+            {
+                return BadRequest("Please fill all fields.");
+            }
+
+            bool isDuplicate = _dbContext.ClinicalSpecialities
+                                        .Any(w => (w.TitleEn == clinicalSpeciality.TitleEn && w.TitleAr == clinicalSpeciality.TitleAr)
+                                        && w.PractitionerTypeId == clinicalSpeciality.PractitionerTypeId);
+            if (isDuplicate)
+            {
+                return BadRequest("The details for the subspecialty have already been added.");
+            }
+
+            else
+            {
+                if (!string.IsNullOrEmpty(clinicalSpeciality.TitleAr) || !string.IsNullOrEmpty(clinicalSpeciality.TitleEn))
+                {
+                    _dbContext.ClinicalSpecialities.Update(clinicalSpeciality);
+                    _dbContext.SaveChanges();
+                }
+            }
+
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("UpdateClinicalSpecialityStatus/{id}/{isActive}")]
+        public IActionResult UpdateClinicalSpecialityStatus(int id, bool isActive)
+        {
+            // Logic to update the status of the practitioner type with the given ID
+            try
+            {
+                var clinicalSpeciality = _dbContext.ClinicalSpecialities.SingleOrDefault(p => p.Id == id);
+                if (clinicalSpeciality == null)
+                {
+                    return NotFound();
+                }
+
+                clinicalSpeciality.IsActive = isActive;
+                _dbContext.SaveChanges();
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while updating the status.");
+            }
+        }
+
+        [HttpGet]
+        [Route("DeleteClinicalSpeciality/{id}")]
+        public IActionResult DeleteClinicalSpeciality(int id)
+        {
+            // Retrieve the practitioner type from the database using the id
+            var clinicalSpeciality = _dbContext.ClinicalSpecialities.Find(id);
+
+            if (clinicalSpeciality == null)
+            {
+                // Handle the case where the practitioner type doesn't exist
+                TempData["isSuccessDelete"] = false;
+            }
+
+            // Remove the practitioner type from the DbSet
+            _dbContext.ClinicalSpecialities.Remove(clinicalSpeciality);
+
+            // Save the changes to the database
+            _dbContext.SaveChanges();
+            TempData["isSuccessDelete"] = true;
+            // Set the value in TempData
+            TempData["isFromDeleteRequest"] = true;
+            return RedirectToAction("ClinicalSpecialities");
+        }
+
+
+        [HttpGet]
+        [Route("GetClinicalSpeciality/{id}")]
+        public ClinicalSpeciality GetClinicalSpeciality(int id)
+        {
+            var clinicalSpeciality = _dbContext.ClinicalSpecialities.Single(w => w.Id == id);
+            return clinicalSpeciality;
+        }
+
+        [Route("GetClinicalSpecialitiesList")]
+        public IActionResult GetClinicalSpecialitiesList()
+        {
+            var subspecialty = _dbContext.Subspecialty.Include(i => i.Specialty).ToList();
+            return PartialView("SubspecialitiesList", subspecialty);
+        }
+        #endregion
 
         #region UserServices
         [Route("Users/ServiceReviewRequests")]
