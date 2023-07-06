@@ -1,4 +1,4 @@
-﻿@model List<Eihal.Data.Entites.ClinicalSpeciality>
+﻿@model List<Eihal.Data.Entites.Privillage>
 
 @{
     var defaultPageSize = 5; // Default number of items per page
@@ -55,11 +55,11 @@
 
 
 
-<table class="table table-striped" id="dataTable-ClinicalSpecialities" width="100%" cellspacing="0">
+<table class="table table-striped" id="dataTable-Privillages" width="100%" cellspacing="0">
     <thead>
         <tr>
             <th>#</th>
-            <th>Practitioner Type</th>
+            <th>Clinical Speciality</th>
             <th>Title (English)</th>
             <th>Title (Arabic)</th>
             <th>Status</th>
@@ -69,29 +69,29 @@
     <tbody>
         @for (int i = 0; i < visibleItems.Count; i++)
         {
-            var clinicalSpeciality = visibleItems[i];
+            var privillage = visibleItems[i];
             <tr>
                 <td>@(startIndex + i + 1)</td>
-                <td>@clinicalSpeciality.PractitionerType.TitleEn</td>
-                <td>@clinicalSpeciality.TitleEn</td>
-                <td>@clinicalSpeciality.TitleAr</td>
+                <td>@privillage.ClinicalSpeciality.TitleEn</td>
+                <td>@privillage.TitleEn</td>
+                <td>@privillage.TitleAr</td>
                 <td>
                     <div class="custom-control custom-switch">
-                        <input type="checkbox" class="custom-control-input" id="statusToggle_@clinicalSpeciality.Id" @(clinicalSpeciality.IsActive ? "checked" : "") data-id="@clinicalSpeciality.Id">
-                        <label class="custom-control-label" for="statusToggle_@clinicalSpeciality.Id"></label>
+                        <input type="checkbox" class="custom-control-input" id="statusToggle_@privillage.Id" @(privillage.IsActive ? "checked" : "") data-id="@privillage.Id">
+                        <label class="custom-control-label" for="statusToggle_@privillage.Id"></label>
                     </div>
                 </td>
                 <td>
                     <li class="list-inline-item">
-                        <button onclick="getClinicalSpeciality(@clinicalSpeciality.Id)" href="#" class="btn btn-success btn-sm rounded-pill" type="button" data-toggle="modal" data-target="#EditClinicalSpeciality" data-placement="top" title="Edit">
+                        <button onclick="getPrivillage(@privillage.Id)" href="#" class="btn btn-success btn-sm rounded-pill" type="button" data-toggle="modal" data-target="#EditPrivillage" data-placement="top" title="Edit">
                             <i class="fa fa-edit"></i>
                         </button>
                     </li>
                     <li class="list-inline-item">
-                        <a href="#" class="btn btn-danger btn-sm rounded-pill" data-toggle="modal" data-target="#confirmDeleteModal_@clinicalSpeciality.Id"><i class="fa fa-trash"></i></a>
+                        <a href="#" class="btn btn-danger btn-sm rounded-pill" data-toggle="modal" data-target="#confirmDeleteModal_@privillage.Id"><i class="fa fa-trash"></i></a>
                     </li>
                     <!-- Confirm Delete Modal -->
-                    <div class="modal fade" id="confirmDeleteModal_@clinicalSpeciality.Id" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="confirmDeleteModal_@privillage.Id" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -101,11 +101,11 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    Are you sure you want to delete this Clinical Speciality?
+                                    Are you sure you want to delete this privillage?
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                    <a href="/Admin/DeleteClinicalSpeciality/@clinicalSpeciality.Id" class="btn btn-danger" id="deleteButton">Delete</a>
+                                    <a href="/Admin/DeletePrivillage/@privillage.Id" class="btn btn-danger" id="deleteButton">Delete</a>
                                 </div>
                             </div>
                         </div>
@@ -116,11 +116,11 @@
     </tbody>
 </table>
 
-<div class="modal fade" id="EditClinicalSpeciality" tabindex="-1" role="dialog" aria-labelledby="EditClinicalSpecialityModal" aria-hidden="true">
+<div class="modal fade" id="EditPrivillage" tabindex="-1" role="dialog" aria-labelledby="EditPrivillageModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="EditClinicalSpecialityModal">Edit</h5>
+                <h5 class="modal-title" id="EditPrivillageModal">Edit</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -138,9 +138,9 @@
                         <input type="text" class="form-control" id="titleArInputEdit" required>
                     </div>
                     <div class="form-group">
-                        <label for="practitionerTypes-ddl-edit" style="font-weight:bold;color:#00768c">Practitioner Type:</label>
+                        <label for="clinicalSpecialities-ddl-edit" style="font-weight:bold;color:#00768c">Clinical Speciality:</label>
                         <!-- Dropdown list HTML element -->
-                        <select class="form-control" id="practitionerTypes-ddl-edit"></select>
+                        <select class="form-control" id="clinicalSpecialities-ddl-edit"></select>
                     </div>
                 </form>
                 <div class="alert alert-danger hidden sm" role="alert">
@@ -148,8 +148,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button id="close-edit-ClinicalSpeciality" type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                <button id="edit-ClinicalSpeciality" type="button" class="btn btn-success" style="background-color:#00768c">Update</button>
+                <button id="close-edit-Privillage" type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button id="edit-Privillage" type="button" class="btn btn-success" style="background-color:#00768c">Update</button>
             </div>
         </div>
     </div>
@@ -183,19 +183,19 @@
         $('.custom-control-input').on('change', function () {
 
             var isChecked = $(this).is(':checked');
-            var clinicalSpecialityId = $(this).data('id');
+            var privillageId = $(this).data('id');
 
-            // Make an API call to update the status using the clinicalSpecialityId and isChecked values
-            updateStatus(clinicalSpecialityId, isChecked);
+            // Make an API call to update the status using the privillageId and isChecked values
+            updateStatus(privillageId, isChecked);
         });
     });
 
-    function updateStatus(clinicalSpecialityId, isChecked) {
-        // Perform the API call here to update the status based on the clinicalSpecialityId and isChecked values
+    function updateStatus(privillageId, isChecked) {
+        // Perform the API call here to update the status based on the privillageId and isChecked values
         // You can use $.ajax or any other method to make the API request
         // Example using $.ajax:
         $.ajax({
-            url: '/Admin/UpdateClinicalSpecialityStatus/' + clinicalSpecialityId + '/' + isChecked,
+            url: '/Admin/UpdatePrivillageStatus/' + privillageId + '/' + isChecked,
             type: 'GET',
             data: { isActive: isChecked },
             success: function (response) {
@@ -214,17 +214,17 @@
         });
     }
 
-        function getClinicalSpeciality(id) {
-        if ($('#practitionerTypes-ddl-edit').children().length == 0) {
+        function getPrivillage(id) {
+        if ($('#clinicalSpecialities-ddl-edit').children().length == 0) {
             $.ajax({
-                url: '@Url.Action("GetPractitionerTypesDDL", "Common")',
+                url: '@Url.Action("GetClinicalSpecialitiesDDL", "Common")',
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
                     // Clear existing options
-                    $('#practitionerTypes-ddl-edit').empty();
+                    $('#clinicalSpecialities-ddl-edit').empty();
                     // Populate the dropdown list
-                    var dropdown = $('#practitionerTypes-ddl-edit');
+                    var dropdown = $('#clinicalSpecialities-ddl-edit');
                     $.each(data, function (index, item) {
                         dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
                     });
@@ -233,7 +233,7 @@
         }
 
             $.ajax({
-                url: '/Admin/GetClinicalSpeciality/' + id,
+                url: '/Admin/GetPrivillage/' + id,
                 type: 'GET',
                 success: function (data) {
                     // Handle the success response here
@@ -243,7 +243,7 @@
                     // For example, you can update HTML elements with the received values
                 $('#titleArInputEdit').val(data.titleAr);
                 $('#titleEnInputEdit').val(data.titleEn);
-                $('#practitionerTypes-ddl-edit').val(data.practitionerTypeId);
+                $('#clinicalSpecialities-ddl-edit').val(data.clinicalSpecialityId);
 
                 $('#titleId').val(data.id);
                 },
@@ -254,26 +254,26 @@
             });
         }
 
-    $('#edit-ClinicalSpeciality').click(function () {
-        var clinicalSpeciality = {
+    $('#edit-Privillage').click(function () {
+        var privillage = {
             TitleAr: $('#titleArInputEdit').val(),
             TitleEn: $('#titleEnInputEdit').val(),
-            PractitionerTypeId: $('#practitionerTypes-ddl-edit').val(),
+            ClinicalSpecialityId: $('#clinicalSpecialities-ddl-edit').val(),
             IsActive:true,
             Id: $('#titleId').val(),
         };
 
         $.ajax({
-            url: '/Admin/UpdateClinicalSpeciality', // Replace with your actual API endpoint URL
+            url: '/Admin/UpdatePrivillage', // Replace with your actual API endpoint URL
             type: 'POST',
-            data: JSON.stringify(clinicalSpeciality),
+            data: JSON.stringify(privillage),
             contentType: 'application/json',
             success: function (response) {
                 // Show the success message
                 $('.alert-success').removeClass('hidden').hide().fadeIn();
                 // Close the modal after the success message fades out
-                $("#close-edit-ClinicalSpeciality").trigger("click");
-                $('#dataTableContainer').load('/Admin/GetClinicalSpecialities');
+                $("#close-edit-Privillage").trigger("click");
+                $('#dataTableContainer').load('/Admin/GetPrivillages');
 
                 // Hide the success message after 2 seconds
                 setTimeout(function () {

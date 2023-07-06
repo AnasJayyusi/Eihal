@@ -781,6 +781,157 @@ namespace Eihal.Controllers
             return PartialView("SubspecialitiesList", subspecialty);
         }
         #endregion
+        #region Privillages
+        [Route("MasterList/Privillages")]
+        public IActionResult Privillages()
+        {
+            // Retrieve the value from TempData
+            bool? isFromDeleteRequest = TempData["isFromDeleteRequest"] as bool?;
+            bool? isSuccessDelete = TempData["isSuccessDelete"] as bool?;
+
+            if (isFromDeleteRequest != null && isSuccessDelete != null)
+            {
+                // Clear the TempData value to avoid persisting it across subsequent requests
+                TempData.Remove("isFromDeleteRequest");
+                TempData.Remove("isSuccessDelete");
+
+                // Use the value as needed
+                ViewBag.SuccessMessage = isSuccessDelete;
+            }
+
+            return View(_dbContext.Privillages.Include(i => i.ClinicalSpeciality).ToList());
+        }
+
+
+        [Route("GetPrivillages")]
+        public IActionResult PrivillagesList()
+        {
+            var privillages = _dbContext.Privillages.Include(i => i.ClinicalSpeciality).ToList();
+            return PartialView("PrivillagesList", privillages);
+        }
+
+        [HttpPost]
+        [Route("AddPrivillage")]
+        public IActionResult AddPrivillage([FromBody] Privillage privillage)
+        {
+            if (privillage == null || string.IsNullOrEmpty(privillage.TitleEn) || string.IsNullOrEmpty(privillage.TitleAr))
+            {
+                return BadRequest("Please fill all fields.");
+            }
+
+            bool isDuplicate = _dbContext.Privillages
+                                         .Any(w => (w.TitleEn == privillage.TitleEn && w.TitleAr == privillage.TitleAr)
+                                         && w.ClinicalSpecialityId == privillage.ClinicalSpecialityId);
+            if (isDuplicate)
+            {
+                return BadRequest("The details for the Subspecialty have already been added.");
+            }
+
+            else
+            {
+                if (!string.IsNullOrEmpty(privillage.TitleAr) || !string.IsNullOrEmpty(privillage.TitleEn))
+                {
+                    _dbContext.Privillages.Add(privillage);
+                    _dbContext.SaveChanges();
+                }
+            }
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("UpdatePrivillage")]
+        public IActionResult UpdatePrivillage([FromBody] Privillage privillage)
+        {
+            if (privillage == null || string.IsNullOrEmpty(privillage.TitleEn) || string.IsNullOrEmpty(privillage.TitleAr))
+            {
+                return BadRequest("Please fill all fields.");
+            }
+
+            bool isDuplicate = _dbContext.Privillages
+                                        .Any(w => (w.TitleEn == privillage.TitleEn && w.TitleAr == privillage.TitleAr)
+                                        && w.ClinicalSpecialityId == privillage.ClinicalSpecialityId);
+            if (isDuplicate)
+            {
+                return BadRequest("The details for the subspecialty have already been added.");
+            }
+
+            else
+            {
+                if (!string.IsNullOrEmpty(privillage.TitleAr) || !string.IsNullOrEmpty(privillage.TitleEn))
+                {
+                    _dbContext.Privillages.Update(privillage);
+                    _dbContext.SaveChanges();
+                }
+            }
+
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("UpdatePrivillageStatus/{id}/{isActive}")]
+        public IActionResult UpdatePrivillageStatus(int id, bool isActive)
+        {
+            // Logic to update the status of the practitioner type with the given ID
+            try
+            {
+                var privillage = _dbContext.Privillages.SingleOrDefault(p => p.Id == id);
+                if (privillage == null)
+                {
+                    return NotFound();
+                }
+
+                privillage.IsActive = isActive;
+                _dbContext.SaveChanges();
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while updating the status.");
+            }
+        }
+
+        [HttpGet]
+        [Route("DeletePrivillage/{id}")]
+        public IActionResult DeletePrivillage(int id)
+        {
+            // Retrieve the practitioner type from the database using the id
+            var privillages = _dbContext.Privillages.Find(id);
+
+            if (privillages == null)
+            {
+                // Handle the case where the practitioner type doesn't exist
+                TempData["isSuccessDelete"] = false;
+            }
+
+            // Remove the practitioner type from the DbSet
+            _dbContext.Privillages.Remove(privillages);
+
+            // Save the changes to the database
+            _dbContext.SaveChanges();
+            TempData["isSuccessDelete"] = true;
+            // Set the value in TempData
+            TempData["isFromDeleteRequest"] = true;
+            return RedirectToAction("Privillages");
+        }
+
+
+        [HttpGet]
+        [Route("GetPrivillage/{id}")]
+        public Privillage GetPrivillage(int id)
+        {
+            var privillages = _dbContext.Privillages.Single(w => w.Id == id);
+            return privillages;
+        }
+
+        [Route("GetPrivillagesList")]
+        public IActionResult GetPrivillagesList()
+        {
+            var privillages = _dbContext.Privillages.Include(i => i.ClinicalSpeciality).ToList();
+            return PartialView("Privillages", privillages);
+        }
+        #endregion
 
         #region UserServices
         [Route("Users/ServiceReviewRequests")]
