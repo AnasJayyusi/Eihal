@@ -11,9 +11,10 @@ namespace Eihal.Data.Entites
         public string? UserId { get; set; }
         public string? FullName { get; set; }
         public int? AccountTypeId { get; set; }
-
-        public string? PhoneNumber { get; set; }
-        public string? Email { get; set; }
+        [Required]
+        public string PhoneNumber { get; set; }
+        [Required]
+        public string Email { get; set; }
         #endregion
 
         #region DropDownList

@@ -39,6 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
     <None Include="wwwroot\css\navs\_global.scss" />
     <None Include="wwwroot\css\navs\_sidebar.scss" />
     <None Include="wwwroot\css\navs\_topbar.scss" />

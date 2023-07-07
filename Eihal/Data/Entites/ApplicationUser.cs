@@ -6,6 +6,7 @@ namespace Eihal.Data.Entites
 {
     public class ApplicationUser : IdentityUser
     {
+
         public string? FullName { get; set; }
 
         [ForeignKey(nameof(AccountType))]

@@ -59,5 +59,24 @@ namespace Eihal.Controllers
             return Json(dropdownData);
         }
         #endregion
+
+        #region Helper For Razor Page
+
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("CheckPhoneNumber")]
+        public bool CheckPhoneNumber(string phoneNumber)
+        {
+            bool isUsed = false;
+
+            var userProfile = _dbContext.UserProfiles.FirstOrDefault(x => x.PhoneNumber.Equals(phoneNumber));
+            if (userProfile != null)
+            {
+                isUsed = true;
+            }
+
+            return isUsed;
+        }
+        #endregion
     }
 }

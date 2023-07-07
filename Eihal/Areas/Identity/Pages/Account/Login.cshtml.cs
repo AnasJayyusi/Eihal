@@ -114,7 +114,7 @@ namespace Eihal.Areas.Identity.Pages.Account
                     _logger.LogInformation("User logged in.");
                     if (userRole.Contains(UserRolesEnum.Beneficiary.ToString()))
                     {
-                        return RedirectToAction("Index", "User");
+                        return RedirectToAction("Profile", "Beneficiary");
                     }
                     if (userRole.Contains(UserRolesEnum.ServiceProvider.ToString()))
                     {

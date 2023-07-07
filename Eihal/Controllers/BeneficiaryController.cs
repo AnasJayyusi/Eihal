@@ -1,4 +1,5 @@
-﻿using Eihal.Data;
+﻿using Microsoft.AspNetCore.Mvc;
+using Eihal.Data;
 using Eihal.Data.Entites;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,13 +8,12 @@ using System.Data;
 
 namespace Eihal.Controllers
 {
-
-    [Route("ServiceProvider")]
-    [Authorize(Roles = "ServiceProvider")]
-    public class ServiceProviderController : BaseController
+    [Route("Beneficiary")]
+    [Authorize(Roles = "Beneficiary")]
+    public class BeneficiaryController : BaseController
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public ServiceProviderController(IWebHostEnvironment webHostEnvironment, ApplicationDbContext dbContext) : base(dbContext)
+        public BeneficiaryController(IWebHostEnvironment webHostEnvironment, ApplicationDbContext dbContext) : base(dbContext)
         {
             _webHostEnvironment = webHostEnvironment;
         }
@@ -50,31 +50,6 @@ namespace Eihal.Controllers
             return View(services);
         }
 
-        [Route("MyServiceCardPartial")]
-
-        public ActionResult MyServiceCardPartial()
-        {
-            // Assuming you have a list of items to pass to the view
-            List<UserServices> model = _dbContext.UserServices.Where(a => a.Status != Enums.ServicesStatusEnum.Deleted).ToList(); // Replace with your logic to fetch the items
-
-            // Render the partial view and return it as HTML content
-            //string htmlContent = RenderPartialToString("_CardPartial", model); // Replace with the name of your partial view
-
-            return PartialView("_ServiceCardPartial", model); // Replace with the name of your partial view
-        }
-        [Route("AllServiceCardPartial")]
-
-        public ActionResult AllServiceCardPartial()
-        {
-            // Assuming you have a list of items to pass to the view
-            var currentUserId = GetUserProfileId();
-            var currentUserServices = _dbContext.UserServices.Where(a => a.Status != Enums.ServicesStatusEnum.Deleted).Select(a => a.ServiceId);
-            var services = _dbContext.Services.Where(a => a.IsActive && !currentUserServices.Contains(a.Id)).ToList();
-            // Render the partial view and return it as HTML content
-            //string htmlContent = RenderPartialToString("_CardPartial", model); // Replace with the name of your partial view
-
-            return PartialView("_AllServiceCardPartial", services); // Replace with the name of your partial view
-        }
         [Route("DeleteUserService")]
         public ActionResult DeleteUserService(int Id)
         {
@@ -125,7 +100,7 @@ namespace Eihal.Controllers
             if (userProfile.SpecialtiesIds != null)
             {
                 List<int> specialityIds = userProfile.SpecialtiesIds.Split(',').Select(int.Parse).ToList();
-              
+
                 // This Code Temp We Should Depnd On Select2 
                 if (specialityIds != null)
                 {
@@ -138,7 +113,7 @@ namespace Eihal.Controllers
                         specialityNames = String.Join(",", specialities.Select(a => a.TitleEn));
                 }
             }
-           
+
             var data = new
             {
                 fullname = userProfile?.FullName,
@@ -363,4 +338,3 @@ namespace Eihal.Controllers
 
     }
 }
-

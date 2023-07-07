@@ -143,7 +143,7 @@
                 <span id="bio-label" class="text-black"></span>
             </div>
         </div>
-        <div class="row mt-4">
+      @*  <div class="row mt-4">
             <div class="col-md-12">
                 <h5 class="font-weight-bold">Speciality</h5>
                 <span id="speciality-label" class="text-black"></span>
@@ -176,7 +176,7 @@
                     <p id="certifications-label"></p>
                 </div>
             </div>
-        </div>
+        </div>*@
     </div>
 </div>
 
@@ -410,7 +410,7 @@
         $.ajax({
 
 
-            url: "/ServiceProvider/GetUserProfileInfo",
+            url: "/Beneficiary/GetUserProfileInfo",
             method: "GET",
             success: function (response) {
                 
@@ -440,7 +440,7 @@
 
         if ($(".choices__list").length == 0 && $(".choices__inner").length == 0) {
             //$.ajax({
-            //    url: '@Url.Action("GetUserSpecialtiesDDL", "ServiceProvider")',
+            //    url: '@Url.Action("GetUserSpecialtiesDDL", "Beneficiary")',
             //    type: 'GET',
             //    dataType: 'json',
             //    success: function (data) {
@@ -460,7 +460,7 @@
             //    }
             //});
             var choicesAjax = new Choices('#speciality-edit-multiSelect').ajax((callback) => {
-    fetch('@Url.Action("GetUserSpecialtiesDDL", "ServiceProvider")')
+    fetch('@Url.Action("GetUserSpecialtiesDDL", "Beneficiary")')
         .then((response) => {
             response.json().then(function(data) {  
                 callback(data.releases, 'title', 'title');
@@ -503,7 +503,7 @@
         });
 
         $.ajax({
-            url: '@Url.Action("GetUserProfessionalRanksDDL", "ServiceProvider")',
+            url: '@Url.Action("GetUserProfessionalRanksDDL", "Beneficiary")',
             type: 'GET',
             dataType: 'json',
             success: function (data) {
@@ -523,7 +523,7 @@
         });
 
         $.ajax({
-            url: '@Url.Action("GetCountriesDDL", "ServiceProvider")',
+            url: '@Url.Action("GetCountriesDDL", "Beneficiary")',
             type: 'GET',
             dataType: 'json',
             success: function (data) {
@@ -540,7 +540,7 @@
         });
 
         $.ajax({
-            url: "/ServiceProvider/GetFullUserProfileInfo",
+            url: "/Beneficiary/GetFullUserProfileInfo",
             method: "GET",
             success: function (response) {
                 setTimeout(function () {
@@ -572,7 +572,7 @@
 
     function getStates(countryId) {
         $.ajax({
-            url: '@Url.Action("GetStatesDDL", "ServiceProvider")' + '?countryId=' + countryId,
+            url: '@Url.Action("GetStatesDDL", "Beneficiary")' + '?countryId=' + countryId,
             type: 'GET',
             dataType: 'json',
             success: function (data) {
@@ -591,7 +591,7 @@
 
     function getCites(stateId) {
         $.ajax({
-            url: '@Url.Action("GetCitiesDDL", "ServiceProvider")' + '?stateId=' + stateId,
+            url: '@Url.Action("GetCitiesDDL", "Beneficiary")' + '?stateId=' + stateId,
             type: 'GET',
             dataType: 'json',
             success: function (data) {
@@ -621,7 +621,7 @@
         formData.append('image', imageFile);
 
         $.ajax({
-            url: '/ServiceProvider/UpdateUserProfile',
+            url: '/Beneficiary/UpdateUserProfile',
             type: 'POST',
             data: formData,
             processData: false,
@@ -651,7 +651,7 @@
 
         // Make an AJAX request to load the options
         $.ajax({
-            url: '@Url.Action("GetUserSpecialtiesDDL", "ServiceProvider")',
+            url: '@Url.Action("GetUserSpecialtiesDDL", "Beneficiary")',
             method: 'GET',
             dataType: 'json',
             success: function (data) {
@@ -730,7 +730,7 @@
         var tableBody = $('#certifications-list');
         tableBody.empty();
         $.ajax({
-            url: '@Url.Action("GetCertifications", "ServiceProvider")',
+            url: '@Url.Action("GetCertifications", "Beneficiary")',
             type: 'GET',
             dataType: 'json',
             success: function (data) {
@@ -844,7 +844,7 @@
         $('#universityName-arabic').val('');
         // Make an AJAX call to retrieve the data from the API
         $.ajax({
-            url: '@Url.Action("GetDegrees", "ServiceProvider")',  // Replace 'your-api-url' with the actual API endpoint URL
+            url: '@Url.Action("GetDegrees", "Beneficiary")',  // Replace 'your-api-url' with the actual API endpoint URL
             method: 'GET',
             success: function (response) {
                 // On success, loop through the response data and populate the dropdown options

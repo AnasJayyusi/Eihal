@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Versioning;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Text;
@@ -71,7 +72,7 @@ namespace Eihal.Areas.Identity.Pages.Account
             public string? Email { get; set; }
 
             [Required]
-            public string? PhoneNumber { get; set; }
+            public string PhoneNumber { get; set; }
 
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
@@ -114,17 +115,35 @@ namespace Eihal.Areas.Identity.Pages.Account
             returnUrl ??= Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser
+                var user = new ApplicationUser();
+                if (account_type == (int)AccountTypeEnum.Beneficiary)
                 {
-                    UserName = Input.Email,
-                    Email = Input.Email,
-                    PhoneNumber = Input.PhoneNumber,
-                    AccountTypeId = account_type,
-                    PractitionerTypeId = practitioner_type,
-                    ProfessionalRankId = professional_Rank,
-                    FullName = Input.FullName,
-                    EmailConfirmed = true
-                };
+                    user = new ApplicationUser
+                    {
+                        UserName = Input.Email,
+                        Email = Input.Email,
+                        PhoneNumber = Input.PhoneNumber,
+                        AccountTypeId = account_type,
+                        FullName = Input.FullName,
+                        EmailConfirmed = true
+                    };
+                }
+                else
+                {
+                    user = new ApplicationUser
+                    {
+                        UserName = Input.Email,
+                        Email = Input.Email,
+                        PhoneNumber = Input.PhoneNumber,
+                        AccountTypeId = account_type,
+                        PractitionerTypeId = practitioner_type,
+                        ProfessionalRankId = professional_Rank,
+                        FullName = Input.FullName,
+                        EmailConfirmed = true
+                    };
+                }
+
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
@@ -139,6 +158,9 @@ namespace Eihal.Areas.Identity.Pages.Account
                     if (account_type == (int)AccountTypeEnum.Beneficiary)
                         await _userManager.AddToRoleAsync(user, AccountTypeEnum.Beneficiary.ToString());
 
+
+
+                    #region Generate Confirmation Code 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(
@@ -146,6 +168,8 @@ namespace Eihal.Areas.Identity.Pages.Account
                         pageHandler: null,
                         values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
+                    #endregion
+
                     debug = "callbackUrl";
                     CreateUserProfileData(user.Id);
                     //await SendEmailConfirmation(callbackUrl);
@@ -229,20 +253,38 @@ namespace Eihal.Areas.Identity.Pages.Account
             return File(bytes, "application/octet-stream", fileName);
         }
 
+
         private void CreateUserProfileData(string userId)
         {
             var applicationUser = _dbContext.ApplicationUsers.Single(x => x.Id == userId);
-            var obj = new UserProfile()
+            var userProfile = new UserProfile();
+
+            if (applicationUser.AccountTypeId == (int)AccountTypeEnum.Beneficiary)
             {
-                UserId = userId,
-                FullName = applicationUser.FullName,
-                AccountTypeId = applicationUser.AccountTypeId,
-                PractitionerTypeId = applicationUser.PractitionerTypeId,
-                PhoneNumber = applicationUser.PhoneNumber,
-                Email = applicationUser.Email,
-                ProfileStatus = ProfileStatus.UnCompleted
-            };
-            _dbContext.UserProfiles.Add(obj);
+                userProfile = new UserProfile()
+                {
+                    UserId = userId,
+                    FullName = applicationUser.FullName,
+                    AccountTypeId = applicationUser.AccountTypeId,
+                    PhoneNumber = applicationUser.PhoneNumber,
+                    Email = applicationUser.Email,
+                    ProfileStatus = ProfileStatus.UnCompleted
+                };
+            }
+            else
+            {
+                userProfile = new UserProfile()
+                {
+                    UserId = userId,
+                    FullName = applicationUser.FullName,
+                    AccountTypeId = applicationUser.AccountTypeId,
+                    PractitionerTypeId = applicationUser.PractitionerTypeId,
+                    PhoneNumber = applicationUser.PhoneNumber,
+                    Email = applicationUser.Email,
+                    ProfileStatus = ProfileStatus.UnCompleted
+                };
+            }
+            _dbContext.UserProfiles.Add(userProfile);
             _dbContext.SaveChanges();
         }
     }
