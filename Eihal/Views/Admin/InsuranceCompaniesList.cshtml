@@ -139,6 +139,10 @@
                         <label style="font-weight:bold;color:#00768c" for="titleArInputEdit">Title (Arabic):</label>
                         <input type="text" class="form-control" id="titleArInputEdit" required>
                     </div>
+                    <div class="form-group">
+                        <label style="font-weight:bold;color:#00768c" for="imageInput">Image:</label>
+                        <input style="padding:1%" type="file" class="form-control" id="imageInputEdit" name="image" accept="image/*" required>
+                    </div>
                 </form>
                 <div class="alert alert-danger hidden sm" role="alert">
                     <span id="error-msg"></span>
@@ -151,6 +155,7 @@
         </div>
     </div>
 </div>
+
 
 
 
@@ -242,26 +247,36 @@
             Id: $('#titleId').val(),
         };
 
+        var form = new FormData();
+        var imageInput = document.getElementById('imageInputEdit');
+        var file = imageInput.files[0];
+        form.append('image', file);
+
+        // Add other form data
+        form.append('titleEn', $('#titleEnInputEdit').val());
+        form.append('titleAr', $('#titleArInputEdit').val());
+        form.append('titleId', $('#titleId').val());
+
         $.ajax({
-            url: '/Admin/UpdateInsuranceCompany', // Replace with your actual API endpoint URL
+            url: '/Admin/UpdateInsuranceCompany',
             type: 'POST',
-            data: JSON.stringify(insuranceCompany),
-            contentType: 'application/json',
+            data: form,
+            processData: false,
+            contentType: false,
             success: function (response) {
                 // Show the success message
                 $('.alert-success').removeClass('hidden').hide().fadeIn();
                 // Close the modal after the success message fades out
                 $("#close-edit-InsuranceCompany").trigger("click");
-                $('#dataTableContainer').load('/Admin/GetInsuranceCompanines');
+                $('#dataTableContainer').load('/Admin/GetInsuranceCompanies');
 
-                // Hide the success message after 2 seconds
+                // Hide the success message after 3 seconds
                 setTimeout(function () {
                     $('.alert-success').fadeOut();
                 }, 3000);
 
             },
             error: function (xhr, status, error) {
-
                 // Show the error message
                 $('.alert-danger').removeClass('hidden');
                 var msg = xhr.responseText;

@@ -1969,7 +1969,7 @@ namespace Eihal.Controllers
 
                 // Save the image file to the specified path
                 string webRootPath = _webHostEnvironment.WebRootPath;
-                string uploadDir  = Path.Combine("images", "InsuranceLogo");
+                string uploadDir = Path.Combine("images", "InsuranceLogo");
                 string imagePath = Path.Combine(webRootPath, uploadDir, uniqueFileName);
                 using (var fileStream = new FileStream(imagePath, FileMode.Create))
                 {
@@ -1990,34 +1990,62 @@ namespace Eihal.Controllers
 
         [HttpPost]
         [Route("UpdateInsuranceCompany")]
-        public IActionResult UpdateInsuranceCompany([FromBody] InsuranceCompany insuranceCompany)
+        public IActionResult UpdateInsuranceCompany()
         {
-            if (insuranceCompany == null || string.IsNullOrEmpty(insuranceCompany.TitleEn) || string.IsNullOrEmpty(insuranceCompany.TitleAr))
+
+
+            // Get the form data
+            var titleEn = Request.Form["titleEn"].ToString();
+            var titleAr = Request.Form["titleAr"].ToString();
+            var id = Convert.ToInt32(Request.Form["titleId"].ToString());
+            var image = Request.Form.Files["image"];
+
+            var insuranceCompany = _dbContext.InsuranceCompanies.Where(w => w.Id == id).Single();
+
+            if (string.IsNullOrEmpty(titleEn) || string.IsNullOrEmpty(titleAr))
             {
                 return BadRequest("Please fill all fields.");
             }
 
-            bool isDuplicate = _dbContext.InsuranceCompanies.Any(w => w.TitleEn == insuranceCompany.TitleEn && w.TitleAr == insuranceCompany.TitleAr);
+            bool isDuplicate = _dbContext.InsuranceCompanies.Any(w => w.TitleEn == titleEn && w.TitleAr == titleAr && image == null);
             if (isDuplicate)
             {
-                return BadRequest("The details for the Practitioner Type have already been added.");
+                return BadRequest("The details for the Insurance Company have already been added.");
             }
 
             else
             {
-                if (!string.IsNullOrEmpty(insuranceCompany.TitleAr) || !string.IsNullOrEmpty(insuranceCompany.TitleAr))
+                insuranceCompany.TitleEn = titleEn;
+                insuranceCompany.TitleAr = titleAr;
+
+                if (image != null)
                 {
-                    _dbContext.InsuranceCompanies.Update(insuranceCompany);
-                    _dbContext.SaveChanges();
+                    // Generate a unique file name
+                    var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
+
+                    // Save the image file to the specified path
+                    string webRootPath = _webHostEnvironment.WebRootPath;
+                    string uploadDir = Path.Combine("images", "InsuranceLogo");
+                    string imagePath = Path.Combine(webRootPath, uploadDir, uniqueFileName);
+                    using (var fileStream = new FileStream(imagePath, FileMode.Create))
+                    {
+                        image.CopyTo(fileStream);
+                    }
+
+                    // Assign the image path to the LogoImagePath property
+                    insuranceCompany.LogoImagePath = $"/images/InsuranceLogo/{uniqueFileName}";
                 }
+
+                _dbContext.InsuranceCompanies.Update(insuranceCompany);
+                _dbContext.SaveChanges();
             }
 
             return Ok();
         }
 
         [HttpGet]
-        [Route("UpdateInsuranceCompaniestatus/{id}/{isActive}")]
-        public IActionResult UpdateInsuranceCompaniestatus(int id, bool isActive)
+        [Route("UpdateInsuranceCompanyStatus/{id}/{isActive}")]
+        public IActionResult UpdateInsuranceCompanyStatus(int id, bool isActive)
         {
             // Logic to update the status of the practitioner type with the given ID
             try
