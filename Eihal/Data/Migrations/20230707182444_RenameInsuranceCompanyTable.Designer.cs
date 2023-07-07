@@ -4,6 +4,7 @@ using Eihal.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Eihal.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230707182444_RenameInsuranceCompanyTable")]
+    partial class RenameInsuranceCompanyTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -207,10 +209,10 @@ namespace Eihal.Data.Migrations
                     b.Property<string>("LogoImagePath")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TitleAr")
+                    b.Property<string>("NameAr")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TitleEn")
+                    b.Property<string>("NameEn")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

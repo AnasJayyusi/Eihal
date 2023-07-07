@@ -30,6 +30,7 @@ namespace Eihal.Data
         public DbSet<City> Cities { get; set; }
         public DbSet<Certification> Certifications { get; set; }
         public DbSet<Degree> Degrees { get; set; }
+        public DbSet<InsuranceCompany> InsuranceCompanies { get; set; }
 
     }
 }

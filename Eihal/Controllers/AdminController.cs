@@ -1,6 +1,7 @@
 ﻿using Eihal.Data;
 using Eihal.Data.Entites;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,8 +13,10 @@ namespace Eihal.Controllers
     [Authorize(Roles = "Administrator")]
     public class AdminController : BaseController
     {
-        public AdminController(ApplicationDbContext dbContext) : base(dbContext)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public AdminController(ApplicationDbContext dbContext, IWebHostEnvironment webHostEnvironment) : base(dbContext)
         {
+            _webHostEnvironment = webHostEnvironment;
         }
 
         #region Dashboard
@@ -325,7 +328,6 @@ namespace Eihal.Controllers
             return RedirectToAction("ProfessionalRanks");
         }
 
-
         [HttpGet]
         [Route("GetProfessionalRank/{id}")]
         public ProfessionalRank GetProfessionalRank(int id)
@@ -479,6 +481,7 @@ namespace Eihal.Controllers
             return specialty;
         }
         #endregion
+
         #region Subspecialties
         [Route("MasterList/Subspecialties")]
         public IActionResult Subspecialties()
@@ -630,6 +633,7 @@ namespace Eihal.Controllers
             return PartialView("SubspecialitiesList", subspecialty);
         }
         #endregion
+
         #region ClinicalSpecialities
         [Route("MasterList/ClinicalSpecialities")]
         public IActionResult ClinicalSpecialities()
@@ -781,6 +785,7 @@ namespace Eihal.Controllers
             return PartialView("SubspecialitiesList", subspecialty);
         }
         #endregion
+
         #region Privillages
         [Route("MasterList/Privillages")]
         public IActionResult Privillages()
@@ -1139,10 +1144,10 @@ namespace Eihal.Controllers
         }
         [HttpGet]
         [Route("RejectDashboardUserServices")]
-        public IActionResult RejectDashboardUserServices(int id,string rejectionReason)
+        public IActionResult RejectDashboardUserServices(int id, string rejectionReason)
         {
 
- 
+
             var userServices = _dbContext.UserServices.Find(id);
             if (userServices != null && userServices.Status == Enums.ServicesStatusEnum.Pending)
             {
@@ -1901,6 +1906,176 @@ namespace Eihal.Controllers
         {
             var degrees = _dbContext.Degrees.Single(w => w.Id == id);
             return degrees;
+        }
+        #endregion
+
+        #region InsuranceCompanies
+        [Route("MasterList/InsuranceCompanies")]
+        public IActionResult InsuranceCompanies()
+        {
+            // Retrieve the value from TempData
+            bool? isFromDeleteRequest = TempData["isFromDeleteRequest"] as bool?;
+            bool? isSuccessDelete = TempData["isSuccessDelete"] as bool?;
+
+            if (isFromDeleteRequest != null && isSuccessDelete != null)
+            {
+                // Clear the TempData value to avoid persisting it across subsequent requests
+                TempData.Remove("isFromDeleteRequest");
+                TempData.Remove("isSuccessDelete");
+
+                // Use the value as needed
+                ViewBag.SuccessMessage = isSuccessDelete;
+            }
+
+            return View(_dbContext.InsuranceCompanies.ToList());
+        }
+
+        [Route("GetInsuranceCompanies")]
+        public IActionResult InsuranceCompaniesList()
+        {
+            var InsuranceCompanies = _dbContext.InsuranceCompanies.ToList();
+            return PartialView("InsuranceCompaniesList", InsuranceCompanies);
+        }
+
+        [HttpPost]
+        [Route("AddInsuranceCompany")]
+        public IActionResult AddInsuranceCompany()
+        {
+            var insuranceCompany = new InsuranceCompany();
+
+            // Get the form data
+            var titleEn = Request.Form["titleEn"].ToString();
+            var titleAr = Request.Form["titleAr"].ToString();
+            var image = Request.Form.Files["image"];
+
+            if (string.IsNullOrEmpty(titleEn) || string.IsNullOrEmpty(titleAr) || image == null)
+            {
+                return BadRequest("Please fill all fields.");
+            }
+
+            bool isDuplicate = _dbContext.InsuranceCompanies.Any(w => w.TitleEn == titleEn && w.TitleAr == titleAr);
+            if (isDuplicate)
+            {
+                return BadRequest("The details for the Insurance Company have already been added.");
+            }
+
+            else
+            {
+                insuranceCompany.TitleEn = titleEn;
+                insuranceCompany.TitleAr = titleAr;
+
+                // Generate a unique file name
+                var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
+
+                // Save the image file to the specified path
+                string webRootPath = _webHostEnvironment.WebRootPath;
+                string uploadDir  = Path.Combine("images", "InsuranceLogo");
+                string imagePath = Path.Combine(webRootPath, uploadDir, uniqueFileName);
+                using (var fileStream = new FileStream(imagePath, FileMode.Create))
+                {
+                    image.CopyTo(fileStream);
+                }
+
+                // Assign the image path to the LogoImagePath property
+                insuranceCompany.LogoImagePath = $"/images/InsuranceLogo/{uniqueFileName}";
+                insuranceCompany.IsActive = true;
+
+                _dbContext.InsuranceCompanies.Add(insuranceCompany);
+                _dbContext.SaveChanges();
+            }
+
+            return Ok();
+        }
+
+
+        [HttpPost]
+        [Route("UpdateInsuranceCompany")]
+        public IActionResult UpdateInsuranceCompany([FromBody] InsuranceCompany insuranceCompany)
+        {
+            if (insuranceCompany == null || string.IsNullOrEmpty(insuranceCompany.TitleEn) || string.IsNullOrEmpty(insuranceCompany.TitleAr))
+            {
+                return BadRequest("Please fill all fields.");
+            }
+
+            bool isDuplicate = _dbContext.InsuranceCompanies.Any(w => w.TitleEn == insuranceCompany.TitleEn && w.TitleAr == insuranceCompany.TitleAr);
+            if (isDuplicate)
+            {
+                return BadRequest("The details for the Practitioner Type have already been added.");
+            }
+
+            else
+            {
+                if (!string.IsNullOrEmpty(insuranceCompany.TitleAr) || !string.IsNullOrEmpty(insuranceCompany.TitleAr))
+                {
+                    _dbContext.InsuranceCompanies.Update(insuranceCompany);
+                    _dbContext.SaveChanges();
+                }
+            }
+
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("UpdateInsuranceCompaniestatus/{id}/{isActive}")]
+        public IActionResult UpdateInsuranceCompaniestatus(int id, bool isActive)
+        {
+            // Logic to update the status of the practitioner type with the given ID
+            try
+            {
+                var insuranceCompany = _dbContext.InsuranceCompanies.SingleOrDefault(p => p.Id == id);
+                if (insuranceCompany == null)
+                {
+                    return NotFound();
+                }
+
+                insuranceCompany.IsActive = isActive;
+                _dbContext.SaveChanges();
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while updating the status.");
+            }
+        }
+
+        [HttpGet]
+        [Route("DeleteInsuranceCompany/{id}")]
+        public IActionResult DeleteInsuranceCompany(int id)
+        {
+
+            // Retrieve the practitioner type from the database using the id
+            var insuranceCompany = _dbContext.InsuranceCompanies.Find(id);
+
+
+            if (insuranceCompany == null)
+            {
+                // Handle the case where the practitioner type doesn't exist
+                TempData["isSuccessDelete"] = false;
+            }
+
+            // Remove the practitioner type from the DbSet
+            _dbContext.InsuranceCompanies.Remove(insuranceCompany);
+
+            // Save the changes to the database
+            _dbContext.SaveChanges();
+            TempData["isSuccessDelete"] = true;
+
+            // Set the value in TempData
+            TempData["isFromDeleteRequest"] = true;
+
+
+
+            return RedirectToAction("InsuranceCompanies");
+        }
+
+
+        [HttpGet]
+        [Route("GetInsuranceCompany/{id}")]
+        public InsuranceCompany GetInsuranceCompany(int id)
+        {
+            var InsuranceCompanies = _dbContext.InsuranceCompanies.Single(w => w.Id == id);
+            return InsuranceCompanies;
         }
         #endregion
 

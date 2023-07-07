@@ -12,6 +12,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\images\User\**" />
+    <Content Remove="wwwroot\images\User\**" />
+    <EmbeddedResource Remove="wwwroot\images\User\**" />
+    <None Remove="wwwroot\images\User\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Areas\Identity\Pages\Account\header.png" />
   </ItemGroup>
 
@@ -1848,7 +1855,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\images\User\" />
+    <Folder Include="wwwroot\images\InsuranceLogo\" />
     <Folder Include="wwwroot\users\attachments\" />
   </ItemGroup>
 
