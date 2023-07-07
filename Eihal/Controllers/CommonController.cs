@@ -38,6 +38,27 @@ namespace Eihal.Controllers
         }
 
         [HttpGet]
+        [Route("GetClinicalSpecialitiesDDL")]
+        public ActionResult GetClinicalSpecialitiesDDL()
+        {
+            // Retrieve the data for the dropdown list
+            var dropdownData = _dbContext.ClinicalSpecialities.Where(w => w.IsActive).ToList();
+
+            // Pass the data to the view
+            return Json(dropdownData);
+        }
+        [HttpGet]
+        [Route("GetSpecialitiesDDL")]
+        public ActionResult GetSpecialitiesDDL()
+        {
+            // Retrieve the data for the dropdown list
+            var dropdownData = _dbContext.Specialties.Where(w => w.IsActive).ToList();
+
+            // Pass the data to the view
+            return Json(dropdownData);
+        }   
+
+        [HttpGet]
         [Route("GetCountriesDDL")]
         public ActionResult GetCountriesDDL()
         {

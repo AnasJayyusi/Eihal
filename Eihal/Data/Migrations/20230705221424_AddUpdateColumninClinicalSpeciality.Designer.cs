@@ -4,6 +4,7 @@ using Eihal.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Eihal.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230705221424_AddUpdateColumninClinicalSpeciality")]
+    partial class AddUpdateColumninClinicalSpeciality
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -215,37 +217,6 @@ namespace Eihal.Data.Migrations
                     b.ToTable("PractitionerTypes");
                 });
 
-            modelBuilder.Entity("Eihal.Data.Entites.Privillage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int?>("ClinicalSpecialityId")
-                        .IsRequired()
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("TitleAr")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TitleEn")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClinicalSpecialityId");
-
-                    b.ToTable("Privillages");
-                });
-
             modelBuilder.Entity("Eihal.Data.Entites.ProfessionalRank", b =>
                 {
                     b.Property<int>("Id")
@@ -418,7 +389,6 @@ namespace Eihal.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FullName")
@@ -431,7 +401,6 @@ namespace Eihal.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("PractitionerTypeId")
@@ -811,17 +780,6 @@ namespace Eihal.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("PractitionerType");
-                });
-
-            modelBuilder.Entity("Eihal.Data.Entites.Privillage", b =>
-                {
-                    b.HasOne("Eihal.Data.Entites.ClinicalSpeciality", "ClinicalSpeciality")
-                        .WithMany()
-                        .HasForeignKey("ClinicalSpecialityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ClinicalSpeciality");
                 });
 
             modelBuilder.Entity("Eihal.Data.Entites.ProfessionalRank", b =>

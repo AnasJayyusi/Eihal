@@ -479,6 +479,459 @@ namespace Eihal.Controllers
             return specialty;
         }
         #endregion
+        #region Subspecialties
+        [Route("MasterList/Subspecialties")]
+        public IActionResult Subspecialties()
+        {
+            // Retrieve the value from TempData
+            bool? isFromDeleteRequest = TempData["isFromDeleteRequest"] as bool?;
+            bool? isSuccessDelete = TempData["isSuccessDelete"] as bool?;
+
+            if (isFromDeleteRequest != null && isSuccessDelete != null)
+            {
+                // Clear the TempData value to avoid persisting it across subsequent requests
+                TempData.Remove("isFromDeleteRequest");
+                TempData.Remove("isSuccessDelete");
+
+                // Use the value as needed
+                ViewBag.SuccessMessage = isSuccessDelete;
+            }
+
+            return View(_dbContext.Subspecialty.Include(i => i.Specialty).ToList());
+        }
+
+
+        [Route("GetSubspecialties")]
+        public IActionResult SubspecialtiesList()
+        {
+            var subspecialties = _dbContext.Subspecialty.Include(i => i.Specialty).ToList();
+            return PartialView("SubspecialtiesList", subspecialties);
+        }
+
+        [HttpPost]
+        [Route("AddSubspeciality")]
+        public IActionResult AddSubspeciality([FromBody] Subspecialty subspecialty)
+        {
+            if (subspecialty == null || string.IsNullOrEmpty(subspecialty.TitleEn) || string.IsNullOrEmpty(subspecialty.TitleAr))
+            {
+                return BadRequest("Please fill all fields.");
+            }
+
+            bool isDuplicate = _dbContext.Subspecialty
+                                         .Any(w => (w.TitleEn == subspecialty.TitleEn && w.TitleAr == subspecialty.TitleAr)
+                                         && w.SpecialityId == subspecialty.SpecialityId);
+            if (isDuplicate)
+            {
+                return BadRequest("The details for the Subspecialty have already been added.");
+            }
+
+            else
+            {
+                if (!string.IsNullOrEmpty(subspecialty.TitleAr) || !string.IsNullOrEmpty(subspecialty.TitleEn))
+                {
+                    _dbContext.Subspecialty.Add(subspecialty);
+                    _dbContext.SaveChanges();
+                }
+            }
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("UpdateSubspeciality")]
+        public IActionResult UpdateSubspeciality([FromBody] Subspecialty subspecialty)
+        {
+            if (subspecialty == null || string.IsNullOrEmpty(subspecialty.TitleEn) || string.IsNullOrEmpty(subspecialty.TitleAr))
+            {
+                return BadRequest("Please fill all fields.");
+            }
+
+            bool isDuplicate = _dbContext.Subspecialty
+                                        .Any(w => (w.TitleEn == subspecialty.TitleEn && w.TitleAr == subspecialty.TitleAr)
+                                        && w.SpecialityId == subspecialty.SpecialityId);
+            if (isDuplicate)
+            {
+                return BadRequest("The details for the subspecialty have already been added.");
+            }
+
+            else
+            {
+                if (!string.IsNullOrEmpty(subspecialty.TitleAr) || !string.IsNullOrEmpty(subspecialty.TitleEn))
+                {
+                    _dbContext.Subspecialty.Update(subspecialty);
+                    _dbContext.SaveChanges();
+                }
+            }
+
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("UpdateSubspecialityStatus/{id}/{isActive}")]
+        public IActionResult UpdateSubspecialityStatus(int id, bool isActive)
+        {
+            // Logic to update the status of the practitioner type with the given ID
+            try
+            {
+                var subspecialty = _dbContext.Subspecialty.SingleOrDefault(p => p.Id == id);
+                if (subspecialty == null)
+                {
+                    return NotFound();
+                }
+
+                subspecialty.IsActive = isActive;
+                _dbContext.SaveChanges();
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while updating the status.");
+            }
+        }
+
+        [HttpGet]
+        [Route("DeleteSubspeciality/{id}")]
+        public IActionResult DeleteSubspeciality(int id)
+        {
+            // Retrieve the practitioner type from the database using the id
+            var subspecialty = _dbContext.Subspecialty.Find(id);
+
+            if (subspecialty == null)
+            {
+                // Handle the case where the practitioner type doesn't exist
+                TempData["isSuccessDelete"] = false;
+            }
+
+            // Remove the practitioner type from the DbSet
+            _dbContext.Subspecialty.Remove(subspecialty);
+
+            // Save the changes to the database
+            _dbContext.SaveChanges();
+            TempData["isSuccessDelete"] = true;
+            // Set the value in TempData
+            TempData["isFromDeleteRequest"] = true;
+            return RedirectToAction("Subspecialties");
+        }
+
+
+        [HttpGet]
+        [Route("GetSubspeciality/{id}")]
+        public Subspecialty GetSubspeciality(int id)
+        {
+            var subspecialty = _dbContext.Subspecialty.Single(w => w.Id == id);
+            return subspecialty;
+        }
+
+        [Route("GetSubspecialities")]
+        public IActionResult GetSubspecialitiesList()
+        {
+            var subspecialty = _dbContext.Subspecialty.Include(i => i.Specialty).ToList();
+            return PartialView("SubspecialitiesList", subspecialty);
+        }
+        #endregion
+        #region ClinicalSpecialities
+        [Route("MasterList/ClinicalSpecialities")]
+        public IActionResult ClinicalSpecialities()
+        {
+            // Retrieve the value from TempData
+            bool? isFromDeleteRequest = TempData["isFromDeleteRequest"] as bool?;
+            bool? isSuccessDelete = TempData["isSuccessDelete"] as bool?;
+
+            if (isFromDeleteRequest != null && isSuccessDelete != null)
+            {
+                // Clear the TempData value to avoid persisting it across subsequent requests
+                TempData.Remove("isFromDeleteRequest");
+                TempData.Remove("isSuccessDelete");
+
+                // Use the value as needed
+                ViewBag.SuccessMessage = isSuccessDelete;
+            }
+
+            return View(_dbContext.ClinicalSpecialities.Include(i => i.PractitionerType).ToList());
+        }
+
+
+        [Route("GetClinicalSpecialities")]
+        public IActionResult ClinicalSpecialitiesList()
+        {
+            var clinicalSpecialities = _dbContext.ClinicalSpecialities.Include(i => i.PractitionerType).ToList();
+            return PartialView("ClinicalSpecialitiesList", clinicalSpecialities);
+        }
+
+        [HttpPost]
+        [Route("AddClinicalSpeciality")]
+        public IActionResult AddClinicalSpeciality([FromBody] ClinicalSpeciality clinicalSpeciality)
+        {
+            if (clinicalSpeciality == null || string.IsNullOrEmpty(clinicalSpeciality.TitleEn) || string.IsNullOrEmpty(clinicalSpeciality.TitleAr))
+            {
+                return BadRequest("Please fill all fields.");
+            }
+
+            bool isDuplicate = _dbContext.ClinicalSpecialities
+                                         .Any(w => (w.TitleEn == clinicalSpeciality.TitleEn && w.TitleAr == clinicalSpeciality.TitleAr)
+                                         && w.PractitionerTypeId == clinicalSpeciality.PractitionerTypeId);
+            if (isDuplicate)
+            {
+                return BadRequest("The details for the Subspecialty have already been added.");
+            }
+
+            else
+            {
+                if (!string.IsNullOrEmpty(clinicalSpeciality.TitleAr) || !string.IsNullOrEmpty(clinicalSpeciality.TitleEn))
+                {
+                    _dbContext.ClinicalSpecialities.Add(clinicalSpeciality);
+                    _dbContext.SaveChanges();
+                }
+            }
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("UpdateClinicalSpeciality")]
+        public IActionResult UpdateClinicalSpeciality([FromBody] ClinicalSpeciality clinicalSpeciality)
+        {
+            if (clinicalSpeciality == null || string.IsNullOrEmpty(clinicalSpeciality.TitleEn) || string.IsNullOrEmpty(clinicalSpeciality.TitleAr))
+            {
+                return BadRequest("Please fill all fields.");
+            }
+
+            bool isDuplicate = _dbContext.ClinicalSpecialities
+                                        .Any(w => (w.TitleEn == clinicalSpeciality.TitleEn && w.TitleAr == clinicalSpeciality.TitleAr)
+                                        && w.PractitionerTypeId == clinicalSpeciality.PractitionerTypeId);
+            if (isDuplicate)
+            {
+                return BadRequest("The details for the subspecialty have already been added.");
+            }
+
+            else
+            {
+                if (!string.IsNullOrEmpty(clinicalSpeciality.TitleAr) || !string.IsNullOrEmpty(clinicalSpeciality.TitleEn))
+                {
+                    _dbContext.ClinicalSpecialities.Update(clinicalSpeciality);
+                    _dbContext.SaveChanges();
+                }
+            }
+
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("UpdateClinicalSpecialityStatus/{id}/{isActive}")]
+        public IActionResult UpdateClinicalSpecialityStatus(int id, bool isActive)
+        {
+            // Logic to update the status of the practitioner type with the given ID
+            try
+            {
+                var clinicalSpeciality = _dbContext.ClinicalSpecialities.SingleOrDefault(p => p.Id == id);
+                if (clinicalSpeciality == null)
+                {
+                    return NotFound();
+                }
+
+                clinicalSpeciality.IsActive = isActive;
+                _dbContext.SaveChanges();
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while updating the status.");
+            }
+        }
+
+        [HttpGet]
+        [Route("DeleteClinicalSpeciality/{id}")]
+        public IActionResult DeleteClinicalSpeciality(int id)
+        {
+            // Retrieve the practitioner type from the database using the id
+            var clinicalSpeciality = _dbContext.ClinicalSpecialities.Find(id);
+
+            if (clinicalSpeciality == null)
+            {
+                // Handle the case where the practitioner type doesn't exist
+                TempData["isSuccessDelete"] = false;
+            }
+
+            // Remove the practitioner type from the DbSet
+            _dbContext.ClinicalSpecialities.Remove(clinicalSpeciality);
+
+            // Save the changes to the database
+            _dbContext.SaveChanges();
+            TempData["isSuccessDelete"] = true;
+            // Set the value in TempData
+            TempData["isFromDeleteRequest"] = true;
+            return RedirectToAction("ClinicalSpecialities");
+        }
+
+
+        [HttpGet]
+        [Route("GetClinicalSpeciality/{id}")]
+        public ClinicalSpeciality GetClinicalSpeciality(int id)
+        {
+            var clinicalSpeciality = _dbContext.ClinicalSpecialities.Single(w => w.Id == id);
+            return clinicalSpeciality;
+        }
+
+        [Route("GetClinicalSpecialitiesList")]
+        public IActionResult GetClinicalSpecialitiesList()
+        {
+            var subspecialty = _dbContext.Subspecialty.Include(i => i.Specialty).ToList();
+            return PartialView("SubspecialitiesList", subspecialty);
+        }
+        #endregion
+        #region Privillages
+        [Route("MasterList/Privillages")]
+        public IActionResult Privillages()
+        {
+            // Retrieve the value from TempData
+            bool? isFromDeleteRequest = TempData["isFromDeleteRequest"] as bool?;
+            bool? isSuccessDelete = TempData["isSuccessDelete"] as bool?;
+
+            if (isFromDeleteRequest != null && isSuccessDelete != null)
+            {
+                // Clear the TempData value to avoid persisting it across subsequent requests
+                TempData.Remove("isFromDeleteRequest");
+                TempData.Remove("isSuccessDelete");
+
+                // Use the value as needed
+                ViewBag.SuccessMessage = isSuccessDelete;
+            }
+
+            return View(_dbContext.Privillages.Include(i => i.ClinicalSpeciality).ToList());
+        }
+
+
+        [Route("GetPrivillages")]
+        public IActionResult PrivillagesList()
+        {
+            var privillages = _dbContext.Privillages.Include(i => i.ClinicalSpeciality).ToList();
+            return PartialView("PrivillagesList", privillages);
+        }
+
+        [HttpPost]
+        [Route("AddPrivillage")]
+        public IActionResult AddPrivillage([FromBody] Privillage privillage)
+        {
+            if (privillage == null || string.IsNullOrEmpty(privillage.TitleEn) || string.IsNullOrEmpty(privillage.TitleAr))
+            {
+                return BadRequest("Please fill all fields.");
+            }
+
+            bool isDuplicate = _dbContext.Privillages
+                                         .Any(w => (w.TitleEn == privillage.TitleEn && w.TitleAr == privillage.TitleAr)
+                                         && w.ClinicalSpecialityId == privillage.ClinicalSpecialityId);
+            if (isDuplicate)
+            {
+                return BadRequest("The details for the Subspecialty have already been added.");
+            }
+
+            else
+            {
+                if (!string.IsNullOrEmpty(privillage.TitleAr) || !string.IsNullOrEmpty(privillage.TitleEn))
+                {
+                    _dbContext.Privillages.Add(privillage);
+                    _dbContext.SaveChanges();
+                }
+            }
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("UpdatePrivillage")]
+        public IActionResult UpdatePrivillage([FromBody] Privillage privillage)
+        {
+            if (privillage == null || string.IsNullOrEmpty(privillage.TitleEn) || string.IsNullOrEmpty(privillage.TitleAr))
+            {
+                return BadRequest("Please fill all fields.");
+            }
+
+            bool isDuplicate = _dbContext.Privillages
+                                        .Any(w => (w.TitleEn == privillage.TitleEn && w.TitleAr == privillage.TitleAr)
+                                        && w.ClinicalSpecialityId == privillage.ClinicalSpecialityId);
+            if (isDuplicate)
+            {
+                return BadRequest("The details for the subspecialty have already been added.");
+            }
+
+            else
+            {
+                if (!string.IsNullOrEmpty(privillage.TitleAr) || !string.IsNullOrEmpty(privillage.TitleEn))
+                {
+                    _dbContext.Privillages.Update(privillage);
+                    _dbContext.SaveChanges();
+                }
+            }
+
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("UpdatePrivillageStatus/{id}/{isActive}")]
+        public IActionResult UpdatePrivillageStatus(int id, bool isActive)
+        {
+            // Logic to update the status of the practitioner type with the given ID
+            try
+            {
+                var privillage = _dbContext.Privillages.SingleOrDefault(p => p.Id == id);
+                if (privillage == null)
+                {
+                    return NotFound();
+                }
+
+                privillage.IsActive = isActive;
+                _dbContext.SaveChanges();
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while updating the status.");
+            }
+        }
+
+        [HttpGet]
+        [Route("DeletePrivillage/{id}")]
+        public IActionResult DeletePrivillage(int id)
+        {
+            // Retrieve the practitioner type from the database using the id
+            var privillages = _dbContext.Privillages.Find(id);
+
+            if (privillages == null)
+            {
+                // Handle the case where the practitioner type doesn't exist
+                TempData["isSuccessDelete"] = false;
+            }
+
+            // Remove the practitioner type from the DbSet
+            _dbContext.Privillages.Remove(privillages);
+
+            // Save the changes to the database
+            _dbContext.SaveChanges();
+            TempData["isSuccessDelete"] = true;
+            // Set the value in TempData
+            TempData["isFromDeleteRequest"] = true;
+            return RedirectToAction("Privillages");
+        }
+
+
+        [HttpGet]
+        [Route("GetPrivillage/{id}")]
+        public Privillage GetPrivillage(int id)
+        {
+            var privillages = _dbContext.Privillages.Single(w => w.Id == id);
+            return privillages;
+        }
+
+        [Route("GetPrivillagesList")]
+        public IActionResult GetPrivillagesList()
+        {
+            var privillages = _dbContext.Privillages.Include(i => i.ClinicalSpeciality).ToList();
+            return PartialView("Privillages", privillages);
+        }
+        #endregion
 
         #region UserServices
         [Route("Users/ServiceReviewRequests")]

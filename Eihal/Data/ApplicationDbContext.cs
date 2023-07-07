@@ -22,6 +22,9 @@ namespace Eihal.Data
         public DbSet<ProfessionalRank> ProfessionalRanks { get; set; }
         public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<Specialty> Specialties { get; set; }
+        public DbSet<Subspecialty> Subspecialty { get; set; }
+        public DbSet<ClinicalSpeciality> ClinicalSpecialities { get; set; }
+        public DbSet<Privillage> Privillages { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<State> States { get; set; }
         public DbSet<City> Cities { get; set; }
