@@ -937,6 +937,157 @@ namespace Eihal.Controllers
             return PartialView("Privillages", privillages);
         }
         #endregion
+        #region SubPrivillages
+        [Route("MasterList/SubPrivillages")]
+        public IActionResult SubPrivillages()
+        {
+            // Retrieve the value from TempData
+            bool? isFromDeleteRequest = TempData["isFromDeleteRequest"] as bool?;
+            bool? isSuccessDelete = TempData["isSuccessDelete"] as bool?;
+
+            if (isFromDeleteRequest != null && isSuccessDelete != null)
+            {
+                // Clear the TempData value to avoid persisting it across subsequent requests
+                TempData.Remove("isFromDeleteRequest");
+                TempData.Remove("isSuccessDelete");
+
+                // Use the value as needed
+                ViewBag.SuccessMessage = isSuccessDelete;
+            }
+
+            return View(_dbContext.SubPrivillages.Include(i => i.Privillage).ToList());
+        }
+
+
+        [Route("GetSubPrivillages")]
+        public IActionResult SubPrivillagesList()
+        {
+            var subPrivillages = _dbContext.SubPrivillages.Include(i => i.Privillage).ToList();
+            return PartialView("SubPrivillagesList", subPrivillages);
+        }
+
+        [HttpPost]
+        [Route("AddSubPrivillage")]
+        public IActionResult AddSubPrivillage([FromBody] SubPrivillage subPrivillage)
+        {
+            if (subPrivillage == null || string.IsNullOrEmpty(subPrivillage.TitleEn) || string.IsNullOrEmpty(subPrivillage.TitleAr))
+            {
+                return BadRequest("Please fill all fields.");
+            }
+
+            bool isDuplicate = _dbContext.SubPrivillages
+                                         .Any(w => (w.TitleEn == subPrivillage.TitleEn && w.TitleAr == subPrivillage.TitleAr)
+                                         && w.PrivillageId == subPrivillage.PrivillageId);
+            if (isDuplicate)
+            {
+                return BadRequest("The details for the Subspecialty have already been added.");
+            }
+
+            else
+            {
+                if (!string.IsNullOrEmpty(subPrivillage.TitleAr) || !string.IsNullOrEmpty(subPrivillage.TitleEn))
+                {
+                    _dbContext.SubPrivillages.Add(subPrivillage);
+                    _dbContext.SaveChanges();
+                }
+            }
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("UpdateSubPrivillage")]
+        public IActionResult UpdateSubPrivillage([FromBody] SubPrivillage subPrivillage)
+        {
+            if (subPrivillage == null || string.IsNullOrEmpty(subPrivillage.TitleEn) || string.IsNullOrEmpty(subPrivillage.TitleAr))
+            {
+                return BadRequest("Please fill all fields.");
+            }
+
+            bool isDuplicate = _dbContext.SubPrivillages
+                                        .Any(w => (w.TitleEn == subPrivillage.TitleEn && w.TitleAr == subPrivillage.TitleAr)
+                                        && w.PrivillageId == subPrivillage.PrivillageId);
+            if (isDuplicate)
+            {
+                return BadRequest("The details for the sub privillage have already been added.");
+            }
+
+            else
+            {
+                if (!string.IsNullOrEmpty(subPrivillage.TitleAr) || !string.IsNullOrEmpty(subPrivillage.TitleEn))
+                {
+                    _dbContext.SubPrivillages.Update(subPrivillage);
+                    _dbContext.SaveChanges();
+                }
+            }
+
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("UpdateSubPrivillageStatus/{id}/{isActive}")]
+        public IActionResult UpdateSubPrivillageStatus(int id, bool isActive)
+        {
+            // Logic to update the status of the practitioner type with the given ID
+            try
+            {
+                var subPrivillage = _dbContext.SubPrivillages.SingleOrDefault(p => p.Id == id);
+                if (subPrivillage == null)
+                {
+                    return NotFound();
+                }
+
+                subPrivillage.IsActive = isActive;
+                _dbContext.SaveChanges();
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while updating the status.");
+            }
+        }
+
+        [HttpGet]
+        [Route("DeleteSubPrivillage/{id}")]
+        public IActionResult DeleteSubPrivillage(int id)
+        {
+            // Retrieve the practitioner type from the database using the id
+            var subPrivillages = _dbContext.SubPrivillages.Find(id);
+
+            if (subPrivillages == null)
+            {
+                // Handle the case where the practitioner type doesn't exist
+                TempData["isSuccessDelete"] = false;
+            }
+
+            // Remove the practitioner type from the DbSet
+            _dbContext.SubPrivillages.Remove(subPrivillages);
+
+            // Save the changes to the database
+            _dbContext.SaveChanges();
+            TempData["isSuccessDelete"] = true;
+            // Set the value in TempData
+            TempData["isFromDeleteRequest"] = true;
+            return RedirectToAction("subPrivillages");
+        }
+
+
+        [HttpGet]
+        [Route("GetSubPrivillage/{id}")]
+        public SubPrivillage GetSubPrivillage(int id)
+        {
+            var subPrivillages = _dbContext.SubPrivillages.Single(w => w.Id == id);
+            return subPrivillages;
+        }
+
+        [Route("GetSubPrivillagesList")]
+        public IActionResult GetSubPrivillagesList()
+        {
+            var subPrivillages = _dbContext.SubPrivillages.Include(i => i.Privillage).ToList();
+            return PartialView("SubPrivillages", SubPrivillages);
+        }
+        #endregion
 
         #region UserServices
         [Route("Users/ServiceReviewRequests")]
