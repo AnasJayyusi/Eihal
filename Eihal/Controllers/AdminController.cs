@@ -937,6 +937,7 @@ namespace Eihal.Controllers
             return PartialView("Privillages", privillages);
         }
         #endregion
+
         #region SubPrivillages
         [Route("MasterList/SubPrivillages")]
         public IActionResult SubPrivillages()
@@ -1782,14 +1783,14 @@ namespace Eihal.Controllers
                 ViewBag.SuccessMessage = isSuccessDelete;
             }
 
-            return View(_dbContext.Services.ToList());
+            return View(_dbContext.Services.Include(a=>a.Privillage).Include(a=>a.SubPrivillage).ToList());
         }
 
 
         [Route("GetServices")]
         public IActionResult ServicesList()
         {
-            var services = _dbContext.Services.ToList();
+            var services = _dbContext.Services.Include(a=>a.Privillage).Include(a=>a.SubPrivillage).ToList();
             return PartialView("ServicesList", services);
         }
 
@@ -1832,7 +1833,7 @@ namespace Eihal.Controllers
             }
 
             bool isDuplicate = _dbContext.Services
-                                        .Any(w => (w.TitleEn == service.TitleEn && w.TitleAr == service.TitleAr)
+                                        .Any(w => (w.TitleEn == service.TitleEn && w.TitleAr == service.TitleAr && w.Id != service.Id)
                                       );
             if (isDuplicate)
             {
