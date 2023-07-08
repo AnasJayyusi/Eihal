@@ -183,6 +183,13 @@
             <div class="modal-body">
                 <!-- Add your modal content here -->
                 <form>
+                   @* <div class="form-group">
+                        <label style="font-weight:bold;color:#00768c" for="privillageEnInput">Privillage:</label>
+                        <input type="text" class="form-control" id="privillageEnInput" required>
+                    </div>      <div class="form-group">
+                        <label style="font-weight:bold;color:#00768c" for="subPrivillageEnInput">SubPrivillage:</label>
+                        <input type="text" class="form-control" id="subPrivillageEnInput" required>
+                    </div>  *@
                     <div class="form-group">
                         <label style="font-weight:bold;color:#00768c" for="titleEnInput">Title (English):</label>
                         <input type="text" class="form-control" id="titleEnInput" required>
@@ -194,11 +201,15 @@
                         <label style="font-weight:bold;color:#00768c" for="feeInput">Fee:</label>
                         <input type="number" class="form-control" id="feeInput" required>
                     </div>
-                 @*   <div class="form-group">
-                        <label for="practitionerTypes-ddl" style="font-weight:bold;color:#00768c">Practitioner Type:</label>
+                    <div class="form-group">
+                        <label for="privillages-ddl" style="font-weight:bold;color:#00768c">Privillage:</label>
                         <!-- Dropdown list HTML element -->
-                        <select class="form-control" id="practitionerTypes-ddl"></select>
-                    </div>*@
+                        <select class="form-control" id="privillages-ddl"></select>
+                    </div>      <div class="form-group">
+                        <label for="subPrivillages-ddl" style="font-weight:bold;color:#00768c">SubPrivillage:</label>
+                        <!-- Dropdown list HTML element -->
+                        <select class="form-control" id="subPrivillages-ddl"></select>
+                    </div>
                 </form>
                 <div class="alert alert-danger hidden sm" role="alert">
                     <span id="error-msg-not-fill" style="display:none">Please fill all fields.</span>
@@ -233,23 +244,41 @@
                 $('#titleEnInput').val("");
                 $('#feeInput').val("");
 
-                //if ($('#practitionerTypes-ddl').children().length == 0) 
-                //{
-                //    $.ajax({
-                //        url: '@Url.Action("GetPractitionerTypesDDL", "Common")',
-                //        type: 'GET',
-                //        dataType: 'json',
-                //        success: function (data) {
-                //            // Clear existing options
-                //            $('#practitionerTypes-ddl').empty();
-                //            // Populate the dropdown list
-                //            var dropdown = $('#practitionerTypes-ddl');
-                //            $.each(data, function (index, item) {
-                //                dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
-                //            });
-                //        }
-                //    });
-                //}
+                if ($('#privillages-ddl').children().length == 0) 
+                {
+                    $.ajax({
+                        url: '@Url.Action("GetPrivillagesDDL", "Common")',
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (data) {
+                            // Clear existing options
+                            $('#privillages-ddl').empty();
+                            // Populate the dropdown list
+                            var dropdown = $('#privillages-ddl');
+                            $.each(data, function (index, item) {
+                                dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                            });
+                        }
+                    });
+                }
+
+                   if ($('#subprivillages-ddl').children().length == 0) 
+                {
+                    $.ajax({
+                        url: '@Url.Action("GetSubPrivillagesDDL", "Common")',
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (data) {
+                            // Clear existing options
+                            $('#subPrivillages-ddl').empty();
+                            // Populate the dropdown list
+                            var dropdown = $('#subPrivillages-ddl');
+                            $.each(data, function (index, item) {
+                                dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                            });
+                        }
+                    });
+                }
             });
 
             $('#add-Service').click(function () {
@@ -258,7 +287,8 @@
                     TitleEn: $('#titleEnInput').val(),
                     Fee: $('#feeInput').val(),
                     IsActive:true,
-                    //PractitionerTypeId: $('#practitionerTypes-ddl').val()
+                    PrivillageId: $('#privillages-ddl').val(),
+                    SubPrivillageId: $('#subPrivillages-ddl').val()
                 };
 
                 $.ajax({

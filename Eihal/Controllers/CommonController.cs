@@ -48,6 +48,16 @@ namespace Eihal.Controllers
             return Json(dropdownData);
         }  
         [HttpGet]
+        [Route("GetSubPrivillagesDDL")]
+        public ActionResult GetSubPrivillagesDDL(int? privillageId)
+        {
+            // Retrieve the data for the dropdown list
+            var dropdownData = _dbContext.SubPrivillages.Where(w => (privillageId== null|| w.PrivillageId== privillageId) && w.IsActive).ToList();
+
+            // Pass the data to the view
+            return Json(dropdownData);
+        }  
+        [HttpGet]
         [Route("GetPrivillagesDDL")]
         public ActionResult GetPrivillagesDDL()
         {

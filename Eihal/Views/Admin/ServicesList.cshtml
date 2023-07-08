@@ -59,6 +59,8 @@
     <thead>
         <tr>
             <th>#</th>
+            <th>Privillage</th>
+            <th>SubPrivillage   </th>
             <th>Title (English)</th>
             <th>Title (Arabic)</th>
             <th>Fee</th>
@@ -73,6 +75,9 @@
             <tr>
                 <td>@(startIndex + i + 1)</td>
                 @*<td>@services.PractitionerType.TitleEn</td>*@
+                <td>@services.Privillage?.TitleEn</td>
+                <td>@services.SubPrivillage?.TitleEn</td>
+                <td>@services.TitleEn</td>
                 <td>@services.TitleEn</td>
                 <td>@services.TitleAr</td>
                 <td>@services.Fee</td>
@@ -139,8 +144,17 @@
                         <input type="text" class="form-control" id="titleArInputEdit" required>
                     </div> <div class="form-group">
                         <input hidden type="text" class="form-control" id="feeId">
-                        <label style="font-weight:bold;color:#00768c" for="feeInputEdit">Title (Arabic):</label>
+                        <label style="font-weight:bold;color:#00768c" for="feeInputEdit">Fee:</label>
                         <input type="number" class="form-control" id="feeInputEdit" required>
+                    </div>
+                       <div class="form-group">
+                        <label for="privillages-ddl" style="font-weight:bold;color:#00768c">Privillage:</label>
+                        <!-- Dropdown list HTML element -->
+                        <select class="form-control" id="privillages-ddl-edit"></select>
+                    </div>      <div class="form-group">
+                        <label for="subPrivillages-ddl" style="font-weight:bold;color:#00768c">SubPrivillage:</label>
+                        <!-- Dropdown list HTML element -->
+                        <select class="form-control" id="subPrivillages-ddl-edit"></select>
                     </div>
                  @*   <div class="form-group">
                         <label for="practitionerTypes-ddl-edit" style="font-weight:bold;color:#00768c">Practitioner Type:</label>
@@ -220,7 +234,41 @@
     }
 
         function getServices(id) {
+                if ($('#privillages-ddl-edit').children().length == 0) 
+                {
+                    $.ajax({
+                        url: '@Url.Action("GetPrivillagesDDL", "Common")',
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (data) {
+                            // Clear existing options
+                            $('#privillages-ddl-edit').empty();
+                            // Populate the dropdown list
+                            var dropdown = $('#privillages-ddl-edit');
+                            $.each(data, function (index, item) {
+                                dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                            });
+                        }
+                    });
+                }
 
+                   if ($('#subprivillages-ddl-edit').children().length == 0) 
+                {
+                    $.ajax({
+                        url: '@Url.Action("GetSubPrivillagesDDL", "Common")',
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (data) {
+                            // Clear existing options
+                            $('#subPrivillages-ddl-edit').empty();
+                            // Populate the dropdown list
+                            var dropdown = $('#subPrivillages-ddl-edit');
+                            $.each(data, function (index, item) {
+                                dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                            });
+                        }
+                    });
+                }
             $.ajax({
                 url: '/Admin/GetService/' + id,
                 type: 'GET',
@@ -233,7 +281,10 @@
                 $('#feeInputEdit').val(data.fee);
                 $('#titleArInputEdit').val(data.titleAr);
                 $('#titleEnInputEdit').val(data.titleEn);
-                //$('#practitionerTypes-ddl-edit').val(data.practitionerTypeId);
+                $('#privillageEnInput').val(data.Privillage?.titleEn);
+                $('#subPrivillageEnInput').val(data.SubPrivillage?.titleEn);
+                $('#privillages-ddl-edit').val(data.privillageId);
+                $('#subPrivillages-ddl-edit').val(data.subPrivillageId);
 
                 $('#titleId').val(data.id);
                 },
@@ -244,12 +295,15 @@
             });
         }
 
+
+
     $('#edit-Services').click(function () {
         var services = {
             TitleAr: $('#titleArInputEdit').val(),
             Fee: $('#feeInputEdit').val(),
             TitleEn: $('#titleEnInputEdit').val(),
-            //PractitionerTypeId: $('#practitionerTypes-ddl-edit').val(),
+            PrivillageId: $('#privillages-ddl-edit').val(),
+            SubPrivillageId: $('#subPrivillages-ddl-edit').val(),
             IsActive:true,
             Id: $('#titleId').val(),
         };

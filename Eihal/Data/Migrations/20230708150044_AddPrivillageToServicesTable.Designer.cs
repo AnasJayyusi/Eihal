@@ -4,6 +4,7 @@ using Eihal.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Eihal.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230708150044_AddPrivillageToServicesTable")]
+    partial class AddPrivillageToServicesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -191,43 +193,6 @@ namespace Eihal.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Degrees");
-                });
-
-            modelBuilder.Entity("Eihal.Data.Entites.District", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int?>("CityId")
-                        .IsRequired()
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CountryId")
-                        .IsRequired()
-                        .HasColumnType("int");
-
-                    b.Property<int?>("StateId")
-                        .IsRequired()
-                        .HasColumnType("int");
-
-                    b.Property<string>("TitleAr")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TitleEn")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CityId");
-
-                    b.HasIndex("CountryId");
-
-                    b.HasIndex("StateId");
-
-                    b.ToTable("Districts");
                 });
 
             modelBuilder.Entity("Eihal.Data.Entites.InsuranceCompany", b =>
@@ -914,33 +879,6 @@ namespace Eihal.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("PractitionerType");
-                });
-
-            modelBuilder.Entity("Eihal.Data.Entites.District", b =>
-                {
-                    b.HasOne("Eihal.Data.Entites.City", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Eihal.Data.Entites.Country", "Country")
-                        .WithMany()
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Eihal.Data.Entites.State", "State")
-                        .WithMany()
-                        .HasForeignKey("StateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("City");
-
-                    b.Navigation("Country");
-
-                    b.Navigation("State");
                 });
 
             modelBuilder.Entity("Eihal.Data.Entites.Privillage", b =>
