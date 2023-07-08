@@ -170,23 +170,8 @@
             document.cookie = name + "=" + value + expires + "; path=/";
         }
 
-        function loadUserImage() {
-            var image = document.getElementById('user-image-layout');
-            $.ajax({
-                url: '/Beneficiary/GetUserImage', // Replace with the actual URL and action method to fetch the partial view
-                type: 'GET',
-                success: function (response) {
-
-                    image.src = response;
-                    setCookie("userImagePath", response, 7); // Set the cookie for 7 days
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error:', error);
-                }
-            });
-        }
+      
         $(document).ready(function () {
-            loadUserImage();
             GetMyService();
             // Get the current URL
             var currentUrl = window.location.href;

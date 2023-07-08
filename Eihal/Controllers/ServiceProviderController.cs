@@ -21,19 +21,8 @@ namespace Eihal.Controllers
         [Route("Profile")]
         public IActionResult Profile()
         {
+            SetImagePathInCookies();
             return View();
-        }
-        [HttpGet]
-        [Route("GetUserImage")]
-        public ActionResult GetUserImage()
-        {
-            var userId = GetUserProfileId();
-            var userProfilePath = _dbContext.UserProfiles.Where(w => w.Id == userId).Select(a => a.ProfilePicturePath).FirstOrDefault();
-            if (userProfilePath == null)
-            {
-                return Ok("/users/images/Default-User-Profile.jpg");
-            }
-            return Ok(userProfilePath);
         }
         public IActionResult Referrals()
         {

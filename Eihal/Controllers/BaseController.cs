@@ -36,6 +36,23 @@ namespace Eihal.Controllers
 
         }
 
+        public string GetUserImage()
+        {
+            var userId = GetUserProfileId();
+            var userProfilePath = _dbContext.UserProfiles.Where(w => w.Id == userId).Select(a => a.ProfilePicturePath).FirstOrDefault();
+            if (userProfilePath == null)
+            {
+                return "/users/images/Default-User-Profile.jpg";
+            }
+            return userProfilePath;
+        }
 
+        public void SetImagePathInCookies()
+        {
+            var cookieOptions = new CookieOptions();
+            cookieOptions.Expires = DateTime.Now.AddDays(1);
+            cookieOptions.Path = "/";
+            Response.Cookies.Append("userImagePath", GetUserImage(), cookieOptions);
+        }
     }
 }

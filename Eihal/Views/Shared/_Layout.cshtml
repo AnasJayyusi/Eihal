@@ -11,13 +11,12 @@
     <!-- Releate To HTMl-->
     <meta charset="utf-8" />
     <title>EIHAL</title>
-      <link rel="icon" type="image/x-icon" href="~/Eihal.ico" />
+    <link rel="icon" type="image/x-icon" href="~/Eihal.ico" />
     <link rel="stylesheet" type="text/css" href="~/css/datepicker.css">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Cdn Css libraries-->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /> <!-- Bootstrap v4.3.1 -->
-    
     <!-- Cdn Js libraries-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
@@ -30,6 +29,22 @@
 
     <!-- Internal JavaScripts  Theme libraries-->
     <script src="~/vendor/bootstrap/js/bootstrap.bundle.js"></script>
+
+    <!-- For User Image -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Your script here
+            var cookies = document.cookie.split("; ");
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].split("=");
+                var cookieName = cookie[0];
+                var cookieValue = cookie[1];
+                if (cookieName === "userImagePath") {
+                    $('#user-image-layout').attr('src', decodeURIComponent(cookieValue));
+                }
+            }
+        });
+    </script>
 </head>
 
 @await RenderSectionAsync("Scripts", required: false)
@@ -192,15 +207,15 @@
                                 else
                                 {
 
-                                  
+
 
                                     <div class="dropdown">
                                         <a href="#">
-                                            <img style="border-radius:30%"  id="user-image-layout" src="~/users/images/Default-User-Profile.jpg" width="40" height="40" alt="user-profile">
+                                            <img style="border-radius:30%" id="user-image-layout" src="" width="40" height="40" alt="user-image-profile">
                                         </a>
 
                                         <div class="dropdown-content">
-                                             <a class="nav-link text-dark  linkButton" asp-area="" asp-controller="Home" asp-action="Index">My Profile </a>
+                                            <a class="nav-link text-dark  linkButton" asp-area="" asp-controller="Home" asp-action="Index">My Profile </a>
                                             <a class="nav-link text-dark linkButton" asp-area="" asp-controller="Doctor" asp-action="Index">My Order </a>
 
 
@@ -259,4 +274,6 @@
 
 </body>
 </html>
+
+
 

@@ -383,7 +383,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
-             function fillRejectionReason(rejectionReason) {
+        function fillRejectionReason(rejectionReason) {
             $("#rejectionReason").text(rejectionReason);
         }
         // Function to get the value of a cookie
@@ -416,7 +416,7 @@
                 }
             });
         }
-         function GetMyService() {
+        function GetMyService() {
             var serviceContainer = $('#serviceContainer');
 
             $.ajax({
@@ -432,33 +432,6 @@
             });
         }
 
-        function loadUserImage() {
-            var image = document.getElementById('user-image-layout');
-            var imagePath = getCookie("userImagePath");
-            if (imagePath == null) {
-                loadUserImageFromServer();
-            } else {
-
-                image.src = imagePath;
-            }
-        }
-
-        function loadUserImageFromServer() {
-            var image = document.getElementById('user-image-layout');
-            $.ajax({
-                url: '/ServiceProvider/GetUserImage', // Replace with the actual URL and action method to fetch the partial view
-                type: 'GET',
-                success: function (response) {
-                    image.src = response;
-                    setCookie("userImagePath", response, 7); // Set the cookie for 7 days
-
-
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error:', error);
-                }
-            });
-        }
         function GetAllService() {
             var serviceContainer = $('#allServiceContainer');
 
@@ -526,7 +499,6 @@
         $(document).ready(function () {
             GetMyService();
             GetAllService();
-            loadUserImage();
             // Get the current URL
             var currentUrl = window.location.href;
             var resultCount = 0; // Variable to keep track of the number of results
