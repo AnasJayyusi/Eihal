@@ -937,6 +937,7 @@ namespace Eihal.Controllers
             return PartialView("Privillages", privillages);
         }
         #endregion
+
         #region SubPrivillages
         [Route("MasterList/SubPrivillages")]
         public IActionResult SubPrivillages()
@@ -1683,14 +1684,14 @@ namespace Eihal.Controllers
                                          && w.CountryId == city.CountryId);
             if (isDuplicate)
             {
-                return BadRequest("The details for the Professional Rank have already been added.");
+                return BadRequest("The details for the City have already been added.");
             }
 
             else
             {
                 if (!string.IsNullOrEmpty(city.TitleAr) || !string.IsNullOrEmpty(city.TitleEn))
                 {
-                    city.CountryId = GetCountryId(city.StateId);
+                    city.CountryId = GetCountryIdByStateId(city.StateId);
                     _dbContext.Cities.Add(city);
                     _dbContext.SaveChanges();
                 }
@@ -1714,7 +1715,7 @@ namespace Eihal.Controllers
                                         && w.CountryId == city.CountryId);
             if (isDuplicate)
             {
-                return BadRequest("The details for the Professional Rank have already been added.");
+                return BadRequest("The details for the City have already been added.");
             }
 
             else
@@ -1761,6 +1762,139 @@ namespace Eihal.Controllers
         {
             var city = _dbContext.Cities.Single(w => w.Id == id);
             return city;
+        }
+        #endregion
+
+        #region Districts
+        [Route("MasterList/Districts")]
+        public IActionResult Districts()
+        {
+            // Retrieve the value from TempData
+            bool? isFromDeleteRequest = TempData["isFromDeleteRequest"] as bool?;
+            bool? isSuccessDelete = TempData["isSuccessDelete"] as bool?;
+
+            if (isFromDeleteRequest != null && isSuccessDelete != null)
+            {
+                // Clear the TempData value to avoid persisting it across subsequent requests
+                TempData.Remove("isFromDeleteRequest");
+                TempData.Remove("isSuccessDelete");
+
+                // Use the value as needed
+                ViewBag.SuccessMessage = isSuccessDelete;
+            }
+
+            return View(_dbContext.Districts.Include(i => i.Country)
+                                          .Include(i => i.State)
+                                          .ToList());
+        }
+
+
+        [Route("GetDistricts")]
+        public IActionResult DistrictsList()
+        {
+            var cities = _dbContext.Districts.Include(i => i.Country)
+                                          .Include(i => i.State)
+                                          .Include(i => i.City)
+                                          .ToList();
+
+            return PartialView("DistrictsList", cities);
+        }
+
+        [HttpPost]
+        [Route("AddDistrict")]
+        public IActionResult AddDistrict([FromBody] District district)
+        {
+            if (district == null || string.IsNullOrEmpty(district.TitleEn) || string.IsNullOrEmpty(district.TitleAr))
+            {
+                return BadRequest("Please fill all fields.");
+            }
+
+            bool isDuplicate = _dbContext.Districts
+                                         .Any(w => (w.TitleEn == district.TitleEn && w.TitleAr == district.TitleAr)
+                                         && w.CityId == district.CityId);
+            if (isDuplicate)
+            {
+                return BadRequest("The details for the District have already been added.");
+            }
+
+            else
+            {
+                if (!string.IsNullOrEmpty(district.TitleAr) || !string.IsNullOrEmpty(district.TitleEn))
+                {
+                    district.CountryId = GetCountryIdByCityId(district.CityId);
+                    district.StateId = GetStateIdByCityId(district.CityId);
+                    _dbContext.Districts.Add(district);
+                    _dbContext.SaveChanges();
+                }
+            }
+
+            return Ok();
+        }
+
+
+        [HttpPost]
+        [Route("UpdateDistrict")]
+        public IActionResult UpdateDistrict([FromBody] District district)
+        {
+            if (district == null || string.IsNullOrEmpty(district.TitleEn) || string.IsNullOrEmpty(district.TitleAr))
+            {
+                return BadRequest("Please fill all fields.");
+            }
+
+            bool isDuplicate = _dbContext.Districts
+                                        .Any(w => (w.TitleEn == district.TitleEn && w.TitleAr == district.TitleAr)
+                                        && w.CityId == district.CityId);
+            if (isDuplicate)
+            {
+                return BadRequest("The details for the District have already been added.");
+            }
+
+            else
+            {
+                if (!string.IsNullOrEmpty(district.TitleAr) || !string.IsNullOrEmpty(district.TitleEn))
+                {
+                    district.CountryId = GetCountryIdByCityId(district.CityId);
+                    district.StateId = GetStateIdByCityId(district.CityId);
+                    _dbContext.Districts.Update(district);
+                    _dbContext.SaveChanges();
+                }
+            }
+
+            return Ok();
+        }
+
+
+        [HttpGet]
+        [Route("DeleteDistrict/{id}")]
+        public IActionResult DeleteDistrict(int id)
+        {
+            // Retrieve the practitioner type from the database using the id
+            var district = _dbContext.Districts.Find(id);
+
+            if (district == null)
+            {
+                // Handle the case where the practitioner type doesn't exist
+                TempData["isSuccessDelete"] = false;
+            }
+
+            // Remove the practitioner type from the DbSet
+            _dbContext.Districts.Remove(district);
+
+            // Save the changes to the database
+            _dbContext.SaveChanges();
+            TempData["isSuccessDelete"] = true;
+            // Set the value in TempData
+            TempData["isFromDeleteRequest"] = true;
+            return RedirectToAction("Districts");
+        }
+
+
+        [HttpGet]
+        [Route("GetDistrict/{id}")]
+        public District GetDistrict(int id)
+        {
+            var district = _dbContext.Districts.Single(w => w.Id == id);
+            return district;
         }
         #endregion
 
@@ -2259,9 +2393,19 @@ namespace Eihal.Controllers
         #endregion
 
         #region Helper
-        private int? GetCountryId(int? stateId)
+        private int? GetCountryIdByStateId(int? stateId)
         {
             return _dbContext.States.SingleOrDefault(x => x.Id == stateId)?.CountryId;
+        }
+
+        private int? GetCountryIdByCityId(int? cityId)
+        {
+            return _dbContext.Cities.SingleOrDefault(x => x.Id == cityId)?.CountryId;
+        }
+
+        private int? GetStateIdByCityId(int? cityId)
+        {
+            return _dbContext.Cities.SingleOrDefault(x => x.Id == cityId)?.StateId;
         }
         #endregion
 
