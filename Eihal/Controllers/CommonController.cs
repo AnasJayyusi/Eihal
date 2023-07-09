@@ -46,17 +46,17 @@ namespace Eihal.Controllers
 
             // Pass the data to the view
             return Json(dropdownData);
-        }  
+        }
         [HttpGet]
         [Route("GetSubPrivillagesDDL")]
         public ActionResult GetSubPrivillagesDDL(int? privillageId)
         {
             // Retrieve the data for the dropdown list
-            var dropdownData = _dbContext.SubPrivillages.Where(w => (privillageId== null|| w.PrivillageId== privillageId) && w.IsActive).ToList();
+            var dropdownData = _dbContext.SubPrivillages.Where(w => (privillageId == null || w.PrivillageId == privillageId) && w.IsActive).ToList();
 
             // Pass the data to the view
             return Json(dropdownData);
-        }  
+        }
         [HttpGet]
         [Route("GetPrivillagesDDL")]
         public ActionResult GetPrivillagesDDL()
@@ -76,7 +76,7 @@ namespace Eihal.Controllers
 
             // Pass the data to the view
             return Json(dropdownData);
-        }   
+        }
 
         [HttpGet]
         [Route("GetCountriesDDL")]
@@ -110,6 +110,39 @@ namespace Eihal.Controllers
             // Pass the data to the view
             return Json(dropdownData);
         }
+
+        //[HttpGet]
+        //public ActionResult GetUserSpecialties(string term)
+        //{
+        //    var results = new List<object>
+        //    {
+        //        new { id = 1, text = "Option 1" },
+        //        new { id = 2, text = "Option 2", selected = true },
+        //        new { id = 3, text = "Option 3", disabled = true }
+        //    };
+
+        //    results.Where(x => x.text == term);
+        //    return Ok(new { });
+        //}
+
+        [HttpGet]
+        [Route("GetUserSpecialtiesDDL")]
+        public ActionResult GetUserSpecialtiesDDL(string term)
+        {
+            _loggedAspNetUserId = GetAspNetUserId();
+            var practitionerTypeId = _dbContext.UserProfiles
+                                                .Where(u => u.UserId == GetAspNetUserId())
+                                                .Select(u => u.PractitionerTypeId);
+
+            var results = _dbContext.Specialties
+                             .Where(w => w.IsActive && practitionerTypeId.Contains(w.PractitionerTypeId))
+                             .Select(s => new { id = s.Id, text = s.TitleEn, textAr = s.TitleAr })
+                             .Where(x => string.IsNullOrEmpty(term) || x.text.Contains(term) || x.textAr.Contains(term))
+                             .ToList();
+
+            return Ok(new { results });
+        }
+
         #endregion
 
         #region Helper For Razor Page

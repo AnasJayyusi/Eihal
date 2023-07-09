@@ -1,11 +1,13 @@
 ﻿<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
+
 <style>
     .wide-button {
         width: 150px; /* Set the desired width for the button */
         width: 100px;
     }
+
     .text-black {
         color: black;
     }
@@ -102,7 +104,7 @@
     <table cellpadding="10">
         <tr>
             <td>
-                <img id="user-image"  style="border-radius:30%" src="~/users/images/Default-User-Profile.jpg" width="150" height="150" />
+                <img id="user-image" style="border-radius:30%" src="~/users/images/Default-User-Profile.jpg" width="150" height="150" />
             </td>
             <td>
                 Welcome!
@@ -255,9 +257,9 @@
                             <td>
                                 <div class="form-group">
                                     <label style="font-weight:bold;color:#00768c" for="countries-ddl-edit">Country:</label>
-                                    <select class="form-control" id="countries-ddl-edit" onchange="getStates(this.value)">
+                                    <s class="form-control" id="countries-ddl-edit" onchange="getStates(this.value)">
                                         <option value="">Select a Country</option>
-                                    </select>
+                                    </s>
                                 </div>
                             </td>
                         </tr>
@@ -287,9 +289,11 @@
                                     <label style="font-weight:bold;color:#00768c" for="speciality-edit-multiSelect">Speciality:</label>
                                     <div>
                                         <div>
-                                            <select id="speciality-edit-multiSelect" multiple>
+                                            @*  <select id="speciality-edit-multiSelect" multiple>
                                             </select>
-
+                                            *@
+                                            <select class="speciality-edit-multiSelect" name="specialties[]" multiple="multiple">
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -368,9 +372,13 @@
         /* Add additional CSS properties if needed */
     }
 </style>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 <script>
     $(document).ready(function () {
         loadUserProfileOverview();
@@ -413,7 +421,7 @@
             url: "/ServiceProvider/GetUserProfileInfo",
             method: "GET",
             success: function (response) {
-                
+
                 $("#fullname-label").text(response.fullname);
                 $("#number-patients-label").text(response.numberPatients);
                 $("#review-label").text("(" + response.review + ")");
@@ -438,39 +446,39 @@
     function getFullUserProfileInfo() {
 
 
-        if ($(".choices__list").length == 0 && $(".choices__inner").length == 0) {
-            //$.ajax({
-            //    url: '@Url.Action("GetUserSpecialtiesDDL", "ServiceProvider")',
-            //    type: 'GET',
-            //    dataType: 'json',
-            //    success: function (data) {
-            //        var select = $('#speciality-edit-multiSelect');
-            //        $.each(data, function (index, item) {
-            //            select.append($('<option></option>').val(item.id).text(item.titleEn));
-            //        });
-            //        new Choices(select[0], {
-            //            removeItemButton: true,
-            //            maxItemCount: 10,
-            //            placeholderValue: ''
-            //        });
+        //if ($(".choices__list").length == 0 && $(".choices__inner").length == 0) {
+        //    //$.ajax({
+        //    //    url: '@Url.Action("GetUserSpecialtiesDDL", "ServiceProvider")',
+        //    //    type: 'GET',
+        //    //    dataType: 'json',
+        //    //    success: function (data) {
+        //    //        var select = $('#speciality-edit-multiSelect');
+        //    //        $.each(data, function (index, item) {
+        //    //            select.append($('<option></option>').val(item.id).text(item.titleEn));
+        //    //        });
+        //    //        new Choices(select[0], {
+        //    //            removeItemButton: true,
+        //    //            maxItemCount: 10,
+        //    //            placeholderValue: ''
+        //    //        });
 
-            //    },
-            //    error: function (error) {
-            //        console.log(error);
-            //    }
-            //});
-            var choicesAjax = new Choices('#speciality-edit-multiSelect').ajax((callback) => {
-    fetch('@Url.Action("GetUserSpecialtiesDDL", "ServiceProvider")')
-        .then((response) => {
-            response.json().then(function(data) {  
-                callback(data.releases, 'title', 'title');
-            });
-        })
-        .catch((error) => {
-            callback();
-        });
-})
-        }
+        //    //    },
+        //    //    error: function (error) {
+        //    //        console.log(error);
+        //    //    }
+        //    //});
+        //    var choicesAjax = new Choices('#speciality-edit-multiSelect').ajax((callback) => {
+        //        fetch('@Url.Action("GetUserSpecialtiesDDL", "ServiceProvider")')
+        //            .then((response) => {
+        //                response.json().then(function (data) {
+        //                    callback(data.releases, 'title', 'title');
+        //                });
+        //            })
+        //            .catch((error) => {
+        //                callback();
+        //            });
+        //    })
+        //}
         $.ajax({
             url: '@Url.Action("GetPractitionerTypesDDL", "Common")',
             type: 'GET',
@@ -554,7 +562,15 @@
                     $("#countries-ddl-edit").val(response.countryId);
                     $('#states-ddl-edit option:first').text(response.stateName);
                     $('#cities-ddl-edit option:first').text(response.cityName);
+
                     $("#speciality-edit-multiSelect").val(response.speciliaties);
+
+                    var speciliatiesIds = response.speciliaties.split(",");
+                    var specialtiesTitlesEn = response.specialtiesTitlesEn.split(",");
+                    $.each(speciliatiesIds, function (index, item) {
+                        var option = new Option(specialtiesTitlesEn[index], speciliatiesIds[index], true, true);
+                        $('.speciality-edit-multiSelect').append(option).trigger('change');
+                    });
                 }, 300); // Delay for 1 second (1000 milliseconds)
             },
             error: function (error) {
@@ -562,10 +578,46 @@
             }
         });
 
+        //GetUserSpecialtiesDDL
+        //  $('.speciality-edit-multiSelect').select2({
+        //    theme: "classic",
+        //    placeholder: 'Select an option',
+        //    width: '100%'
+        //});
+
+        debugger
+        $('.speciality-edit-multiSelect').select2({
+            theme: "classic",
+            placeholder: 'Select an option',
+            width: '100%',
+            ajax: {
+                url: '@Url.Action("GetUserSpecialtiesDDL", "Common")',
+                cache: false
+            }
+        });
+
+
+        //$.ajax({
+        //    url: '@Url.Action("GetSpecialtiesSelectedOptions", "ServiceProvider")',
+        //        type: 'GET',
+        //    dataType: 'json',
+        //    success: function (data) {
+        //        console.log(data);
+        //        //$.each(data, function (index, item) {
+        //        //    var items =
+        //        //    var option = new Option(item.text, item.Id, true, true);
+        //        //    $('.speciality-edit-multiSelect').append(option).trigger('change');
+        //        //});
+        //    }
+        //})
+
+        //TODO
+
+
     }
 
     function loadImage(event) {
-          
+
         var image = document.getElementById('user-image-edit');
         image.src = URL.createObjectURL(event.target.files[0]);
     }
@@ -615,7 +667,7 @@
         formData.append('CountryId', $('#countries-ddl-edit').val());
         formData.append('StateId', $('#states-ddl-edit').val());
         formData.append('CityId', $('#cities-ddl-edit').val());
-        formData.append('SpecialtiesIds', $('#speciality-edit-multiSelect').val());
+        formData.append('SpecialtiesIds', $('.speciality-edit-multiSelect').val().toString());
 
         var imageFile = $('#image-upload')[0].files[0];
         formData.append('image', imageFile);
@@ -636,44 +688,6 @@
             error: function (error) {
                 toastr.error('Error occurred', 'Failed !!');
                 // Handle error response
-            }
-        });
-    }
-
-
-    function loadOptionsAndSetSelection(url, selectId, selectedValues) {
-        const selectElement = document.getElementById(selectId);
-
-        // Clear any existing Choices instance
-        if (selectElement.choices) {
-            selectElement.choices.destroy();
-        }
-
-        // Make an AJAX request to load the options
-        $.ajax({
-            url: '@Url.Action("GetUserSpecialtiesDDL", "ServiceProvider")',
-            method: 'GET',
-            dataType: 'json',
-            success: function (data) {
-                // Clear existing options
-                selectElement.choices.clear();
-
-                // Add options from the API response
-                data.forEach(function (option) {
-                    const newOption = new Option(option.label, option.value, option.selected, option.disabled);
-                    selectElement.appendChild(newOption);
-                });
-
-                // Initialize Choices with the provided options and settings
-                const choices = new Choices(selectElement, {
-                    choices: selectedValues,
-                    removeItemButton: true,
-                    maxItemCount: -1,
-                    placeholderValue: ''
-                });
-            },
-            error: function (error) {
-                console.log(error);
             }
         });
     }
@@ -816,7 +830,7 @@
 
 
     function removeCertificate(fileId) {
-          
+
         // Perform an AJAX request to delete the certificate
         $.ajax({
             url: '/File/DeleteFile/' + fileId, // Replace with the actual URL to delete the certificate
