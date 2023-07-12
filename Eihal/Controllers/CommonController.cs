@@ -87,6 +87,16 @@ namespace Eihal.Controllers
 
             // Pass the data to the view
             return Json(dropdownData);
+        }  
+        [HttpGet]
+        [Route("GetServicesDDL")]
+        public ActionResult GetServicesDDL()
+        {
+            // Retrieve the data for the dropdown list
+            var dropdownData = _dbContext.Services.ToList();
+
+            // Pass the data to the view
+            return Json(dropdownData);
         }
 
         [HttpGet]
@@ -106,6 +116,15 @@ namespace Eihal.Controllers
         {
             // Retrieve the data for the dropdown list
             var dropdownData = _dbContext.Cities.ToList();
+
+            // Pass the data to the view
+            return Json(dropdownData);
+        }       [HttpGet]
+        [Route("GetDisctrictsDDL")]
+        public ActionResult GetDisctrictsDDL()
+        {
+            // Retrieve the data for the dropdown list
+            var dropdownData = _dbContext.Districts.ToList();
 
             // Pass the data to the view
             return Json(dropdownData);

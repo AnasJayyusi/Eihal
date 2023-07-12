@@ -145,6 +145,46 @@ namespace Eihal.Controllers
         }
 
         [HttpGet]
+        [Route("GetUserProfileInfo")]
+        public ActionResult GetUserProfileInfoByUseId(string userId)
+        {
+
+            var userProfile = _dbContext.UserProfiles.FirstOrDefault(w => w.UserId == userId);
+            var specialityNames = "";
+            // Your logic to retrieve the necessary data
+            if (userProfile.SpecialtiesIds != null)
+            {
+                List<int> specialityIds = userProfile.SpecialtiesIds.Split(',').Select(int.Parse).ToList();
+
+                // This Code Temp We Should Depnd On Select2 
+                if (specialityIds != null)
+                {
+                    var specialities = _dbContext.Specialties
+                                   .Where(t => specialityIds.Contains(t.Id)).Select(a => new
+                                   {
+                                       a.TitleEn
+                                   }).ToList();
+                    if (specialities.Any())
+                        specialityNames = String.Join(",", specialities.Select(a => a.TitleEn));
+                }
+            }
+
+            var data = new
+            {
+                fullname = userProfile?.FullName,
+                numberPatients = userProfile.NumOfPatients ?? 0,
+                review = userProfile.Reviews ?? 0,
+                insurance = userProfile.InsuranceAccepted ?? false,
+                bio = userProfile.Bio ?? "No Bio yet.",
+                speciality = specialityNames ?? "No Speciality added yet.",
+                profilePicturePath = userProfile.ProfilePicturePath,
+                profileStatus = userProfile.ProfileStatus.ToString(),
+                rejectionReason = userProfile.RejectionReason
+            };
+
+            return Json(data);
+        }
+        [HttpGet]
         [Route("GetFullUserProfileInfo")]
         public ActionResult GetFullUserProfileInfo()
         {

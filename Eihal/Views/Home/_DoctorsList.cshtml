@@ -1,0 +1,124 @@
+﻿@model List<Eihal.Data.Entites.UserProfile>
+
+    <div class="row">
+
+        @foreach(var doc in Model){
+                           <div class="col-md-@(Model.Count > 1?'4':'8') padding-top-25">
+        <div class="doctor-card" style="    border: 1px solid #eadfdf;
+    border-radius: 10px;">
+            <div class="doctor-card-body">
+                <div class="row" style="    padding-bottom: 25px;">
+                <h5 class="doctor-card-title" style="color: black;">
+                    <img style="border-radius:50%" id="user-image-layout" src="/users/images/@(doc.UserId).jpg" width="70" height="70" alt="user-image-profile" onerror="this.src='/users/images/Default-User-Profile.jpg'" >
+                    </h5>
+                    <span style="font-size:10px;margin:auto">
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                <label style="font-weight:bold">Reviews</label> <img src="~/icon/Doctor/review-icon.png" width="25" height="25" />
+                <span id="review-label" style="color:black"></span>
+                </span>
+                        @if(doc.InsuranceAccepted==true)
+                        {
+                            <div class="service-info-value" style="margin-top: -25px;
+    margin-left: 100px;">
+                                <span class="status status-default">Insurance Accpeted</span>
+                            </div>
+                        }else{
+                          <div class="service-info-value" style="margin-top: -25px;
+    margin-left: 100px;">
+                                <span class="status status-warning">Insurance Rejected</span>
+                            </div>
+                        
+                        
+                        }
+                    </div>
+                <h5 class="doctor-card-title" >@doc.FullName</h5>
+                <h5 class="doctor-card-title" style="font-size:11px" >@doc.PractitionerType.TitleEn</h5>
+                @foreach(var certificate in doc.Certifications.Take(2)){
+                <h5 class="doctor-card-title" style="font-size:11px;color:black" >@certificate.Degree.TitleEn - @certificate.UniversityNameEn</h5>
+                }
+@*<div class="d-flex align-items-center w-100 mt-auto">
+    @if (doc.City != null)
+    {
+        <span class="doctor-sub-title" style="display: inline-block; font-size: 12px; margin-right: 10px;">
+            <img width="15px" src="~/icon/location-icon-default.png" alt=""> @doc.City.TitleEn
+        </span>
+    }
+ 
+</div>*@
+<span class="d-flex align-items-center mt-auto">
+    @if (doc.City != null)
+    {
+        <img width="15px" src="~/icon/location-icon-default.png" alt="" style="margin-right: 5px;">
+        <strong style="font-size: 13px;">@doc.City.TitleEn</strong>
+    }
+    <strong style="font-size: 13px; padding-left: 30px;">Read More</strong>
+    @*<a class="custom-btn" style="width: 20px; height: 20px; margin-left: 3px;" href="">
+        <span>&gt;</span>
+    </a>*@
+    <span class="custom-btn" style="width: 20px; height: 20px; margin-left: 3px;color:white"  data-toggle="modal" onclick="fillDoctorDetails('@(doc.UserId)')" data-target="#UserProfileModal">&gt;</span>
+
+</span>
+
+
+
+          
+            </div>
+
+        </div>
+
+    </div>
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*
+                          <div class="col-md-4 padding-top-25">
+        <div class="doctor-card">
+            <div class="doctor-card-body">
+                <h5 class="doctor-card-title" style="color: black;"><img style="border-radius:50%" id="user-image-layout" src="/users/images/6fa2bcc0-3fb1-4ed9-9ef4-7c3697f8b25a.jpg" width="70" height="70" alt="user-image-profile"><span style="padding:15px;font-size:16px">TitleEn</span></h5>
+                <h5 class="doctor-card-title" >Name Name</h5>
+                <h5 class="doctor-card-title" style="font-size:11px" >Name Name</h5>
+                <div class="row col-12" >
+                    <div class="col-8">
+                        <span class="doctor-sub-title" style="display: inline-block;">Fee:</span>
+                        <span style="display: inline-block; margin-left: 5px;">           .Fee</span>
+                    </div>
+                       <div class="col-8">
+                        <span class="doctor-sub-title" style="display: inline-block;">Fee:</span>
+                        <span style="display: inline-block; margin-left: 5px;">.Fee</span>
+                    </div>
+                      <div class="row">
+                        <span class="doctor-sub-title" style="display: inline-block;"><img width="20px"  src="~/icon/location-icon.png" alt=""> Riyadh</span>
+                        <span style="display: inline-block; margin-left: 25px;">Read More <a class="custom-btn" style="width: 30px;
+    height: 30px;" href="">
+          
+            <span>
+               >
+            </span>
+        </a> </span>
+                    </div>
+            
+                </div>
+                <div class="dots-container">
+                  
+                </div>
+            </div>
+
+        </div>
+
+    </div>*@
+</div>
+

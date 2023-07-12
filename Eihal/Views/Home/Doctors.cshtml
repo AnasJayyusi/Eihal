@@ -1,0 +1,535 @@
+﻿@model List<Eihal.Data.Entites.UserProfile>
+
+<style>
+    .doctor-card {
+        min-height:300px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        position: relative;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+
+        .doctor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+    .doctor-card-body {
+        background-color: white;
+    }
+
+    .doctor-weight-700 {
+        color: #00768c;
+        font-weight: 700;
+    }
+
+    .doctor-card-title {
+        color: #00768c;
+        font-size: 18px;
+        margin-bottom: 10px;
+        color: #00768c
+    }
+
+    .doctor-card-text {
+        color: #666;
+        margin-bottom: 5px;
+    }
+
+
+    .dots-container {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .dots-button {
+        background: none;
+        border: none;
+        color: #007bff;
+        font-size: 18px;
+        padding: 0;
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .dots-button::before {
+            content: "";
+            position: absolute;
+            color: #007bff;
+            font-size: 20px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .dots-button::after {
+            content: "";
+            position: absolute;
+            background-color: #007bff;
+            width: 4px;
+            height: 4px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .dots-button::before,
+        .dots-button::after {
+            border-radius: 50%;
+        }
+
+        .dots-button::after {
+            top: 54%;
+        }
+
+        .dots-button::before {
+            top: 46%;
+        }
+
+    .activeLink {
+        color: #00768c;
+        font-weight: bold;
+        pointer-events: none;
+        cursor: not-allowed;
+        background-color: whitesmoke
+    }
+
+    #menu .nav-item:hover {
+        /* Add your desired styles for hover state */
+        background-color: #e0e0e0;
+        color: #333;
+    }
+
+
+    .tab-header {
+        display: flex;
+        justify-content: space-between;
+        background-color: #f1f1f1;
+    }
+
+    .padding-top-25 {
+        padding-top: 25px;
+    }
+
+    .tab-button {
+        background-color: inherit;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 10px 20px;
+        transition: background-color 0.3s;
+        border-radius: 12px;
+        margin: 5px;
+    }
+
+        .tab-button:hover {
+            background-color: #ddd;
+        }
+
+        .tab-button.active {
+            background-color: #00768c;
+            color: white
+        }
+
+    .tab-content {
+        background-color: #fff;
+    }
+
+    .no-results {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        margin-top: 20px;
+        padding: 20px;
+        font-size: 18px;
+    }
+
+        .no-results img {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 10px;
+        }
+
+        .no-results p {
+            margin: 0;
+        }
+            .doctor-card {
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        position: relative;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+       
+    }
+
+    .doctor-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .doctor-card-body {
+        background-color: white;
+        padding: 20px;
+    }
+
+    .doctor-card-title {
+        color: #333;
+        font-size: 18px;
+        margin-bottom: 10px;
+        color: #00768c
+    }
+
+    .doctor-card-text {
+        color: #666;
+        margin-bottom: 5px;
+    }
+
+
+    .dots-container {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .dots-button {
+        background: none;
+        border: none;
+        color: #007bff;
+        font-size: 18px;
+        padding: 0;
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .dots-button::before {
+            content: "...";
+            position: absolute;
+            color: #007bff;
+            font-size: 20px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .dots-button::after {
+            content: "";
+            position: absolute;
+            background-color: #007bff;
+            width: 4px;
+            height: 4px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .dots-button::before,
+        .dots-button::after {
+            border-radius: 50%;
+        }
+
+        .dots-button::after {
+            top: 54%;
+        }
+
+        .dots-button::before {
+            top: 46%;
+        }
+        .no-results {
+    width:100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: 20px;
+  padding: 20px;
+  font-size: 18px;
+}
+
+.no-results img {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 10px;
+}
+
+.no-results p {
+  margin: 0;
+}
+
+    .search-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        width: 100%;
+    }
+
+        .search-container input {
+            padding-right: 30px; /* Add space for the search icon */
+        }
+
+        .search-container i {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+        }
+        
+    .status {
+        text-align: center;
+        font-size: 10px;
+        padding: 4px 6px;
+        border-radius: 4px;
+        font-weight: bold;
+    }
+     .status-default {
+        background-color: #00768c;
+        color: #ffffff;
+    }
+    .status-success {
+        background-color: #4CAF50;
+        color: #ffffff;
+    }
+
+    .status-warning {
+        background-color: #FFC107;
+        color: #ffffff;
+    }
+
+    .status-error {
+        background-color: #FF0000;
+        color: #ffffff;
+    }
+</style>
+<section class="sub-header">
+    <div class="container">
+        <div class="content">
+            <h1>
+                Doctors
+            </h1>
+
+            <ul class="bread-list">
+                <li>
+                    <a href="#">
+                        Home
+                    </a>
+                </li>
+
+                <li>
+                    <span>
+                        Doctors
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section class="contact-us general-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-12 mb-4">
+                <div class="heading-contact">
+                    <p style="font-size:40px">
+                        Doctors
+                    </p>
+
+                </div>
+                <div id="error">
+                </div>
+                <form class="form-contain" method="POST" action="https://eihal.paths.sa/contact-us/insert" id="validation">
+
+                    <input type="hidden" name="_token" value="P9gMRWSZXiKVb1HY0oTRjpAhSnhUQU6JAmVkQpN8">        
+                          <div class="row">
+                                    <div class="form-group mr-2 search-container">
+                                        <input type="text" class="form-control margin-15-position-obselete" id="filterInput" name="search" style=" background-color: #f2f2f2;" placeholder="Search" value="">
+                                        <i class="fas fa-search" style=" margin-right: 0.5%; color: #00768c;cursor:pointer" onclick="filterDoctors()"></i>
+                                    </div>
+                  
+                                </div>
+                                                  <div class="row">
+                <div class="col-lg-4 col-12 padding-screen" style="padding-right:8px">
+                           <select class="form-control"  id="services-ddl" onchange="filterDoctors()">
+                                        <option value="">All Services</option>
+                                    </select>
+                                </div>
+                                    <div class="col-lg-4 col-12 padding-screen" style="padding-right:8px">
+                           <select class="form-control"  id="cities-ddl" onchange="filterDoctors()">
+                                        <option value="">City</option>
+                                    </select>
+                                </div>            <div class="col-lg-4 col-12 padding-screen">
+                           <select class="form-control"  id="disctricts-ddl" onchange="filterDoctors()">
+                                        <option value="">Disctrict</option>
+                                    </select>
+                                </div>
+                                </div>
+                <div id="doctorsListContainer" class="row">
+                                @Html.Partial("_DoctorsList",Model)
+                                </div>
+                </form>
+            </div>
+
+            <div class="col-lg-4 col-12 mb-4">
+                <div class="data-contain" style="margin-top: 84px;">
+                    <div  style="padding-bottom:16px">
+                    <select class="form-control"  id="sort-ddl" onchange="filterDoctors()">
+                                        <option value="0">Sort By</option>
+                                        <option value="1">Name</option>
+                                        <option value="2">Location</option>
+                                    </select>
+                                    </div>
+                                    <div style="padding-bottom:10px">
+                    <select class="form-control"  id="insurance-ddl" onchange="filterDoctors()">
+                                        <option value="0">Insurance </option>
+                                        <option value="1">Included </option>
+                                        <option value="2">Excluded </option>
+                                    </select>
+                                    </div>
+                          
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+    $(document).ready(function() {
+                $.ajax({
+                        url: '@Url.Action("GetCitiesDDL", "Common")',
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (data) {
+                            // Clear existing options
+                            $('#cities-ddl').empty();
+                            // Populate the dropdown list
+                            var dropdown = $('#cities-ddl');
+                                dropdown.append($('<option></option>').val(0).text('Cities'));
+
+                            $.each(data, function (index, item) {
+                                dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                            });
+                        }
+                    });
+                           $.ajax({
+                        url: '@Url.Action("GetDisctrictsDDL", "Common")',
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (data) {
+                            // Clear existing options
+                            $('#disctricts-ddl').empty();
+                            // Populate the dropdown list
+                            var dropdown = $('#disctricts-ddl');
+                                dropdown.append($('<option></option>').val(0).text('Disctricts'));
+
+                            $.each(data, function (index, item) {
+                                dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                            });
+                        }
+                    });
+
+                            $.ajax({
+                        url: '@Url.Action("GetServicesDDL", "Common")',
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (data) {
+                            // Clear existing options
+                            $('#services-ddl').empty();
+                            // Populate the dropdown list
+                            var dropdown = $('#services-ddl');
+                                dropdown.append($('<option></option>').val(0).text('All Services'));
+
+                            $.each(data, function (index, item) {
+                                dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                            });
+                        }
+                    });
+
+
+   
+    });
+                     
+        function filterDoctors() {
+            debugger;
+            var doctorsContainer = $('#doctorsListContainer');
+            var serviceId = $('#services-ddl').val();
+            var disctrictId = $('#disctricts-ddl').val();
+
+            var cityId = $('#cities-ddl').val();
+            var sortBy = $('#sort-ddl').val();
+            var insuranceType = $('#insurance-ddl').val();
+            var name = $('#filterInput').val();
+
+            $.ajax({
+                url: '/Home/FillDoctorsList?name='+name+'&serviceId='+serviceId+'&cityId='+cityId+'&disctrictId='+disctrictId+'&sortBy='+sortBy+'&insuranceType='+insuranceType, // Replace with the actual URL and action method to fetch the partial view
+                type: 'GET',
+                success: function (response) {
+                    doctorsContainer.html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
+             function fillDoctorDetails(userId) {
+            debugger;
+            var userDetailsContainer = $('#userDetailsContainer');
+
+            $.ajax({
+                url: '/Home/GetUserDetailsById?userId='+userId,
+                type: 'GET',
+                success: function (response) {
+                    userDetailsContainer.html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
+</script>
+}
+
+<div class="modal fade" id="UserProfileModal" tabindex="-1" role="dialog" aria-labelledby="UserProfileModal" aria-hidden="true">
+    <div class="modal-dialog custom-modal-dialog" style="max-width: 600px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="UserProfileModal">User Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body userDetailsContainer" id="userDetailsContainer">
+                    <!-- Add your modal content here -->
+
+            </div>
+
+            <div class="modal-footer" style="text-align:center">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="close-add-service">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

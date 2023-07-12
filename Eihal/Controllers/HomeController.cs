@@ -1,16 +1,18 @@
-﻿using Eihal.Models;
+﻿using Eihal.Data;
+using Eihal.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Globalization;
 using static Eihal.Areas.Identity.Pages.Account.LoginModel;
 
 namespace Eihal.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ApplicationDbContext dbContext, ILogger<HomeController> logger) : base(dbContext)
         {
             _logger = logger;
         }
@@ -63,6 +65,45 @@ namespace Eihal.Controllers
         public IActionResult Contact()
         {
             return View();
+        }
+        public IActionResult Doctors()
+        {
+            var doctors = _dbContext.UserProfiles.Include(x => x.Certifications).ThenInclude(a => a.Degree).Include(a=> a.PractitionerType).Include(a=>a.City).Where(a => a.AccountTypeId == 1).ToList();
+            return View(doctors);
+        }
+        public ActionResult FillDoctorsList(string name,int serviceId,int cityId,int disctrictId,int sortBy,int insuranceType)
+        {
+            List<int> ids = new List<int>();
+            if (serviceId > 0)
+            {
+                ids = _dbContext.UserServices.Where(a => a.ServiceId == serviceId).Select(a => a.UserId).ToList();
+
+            }
+            name = string.IsNullOrEmpty(name) ? string.Empty : name;
+            var doctors = _dbContext.UserProfiles.Include(x=>x.Certifications).ThenInclude(a=>a.Degree).Include(a => a.PractitionerType).Include(x=>x.City).Where(a => a.AccountTypeId == 1 
+           && (name == String.Empty || a.FullName.Contains(name))
+            && (serviceId == 0  || ids.Contains( a.Id))
+            && (cityId ==0 || a.CityId == cityId) 
+            && (insuranceType == 0 || (insuranceType == 1 && a.InsuranceAccepted == true) || (insuranceType == 2 && a.InsuranceAccepted != true))
+           
+            ).ToList();
+            if (sortBy != 0) {
+                if(sortBy == 1)
+                doctors = doctors.OrderBy(a => a.FullName).ToList();
+            else
+                {
+                    doctors = doctors.OrderBy(a => a.City).ToList();
+                }
+            }
+            return PartialView("_DoctorsList",doctors);
+        }
+
+        public ActionResult GetUserDetailsById(string userId)
+        {
+            var userDetails = _dbContext.UserProfiles.Include(x => x.Certifications).ThenInclude(a => a.Degree).Include(a => a.PractitionerType).Include(x => x.City).Where(a => a.UserId == userId
+            ).FirstOrDefault();
+          
+            return PartialView("_UserDetails", userDetails);
         }
 
         public IActionResult About()
