@@ -68,7 +68,7 @@ namespace Eihal.Controllers
         }
         public IActionResult Doctors()
         {
-            var doctors = _dbContext.UserProfiles.Include(x => x.Certifications).ThenInclude(a => a.Degree).Include(a=> a.PractitionerType).Include(a=>a.City).Where(a => a.AccountTypeId == 1).ToList();
+            var doctors = _dbContext.UserProfiles.Include(x => x.Certifications).ThenInclude(a => a.Degree).Include(a=> a.PractitionerType).Include(a=>a.City).Where(a =>a.ProfileStatus == ProfileStatus.Active && a.AccountTypeId == 1).ToList();
             return View(doctors);
         }
         public ActionResult FillDoctorsList(string name,int serviceId,int cityId,int disctrictId,int sortBy,int insuranceType)
@@ -80,7 +80,7 @@ namespace Eihal.Controllers
 
             }
             name = string.IsNullOrEmpty(name) ? string.Empty : name;
-            var doctors = _dbContext.UserProfiles.Include(x=>x.Certifications).ThenInclude(a=>a.Degree).Include(a => a.PractitionerType).Include(x=>x.City).Where(a => a.AccountTypeId == 1 
+            var doctors = _dbContext.UserProfiles.Include(x=>x.Certifications).ThenInclude(a=>a.Degree).Include(a => a.PractitionerType).Include(x=>x.City).Where(a => a.ProfileStatus == ProfileStatus.Active && a.AccountTypeId == 1 
            && (name == String.Empty || a.FullName.Contains(name))
             && (serviceId == 0  || ids.Contains( a.Id))
             && (cityId ==0 || a.CityId == cityId) 

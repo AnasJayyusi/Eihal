@@ -243,7 +243,7 @@
 
                                     <h6 style="color:#00768c" class="m-0 font-weight-bold text-primary">
                                         <a style="color:#00768c" class="nav-link" href="index.html">
-                                            <i style="color:#00768c" class="fa fa-user" aria-hidden="true"></i>
+                                            <i style="color:#00768c" class="fas fa-share-alt" aria-hidden="true"></i>
                                             <span style="color:#00768c">Referrals</span>
                                         </a>
                                     </h6>
@@ -258,21 +258,27 @@
 <div id="tab1" class="tab-content" style="display: none;">
               <div class="row">
                           <div class="form-group mr-2 search-container" style="margin-top: 32px;">
-                               <label for="filterInput"></label>
-                                        <input type="text" class="form-control margin-15-position-obselete" id="filterInput" name="search" style=" background-color: #f2f2f2;" placeholder="Search for name" value="">
-                                        <i class="fas fa-search" style=" margin-right: 0.5%; color: #00768c;cursor:pointer" onclick="filterDoctors()"></i>
+                               <label for="filterInput-incoming"></label>
+                                        <input type="text" class="form-control margin-15-position-obselete" id="filterInput-incoming" name="search" style=" background-color: #f2f2f2;" placeholder="Search for name" value="">
+                                        <i class="fas fa-search" style=" margin-right: 0.5%; color: #00768c;cursor:pointer" onclick="filterIncomingReferrals()"></i>
                                     </div>
                      <div class="col-lg-3 col-12 padding-screen" style="padding-right:8px">
-                         <label for="status-dll">Status</label>
-                           <select class="form-control"  id="Status-ddl" onchange="filterDoctors()">
-                                        <option value="">Status</option>
+                         <label for="status-incoming-dll">Status</label>
+                           <select class="form-control"  id="status-incoming-ddl" onchange="filterIncomingReferrals()">
+                                        <option value="0">Status</option>
+                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.UnderReview)">Under Review</option>
+                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.Approved)">Approved</option>
+                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.Rejected)">Rejected</option>
                                     </select>
                                 </div>
                                   <div class="col-lg-3 col-12 padding-screen" style="padding-right:8px">
-                         <label for="date-dll">Date</label>
+                         <label for="date-incoming-dll">Date</label>
 
-                           <select class="form-control"  id="date-ddl" onchange="filterDoctors()">
-                                        <option value="">Date</option>
+                           <select class="form-control"  id="date-incoming-ddl" onchange="filterIncomingReferrals()">
+                                        <option value="0">Date</option>
+                                        <option value="1">Today</option>
+                                        <option value="2">7 days ago</option>
+                                        <option value="3">30 days ago</option>
                                     </select>
                                 </div>
         </div>
@@ -288,21 +294,27 @@
 <div id="tab2" class="tab-content" style="display: none;">
               <div class="row">
                           <div class="form-group mr-2 search-container" style="margin-top: 32px;">
-                               <label for="filterInput"></label>
-                                        <input type="text" class="form-control margin-15-position-obselete" id="filterInput" name="search" style=" background-color: #f2f2f2;" placeholder="Search for name" value="">
-                                        <i class="fas fa-search" style=" margin-right: 0.5%; color: #00768c;cursor:pointer" onclick="filterDoctors()"></i>
+                               <label for="filterInput-outgoing"></label>
+                                        <input type="text" class="form-control margin-15-position-obselete" id="filterInput-outgoing" name="search" style=" background-color: #f2f2f2;" placeholder="Search for name" value="">
+                                        <i class="fas fa-search" style=" margin-right: 0.5%; color: #00768c;cursor:pointer" onclick="filterOutgoingReferrals()"></i>
                                     </div>
-                     <div class="col-lg-3 col-12 padding-screen" style="padding-right:8px">
-                         <label for="status-dll">Status</label>
-                           <select class="form-control"  id="Status-ddl" onchange="filterDoctors()">
-                                        <option value="">Status</option>
+                    <div class="col-lg-3 col-12 padding-screen" style="padding-right:8px">
+                           <label for="status-outgoing-dll">Status</label>
+                           <select class="form-control"  id="status-outgoing-ddl" onchange="filterOutgoingReferrals()">
+                                        <option value="0">Status</option>
+                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.UnderReview)">Under Review</option>
+                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.Approved)">Approved</option>
+                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.Rejected)">Rejected</option>
                                     </select>
                                 </div>
                                   <div class="col-lg-3 col-12 padding-screen" style="padding-right:8px">
-                         <label for="date-dll">Date</label>
+                         <label for="date-outgoing-dll">Date</label>
 
-                           <select class="form-control"  id="date-ddl" onchange="filterDoctors()">
-                                        <option value="">Date</option>
+                           <select class="form-control"  id="date-outgoing-ddl" onchange="filterOutgoingReferrals()">
+                                        <option value="0">Date</option>
+                                        <option value="1">Today</option>
+                                        <option value="2">7 days ago</option>
+                                        <option value="3">30 days ago</option>
                                     </select>
                                 </div>
         </div>
@@ -339,37 +351,46 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
-       
-        function GetOutgoingRequests() {
-            var outgoingRequestContainer = $('#outgoingRequestContainer');
+                     
+        function filterIncomingReferrals() {
+            debugger;
+            var name = $('#filterInput-incoming').val();
+
+            var incomingContainer = $('#incomingRequestContainer');
+            var statusId = $('#status-incoming-ddl').val();
+            var dateId = $('#date-incoming-ddl').val();
 
             $.ajax({
-                url: '/ServiceProvider/GetUserOutgoingRequests', // Replace with the actual URL and action method to fetch the partial view
+                url: '/ServiceProvider/GetUserIncomingRequests?name='+name+'&statusId='+statusId+'&dateId='+dateId, // Replace with the actual URL and action method to fetch the partial view
                 type: 'GET',
                 success: function (response) {
-                    outgoingRequestContainer.html(response);
+                    incomingContainer.html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        } 
+        function filterOutgoingReferrals() {
+            debugger;
+            var name = $('#filterInput-outgoing').val();
 
+            var outgoingContainer = $('#outgoingRequestContainer');
+            var statusId = $('#status-outgoing-ddl').val();
+            var dateId = $('#date-outgoing-ddl').val();
+
+            $.ajax({
+                url: '/ServiceProvider/GetUserOutgoingRequests?name='+name+'&statusId='+statusId+'&dateId='+dateId, // Replace with the actual URL and action method to fetch the partial view
+                type: 'GET',
+                success: function (response) {
+                    outgoingContainer.html(response);
                 },
                 error: function (xhr, status, error) {
                     console.error('Error:', error);
                 }
             });
         }
-            function GetIncomingRequests() {
-            var incomingRequestContainer = $('#incomingRequestContainer');
 
-            $.ajax({
-                url: '/ServiceProvider/GetUserIncomingRequests', // Replace with the actual URL and action method to fetch the partial view
-                type: 'GET',
-                success: function (response) {
-                    incomingRequestContainer.html(response);
-
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error:', error);
-                }
-            });
-        }
         function setCookie(name, value, days) {
             var expires = "";
             if (days) {
@@ -381,20 +402,13 @@
         }
 
         $(document).ready(function () {
-            // Get the current URL
             var currentUrl = window.location.href;
-
-            // Check if the URL contains a specific segment
             if (currentUrl.includes("Referrals")) {
-                // Perform an action when the URL contains "something"
                 $("#referrals-li").addClass("activeLink");
                 $("#referrals-text").addClass("activeLink");
             } else {
-                // Perform a different action when the URL doesn't contain "something"
                 console.log("The URL does not contain 'Referrals'.");
             }
-            //GetIncomingRequests();
-            //$("#btnIncoming").click();
             document.getElementsByClassName('active')[0].click();
 
     
@@ -416,9 +430,9 @@
             // Show the selected tab content and set the corresponding button as active
             document.getElementById(tabName).style.display = "block";
             if(tabName == 'tab1'){
-                GetIncomingRequests();
+                filterIncomingReferrals();
             }else{
-                GetOutgoingRequests();
+                filterOutgoingReferrals();
             }
             evt.currentTarget.className += " active";
         }
