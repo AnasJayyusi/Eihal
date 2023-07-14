@@ -36,23 +36,43 @@ namespace Eihal.Controllers
 
         [Route("GetUserIncomingRequests")]
 
-        public ActionResult GetUserIncomingRequests()
+        public ActionResult GetUserIncomingRequests(string? name,int? statusId=0,int? dateId=0)
         {
             var currentUserId = GetUserProfileId();
-            var model = _dbContext.ReferralRequests.Include(a => a.Service).Include(a => a.CreatedByUser).Include(a => a.AssignedToUser).Where(a => a.AssignedToUserId == currentUserId).ToList(); // Replace with your logic to fetch the items
+            if (string.IsNullOrEmpty(name))
+                name = string.Empty;
+            var model = _dbContext.ReferralRequests.Include(a=>a.Service).Include(a=>a.CreatedByUser).Include(a=>a.AssignedToUser).Where(a =>
+            (a.CreatedByUser.FullName.Contains(name) ||name==string.Empty) 
+            &&(statusId ==0 || (int)a.Status==statusId)
+            &&(dateId==0 ||
+            (dateId == 1 && a.CreationDate.Date == DateTime.Now.Date) ||
+            (dateId == 2 && a.CreationDate >= DateTime.Now.AddDays(-7).Date  )||
+            (dateId == 3 && a.CreationDate >= DateTime.Now.AddDays(-30).Date  )
+            )
+            && a.AssignedToUserId == currentUserId).ToList(); 
 
-            return PartialView("_IncomingRequests", model); // Replace with the name of your partial view
-        }
-
+            return PartialView("_IncomingRequests", model);
+        }   
         [Route("GetUserOutgoingRequests")]
 
-        public ActionResult GetUserOutgoingRequests()
+        public ActionResult GetUserOutgoingRequests(string? name,int? statusId=0,int? dateId=0)
         {
             var currentUserId = GetUserProfileId();
-            var model = _dbContext.ReferralRequests.Include(a => a.Service).Include(a => a.CreatedByUser).Include(a => a.AssignedToUser).Where(a => a.CreatedByUserId == currentUserId).ToList(); // Replace with your logic to fetch the items
+            if (string.IsNullOrEmpty(name))
+                name = string.Empty;
+            var model = _dbContext.ReferralRequests.Include(a=>a.Service).Include(a=>a.CreatedByUser).Include(a=>a.AssignedToUser).Where(a =>
+            (a.AssignedToUser.FullName.Contains(name) ||name==string.Empty) 
+            &&(statusId ==0 || (int)a.Status==statusId)
+            &&(dateId==0 ||
+            (dateId == 1 && a.CreationDate.Date == DateTime.Now.Date) ||
+            (dateId == 2 && a.CreationDate >= DateTime.Now.AddDays(-7).Date  )||
+            (dateId == 3 && a.CreationDate >= DateTime.Now.AddDays(-30).Date  )
+            )
+            && a.CreatedByUserId == currentUserId).ToList(); 
 
-            return PartialView("_OutgoingRequests", model); // Replace with the name of your partial view
+            return PartialView("_OutgoingRequests", model);
         }
+
         #endregion
 
 
