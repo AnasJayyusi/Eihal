@@ -84,7 +84,7 @@
                         @Html.Partial("_Sidebar")
                         <div class="col-xl-8 col-lg-8 ">
 
-                            <div id="profile-status-container" style="color:white"></div>
+                            <div data-toggle="modal" data-target="#helpModal" id="profile-status-container" style="color:white"></div>
 
                             <br />
                             <div class="card shadow mb-4">
@@ -275,7 +275,7 @@
             var statusText = '';
             if (profileStatus === 'UnCompleted') {
                 profileStatusElement.css('background-color', 'rebeccapurple');
-                statusText = '<span style="font-weight: bold;">  Profile Status: UnCompleted </span> </br> Please complete your profile. Then <a id="reviewLink" href="#" onclick=sendToReview()  style="color: white; text-decoration: underline; font-weight: bold;">click here</a> to send your profile for review.';
+                statusText = '<span style="font-weight: bold;">  Profile Status: UnCompleted </span> </br> Please complete your profile. Then <a id="reviewLink" href="#" onclick=sendToReview()  style="color: white; text-decoration: underline; font-weight: bold;">Click here or send the profile again from the send to review button</a>  to send your profile for review.';
             } else if (profileStatus === 'UnderReview') {
                 profileStatusElement.css('background-color', 'darkcyan');
                 statusText = '<span style="font-weight: bold;"> Profile Status: Under Review</span>';
@@ -284,6 +284,15 @@
                 statusText = '<span style="font-weight: bold;"> Profile Status: Rejected</span>  to send your profile for review again. <a id="reviewLink" href="#" onclick=sendToReview()  style="color: white; text-decoration: underline; font-weight: bold;">Click here</a>';
 
             } else if (profileStatus === 'Active') {
+
+                $("#active-profile-sign").addClass("send-review-btn__circle")
+                $("#active-profile-sign").css("pointer-events", "none");
+                let buttonText = document.querySelector('.tick');
+                const tickMark = "<svg width=\"58\" height=\"45\" viewBox=\"0 0 58 45\" xmlns=\"http://www.w3.org/2000/svg\"><path fill=\"#fff\" fill-rule=\"nonzero\" d=\"M19.11 44.64L.27 25.81l5.66-5.66 13.18 13.18L52.07.38l5.65 5.65\"/></svg>";
+                buttonText.innerHTML = tickMark;
+                $("#send-icon").hide()
+               
+                
                 profileStatusElement.css('background-color', 'dodgerblue');
                 statusText = '<span style="font-weight: bold;"> Profile Status: Active</span>';
             }
@@ -316,3 +325,4 @@
 
 
 
+<st

@@ -180,6 +180,13 @@
             </div>
         </div>
     </div>
+
+    <div id="active-profile-sign" onclick=sendToReview() class="send-review-btn">
+  <i id="send-icon" style="color:white;margin-left:10px" class="fa fa-paper-plane" aria-hidden="true"></i>
+    <div class="container">
+        <div class="tick"></div>
+    </div>
+</div>
 </div>
 
 
@@ -317,6 +324,8 @@
 
 
 
+
+
 <!------------------------------ Attachment -------------------->
 
 <div class="modal fade" id="AttachCertificationsModal" tabindex="-1" role="dialog" aria-labelledby="AttachCertificationsModal" aria-hidden="true">
@@ -446,39 +455,6 @@
     function getFullUserProfileInfo() {
 
 
-        //if ($(".choices__list").length == 0 && $(".choices__inner").length == 0) {
-        //    //$.ajax({
-        //    //    url: '@Url.Action("GetUserSpecialtiesDDL", "ServiceProvider")',
-        //    //    type: 'GET',
-        //    //    dataType: 'json',
-        //    //    success: function (data) {
-        //    //        var select = $('#speciality-edit-multiSelect');
-        //    //        $.each(data, function (index, item) {
-        //    //            select.append($('<option></option>').val(item.id).text(item.titleEn));
-        //    //        });
-        //    //        new Choices(select[0], {
-        //    //            removeItemButton: true,
-        //    //            maxItemCount: 10,
-        //    //            placeholderValue: ''
-        //    //        });
-
-        //    //    },
-        //    //    error: function (error) {
-        //    //        console.log(error);
-        //    //    }
-        //    //});
-        //    var choicesAjax = new Choices('#speciality-edit-multiSelect').ajax((callback) => {
-        //        fetch('@Url.Action("GetUserSpecialtiesDDL", "ServiceProvider")')
-        //            .then((response) => {
-        //                response.json().then(function (data) {
-        //                    callback(data.releases, 'title', 'title');
-        //                });
-        //            })
-        //            .catch((error) => {
-        //                callback();
-        //            });
-        //    })
-        //}
         $.ajax({
             url: '@Url.Action("GetPractitionerTypesDDL", "Common")',
             type: 'GET',
@@ -578,12 +554,7 @@
             }
         });
 
-        //GetUserSpecialtiesDDL
-        //  $('.speciality-edit-multiSelect').select2({
-        //    theme: "classic",
-        //    placeholder: 'Select an option',
-        //    width: '100%'
-        //});
+      
 
         debugger
         $('.speciality-edit-multiSelect').select2({
@@ -597,21 +568,6 @@
         });
 
 
-        //$.ajax({
-        //    url: '@Url.Action("GetSpecialtiesSelectedOptions", "ServiceProvider")',
-        //        type: 'GET',
-        //    dataType: 'json',
-        //    success: function (data) {
-        //        console.log(data);
-        //        //$.each(data, function (index, item) {
-        //        //    var items =
-        //        //    var option = new Option(item.text, item.Id, true, true);
-        //        //    $('.speciality-edit-multiSelect').append(option).trigger('change');
-        //        //});
-        //    }
-        //})
-
-        //TODO
 
 
     }
@@ -880,3 +836,63 @@
 
 
 
+<style>
+    /* CSS Styles */
+    .send-review-btn, .tick {
+        display: flex;
+        justify-content: center;
+        margin-left:auto;
+        align-items: center;
+        font-family: sans-serif;
+    }
+
+    .send-review-btn {
+        width: 175px;
+        height: 40px;
+        background: #00768c;
+        border-radius: 6px;
+        transition: all .3s cubic-bezier(0.67, 0.17, 0.40, 0.83);
+    }
+
+        .send-review-btn svg {
+            transform: rotate(180deg);
+            transition: all .5s;
+        }
+
+    .send-review-btn__circle {
+        width: 60px;
+        height: 50px;
+        background: mediumseagreen;
+        border-radius: 50%;
+        transform: rotate(-180deg);
+    }
+
+    .send-review-btn:hover {
+        cursor: pointer;
+    }
+
+    .tick {
+        color: white;
+        /*font-size: 2em;*/
+        transition: all .9s;
+    }
+</style>
+<script>
+    // JavaScript Code
+    let button = document.querySelector('.send-review-btn');
+    let buttonText = document.querySelector('.tick');
+
+    const tickMark = "<svg width=\"58\" height=\"45\" viewBox=\"0 0 58 45\" xmlns=\"http://www.w3.org/2000/svg\"><path fill=\"#fff\" fill-rule=\"nonzero\" d=\"M19.11 44.64L.27 25.81l5.66-5.66 13.18 13.18L52.07.38l5.65 5.65\"/></svg>";
+
+    buttonText.innerHTML = "Send To Review";
+
+    button.addEventListener('click', function () {
+        if (buttonText.innerHTML !== "Send To Review") {
+            buttonText.innerHTML = "Send To Review";
+        } else if (buttonText.innerHTML === "Send To Review") {
+            buttonText.innerHTML = tickMark;
+        }
+        $("#send-icon").hide()
+        this.classList.toggle('send-review-btn__circle');
+    });
+</script>
