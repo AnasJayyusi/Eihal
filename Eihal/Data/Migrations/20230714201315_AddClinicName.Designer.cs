@@ -4,6 +4,7 @@ using Eihal.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Eihal.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230714201315_AddClinicName")]
+    partial class AddClinicName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -640,21 +642,6 @@ namespace Eihal.Data.Migrations
                     b.ToTable("TimeClinicLocations");
                 });
 
-            modelBuilder.Entity("Eihal.Data.Entites.UserCompany", b =>
-                {
-                    b.Property<int>("UserProfileId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("InsuranceCompanyId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserProfileId", "InsuranceCompanyId");
-
-                    b.HasIndex("InsuranceCompanyId");
-
-                    b.ToTable("UserCompanies");
-                });
-
             modelBuilder.Entity("Eihal.Data.Entites.UserProfile", b =>
                 {
                     b.Property<int>("Id")
@@ -792,21 +779,6 @@ namespace Eihal.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserServices");
-                });
-
-            modelBuilder.Entity("InsuranceCompanyUserProfile", b =>
-                {
-                    b.Property<int>("InsuranceCompaniesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserProfilesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("InsuranceCompaniesId", "UserProfilesId");
-
-                    b.HasIndex("UserProfilesId");
-
-                    b.ToTable("InsuranceCompanyUserProfile");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -1255,25 +1227,6 @@ namespace Eihal.Data.Migrations
                     b.Navigation("UserProfile");
                 });
 
-            modelBuilder.Entity("Eihal.Data.Entites.UserCompany", b =>
-                {
-                    b.HasOne("Eihal.Data.Entites.InsuranceCompany", "CompanyId")
-                        .WithMany()
-                        .HasForeignKey("InsuranceCompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Eihal.Data.Entites.UserProfile", "UserProfile")
-                        .WithMany()
-                        .HasForeignKey("UserProfileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CompanyId");
-
-                    b.Navigation("UserProfile");
-                });
-
             modelBuilder.Entity("Eihal.Data.Entites.UserProfile", b =>
                 {
                     b.HasOne("Eihal.Data.Entites.City", "City")
@@ -1324,21 +1277,6 @@ namespace Eihal.Data.Migrations
                     b.Navigation("Service");
 
                     b.Navigation("UserProfile");
-                });
-
-            modelBuilder.Entity("InsuranceCompanyUserProfile", b =>
-                {
-                    b.HasOne("Eihal.Data.Entites.InsuranceCompany", null)
-                        .WithMany()
-                        .HasForeignKey("InsuranceCompaniesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Eihal.Data.Entites.UserProfile", null)
-                        .WithMany()
-                        .HasForeignKey("UserProfilesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

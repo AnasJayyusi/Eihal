@@ -1,8 +1,10 @@
 ﻿using Eihal.Data;
 using Eihal.Data.Entites;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.Design;
 using System.Data;
 
 namespace Eihal.Controllers
@@ -37,7 +39,7 @@ namespace Eihal.Controllers
         public ActionResult GetUserIncomingRequests()
         {
             var currentUserId = GetUserProfileId();
-            var model = _dbContext.ReferralRequests.Include(a=>a.Service).Include(a=>a.CreatedByUser).Include(a=>a.AssignedToUser).Where(a => a.AssignedToUserId == currentUserId).ToList(); // Replace with your logic to fetch the items
+            var model = _dbContext.ReferralRequests.Include(a => a.Service).Include(a => a.CreatedByUser).Include(a => a.AssignedToUser).Where(a => a.AssignedToUserId == currentUserId).ToList(); // Replace with your logic to fetch the items
 
             return PartialView("_IncomingRequests", model); // Replace with the name of your partial view
         }
@@ -63,7 +65,7 @@ namespace Eihal.Controllers
             //var services = _dbContext.Services.Where(a => a.IsActive).ToList();
             return View(services);
         }
-       
+
         [Route("MyServiceCardPartial")]
 
         public ActionResult MyServiceCardPartial()
@@ -295,6 +297,14 @@ namespace Eihal.Controllers
             return Json(cities);
         }
 
+
+        [Route("GetDistricts")]
+        public ActionResult GetDistricts(int cityId)
+        {
+            var districts = _dbContext.Districts.Where(w => w.CityId == cityId).ToList();
+            return Json(districts);
+        }
+
         [HttpGet]
         [Route("SendProfileToReview")]
         public ActionResult SendProfileToReview()
@@ -404,6 +414,193 @@ namespace Eihal.Controllers
             return Json(degrees);
         }
         #endregion
+
+
+
+        [HttpPost]
+        [Route("UpdateTimeClinicLocation")]
+        public IActionResult UpdateTimeClinicLocation(IFormCollection form)
+        {
+            var userProfileId = GetUserProfileId();
+            bool isAddOperation = false;
+            var obj = _dbContext.TimeClinicLocations.SingleOrDefault(s => s.UserProfileId == userProfileId);
+
+            if (obj == null)
+            {
+                obj = new TimeClinicLocation();
+                isAddOperation = true;
+                obj.UserProfileId = GetUserProfileId();
+            }
+
+            if (!string.IsNullOrEmpty(form["CountryId"]))
+                obj.ClinicName = form["ClinicName"];
+
+            // Access form data & fill to user profile object
+            if (!string.IsNullOrEmpty(form["CountryId"]))
+                obj.CountryId = Convert.ToInt32(form["CountryId"]);
+
+            if (!string.IsNullOrEmpty(form["StateId"]))
+                obj.StateId = Convert.ToInt32(form["StateId"]);
+
+            if (!string.IsNullOrEmpty(form["CityId"]))
+                obj.CityId = Convert.ToInt32(form["CityId"]);
+
+            if (!string.IsNullOrEmpty(form["DistrictId"]))
+                obj.DistrictId = Convert.ToInt32(form["DistrictId"]);
+
+            if (!string.IsNullOrEmpty(form["SundayOpenAt"]) && !string.IsNullOrEmpty(form["SundayClosedAt"]))
+            {
+                obj.SundayOpenAt = form["SundayOpenAt"];
+                obj.SundayClosedAt = form["SundayClosedAt"];
+                obj.SundayIsClosed = false;
+            }
+            else
+            {
+                obj.SundayIsClosed = form["SundayIsClosed"] == "true" ? true : false;
+            }
+
+            if (!string.IsNullOrEmpty(form["MondayOpenAt"]) && !string.IsNullOrEmpty(form["MondayClosedAt"]))
+            {
+                obj.MondayOpenAt = form["MondayOpenAt"];
+                obj.MondayClosedAt = form["MondayClosedAt"];
+                obj.MondayIsClosed = false;
+            }
+            else
+            {
+                obj.MondayIsClosed = form["MondayIsClosed"] == "true" ? true : false;
+            }
+
+            if (!string.IsNullOrEmpty(form["TuesdayOpenAt"]) && !string.IsNullOrEmpty(form["TuesdayClosedAt"]))
+            {
+                obj.TuesdayOpenAt = form["TuesdayOpenAt"];
+                obj.TuesdayClosedAt = form["TuesdayClosedAt"];
+                obj.TuesdayIsClosed = false;
+            }
+            else
+            {
+                obj.TuesdayIsClosed = form["TuesdayIsClosed"] == "true" ? true : false;
+            }
+
+            if (!string.IsNullOrEmpty(form["WednesdayOpenAt"]) && !string.IsNullOrEmpty(form["WednesdayClosedAt"]))
+            {
+                obj.WednesdayOpenAt = form["WednesdayOpenAt"];
+                obj.WednesdayClosedAt = form["WednesdayClosedAt"];
+                obj.WednesdayIsClosed = false;
+            }
+            else
+            {
+                obj.WednesdayIsClosed = form["WednesdayIsClosed"] == "true" ? true : false;
+            }
+
+            if (!string.IsNullOrEmpty(form["ThursdayOpenAt"]) && !string.IsNullOrEmpty(form["ThursdayClosedAt"]))
+            {
+                obj.ThursdayOpenAt = form["ThursdayOpenAt"];
+                obj.ThursdayClosedAt = form["ThursdayClosedAt"];
+                obj.ThursdayIsClosed = false;
+            }
+            else
+            {
+                obj.ThursdayIsClosed = form["ThursdayIsClosed"] == "true" ? true : false;
+            }
+
+            if (!string.IsNullOrEmpty(form["FridayOpenAt"]) && !string.IsNullOrEmpty(form["FridayClosedAt"]))
+            {
+                obj.FridayOpenAt = form["FridayOpenAt"];
+                obj.FridayClosedAt = form["FridayClosedAt"];
+                obj.FridayIsClosed = false;
+            }
+            else
+            {
+                obj.FridayIsClosed = form["FridayIsClosed"] == "true" ? true : false;
+            }
+
+            if (!string.IsNullOrEmpty(form["SaturdayOpenAt"]) && !string.IsNullOrEmpty(form["SaturdayClosedAt"]))
+            {
+                obj.SaturdayOpenAt = form["SaturdayOpenAt"];
+                obj.SaturdayClosedAt = form["SaturdayClosedAt"];
+                obj.SaturdayIsClosed = false;
+            }
+            else
+            {
+                obj.SaturdayIsClosed = form["SaturdayIsClosed"] == "true" ? true : false;
+            }
+
+
+            if (isAddOperation)
+                _dbContext.TimeClinicLocations.Add(obj);
+            else
+                _dbContext.TimeClinicLocations.Update(obj);
+            _dbContext.SaveChanges();
+            return Ok("Updated successfully.");
+        }
+
+        [HttpGet]
+        [Route("GetTimeClinicLocation")]
+        public ActionResult GetTimeClinicLocation()
+        {
+            var userProfileId = GetUserProfileId();
+            var timeClinicLocation = _dbContext.TimeClinicLocations.
+                                                             Include(i => i.State)
+                                                            .Include(i => i.City)
+                                                            .Include(i => i.Districts)
+                                                            .FirstOrDefault(w => w.UserProfileId == userProfileId);
+            if (timeClinicLocation != null)
+            {
+                // Your logic to retrieve the necessary data
+                var data = new
+                {
+                    timeClinicLocation.ClinicName,
+                    timeClinicLocation.SundayOpenAt,
+                    timeClinicLocation.SundayClosedAt,
+                    timeClinicLocation.SundayIsClosed,
+                    timeClinicLocation.MondayOpenAt,
+                    timeClinicLocation.MondayClosedAt,
+                    timeClinicLocation.MondayIsClosed,
+                    timeClinicLocation.TuesdayOpenAt,
+                    timeClinicLocation.TuesdayClosedAt,
+                    timeClinicLocation.TuesdayIsClosed,
+                    timeClinicLocation.WednesdayOpenAt,
+                    timeClinicLocation.WednesdayClosedAt,
+                    timeClinicLocation.WednesdayIsClosed,
+                    timeClinicLocation.ThursdayOpenAt,
+                    timeClinicLocation.ThursdayClosedAt,
+                    timeClinicLocation.ThursdayIsClosed,
+                    timeClinicLocation.FridayOpenAt,
+                    timeClinicLocation.FridayClosedAt,
+                    timeClinicLocation.FridayIsClosed,
+                    timeClinicLocation.SaturdayOpenAt,
+                    timeClinicLocation.SaturdayClosedAt,
+                    timeClinicLocation.SaturdayIsClosed,
+                    timeClinicLocation.CountryId,
+                    timeClinicLocation.StateId,
+                    timeClinicLocation.CityId,
+                    timeClinicLocation.DistrictId
+                };
+                return Json(data);
+            }
+            return Json("");
+        }
+
+
+        [HttpGet]
+        [Route("AddInsuranceCompany")]
+        public ActionResult AddInsuranceCompany(string companyId)
+        {
+            int id = Convert.ToInt32(companyId);
+
+            var userProfileId = GetUserProfileId();
+
+            var userCompany = new UserCompany();
+            userCompany.UserProfileId = userProfileId;
+            userCompany.InsuranceCompanyId = id;
+
+            _dbContext.UserCompanies.Add(userCompany);
+            _dbContext.SaveChanges();
+
+            return Ok("Added successfully.");
+
+        }
+
 
     }
 }

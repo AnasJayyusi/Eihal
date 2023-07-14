@@ -1786,6 +1786,7 @@ namespace Eihal.Controllers
 
             return View(_dbContext.Districts.Include(i => i.Country)
                                           .Include(i => i.State)
+                                          .Include(i => i.City)
                                           .ToList());
         }
 
