@@ -218,7 +218,6 @@
         });
     });
     function rejectService(userServicesId){
-        debugger;
         var reason = $('#rejectionReason').val();
   $.ajax({
             url: '/Admin/RejectDashboardUserServices?id='+userServicesId+'&rejectionReason='+reason,

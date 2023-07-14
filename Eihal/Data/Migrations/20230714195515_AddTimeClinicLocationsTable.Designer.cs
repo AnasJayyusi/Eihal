@@ -4,6 +4,7 @@ using Eihal.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Eihal.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230714195515_AddTimeClinicLocationsTable")]
+    partial class AddTimeClinicLocationsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -253,50 +255,6 @@ namespace Eihal.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("InsuranceCompanies");
-                });
-
-            modelBuilder.Entity("Eihal.Data.Entites.Notification", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("AssignedToUserId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CreatedByUserId")
-                        .IsRequired()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsRead")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("MessageAr")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MessageEn")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TitleAr")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TitleEn")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AssignedToUserId");
-
-                    b.HasIndex("CreatedByUserId");
-
-                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("Eihal.Data.Entites.PractitionerType", b =>
@@ -591,9 +549,6 @@ namespace Eihal.Data.Migrations
                     b.Property<int?>("CityId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ClinicName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("CountryId")
                         .HasColumnType("int");
 
@@ -601,72 +556,86 @@ namespace Eihal.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("FridayClosedAt")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("FridayIsClosed")
                         .HasColumnType("bit");
 
                     b.Property<string>("FridayOpenAt")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MondayClosedAt")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("MondayIsClosed")
                         .HasColumnType("bit");
 
                     b.Property<string>("MondayOpenAt")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SaturdayClosedAt")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("SaturdayIsClosed")
                         .HasColumnType("bit");
 
                     b.Property<string>("SaturdayOpenAt")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("StateId")
                         .HasColumnType("int");
 
                     b.Property<string>("SundayClosedAt")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("SundayIsClosed")
                         .HasColumnType("bit");
 
                     b.Property<string>("SundayOpenAt")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ThursdayClosedAt")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("ThursdayIsClosed")
                         .HasColumnType("bit");
 
                     b.Property<string>("ThursdayOpenAt")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TuesdayClosedAt")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TuesdayIsClosed")
                         .HasColumnType("bit");
 
                     b.Property<string>("TuesdayOpenAt")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("UserProfileId")
                         .HasColumnType("int");
 
                     b.Property<string>("WednesdayClosedAt")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("WednesdayIsClosed")
                         .HasColumnType("bit");
 
                     b.Property<string>("WednesdayOpenAt")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -682,21 +651,6 @@ namespace Eihal.Data.Migrations
                     b.HasIndex("UserProfileId");
 
                     b.ToTable("TimeClinicLocations");
-                });
-
-            modelBuilder.Entity("Eihal.Data.Entites.UserCompany", b =>
-                {
-                    b.Property<int>("UserProfileId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("InsuranceCompanyId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserProfileId", "InsuranceCompanyId");
-
-                    b.HasIndex("InsuranceCompanyId");
-
-                    b.ToTable("UserCompanies");
                 });
 
             modelBuilder.Entity("Eihal.Data.Entites.UserProfile", b =>
@@ -836,21 +790,6 @@ namespace Eihal.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserServices");
-                });
-
-            modelBuilder.Entity("InsuranceCompanyUserProfile", b =>
-                {
-                    b.Property<int>("InsuranceCompaniesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserProfilesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("InsuranceCompaniesId", "UserProfilesId");
-
-                    b.HasIndex("UserProfilesId");
-
-                    b.ToTable("InsuranceCompanyUserProfile");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -1158,25 +1097,6 @@ namespace Eihal.Data.Migrations
                     b.Navigation("State");
                 });
 
-            modelBuilder.Entity("Eihal.Data.Entites.Notification", b =>
-                {
-                    b.HasOne("Eihal.Data.Entites.UserProfile", "AssignedToUser")
-                        .WithMany()
-                        .HasForeignKey("AssignedToUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Eihal.Data.Entites.UserProfile", "CreatedByUser")
-                        .WithMany()
-                        .HasForeignKey("CreatedByUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AssignedToUser");
-
-                    b.Navigation("CreatedByUser");
-                });
-
             modelBuilder.Entity("Eihal.Data.Entites.Privillage", b =>
                 {
                     b.HasOne("Eihal.Data.Entites.ClinicalSpeciality", "ClinicalSpeciality")
@@ -1318,25 +1238,6 @@ namespace Eihal.Data.Migrations
                     b.Navigation("UserProfile");
                 });
 
-            modelBuilder.Entity("Eihal.Data.Entites.UserCompany", b =>
-                {
-                    b.HasOne("Eihal.Data.Entites.InsuranceCompany", "CompanyId")
-                        .WithMany()
-                        .HasForeignKey("InsuranceCompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Eihal.Data.Entites.UserProfile", "UserProfile")
-                        .WithMany()
-                        .HasForeignKey("UserProfileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CompanyId");
-
-                    b.Navigation("UserProfile");
-                });
-
             modelBuilder.Entity("Eihal.Data.Entites.UserProfile", b =>
                 {
                     b.HasOne("Eihal.Data.Entites.City", "City")
@@ -1387,21 +1288,6 @@ namespace Eihal.Data.Migrations
                     b.Navigation("Service");
 
                     b.Navigation("UserProfile");
-                });
-
-            modelBuilder.Entity("InsuranceCompanyUserProfile", b =>
-                {
-                    b.HasOne("Eihal.Data.Entites.InsuranceCompany", null)
-                        .WithMany()
-                        .HasForeignKey("InsuranceCompaniesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Eihal.Data.Entites.UserProfile", null)
-                        .WithMany()
-                        .HasForeignKey("UserProfilesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

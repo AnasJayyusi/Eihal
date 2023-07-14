@@ -2,7 +2,7 @@
 
 <style>
     .doctor-card {
-        min-height:300px;
+        min-height: 300px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         position: relative;
         cursor: pointer;
@@ -165,18 +165,18 @@
         .no-results p {
             margin: 0;
         }
-            .doctor-card {
+
+    .doctor-card {
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         position: relative;
         cursor: pointer;
         transition: transform 0.3s ease;
-       
     }
 
-    .doctor-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-    }
+        .doctor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
 
     .doctor-card-body {
         background-color: white;
@@ -254,27 +254,28 @@
         .dots-button::before {
             top: 46%;
         }
-        .no-results {
-    width:100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  margin-top: 20px;
-  padding: 20px;
-  font-size: 18px;
-}
 
-.no-results img {
-  width: 80px;
-  height: 80px;
-  margin-bottom: 10px;
-}
+    .no-results {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        margin-top: 20px;
+        padding: 20px;
+        font-size: 18px;
+    }
 
-.no-results p {
-  margin: 0;
-}
+        .no-results img {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 10px;
+        }
+
+        .no-results p {
+            margin: 0;
+        }
 
     .search-container {
         position: relative;
@@ -294,7 +295,7 @@
             transform: translateY(-50%);
             color: #888;
         }
-        
+
     .status {
         text-align: center;
         font-size: 10px;
@@ -302,10 +303,12 @@
         border-radius: 4px;
         font-weight: bold;
     }
-     .status-default {
+
+    .status-default {
         background-color: #00768c;
         color: #ffffff;
     }
+
     .status-success {
         background-color: #4CAF50;
         color: #ffffff;
@@ -359,53 +362,53 @@
                 </div>
                 <form class="form-contain" method="POST" action="https://eihal.paths.sa/contact-us/insert" id="validation">
 
-                    <input type="hidden" name="_token" value="P9gMRWSZXiKVb1HY0oTRjpAhSnhUQU6JAmVkQpN8">        
-                          <div class="row">
-                                    <div class="form-group mr-2 search-container">
-                                        <input type="text" class="form-control margin-15-position-obselete" id="filterInput" name="search" style=" background-color: #f2f2f2;" placeholder="Search" value="">
-                                        <i class="fas fa-search" style=" margin-right: 0.5%; color: #00768c;cursor:pointer" onclick="filterDoctors()"></i>
-                                    </div>
-                  
-                                </div>
-                                                  <div class="row">
-                <div class="col-lg-4 col-12 padding-screen" style="padding-right:8px">
-                           <select class="form-control"  id="services-ddl" onchange="filterDoctors()">
-                                        <option value="">All Services</option>
-                                    </select>
-                                </div>
-                                    <div class="col-lg-4 col-12 padding-screen" style="padding-right:8px">
-                           <select class="form-control"  id="cities-ddl" onchange="filterDoctors()">
-                                        <option value="">City</option>
-                                    </select>
-                                </div>            <div class="col-lg-4 col-12 padding-screen">
-                           <select class="form-control"  id="disctricts-ddl" onchange="filterDoctors()">
-                                        <option value="">Disctrict</option>
-                                    </select>
-                                </div>
-                                </div>
-                <div id="doctorsListContainer" class="row">
-                                @Html.Partial("_DoctorsList",Model)
-                                </div>
+                    <input type="hidden" name="_token" value="P9gMRWSZXiKVb1HY0oTRjpAhSnhUQU6JAmVkQpN8">
+                    <div class="row">
+                        <div class="form-group mr-2 search-container">
+                            <input type="text" class="form-control margin-15-position-obselete" id="filterInput" name="search" style=" background-color: #f2f2f2;" placeholder="Search" value="">
+                            <i class="fas fa-search" style=" margin-right: 0.5%; color: #00768c;cursor:pointer" onclick="filterDoctors()"></i>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-12 padding-screen" style="padding-right:8px">
+                            <select class="form-control" id="services-ddl" onchange="filterDoctors()">
+                                <option value="">All Services</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-4 col-12 padding-screen" style="padding-right:8px">
+                            <select class="form-control" id="cities-ddl" onchange="filterDoctors()">
+                                <option value="">City</option>
+                            </select>
+                        </div>            <div class="col-lg-4 col-12 padding-screen">
+                            <select class="form-control" id="disctricts-ddl" onchange="filterDoctors()">
+                                <option value="">Disctrict</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="doctorsListContainer" class="row">
+                        @Html.Partial("_DoctorsList",Model)
+                    </div>
                 </form>
             </div>
 
             <div class="col-lg-4 col-12 mb-4">
                 <div class="data-contain" style="margin-top: 84px;">
-                    <div  style="padding-bottom:16px">
-                    <select class="form-control"  id="sort-ddl" onchange="filterDoctors()">
-                                        <option value="0">Sort By</option>
-                                        <option value="1">Name</option>
-                                        <option value="2">Location</option>
-                                    </select>
-                                    </div>
-                                    <div style="padding-bottom:10px">
-                    <select class="form-control"  id="insurance-ddl" onchange="filterDoctors()">
-                                        <option value="0">Insurance </option>
-                                        <option value="1">Included </option>
-                                        <option value="2">Excluded </option>
-                                    </select>
-                                    </div>
-                          
+                    <div style="padding-bottom:16px">
+                        <select class="form-control" id="sort-ddl" onchange="filterDoctors()">
+                            <option value="0">Sort By</option>
+                            <option value="1">Name</option>
+                            <option value="2">Location</option>
+                        </select>
+                    </div>
+                    <div style="padding-bottom:10px">
+                        <select class="form-control" id="insurance-ddl" onchange="filterDoctors()">
+                            <option value="0">Insurance </option>
+                            <option value="1">Included </option>
+                            <option value="2">Excluded </option>
+                        </select>
+                    </div>
+
                     </ul>
                 </div>
             </div>
@@ -418,63 +421,64 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
-    $(document).ready(function() {
-                $.ajax({
-                        url: '@Url.Action("GetCitiesDDL", "Common")',
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function (data) {
-                            // Clear existing options
-                            $('#cities-ddl').empty();
-                            // Populate the dropdown list
-                            var dropdown = $('#cities-ddl');
-                                dropdown.append($('<option></option>').val(0).text('Cities'));
+        $(document).ready(function () {
+            $.ajax({
+                url: '@Url.Action("GetCitiesDDL", "Common")',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Clear existing options
+                    $('#cities-ddl').empty();
+                    // Populate the dropdown list
+                    var dropdown = $('#cities-ddl');
+                    dropdown.append($('<option></option>').val(0).text('Cities'));
 
-                            $.each(data, function (index, item) {
-                                dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
-                            });
-                        }
+                    $.each(data, function (index, item) {
+                        dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
                     });
-                           $.ajax({
-                        url: '@Url.Action("GetDisctrictsDDL", "Common")',
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function (data) {
-                            // Clear existing options
-                            $('#disctricts-ddl').empty();
-                            // Populate the dropdown list
-                            var dropdown = $('#disctricts-ddl');
-                                dropdown.append($('<option></option>').val(0).text('Disctricts'));
+                }
+            });
 
-                            $.each(data, function (index, item) {
-                                dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
-                            });
-                        }
+
+            $.ajax({
+                url: '@Url.Action("GetDistrictsDDL", "Common")',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Clear existing options
+                    $('#disctricts-ddl').empty();
+                    // Populate the dropdown list
+                    var dropdown = $('#disctricts-ddl');
+                    dropdown.append($('<option></option>').val(0).text('Disctricts'));
+
+                    $.each(data, function (index, item) {
+                        dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
                     });
+                }
+            });
 
-                            $.ajax({
-                        url: '@Url.Action("GetServicesDDL", "Common")',
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function (data) {
-                            // Clear existing options
-                            $('#services-ddl').empty();
-                            // Populate the dropdown list
-                            var dropdown = $('#services-ddl');
-                                dropdown.append($('<option></option>').val(0).text('All Services'));
+            $.ajax({
+                url: '@Url.Action("GetServicesDDL", "Common")',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Clear existing options
+                    $('#services-ddl').empty();
+                    // Populate the dropdown list
+                    var dropdown = $('#services-ddl');
+                    dropdown.append($('<option></option>').val(0).text('All Services'));
 
-                            $.each(data, function (index, item) {
-                                dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
-                            });
-                        }
+                    $.each(data, function (index, item) {
+                        dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
                     });
+                }
+            });
 
 
-   
-    });
-                     
+
+        });
+
         function filterDoctors() {
-            debugger;
             var doctorsContainer = $('#doctorsListContainer');
             var serviceId = $('#services-ddl').val();
             var disctrictId = $('#disctricts-ddl').val();
@@ -485,7 +489,7 @@
             var name = $('#filterInput').val();
 
             $.ajax({
-                url: '/Home/FillDoctorsList?name='+name+'&serviceId='+serviceId+'&cityId='+cityId+'&disctrictId='+disctrictId+'&sortBy='+sortBy+'&insuranceType='+insuranceType, // Replace with the actual URL and action method to fetch the partial view
+                url: '/Home/FillDoctorsList?name=' + name + '&serviceId=' + serviceId + '&cityId=' + cityId + '&disctrictId=' + disctrictId + '&sortBy=' + sortBy + '&insuranceType=' + insuranceType, // Replace with the actual URL and action method to fetch the partial view
                 type: 'GET',
                 success: function (response) {
                     doctorsContainer.html(response);
@@ -495,12 +499,11 @@
                 }
             });
         }
-             function fillDoctorDetails(userId) {
-            debugger;
+        function fillDoctorDetails(userId) {
             var userDetailsContainer = $('#userDetailsContainer');
 
             $.ajax({
-                url: '/Home/GetUserDetailsById?userId='+userId,
+                url: '/Home/GetUserDetailsById?userId=' + userId,
                 type: 'GET',
                 success: function (response) {
                     userDetailsContainer.html(response);
@@ -510,7 +513,7 @@
                 }
             });
         }
-</script>
+    </script>
 }
 
 <div class="modal fade" id="UserProfileModal" tabindex="-1" role="dialog" aria-labelledby="UserProfileModal" aria-hidden="true">
@@ -523,7 +526,7 @@
                 </button>
             </div>
             <div class="modal-body userDetailsContainer" id="userDetailsContainer">
-                    <!-- Add your modal content here -->
+                <!-- Add your modal content here -->
 
             </div>
 

@@ -211,22 +211,7 @@
                 // Perform a different action when the URL doesn't contain "something"
                 console.log("The URL does not contain 'MyProfile'.");
             }
-            //$("#companyAutoComplete").autocomplete({
-            //    source: function (request, response) {
-            //        $.ajax({
-            //            url: "/Doctor/Index",
-            //            type: "POST",
-            //            dataType: "json",
-            //            data: { kw: request.term },
-            //            success: function (data) {
-            //                response($.map(data, function (item) {
-            //                    return { label: item.nameEn + ' - ' + item.nameAr, value: item.nameEn + ' - ' + item.nameAr };
-            //                }))
-            //            }
-            //        })
-            //    },
-
-            //});
+        
         })
 
         function openTab(evt, tabName) {
@@ -245,6 +230,8 @@
             // Show the selected tab content and set the corresponding button as active
             document.getElementById(tabName).style.display = "block";
             evt.currentTarget.className += " active";
+
+          
         }
 
         function sendToReview() {

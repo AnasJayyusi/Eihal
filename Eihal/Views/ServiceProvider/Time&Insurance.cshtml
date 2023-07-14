@@ -1,14 +1,15 @@
-﻿<div id="tab3" class="tab-content" style="display: none;">
+﻿@model List<Eihal.Data.Entites.TimeClinicLocation>
+
+<div id="tab3" class="tab-content" style="display: none;">
     <div style="text-align: end; cursor:pointer">
-        <button type="button" style="background-color:#00768c" class="btn btn-success" data-toggle="modal" data-target="#EditTimeInsurance">
+        <button type="button" style="background-color:#00768c" onclick="getTimeInsuranceData()" class="btn btn-success" data-toggle="modal" data-target="#EditTimeInsurance">
             <i style="font-size:25px" class="fas fa-edit"></i> Edit Clinic Info
         </button>
-    
-    </div>
-    <h3 style="color:#00768c">Eihal Clinic</h3>
-    <i style="color:#00768c" class="	fas fa-map-marker-alt" aria-hidden="true"></i>
-    <label>Riyadh </label>
 
+    </div>
+    <h3 id="clinic-name-lable" style="color:#00768c">Eihal Clinic</h3>
+    <i style="color:#00768c" class="	fas fa-map-marker-alt" aria-hidden="true"></i>
+    <label class="label-WorkingHours">Riyadh </label>
     <br />
     <br />
     <table width="75%">
@@ -17,33 +18,91 @@
             <td>
                 Sunday
             </td>
+            <td id="isSundayOpen">
+                <span id="sunday-OpenAt">00:00</span>   <span style="color:#00768c;font-weight:bold">To</span> <span id="sunday-ClosedAt">00:00</span>
+            </td>
             <td>
-                04:00 PM <span style="color:#00768c;font-weight:bold">To</span> 06:30 PM
+                <span id="isSundayClosed">Closed</span>
             </td>
         </tr>
+        <tr>
+            <td>
+                Monday
+            </td>
+            <td id="isMondayOpen">
+                <span id="monday-OpenAt">00:00</span>   <span style="color:#00768c;font-weight:bold">To</span> <span id="monday-ClosedAt">00:00</span>
+            </td>
+            <td>
+                <span id="isMondayClosed">Closed</span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Tuesday
+            </td>
+            <td id="isTuesdayOpen">
+                <span id="tuesday-OpenAt">00:00</span>   <span style="color:#00768c;font-weight:bold">To</span> <span id="tuesday-ClosedAt">00:00</span>
+            </td>
+            <td>
+                <span id="isTuesdayClosed">Closed</span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Wednesday
+            </td>
+            <td id="isWednesdayOpen">
+                <span id="wednesday-OpenAt">00:00</span>   <span style="color:#00768c;font-weight:bold">To</span> <span id="wednesday-ClosedAt">00:00</span>
+            </td>
+            <td>
+                <span id="isWednesdayClosed">Closed</span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Thursday
+            </td>
+            <td id="isThursdayOpen">
+                <span id="thursday-OpenAt">00:00</span>   <span style="color:#00768c;font-weight:bold">To</span> <span id="thursday-ClosedAt">00:00</span>
+            </td>
+            <td>
+                <span id="isThursdayClosed">Closed</span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Friday
+            </td>
+            <td id="isFridayOpen">
+                <span id="friday-OpenAt">00:00</span>   <span style="color:#00768c;font-weight:bold">To</span> <span id="friday-ClosedAt">00:00</span>
+            </td>
+            <td>
+                <span id="isFridayClosed">Closed</span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Saturday
+            </td>
+            <td id="isSaturdayOpen">
+                <span id="saturday-OpenAt">00:00</span>   <span style="color:#00768c;font-weight:bold">To</span> <span id="saturday-ClosedAt">00:00</span>
+            </td>
+            <td>
+                <span id="isSaturdayClosed">Closed</span>
+            </td>
+        </tr>
+
+
+
+
     </table>
 
     <br />
     <br />
+
+
+
     <h3 style="color:#00768c">Insurance Company</h3>
-    @*    @using (Html.BeginForm())
-    {
-
-    <div class="form-horizontal">
-
-    <hr />
-
-    <div class="form-group">
-
-    <div class="col-md-12">
-    @Html.EditorFor(model => model.NameAr, new { htmlAttributes = new { @class = "form-control" } })
-
-    </div>
-    </div>
-
-    </div>
-    }*@
-
     <form action="/Doctor" method="post">
         <div class="form-horizontal">
 
@@ -52,7 +111,10 @@
             <div class="form-group">
 
                 <div class="col-md-12">
-                    <input placeholder="Search In Companies" class="form-control text-box single-line ui-autocomplete-input ui-autocomplete-loading" id="companyAutoComplete" name="companyAutoComplete" type="text" value="" autocomplete="off">
+                    <select onchange="addInsuranceCompany()" class="companies-autoComplete" name="companies">
+                        <option value="AL">Alabama</option>
+                        <option value="WY">Wyoming</option>
+                    </select>
                 </div>
             </div>
 
@@ -61,7 +123,9 @@
 
 
     <div style="text-align:center">
-        <label style="font-weight:bold">No Results Found</label>    <img src="~/icon/no-result-found-icon.png" width="25" height="25" /> <span style="color:black"></span>
+        <label class="label-WorkingHours" style="font-weight:bold">No Results Found</label>
+        <img src="~/icon/no-result-found-icon.png" width="25" height="25" />
+        <span style="color:black"></span>
     </div>
 
 </div>
@@ -74,17 +138,613 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="EditTimeInsurance">Information</h5>
+                <h5 class="modal-title" id="EditTimeInsurance">Clinic Information</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p id="help-msg" style="text-transform:none">This message appear to complete your profile by adding Certifications by using attach button below to add new Certification. After that return to this message and press on click here</p>
+                <form>
+                    <label class="label-clinicName" style="font-weight:bold;color:#00768c" for="opening-hours">Clinic Name</label>
+                    <input type="text" class="form-control" id="clinicName-input-wk" required>
+                    <label class="label-WorkingHours" style="font-weight:bold;color:#00768c" for="opening-hours">Location</label>
+                    <hr />
+                    <table>
+                        <tr>
+                            <td class="td-WorkingHours">
+                                <label class="label-WorkingHours" for="states-ddl-wk">Country:</label>
+                            </td>
+                            <td class="td-WorkingHours">
+                                <select class="form-control" id="countries-ddl-wk" onchange="getStates(this.value)">
+                                    <option value="">Select a Country</option>
+                                </select>
+                            </td>
+                            <td>
+                                <label class="label-WorkingHours" for="states-ddl-wk">State:</label>
+                            </td>
+                            <td class="td-WorkingHours">
+                                <select class="form-control" id="states-ddl-wk" onchange="getCites(this.value)">
+                                    <option value="">Select a State</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="td-WorkingHours">
+                                <label class="label-WorkingHours" for="cities-ddl-wk">City:</label>
+                            </td>
+                            <td class="td-WorkingHours">
+                                <select class="form-control" id="cities-ddl-wk" onchange="getDistricts(this.value)">
+                                    <option value="">Select a City</option>
+                                </select>
+                            </td>
+                            <td>
+                                <label class="label-WorkingHours" for="districts-ddl-wk">District:</label>
+                            </td>
+                            <td class="td-WorkingHours">
+                                <select class="form-control" id="districts-ddl-wk">
+                                    <option value="">Select a District</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+                    <label class="label-WorkingHours" style="font-weight:bold;color:#00768c" for="opening-hours">Working Hours</label>
+                    <hr />
+                    <table class="table-WorkingHours">
+                        <tr>
+                            <th class="th-WorkingHours"><label class="label-WorkingHours">Day</label></th>
+                            <th class="th-WorkingHours"><label class="label-WorkingHours">From</label> </th>
+                            <th class="th-WorkingHours"><label class="label-WorkingHours"></label> </th>
+                            <th class="th-WorkingHours"><label class="label-WorkingHours">To</label></th>
+                            <th class="th-WorkingHours"><label class="label-WorkingHours">Closed</label></th>
+                        </tr>
+                        <tr>
+                            <td class="td-WorkingHours"><label class="label-WorkingHours" for="sunday-opening-hours">Sunday</label></td>
+                            <td class="td-WorkingHours"><input type="time" id="sunday-opening-hours" name="sunday-opening-hours"></td>
+                            <td class="td-WorkingHours"><label class="label-WorkingHours" for="sunday-closing-hours">-</label></td>
+                            <td class="td-WorkingHours"><input type="time" id="sunday-closing-hours" class="sunday-hours-input" name="sunday-opening-hours"></td>
+                            <td class="td-WorkingHours" style="text-align:center"><input type="checkbox" id="sun-closed" class="sunday-checkbox" name="sunday-closed"></td>
+                        </tr>
+                        <!-- Repeat the above table row structure for the remaining days -->
+                        <!-- Monday -->
+                        <tr>
+                            <td class="td-WorkingHours"><label class="label-WorkingHours" for="monday-opening-hours">Monday</label></td>
+                            <td class="td-WorkingHours"><input type="time" id="monday-opening-hours" name="monday-opening-hours"></td>
+                            <td class="td-WorkingHours"><label class="label-WorkingHours" for="monday-closing-hours">-</label></td>
+                            <td class="td-WorkingHours"><input type="time" id="monday-closing-hours" class="monday-hours-input" name="sunday-opening-hours"></td>
+                            <td class="td-WorkingHours" style="text-align:center"><input type="checkbox" id="mon-closed" class="monday-checkbox" name="monday-closed"></td>
+                        </tr>
+                        <!-- Tuesday -->
+                        <tr>
+                            <td class="td-WorkingHours"><label class="label-WorkingHours" for="tuesday-opening-hours">Tuesday</label></td>
+                            <td class="td-WorkingHours"><input type="time" id="tuesday-opening-hours" name="tuesday-opening-hours"></td>
+                            <td class="td-WorkingHours"><label class="label-WorkingHours" for="tuesday-closing-hours">-</label></td>
+                            <td class="td-WorkingHours"><input type="time" id="tuesday-closing-hours" class="tuesday-hours-input" name="tuesday-opening-hours"></td>
+                            <td class="td-WorkingHours" style="text-align:center"><input type="checkbox" id="tue-closed" class="tuesday-checkbox" name="tuesday-closed"></td>
+                        </tr>
+                        <!-- Wednesday -->
+                        <tr>
+                            <td class="td-WorkingHours"><label class="label-WorkingHours" for="wednesday-opening-hours">Wednesday</label></td>
+                            <td class="td-WorkingHours"><input type="time" id="wednesday-opening-hours" name="wednesday-opening-hours"></td>
+                            <td class="td-WorkingHours"><label class="label-WorkingHours" for="wednesday-closing-hours">-</label></td>
+                            <td class="td-WorkingHours"><input type="time" id="wednesday-closing-hours" class="wednesday-hours-input" name="wednesday-opening-hours"></td>
+                            <td class="td-WorkingHours" style="text-align:center"><input type="checkbox" id="wed-closed" class="wednesday-checkbox" name="wednesday-closed"></td>
+                        </tr>
+                        <!-- Thursday -->
+                        <tr>
+                            <td class="td-WorkingHours"><label class="label-WorkingHours" for="thursday-opening-hours">Thursday</label></td>
+                            <td class="td-WorkingHours"><input type="time" id="thursday-opening-hours" name="thursday-opening-hours"></td>
+                            <td class="td-WorkingHours"><label class="label-WorkingHours" for="thursday-closing-hours">-</label></td>
+                            <td class="td-WorkingHours"><input type="time" id="thursday-closing-hours" class="thursday-hours-input" name="thursday-opening-hours"></td>
+                            <td class="td-WorkingHours" style="text-align:center"><input type="checkbox" id="thu-closed" class="thursday-checkbox" name="thursday-closed"></td>
+                        </tr>
+                        <!-- Friday -->
+                        <tr>
+                            <td class="td-WorkingHours"><label class="label-WorkingHours" for="friday-opening-hours">Friday</label></td>
+                            <td class="td-WorkingHours"><input type="time" id="friday-opening-hours" name="friday-opening-hours"></td>
+                            <td class="td-WorkingHours"><label class="label-WorkingHours" for="friday-closing-hours">-</label></td>
+                            <td class="td-WorkingHours"><input type="time" id="friday-closing-hours" class="friday-hours-input" name="friday-opening-hours"></td>
+                            <td class="td-WorkingHours" style="text-align:center"><input type="checkbox" id="fri-closed" class="friday-checkbox" name="friday-closed"></td>
+                        </tr>
+                        <!-- Saturday -->
+                        <tr>
+                            <td class="td-WorkingHours"><label class="label-WorkingHours" for="saturday-opening-hours">Saturday</label></td>
+                            <td class="td-WorkingHours"><input type="time" id="saturday-opening-hours" name="saturday-opening-hours"></td>
+                            <td class="td-WorkingHours"><label class="label-WorkingHours" for="saturday-closing-hours">-</label></td>
+                            <td class="td-WorkingHours"><input type="time" id="saturday-closing-hours" class="saturday-hours-input" name="saturday-opening-hours"></td>
+                            <td class="td-WorkingHours" style="text-align:center"><input type="checkbox" id="sat-closed" class="saturday-checkbox" name="saturday-closed"></td>
+                        </tr>
+                    </table>
+                    <br><br>
+                </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="close-TimeLocation">Cancel</button>
+                <button onclick="updateTimeLocation()" type="button" class="btn btn-success" style="background-color:#00768c">Update</button>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    table-WorkingHours {
+        border-collapse: collapse;
+    }
+
+    th-WorkingHours, td-WorkingHours {
+        border: 0px;
+        padding: 5px;
+        text-align: center;
+    }
+
+    .label-WorkingHours {
+        font-weight: bold;
+        color: #00768c;
+        margin: 10px
+    }
+</style>
+<style>
+    .row-wk {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+
+    .form-group-wk {
+        flex: 0 0 48%;
+    }
+
+
+
+    .form-control-wk {
+        padding: 5px;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        getClinicNameWorkingHours();
+
+        $('#sun-closed').change(function () {
+            if ($(this).is(':checked')) {
+                $('input[id^="sunday"]').prop('disabled', true);
+            }
+            else
+                $('input[id^="sunday"]').prop('disabled', false);
+        });
+        $('#mon-closed').change(function () {
+            if ($(this).is(':checked')) {
+                $('input[id^="monday"]').prop('disabled', true);
+            }
+            else
+                $('input[id^="monday"]').prop('disabled', false);
+        });
+        $('#tue-closed').change(function () {
+            if ($(this).is(':checked')) {
+                $('input[id^="tuesday"]').prop('disabled', true);
+            }
+            else
+                $('input[id^="tuesday"]').prop('disabled', false);
+        });
+        $('#wed-closed').change(function () {
+            if ($(this).is(':checked')) {
+                $('input[id^="wednesday"]').prop('disabled', true);
+            }
+            else
+                $('input[id^="wednesday"]').prop('disabled', false);
+        });
+        $('#thu-closed').change(function () {
+            if ($(this).is(':checked')) {
+                $('input[id^="thursday"]').prop('disabled', true);
+            }
+            else
+                $('input[id^="thursday"]').prop('disabled', false);
+        });
+        $('#fri-closed').change(function () {
+            if ($(this).is(':checked')) {
+                $('input[id^="friday"]').prop('disabled', true);
+            }
+            else
+                $('input[id^="friday"]').prop('disabled', false);
+        });
+
+        $('#sat-closed').change(function () {
+            if ($(this).is(':checked')) {
+                $('input[id^="saturday"]').prop('disabled', true);
+            }
+            else
+                $('input[id^="saturday"]').prop('disabled', false);
+        });
+
+    });
+
+    function getTimeInsuranceData() {
+        $.ajax({
+            url: '@Url.Action("GetCountriesDDL", "ServiceProvider")',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                // Clear existing options
+                $('#countries-ddl-wk').empty();
+                // Populate the dropdown list
+                var dropdown = $('#countries-ddl-wk');
+                // Add default option
+                dropdown.append($('<option></option>').val('').text('Select a country'));
+                $.each(data, function (index, item) {
+                    dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                });
+            }
+        });
+        getTimeClinicLocation();
+
+    }
+
+    function getStates(countryId) {
+        $.ajax({
+            url: '@Url.Action("GetStatesDDL", "ServiceProvider")' + '?countryId=' + countryId,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                // Clear existing options
+                $('#states-ddl-wk').empty();
+                // Populate the dropdown list
+                var dropdown = $('#states-ddl-wk');
+                // Add default option
+                dropdown.append($('<option></option>').val('').text('Select a state'));
+                $.each(data, function (index, item) {
+                    dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                });
+            }
+        });
+    }
+
+    function getCites(stateId) {
+        $.ajax({
+            url: '@Url.Action("GetCitiesDDL", "ServiceProvider")' + '?stateId=' + stateId,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                // Clear existing options
+                $('#cities-ddl-wk').empty();
+                // Populate the dropdown list
+                var dropdown = $('#cities-ddl-wk');
+                dropdown.append($('<option></option>').val('').text('Select a city'));
+                $.each(data, function (index, item) {
+                    dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                });
+            }
+        });
+    }
+
+    function getDistricts(cityId) {
+        $.ajax({
+            url: '@Url.Action("GetDistricts", "ServiceProvider")' + '?cityId=' + cityId,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                // Clear existing options
+                $('#districts-ddl-wk').empty();
+                // Populate the dropdown list
+                var dropdown = $('#districts-ddl-wk');
+                dropdown.append($('<option></option>').val('').text('Select a District'));
+                $.each(data, function (index, item) {
+                    dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                });
+            }
+        });
+    }
+
+
+    function updateTimeLocation() {
+        var formData = new FormData();
+
+        formData.append('ClinicName', $('#clinicName-input-wk').val());
+        // DDLs
+        formData.append('CountryId', $('#countries-ddl-wk').val());
+        formData.append('StateId', $('#states-ddl-wk').val());
+        formData.append('CityId', $('#cities-ddl-wk').val());
+        formData.append('DistrictId', $('#districts-ddl-wk').val());
+
+        // Days Opening/Closed Hours
+        // Sunday
+        formData.append('Sunday', 'Sunday');
+        formData.append('SundayOpenAt', $("#sunday-opening-hours").val());
+        formData.append('SundayClosedAt', $("#sunday-closing-hours").val());
+        formData.append('SundayIsClosed', $('#sun-closed').is(':checked'));
+
+        // Monday
+        formData.append('Monday', 'Monday');
+        formData.append('MondayOpenAt', $("#monday-opening-hours").val());
+        formData.append('MondayClosedAt', $("#monday-closing-hours").val());
+        formData.append('MondayIsClosed', $('#mon-closed').is(':checked'));
+
+        // Tuesday
+        formData.append('Tuesday', 'Tuesday');
+        formData.append('TuesdayOpenAt', $("#tuesday-opening-hours").val());
+        formData.append('TuesdayClosedAt', $("#tuesday-closing-hours").val());
+        formData.append('TuesdayIsClosed', $('#tue-closed').is(':checked'));
+
+        // Wednesday
+        formData.append('Wednesday', 'Wednesday');
+        formData.append('WednesdayOpenAt', $("#wednesday-opening-hours").val());
+        formData.append('WednesdayClosedAt', $("#wednesday-closing-hours").val());
+        formData.append('WednesdayIsClosed', $('#wed-closed').is(':checked'));
+
+        // Thursday
+        formData.append('Thursday', 'Thursday');
+        formData.append('ThursdayOpenAt', $("#thursday-opening-hours").val());
+        formData.append('ThursdayClosedAt', $("#thursday-closing-hours").val());
+        formData.append('ThursdayIsClosed', $('#thu-closed').is(':checked'));
+
+        // Friday
+        formData.append('Friday', 'Friday');
+        formData.append('FridayOpenAt', $("#friday-opening-hours").val());
+        formData.append('FridayClosedAt', $("#friday-closing-hours").val());
+        formData.append('FridayIsClosed', $('#fri-closed').is(':checked'));
+
+        // Saturday
+        formData.append('Saturday', 'Saturday');
+        formData.append('SaturdayOpenAt', $("#saturday-opening-hours").val());
+        formData.append('SaturdayClosedAt', $("#saturday-closing-hours").val());
+        formData.append('SaturdayIsClosed', $('#sat-closed').is(':checked'));
+
+        $.ajax({
+            url: '/ServiceProvider/UpdateTimeClinicLocation',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                console.log(response);
+                $("#close-TimeLocation").trigger("click");
+                getClinicNameWorkingHours();
+                toastr.success('Time & Location updated successfully', 'Success !!');
+                // Handle success response
+            },
+            error: function (error) {
+                toastr.error('Error occurred', 'Failed !!');
+                // Handle error response
+            }
+        });
+    }
+
+    function getTimeClinicLocation() {
+        $.ajax({
+            url: "/ServiceProvider/GetTimeClinicLocation",
+            method: "GET",
+            success: function (response) {
+                setTimeout(function () {
+                    $("#clinicName-input-wk").val(response.clinicName);
+                    $("#countries-ddl-wk").val(response.countryId);
+                    getStates(response.countryId)
+                    $("#states-ddl-wk").val(response.stateId);
+                    getCites(response.stateId)
+                    $("#cities-ddl-wk").val(response.cityId);
+                    getDistricts(response.cityId)
+                    $("#districts-ddl-wk").val(response.districtId);
+                }, 300); // Delay for 1 second (1000 milliseconds)
+
+
+                // Days Opening/Closed Hours
+                // Sunday
+                $("#sunday-opening-hours").val(response.sundayOpenAt);
+                $("#sunday-closing-hours").val(response.sundayClosedAt);
+                if (response.sundayIsClosed)
+                    $('#sun-closed').trigger("click");
+                // Monday
+                $("#monday-opening-hours").val(response.mondayOpenAt);
+                $("#monday-closing-hours").val(response.mondayOpenAt);
+                if (response.mondayIsClosed)
+                    $('#mon-closed').trigger("click");
+
+                // Tuesday
+                $("#tuesday-opening-hours").val(response.tuesdayOpenAt);
+                $("#tuesday-closing-hours").val(response.tuesdayOpenAt);
+                if (response.tuesdayIsClosed)
+                    $('#tue-closed').trigger("click");
+
+                // Wednesday
+                $("#wednesday-opening-hours").val(response.wednesdayOpenAt);
+                $("#wednesday-closing-hours").val(response.wednesdayOpenAt);
+                if (response.wednesdayIsClosed)
+                    $('#wed-closed').trigger("click");
+
+                // Thursday
+                $("#thursday-opening-hours").val(response.thursdayOpenAt);
+                $("#thursday-closing-hours").val(response.thursdayOpenAt);
+                if (response.thursdayIsClosed)
+                    $('#thu-closed').trigger("click");
+
+                // Friday
+                $("#friday-opening-hours").val(response.fridayOpenAt);
+                $("#friday-closing-hours").val(response.fridayOpenAt);
+                if (response.fridayIsClosed)
+                    $('#fri-closed').trigger("click");
+
+                // Saturday
+                $("#saturday-opening-hours").val(response.saturdayOpenAt);
+                $("#saturday-closing-hours").val(response.saturdayOpenAt);
+                if (response.saturdayIsClosed)
+                    $('#sat-closed').trigger("click");
+
+
+                setTimeout(function () {
+
+                    $("#states-ddl-wk").val(response.stateId);
+                    $("#cities-ddl-wk").val(response.cityId);
+                    $("#districts-ddl-wk").val(response.districtId);
+                }, 900); // Delay for 1 second (1000 milliseconds)
+
+
+
+
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function getClinicNameWorkingHours() {
+        $.ajax({
+            url: "/ServiceProvider/GetTimeClinicLocation",
+            method: "GET",
+            success: function (response) {
+                if (response == "") {
+                    $('#isSundayClosed').show();
+                    $('#isSundayOpen').hide();
+                    $('#isMondayClosed').show();
+                    $('#isMondayOpen').hide();
+                    $('#isTuesdayClosed').show();
+                    $('#isTuesdayOpen').hide();
+                    $('#isWednesdayClosed').show();
+                    $('#isWednesdayOpen').hide();
+                    $('#isThursdayClosed').show();
+                    $('#isThursdayOpen').hide();
+                    $('#isFridayClosed').show();
+                    $('#isFridayOpen').hide();
+                    $('#isSaturdayClosed').show();
+                    $('#isSaturdayOpen').hide();
+                    return;
+                }
+                // Sunday
+                $("#sunday-OpenAt").text(convertTo12HourFormat(response.sundayOpenAt));
+                $("#sunday-ClosedAt").text(convertTo12HourFormat(response.sundayClosedAt));
+                if (response.sundayIsClosed) {
+                    $('#isSundayClosed').show();
+                    $('#isSundayOpen').hide();
+                } else {
+                    $('#isSundayClosed').hide();
+                    $('#isSundayOpen').show();
+                }
+
+                // Monday
+                $("#monday-OpenAt").text(convertTo12HourFormat(response.mondayOpenAt));
+                $("#monday-ClosedAt").text(convertTo12HourFormat(response.mondayClosedAt));
+                if (response.mondayIsClosed) {
+                    $('#isMondayClosed').show();
+                    $('#isMondayOpen').hide();
+                } else {
+                    $('#isMondayClosed').hide();
+                    $('#isMondayOpen').show();
+                }
+
+                // Tuesday
+                $("#tuesday-OpenAt").text(convertTo12HourFormat(response.tuesdayOpenAt));
+                $("#tuesday-ClosedAt").text(convertTo12HourFormat(response.tuesdayClosedAt));
+                if (response.tuesdayIsClosed) {
+                    $('#isTuesdayClosed').show();
+                    $('#isTuesdayOpen').hide();
+                } else {
+                    $('#isTuesdayClosed').hide();
+                    $('#isTuesdayOpen').show();
+                }
+
+                // Wednesday
+                $("#wednesday-OpenAt").text(convertTo12HourFormat(response.wednesdayOpenAt));
+                $("#wednesday-ClosedAt").text(convertTo12HourFormat(response.wednesdayClosedAt));
+                if (response.wednesdayIsClosed) {
+                    $('#isWednesdayClosed').show();
+                    $('#isWednesdayOpen').hide();
+                } else {
+                    $('#isWednesdayClosed').hide();
+                    $('#isWednesdayOpen').show();
+                }
+
+                // Thursday
+                $("#thursday-OpenAt").text(convertTo12HourFormat(response.thursdayOpenAt));
+                $("#thursday-ClosedAt").text(convertTo12HourFormat(response.thursdayClosedAt));
+                if (response.thursdayIsClosed) {
+                    $('#isThursdayClosed').show();
+                    $('#isThursdayOpen').hide();
+                } else {
+                    $('#isThursdayClosed').hide();
+                    $('#isThursdayOpen').show();
+                }
+
+                // Friday
+                $("#friday-OpenAt").text(convertTo12HourFormat(response.fridayOpenAt));
+                $("#friday-ClosedAt").text(convertTo12HourFormat(response.fridayClosedAt));
+                if (response.fridayIsClosed) {
+                    $('#isFridayClosed').show();
+                    $('#isFridayOpen').hide();
+                } else {
+                    $('#isFridayClosed').hide();
+                    $('#isFridayOpen').show();
+                }
+
+                // Saturday
+                $("#saturday-OpenAt").text(convertTo12HourFormat(response.saturdayOpenAt));
+                $("#saturday-ClosedAt").text(convertTo12HourFormat(response.saturdayClosedAt));
+                if (response.saturdayIsClosed) {
+                    $('#isSaturdayClosed').show();
+                    $('#isSaturdayOpen').hide();
+                } else {
+                    $('#isSaturdayClosed').hide();
+                    $('#isSaturdayOpen').show();
+                }
+
+
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function convertTo12HourFormat(time) {
+        if (time == undefined)
+            return;
+        var timeParts = time.split(':');
+        var hours = parseInt(timeParts[0]);
+        var minutes = parseInt(timeParts[1]);
+        var period = hours >= 12 ? 'PM' : 'AM';
+
+        // Convert hours to 12-hour format
+        hours = hours % 12;
+        hours = hours ? hours : 12; // If hours is 0, set it to 12
+
+        // Pad the minutes with leading zeros if necessary
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+
+        // Return the formatted time
+        return hours + ':' + minutes + ' ' + period;
+    }
+
+
+    $('.companies-autoComplete').select2({
+        theme: "classic",
+        placeholder: 'Select an option',
+        width: '100%',
+        ajax: {
+            url: '@Url.Action("GetInsuranceCompanies", "Common")',
+            cache: false
+        }
+    });
+
+    function addInsuranceCompany()
+    {
+        debugger;
+        var companyId=$('.companies-autoComplete').val();
+
+          $.ajax({
+            url: '@Url.Action("AddInsuranceCompany", "ServiceProvider")' + '?companyId=' + companyId,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+               toastr.success('Insurance Comapny Added successfully', 'Success !!'); 
+            }
+        });
+
+           $.ajax({
+            url: '@Url.Action("GetUserCompany", "ServiceProvider")' + '?companyId=' + companyId,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+               toastr.success('Insurance Comapny Added successfully', 'Success !!'); 
+            }
+        });
+
+        
+    }
+
+</script>

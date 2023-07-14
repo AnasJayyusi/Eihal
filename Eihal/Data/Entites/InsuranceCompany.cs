@@ -7,5 +7,6 @@
         public string? TitleEn { get; set; }
         public string? LogoImagePath { get; set; }
         public bool IsActive { get; set; }
+        public List<UserProfile> UserProfiles { get; set; }
     }
 }

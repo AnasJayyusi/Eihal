@@ -87,7 +87,7 @@ namespace Eihal.Controllers
 
             // Pass the data to the view
             return Json(dropdownData);
-        }  
+        }
         [HttpGet]
         [Route("GetServicesDDL")]
         public ActionResult GetServicesDDL()
@@ -119,8 +119,10 @@ namespace Eihal.Controllers
 
             // Pass the data to the view
             return Json(dropdownData);
-        }       [HttpGet]
-        [Route("GetDisctrictsDDL")]
+        }
+
+        [HttpGet]
+        [Route("GetDistrictsDDL")]
         public ActionResult GetDisctrictsDDL()
         {
             // Retrieve the data for the dropdown list
@@ -130,19 +132,22 @@ namespace Eihal.Controllers
             return Json(dropdownData);
         }
 
-        //[HttpGet]
-        //public ActionResult GetUserSpecialties(string term)
-        //{
-        //    var results = new List<object>
-        //    {
-        //        new { id = 1, text = "Option 1" },
-        //        new { id = 2, text = "Option 2", selected = true },
-        //        new { id = 3, text = "Option 3", disabled = true }
-        //    };
 
-        //    results.Where(x => x.text == term);
-        //    return Ok(new { });
-        //}
+
+        [HttpGet]
+        [Route("GetInsuranceCompanies")]
+        public ActionResult GetInsuranceCompanies(string term)
+        {
+            var results = _dbContext.InsuranceCompanies
+                             .Where(w => w.IsActive)
+                             .Select(s => new { id = s.Id, text = s.TitleEn, textAr = s.TitleAr })
+                             .Where(x => string.IsNullOrEmpty(term) || x.text.Contains(term) || x.textAr.Contains(term))
+                             .ToList();
+
+            return Ok(new { results });
+        }
+
+
 
         [HttpGet]
         [Route("GetUserSpecialtiesDDL")]

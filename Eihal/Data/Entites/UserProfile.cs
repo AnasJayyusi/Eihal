@@ -61,6 +61,8 @@ namespace Eihal.Data.Entites
         public string? SpecialtiesTitlesEn { get; set; }
         #endregion
 
+      
+        public List<InsuranceCompany> InsuranceCompanies{ get; set; }
         public ProfileStatus ProfileStatus { get; set; }
         public string? RejectionReason { get; set; }
 

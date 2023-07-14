@@ -14,6 +14,13 @@ namespace Eihal.Data
             // No Code Here 
         }
 
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<UserCompany>().HasKey(sc => new { sc.UserProfileId, sc.InsuranceCompanyId });
+            base.OnModelCreating(modelBuilder);
+        }
+
         public DbSet<Services> Services { get; set; }
         public DbSet<UserServices> UserServices { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
@@ -35,6 +42,8 @@ namespace Eihal.Data
         public DbSet<Certification> Certifications { get; set; }
         public DbSet<Degree> Degrees { get; set; }
         public DbSet<InsuranceCompany> InsuranceCompanies { get; set; }
+        public DbSet<TimeClinicLocation> TimeClinicLocations { get; set; }
+        public DbSet<UserCompany> UserCompanies { get; set; }
 
     }
 }
