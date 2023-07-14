@@ -169,8 +169,11 @@ namespace Eihal.Controllers
             return Json(data);
         }
 
+
+        // If want use this in doctor page please move to other controller with anoynomus and other name
+        #region
         [HttpGet]
-        [Route("GetUserProfileInfo")]
+        [Route("GetUserProfileInfoByUseId")]
         public ActionResult GetUserProfileInfoByUseId(string userId)
         {
 
@@ -209,6 +212,7 @@ namespace Eihal.Controllers
 
             return Json(data);
         }
+        #endregion
         [HttpGet]
         [Route("GetFullUserProfileInfo")]
         public ActionResult GetFullUserProfileInfo()
