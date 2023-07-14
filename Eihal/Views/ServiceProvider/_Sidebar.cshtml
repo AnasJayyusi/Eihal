@@ -89,10 +89,10 @@
                     <i id="myServices-icon"  class="fas fa-medkit"></i> <span id="myServices-text">@Localizer["My Services"]</span>
                 </a>
             </li>
-
-            <li id="myReferrals-li" class="nav-item">
-                <a class="nav-link text-dark">
-                    <i class="fas fa-share-alt"></i> <span>@Localizer["My Referrals"]</span>
+            
+            <li id="referrals-li" class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="ServiceProvider" asp-action="Referrals">
+                    <i id="referrals-icon"  class="fas fa-medkit"></i> <span id="referrals-text">@Localizer["Referrals"]</span>
                 </a>
             </li>
         </ul>

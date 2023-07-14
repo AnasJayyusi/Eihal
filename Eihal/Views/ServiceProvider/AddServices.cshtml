@@ -217,6 +217,31 @@
             color: #888;
         }
 
+/*.color-changing-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.color-changing-button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.color-changing-button:focus {
+  outline: none;
+}
+
+.color-changing-button:active {
+  transform: scale(0.95);
+}*/
+
+
 </style>
 
 <div id="page-top">
@@ -286,6 +311,10 @@
                                         <span style="color:#00768c" class="nav-link" href="#">
                                             <i style="color:#00768c" class="fas fa-medkit" aria-hidden="true"></i>
                                             <span id="myServices-text" style="color:#00768c">All Services</span>
+@*<button class="color-changing-button" id="myButton">Auto Color Change</button>*@
+
+
+
                                         </span>
 
                                     </h6>
@@ -551,7 +580,23 @@
 
             //});
         })
+//document.addEventListener('DOMContentLoaded', function() {
+//  const button = document.getElementById('myButton');
 
+//  function getRandomColor() {
+//    const letters = '0123456789ABCDEF';
+//    let color = '#';
+//    for (let i = 0; i < 6; i++) {
+//      color += letters[Math.floor(Math.random() * 16)];
+//    }
+//    return color;
+//  }
+
+//  setInterval(() => {
+//    const randomColor = getRandomColor();
+//    button.style.backgroundColor = randomColor;
+//  }, 2000); // Change color every 2 seconds (adjust the interval as needed)
+//});
 
     </script>
 

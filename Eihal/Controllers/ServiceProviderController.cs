@@ -24,10 +24,35 @@ namespace Eihal.Controllers
             SetImagePathInCookies();
             return View();
         }
+        #region Referrals
+        [Route("Referrals")]
         public IActionResult Referrals()
         {
             return View();
         }
+
+
+        [Route("GetUserIncomingRequests")]
+
+        public ActionResult GetUserIncomingRequests()
+        {
+            var currentUserId = GetUserProfileId();
+            var model = _dbContext.ReferralRequests.Include(a=>a.Service).Include(a=>a.CreatedByUser).Include(a=>a.AssignedToUser).Where(a => a.AssignedToUserId == currentUserId).ToList(); // Replace with your logic to fetch the items
+
+            return PartialView("_IncomingRequests", model); // Replace with the name of your partial view
+        }
+
+        [Route("GetUserOutgoingRequests")]
+
+        public ActionResult GetUserOutgoingRequests()
+        {
+            var currentUserId = GetUserProfileId();
+            var model = _dbContext.ReferralRequests.Include(a => a.Service).Include(a => a.CreatedByUser).Include(a => a.AssignedToUser).Where(a => a.CreatedByUserId == currentUserId).ToList(); // Replace with your logic to fetch the items
+
+            return PartialView("_OutgoingRequests", model); // Replace with the name of your partial view
+        }
+        #endregion
+
 
         [Route("AddServices")]
         public IActionResult AddServices()
@@ -38,7 +63,7 @@ namespace Eihal.Controllers
             //var services = _dbContext.Services.Where(a => a.IsActive).ToList();
             return View(services);
         }
-
+       
         [Route("MyServiceCardPartial")]
 
         public ActionResult MyServiceCardPartial()
