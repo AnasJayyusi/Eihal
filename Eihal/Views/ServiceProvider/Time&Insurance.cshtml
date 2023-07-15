@@ -9,7 +9,7 @@
     </div>
     <h3 id="clinic-name-lable" style="color:#00768c">Eihal Clinic</h3>
     <i style="color:#00768c" class="	fas fa-map-marker-alt" aria-hidden="true"></i>
-    <label class="label-WorkingHours">Riyadh </label>
+    <label  id="clinic-location-lable"class="label-WorkingHours">Riyadh </label>
     <br />
     <br />
     <table width="75%">
@@ -305,6 +305,7 @@
     $(document).ready(function () {
         getClinicNameWorkingHours();
         getUserCompanies();
+       
         $('#sun-closed').change(function () {
             if ($(this).is(':checked')) {
                 $('input[id^="sunday"]').prop('disabled', true);
@@ -607,6 +608,11 @@
                     $('#isSaturdayOpen').hide();
                     return;
                 }
+              
+                // Name , Location 
+                $("#clinic-name-lable").text(response.clinicName)
+                $("#clinic-location-lable").text(response.countryName + " " + response.stateName + " " + response.cityName + " " + response.districtName)
+
                 // Sunday
                 $("#sunday-OpenAt").text(convertTo12HourFormat(response.sundayOpenAt));
                 $("#sunday-ClosedAt").text(convertTo12HourFormat(response.sundayClosedAt));

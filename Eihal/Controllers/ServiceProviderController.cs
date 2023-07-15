@@ -452,7 +452,7 @@ namespace Eihal.Controllers
                 obj.UserProfileId = GetUserProfileId();
             }
 
-            if (!string.IsNullOrEmpty(form["CountryId"]))
+            if (!string.IsNullOrEmpty(form["ClinicName"]))
                 obj.ClinicName = form["ClinicName"];
 
             // Access form data & fill to user profile object
@@ -561,6 +561,7 @@ namespace Eihal.Controllers
             var userProfileId = GetUserProfileId();
             var timeClinicLocation = _dbContext.TimeClinicLocations.
                                                              Include(i => i.State)
+                                                            .Include(i => i.Country)
                                                             .Include(i => i.City)
                                                             .Include(i => i.Districts)
                                                             .FirstOrDefault(w => w.UserProfileId == userProfileId);
@@ -594,7 +595,11 @@ namespace Eihal.Controllers
                     timeClinicLocation.CountryId,
                     timeClinicLocation.StateId,
                     timeClinicLocation.CityId,
-                    timeClinicLocation.DistrictId
+                    timeClinicLocation.DistrictId,
+                    CountryName = timeClinicLocation?.Country?.TitleEn,
+                    StateName = timeClinicLocation?.State?.TitleEn,
+                    CityName = timeClinicLocation?.City?.TitleEn,
+                    DistrictName = timeClinicLocation?.Districts?.TitleEn
                 };
                 return Json(data);
             }

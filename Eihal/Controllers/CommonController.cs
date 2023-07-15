@@ -6,7 +6,6 @@ namespace Eihal.Controllers
 {
 
     [Route("Common")]
-    [Authorize(Roles = "Administrator,ServiceProvider")]
     public class CommonController : BaseController
     {
         public CommonController(ApplicationDbContext dbContext) : base(dbContext)
