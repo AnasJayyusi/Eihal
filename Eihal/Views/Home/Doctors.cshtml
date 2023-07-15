@@ -365,7 +365,7 @@
                     <input type="hidden" name="_token" value="P9gMRWSZXiKVb1HY0oTRjpAhSnhUQU6JAmVkQpN8">
                     <div class="row">
                         <div class="form-group mr-2 search-container">
-                            <input type="text" class="form-control margin-15-position-obselete" id="filterInput" name="search" style=" background-color: #f2f2f2;" placeholder="Search" value="">
+                            <input type="text" class="form-control margin-15-position-obselete" id="filterInput"  onkeypress="searchUsingEnterButton(event)" name="search" style=" background-color: #f2f2f2;" placeholder="Search" value="">
                             <i class="fas fa-search" style=" margin-right: 0.5%; color: #00768c;cursor:pointer" onclick="filterDoctors()"></i>
                         </div>
 
@@ -477,7 +477,12 @@
 
 
         });
-
+        function searchUsingEnterButton(event){  if (event.keyCode === 13) {
+             event.preventDefault(); 
+                filterDoctors();
+;
+    }
+        }
         function filterDoctors() {
             var doctorsContainer = $('#doctorsListContainer');
             var serviceId = $('#services-ddl').val();

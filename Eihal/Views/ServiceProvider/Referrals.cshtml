@@ -270,7 +270,7 @@
                                         <div class="row">
                                             <div class="form-group mr-2 search-container" style="margin-top: 32px;">
                                                 <label for="filterInput-incoming"></label>
-                                                <input type="text" class="form-control margin-15-position-obselete" id="filterInput-incoming" name="search" style=" background-color: #f2f2f2;" placeholder="Search for name" value="">
+                                                <input type="text" class="form-control margin-15-position-obselete" id="filterInput-incoming" onkeypress="searchUsingEnterButtonIncoming(event)" name="search" style=" background-color: #f2f2f2;" placeholder="Search for name" value="">
                                                 <i class="fas fa-search" style=" margin-right: 0.5%; color: #00768c;cursor:pointer" onclick="filterIncomingReferrals()"></i>
                                             </div>
                                             <div class="col-lg-3 col-12 padding-screen" style="padding-right:8px">
@@ -303,7 +303,7 @@
                                         <div class="row">
                                             <div class="form-group mr-2 search-container" style="margin-top: 32px;">
                                                 <label for="filterInput-outgoing"></label>
-                                                <input type="text" class="form-control margin-15-position-obselete" id="filterInput-outgoing" name="search" style=" background-color: #f2f2f2;" placeholder="Search for name" value="">
+                                                <input type="text" class="form-control margin-15-position-obselete" id="filterInput-outgoing" onkeypress="searchUsingEnterButtonOutgoing(event)" name="search" style=" background-color: #f2f2f2;" placeholder="Search for name" value="">
                                                 <i class="fas fa-search" style=" margin-right: 0.5%; color: #00768c;cursor:pointer" onclick="filterOutgoingReferrals()"></i>
                                             </div>
                                             <div class="col-lg-3 col-12 padding-screen" style="padding-right:8px">
@@ -525,6 +525,18 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
+                  function searchUsingEnterButtonIncoming(event){  if (event.keyCode === 13) {
+             event.preventDefault(); 
+                filterIncomingReferrals();
+;
+    }}
+
+           function searchUsingEnterButtonOutgoing(event){  if (event.keyCode === 13) {
+             event.preventDefault(); 
+                filterOutgoingReferrals();
+;
+    }}
+
 
         function filterIncomingReferrals() {
             var name = $('#filterInput-incoming').val();
@@ -544,6 +556,7 @@
                 }
             });
         }
+
         function filterOutgoingReferrals() {
             var name = $('#filterInput-outgoing').val();
 
