@@ -36,39 +36,39 @@ namespace Eihal.Controllers
 
         [Route("GetUserIncomingRequests")]
 
-        public ActionResult GetUserIncomingRequests(string? name,int? statusId=0,int? dateId=0)
+        public ActionResult GetUserIncomingRequests(string? name, int? statusId = 0, int? dateId = 0)
         {
             var currentUserId = GetUserProfileId();
             if (string.IsNullOrEmpty(name))
                 name = string.Empty;
-            var model = _dbContext.ReferralRequests.Include(a=>a.Service).Include(a=>a.CreatedByUser).Include(a=>a.AssignedToUser).Where(a =>
-            (a.CreatedByUser.FullName.Contains(name) ||name==string.Empty) 
-            &&(statusId ==0 || (int)a.Status==statusId)
-            &&(dateId==0 ||
+            var model = _dbContext.ReferralRequests.Include(a => a.Service).Include(a => a.CreatedByUser).Include(a => a.AssignedToUser).Where(a =>
+            (a.CreatedByUser.FullName.Contains(name) || name == string.Empty)
+            && (statusId == 0 || (int)a.Status == statusId)
+            && (dateId == 0 ||
             (dateId == 1 && a.CreationDate.Date == DateTime.Now.Date) ||
-            (dateId == 2 && a.CreationDate >= DateTime.Now.AddDays(-7).Date  )||
-            (dateId == 3 && a.CreationDate >= DateTime.Now.AddDays(-30).Date  )
+            (dateId == 2 && a.CreationDate >= DateTime.Now.AddDays(-7).Date) ||
+            (dateId == 3 && a.CreationDate >= DateTime.Now.AddDays(-30).Date)
             )
-            && a.AssignedToUserId == currentUserId).ToList(); 
+            && a.AssignedToUserId == currentUserId).ToList();
 
             return PartialView("_IncomingRequests", model);
-        }   
+        }
         [Route("GetUserOutgoingRequests")]
 
-        public ActionResult GetUserOutgoingRequests(string? name,int? statusId=0,int? dateId=0)
+        public ActionResult GetUserOutgoingRequests(string? name, int? statusId = 0, int? dateId = 0)
         {
             var currentUserId = GetUserProfileId();
             if (string.IsNullOrEmpty(name))
                 name = string.Empty;
-            var model = _dbContext.ReferralRequests.Include(a=>a.Service).Include(a=>a.CreatedByUser).Include(a=>a.AssignedToUser).Where(a =>
-            (a.AssignedToUser.FullName.Contains(name) ||name==string.Empty) 
-            &&(statusId ==0 || (int)a.Status==statusId)
-            &&(dateId==0 ||
+            var model = _dbContext.ReferralRequests.Include(a => a.Service).Include(a => a.CreatedByUser).Include(a => a.AssignedToUser).Where(a =>
+            (a.AssignedToUser.FullName.Contains(name) || name == string.Empty)
+            && (statusId == 0 || (int)a.Status == statusId)
+            && (dateId == 0 ||
             (dateId == 1 && a.CreationDate.Date == DateTime.Now.Date) ||
-            (dateId == 2 && a.CreationDate >= DateTime.Now.AddDays(-7).Date  )||
-            (dateId == 3 && a.CreationDate >= DateTime.Now.AddDays(-30).Date  )
+            (dateId == 2 && a.CreationDate >= DateTime.Now.AddDays(-7).Date) ||
+            (dateId == 3 && a.CreationDate >= DateTime.Now.AddDays(-30).Date)
             )
-            && a.CreatedByUserId == currentUserId).ToList(); 
+            && a.CreatedByUserId == currentUserId).ToList();
 
             return PartialView("_OutgoingRequests", model);
         }
@@ -622,6 +622,28 @@ namespace Eihal.Controllers
         }
 
 
+        [HttpGet]
+        [Route("GetUserCompanies")]
+        public ActionResult GetUserCompanies()
+        {
+            var userProfileId = GetUserProfileId();
+            var result = _dbContext.UserCompanies
+                                   .Include(i => i.Company)
+                                   .Where(w => w.UserProfileId == userProfileId).Select(s => s.Company).ToList();
+            return Json(result);
+        }
+
+
+        [HttpPost]
+        [Route("DeleteInsuranceCompany")]
+        public ActionResult DeleteInsuranceCompany(int companyId)
+        {
+            var userProfileId = GetUserProfileId();
+            var obj = _dbContext.UserCompanies.Single(w => w.InsuranceCompanyId == companyId && w.UserProfileId == userProfileId);
+            _dbContext.UserCompanies.Remove(obj);
+            _dbContext.SaveChanges();
+            return Ok("Deleted Successfully");
+        }
     }
 }
 

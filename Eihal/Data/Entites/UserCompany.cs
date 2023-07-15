@@ -5,6 +5,6 @@
         public int UserProfileId { get; set; }
         public UserProfile UserProfile { get; set; }
         public int InsuranceCompanyId { get; set; }
-        public InsuranceCompany CompanyId { get; set; }
+        public InsuranceCompany Company { get; set; }
     }
 }

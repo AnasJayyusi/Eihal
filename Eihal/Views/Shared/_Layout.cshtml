@@ -283,6 +283,7 @@
                                         <!-- Add your loading spinner HTML here -->
                                         <!-- For example, you can use a GIF or a CSS-based spinner -->
                                         <img src="~/icon/spinner-loading.gif" alt="Loading" />
+                                        <div class="loading-text">Please wait...</div>
                                     </div>
 
 
@@ -412,15 +413,24 @@
     }
 
   
+    .loading-text {
+        color: white;
+        font-size: 16px;
+        margin-top: 10px;
+        text-align: center;
+    }
 </style>
 
 <script>
-    // Show the loading spinner
-    document.getElementById('loadingSpinner').style.display = 'block';
+    var currentUrl = window.location.href;
+    if (currentUrl.includes("/ServiceProvider/Profile")) {
+        // Show the loading spinner
+        document.getElementById('loadingSpinner').style.display = 'block';
 
-    // Hide the loading spinner after 3 seconds
-    setTimeout(function () {
-        document.getElementById('loadingSpinner').style.display = 'none';
-    }, 5000);
+        // Hide the loading spinner after 3 seconds
+        setTimeout(function () {
+            document.getElementById('loadingSpinner').style.display = 'none';
+        }, 3500);
+    }
 </script>
 

@@ -109,11 +109,8 @@
             <hr>
 
             <div class="form-group">
-
                 <div class="col-md-12">
                     <select onchange="addInsuranceCompany()" class="companies-autoComplete" name="companies">
-                        <option value="AL">Alabama</option>
-                        <option value="WY">Wyoming</option>
                     </select>
                 </div>
             </div>
@@ -122,10 +119,14 @@
     </form>
 
 
-    <div style="text-align:center">
-        <label class="label-WorkingHours" style="font-weight:bold">No Results Found</label>
+    <div id="no-company-added" style="text-align:center">
+        <label class="label-WorkingHours" style="font-weight:bold">No Insurance Company Added</label>
         <img src="~/icon/no-result-found-icon.png" width="25" height="25" />
         <span style="color:black"></span>
+    </div>
+
+    <div class="iconList">
+    
     </div>
 
 </div>
@@ -303,7 +304,7 @@
 <script>
     $(document).ready(function () {
         getClinicNameWorkingHours();
-
+        getUserCompanies();
         $('#sun-closed').change(function () {
             if ($(this).is(':checked')) {
                 $('input[id^="sunday"]').prop('disabled', true);
@@ -721,30 +722,130 @@
         }
     });
 
-    function addInsuranceCompany()
-    {
+    function addInsuranceCompany() {
         debugger;
-        var companyId=$('.companies-autoComplete').val();
+        var companyId = $('.companies-autoComplete').val();
 
-          $.ajax({
+        $.ajax({
             url: '@Url.Action("AddInsuranceCompany", "ServiceProvider")' + '?companyId=' + companyId,
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-               toastr.success('Insurance Comapny Added successfully', 'Success !!'); 
+                toastr.success('Insurance Comapny Added successfully', 'Success !!');
             }
         });
+        toastr.success('Insurance Comapny Added successfully', 'Success !!');
 
-           $.ajax({
-            url: '@Url.Action("GetUserCompany", "ServiceProvider")' + '?companyId=' + companyId,
-            type: 'GET',
-            dataType: 'json',
-            success: function (data) {
-               toastr.success('Insurance Comapny Added successfully', 'Success !!'); 
-            }
-        });
+        getUserCompanies();
 
-        
+
+
+
     }
 
+
+    function getUserCompanies() {
+        $.ajax({
+            url: '/ServiceProvider/GetUserCompanies',
+            type: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                // Handle success response
+                if (response && response.length > 0) {
+                    $("#no-company-added").hide();
+                    var ul = $('<ul></ul>'); // Create <ul> element
+                    response.forEach(function (company) {
+                        var li = $('<li></li>'); // Create <li> element
+                        var img = $('<img />').attr('src', company.logoImagePath); // Create <img> element
+                        var a = $('<a></a>').attr('href', '#').append(img).append(company.titleEn); // Create <a> element
+
+                        var closeButton = $('<i class="fa fa-remove" style="color:red" aria-hidden="true"></i>').click(function () {
+                            $(this).closest('li').remove(); // Remove the <li> element when the button is clicked
+                            deleteCompany(company.id); // Call the deleteCompany function with the company ID
+                        });
+
+                        a.append(closeButton); // Append the close button to the <a> element
+                        li.append(a); // Append <a> to <li>
+                        ul.append(li); // Append <li> to <ul>
+                    });
+
+                    // Add the generated <ul> to the desired container element
+                    $('.iconList').empty().append(ul);
+                } else {
+                    $("#no-company-added").show();
+                }
+            },
+            error: function (error) {
+                toastr.error('Error occurred', 'Failed !!');
+                // Handle error response
+            }
+        });
+    }
+
+    function deleteCompany(companyId) {
+        // Perform the deletion operation using the provided company ID
+        // You can use an AJAX request or any other method to delete the company
+         $.ajax({
+            url: '/ServiceProvider/DeleteInsuranceCompany',
+             type: 'POST',
+             data: { companyId: companyId },
+             success: function (response) {
+                 // Handle the success response after deleting the company
+                  toastr.success('Insurance Comapny Deleted successfully', 'Success !!');
+             },
+             error: function (error) {
+                 // Handle the error response if the deletion operation fails
+                toastr.error('Error occurred', 'Failed !!');
+             }
+         });
+    }
+
+
 </script>
+
+<style>
+
+
+
+    .iconList ul {
+        list-style: none;
+    }
+
+        .iconList ul li {
+            display: inline;
+            float: left;
+            margin: 10px;
+            text-align: center;
+            height: 150px;
+            width: 200px;
+        }
+
+            .iconList ul li img {
+                margin: 5px auto;
+                display: block;
+                height: 97px;
+                width: 97px;
+                -webkit-transition: all 0.1s linear;
+                -moz-transition: all 0.1s linear;
+                transition: all 0.1s linear;
+            }
+
+            .iconList ul li a {
+                display: block;
+                opacity: 0.50;
+                text-decoration: none;
+                letter-spacing: 0px;
+                -webkit-transition: all 0.2s linear;
+                -moz-transition: all 0.2s linear;
+                transition: all 0.2s linear;
+                font-family: 'Droid Arabic Naskh', Tahoma;
+                color: black;
+                line-height: 25px;
+                font-size: 18px;
+            }
+
+                .iconList ul li a:hover {
+                    opacity: 1.0;
+                    font-size: 22px;
+                }
+</style>
