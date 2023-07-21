@@ -1,0 +1,34 @@
+﻿@model List<Eihal.Data.Entites.Notification>
+
+    @foreach(var notification in Model){
+ <div class="custom-notification-item" style='@(notification.IsRead?"":"background-color:#ececec")'>
+      <div class="custom-notification-icon">
+        <i class="fas fa-bell"  style="color: #00768c;"></i>
+      </div>
+      <div class="custom-notification-content">
+        <h6 class="custom-notification-message">@notification.MessageEn</h6>
+            <span class="custom-notification-time">@{
+
+                    //if((DateTime.Now -   notification.CreationDate) < 5
+                    bool isLessThan5Minutes = DateTime.Now.Subtract(notification.CreationDate).Duration() < TimeSpan.FromMinutes(5);
+                    if (isLessThan5Minutes)
+                    {
+                        <text>Now</text>
+                    }else{
+                        <text>@notification.CreationDate</text>
+                    }
+                }</span>
+      </div>
+    </div>
+    <div style="border-bottom: 1px solid #cdcaca;">
+    <!-- Your content goes here -->
+</div>
+    }
+    @if(Model.Count ==0){
+  <div class="no-notification-container">
+  <div class="notification-message">
+    No New Notifications
+  </div>
+</div>
+
+    }

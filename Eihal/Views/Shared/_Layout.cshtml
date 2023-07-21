@@ -64,13 +64,38 @@
 }
 
 .custom-notification-list {
-  padding: 10px;
+     margin: -24px;
 }
-
+.no-notification-container {
+  padding: 20px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  text-align: center;
+  max-width: 100%;
+  margin: 0 auto;
+}
+.notification-message {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
 .custom-notification-item {
+        padding: 10px;
   display: flex;
   align-items: flex-start;
-  margin-bottom: 10px;
+}
+.notification-close{
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: end;
+    justify-content: center;
+    padding-top:32px;
+    /*padding: 1rem;*/
+    /* border-top: 1px solid #dee2e6; */
+    border-bottom-right-radius: 0.3rem;
+    border-bottom-left-radius: 0.3rem;
 }
 
 .custom-notification-icon {
@@ -340,56 +365,12 @@
                     </div>
                     <div class="modal-body">
 
-  <div class="custom-notification-list">
-    <div class="custom-notification-item">
-      <div class="custom-notification-icon">
-        <i class="fas fa-bell"  style="color: #00768c;"></i>
-      </div>
-      <div class="custom-notification-content">
-        <h6 class="custom-notification-message">New referral request from doctor</h6>
-        <span class="custom-notification-time">2 hours ago</span>
-      </div>
-    </div>
-    <div class="custom-notification-item">
-      <div class="custom-notification-icon">
-        <i class="fas fa-bell" style="color: #00768c;"></i>
-      </div>
-      <div class="custom-notification-content">
-        <h6 class="custom-notification-message">the referal request #0099 rejected</h6>
-        <span class="custom-notification-time">1 day ago</span>
-      </div>
-    </div>
-     <div class="custom-notification-item">
-      <div class="custom-notification-icon">
-        <i class="fas fa-bell" style="color: #00768c;"></i>
-      </div>
-      <div class="custom-notification-content">
-        <h6 class="custom-notification-message">the referal request #0585 rejected</h6>
-        <span class="custom-notification-time">1 day ago</span>
-      </div>
-    </div>
-     <div class="custom-notification-item">
-      <div class="custom-notification-icon">
-        <i class="fas fa-bell" style="color: #00768c;"></i>
-      </div>
-      <div class="custom-notification-content">
-        <h6 class="custom-notification-message">the referal request #7979 rejected</h6>
-        <span class="custom-notification-time">2 day ago</span>
-      </div>
-    </div>
-    <div class="custom-notification-item">
-      <div class="custom-notification-icon">
-        <i class="fas fa-bell"  style="color: #00768c;"></i>
-      </div>
-      <div class="custom-notification-content">
-        <h6 class="custom-notification-message">Notification message goes here.</h6>
-        <span class="custom-notification-time">3 days ago</span>
-      </div>
-  </div>
+  <div class="custom-notification-list" id="notificationContainer">
+   
 
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <div class="notification-close">
+                        <button style="width:200px" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
@@ -446,7 +427,58 @@
 </style>
 
 <script>
+
+        $(document).ready(function () {
+             $.ajax({
+        url: '/Notification/GetUserNotificationsCount',  // Replace 'your-api-url' with the actual API endpoint URL
+        method: 'GET',
+        success: function (response) {
+            // On success, loop through the response data and populate the dropdown options
+            //dropdown.append($('<option>').text(degree.titleEn).val(degree.id));
+            $(".notificationsCount").text(response);
+            //li.textContent = `${response} says `;
+
+            //$.each(response, function (index, item) {
+            //    li.textContent = `${item.titleEn} says `;
+            //});
+
+
+        },
+        error: function () {
+            console.log('Error occurred while retrieving degree data.');
+        }
+    });
+
+        })
 function showNotifications() {
+            var notificationContainer = $('#notificationContainer');
+    
+            $.ajax({
+                url: '/Notification/GetUserNotifications',
+                type: 'GET',
+                success: function (response) {
+                    notificationContainer.html(response);
+                    markAllNotificationsReaded();
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+    }
+    function markAllNotificationsReaded() {
+            //var notificationContainer = $('#notificationContainer');
+    
+            $.ajax({
+                url: '/Notification/MarkAllNotificationsReaded',
+                type: 'GET',
+                success: function (response) {
+            $(".notificationsCount").text(0);
+
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
     console.log("omar omar omar");
     }
     var currentUrl = window.location.href;
