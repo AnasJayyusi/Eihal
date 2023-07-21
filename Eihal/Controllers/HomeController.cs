@@ -68,7 +68,7 @@ namespace Eihal.Controllers
         }
         public IActionResult Doctors()
         {
-            var doctors = _dbContext.UserProfiles.Include(x => x.Certifications).ThenInclude(a => a.Degree).Include(a=> a.PractitionerType).Include(a=>a.City).Where(a =>a.ProfileStatus == ProfileStatus.Active && a.AccountTypeId == 1).ToList();
+            var doctors = _dbContext.UserProfiles.Include(a => a.TimeClinicLocation).ThenInclude(a=>a.City).Include(x => x.Certifications).ThenInclude(a => a.Degree).Include(a=> a.PractitionerType).Include(a=>a.City).Where(a =>a.ProfileStatus == ProfileStatus.Active && a.AccountTypeId == 1).ToList();
             return View(doctors);
         }
         public ActionResult FillDoctorsList(string name,int serviceId,int cityId,int disctrictId,int sortBy,int insuranceType)
@@ -80,11 +80,12 @@ namespace Eihal.Controllers
 
             }
             name = string.IsNullOrEmpty(name) ? string.Empty : name;
-            var doctors = _dbContext.UserProfiles.Include(x=>x.Certifications).ThenInclude(a=>a.Degree).Include(a => a.PractitionerType).Include(x=>x.City).Where(a => a.ProfileStatus == ProfileStatus.Active && a.AccountTypeId == 1 
+            var doctors = _dbContext.UserProfiles.Include(a=>a.TimeClinicLocation).ThenInclude(a=>a.City).Include(a=>a.InsuranceCompanies).Include(x=>x.Certifications).ThenInclude(a=>a.Degree).Include(a => a.PractitionerType).Include(x=>x.City).Where(a => a.ProfileStatus == ProfileStatus.Active && a.AccountTypeId == 1 
            && (name == String.Empty || a.FullName.Contains(name))
             && (serviceId == 0  || ids.Contains( a.Id))
-            && (cityId ==0 || a.CityId == cityId) 
-            && (insuranceType == 0 || (insuranceType == 1 && a.InsuranceAccepted == true) || (insuranceType == 2 && a.InsuranceAccepted != true))
+            && (cityId ==0 || a.TimeClinicLocation.CityId == cityId) 
+            && (disctrictId == 0 || a.TimeClinicLocation.DistrictId == disctrictId) 
+            && (insuranceType == 0 || (insuranceType !=0 && a.InsuranceCompanies.Any(x=>x.Id == insuranceType)))
            
             ).ToList();
             if (sortBy != 0) {
@@ -92,7 +93,7 @@ namespace Eihal.Controllers
                 doctors = doctors.OrderBy(a => a.FullName).ToList();
             else
                 {
-                    doctors = doctors.OrderBy(a => a.City).ToList();
+                    doctors = doctors.OrderBy(a => a.TimeClinicLocation?.City?.TitleEn).ToList();
                 }
             }
             return PartialView("_DoctorsList",doctors);

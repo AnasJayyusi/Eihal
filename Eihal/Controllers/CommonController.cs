@@ -130,6 +130,16 @@ namespace Eihal.Controllers
             // Pass the data to the view
             return Json(dropdownData);
         }
+        [HttpGet]
+        [Route("GetInsuranceCompaniesDDL")]
+        public ActionResult GetInsuranceCompaniesDDL()
+        {
+            // Retrieve the data for the dropdown list
+            var dropdownData = _dbContext.InsuranceCompanies.Where(a=>a.IsActive).ToList();
+
+            // Pass the data to the view
+            return Json(dropdownData);
+        }
 
 
 

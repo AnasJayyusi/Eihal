@@ -46,10 +46,10 @@
  
 </div>*@
 <span class="d-flex align-items-center mt-auto">
-    @if (doc.City != null)
+    @if (doc.TimeClinicLocation != null && doc.TimeClinicLocation.City != null)
     {
         <img width="15px" src="~/icon/location-icon-default.png" alt="" style="margin-right: 5px;">
-        <strong style="font-size: 13px;">@doc.City.TitleEn</strong>
+        <strong style="font-size: 13px;">@doc.TimeClinicLocation?.City?.TitleEn</strong>
     }
     <strong style="font-size: 13px; padding-left: 30px;">Read More</strong>
     @*<a class="custom-btn" style="width: 20px; height: 20px; margin-left: 3px;" href="">

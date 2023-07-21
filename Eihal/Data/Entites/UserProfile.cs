@@ -63,6 +63,8 @@ namespace Eihal.Data.Entites
 
       
         public List<InsuranceCompany> InsuranceCompanies{ get; set; }
+
+        public TimeClinicLocation TimeClinicLocation { get; set; }
         public ProfileStatus ProfileStatus { get; set; }
         public string? RejectionReason { get; set; }
 

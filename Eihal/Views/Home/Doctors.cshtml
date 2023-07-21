@@ -378,11 +378,11 @@
                         </div>
                         <div class="col-lg-4 col-12 padding-screen" style="padding-right:8px">
                             <select class="form-control" id="cities-ddl" onchange="filterDoctors()">
-                                <option value="">City</option>
+                                <option value="">All Cities</option>
                             </select>
                         </div>            <div class="col-lg-4 col-12 padding-screen">
                             <select class="form-control" id="disctricts-ddl" onchange="filterDoctors()">
-                                <option value="">Disctrict</option>
+                                <option value="">All Disctrict</option>
                             </select>
                         </div>
                     </div>
@@ -403,9 +403,9 @@
                     </div>
                     <div style="padding-bottom:10px">
                         <select class="form-control" id="insurance-ddl" onchange="filterDoctors()">
-                            <option value="0">Insurance </option>
-                            <option value="1">Included </option>
-                            <option value="2">Excluded </option>
+                            <option value="0">All Insurance Companies</option>
+                      @*      <option value="1">Included </option>
+                            <option value="2">Excluded </option>*@
                         </select>
                     </div>
 
@@ -431,7 +431,7 @@
                     $('#cities-ddl').empty();
                     // Populate the dropdown list
                     var dropdown = $('#cities-ddl');
-                    dropdown.append($('<option></option>').val(0).text('Cities'));
+                    dropdown.append($('<option></option>').val(0).text('All Cities'));
 
                     $.each(data, function (index, item) {
                         dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
@@ -449,14 +449,29 @@
                     $('#disctricts-ddl').empty();
                     // Populate the dropdown list
                     var dropdown = $('#disctricts-ddl');
-                    dropdown.append($('<option></option>').val(0).text('Disctricts'));
+                    dropdown.append($('<option></option>').val(0).text('All Disctricts'));
 
                     $.each(data, function (index, item) {
                         dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
                     });
                 }
             });
+                $.ajax({
+                url: '@Url.Action("GetInsuranceCompaniesDDL", "Common")',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Clear existing options
+                    $('#insurance-ddl').empty();
+                    // Populate the dropdown list
+                    var dropdown = $('#insurance-ddl');
+                    dropdown.append($('<option></option>').val(0).text('All Insurance Companies'));
 
+                    $.each(data, function (index, item) {
+                        dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                    });
+                }
+            });
             $.ajax({
                 url: '@Url.Action("GetServicesDDL", "Common")',
                 type: 'GET',
