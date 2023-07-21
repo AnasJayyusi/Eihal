@@ -1,5 +1,6 @@
 using Eihal.Data;
 using Eihal.Helper;
+using Eihal.Hubs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
@@ -34,8 +35,8 @@ try
         options.RequestCultureProviders.Insert(0, new Eihal.Helper.CookieRequestCultureProvider());
     });
 
-
-
+    builder.Services.AddSignalR();
+    builder.Services.AddSingleton<INotificationService, NotificationService>();
     builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation()
          .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
             .AddDataAnnotationsLocalization(); 
@@ -121,6 +122,7 @@ try
 
     using (StreamWriter writer = new StreamWriter("./Debug.txt"))
         writer.WriteLine(logger);
+    app.MapHub<NotificationHub>("/notificationHub");
 
     app.Run();
 

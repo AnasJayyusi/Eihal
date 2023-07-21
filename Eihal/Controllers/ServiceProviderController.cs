@@ -1,5 +1,6 @@
 ﻿using Eihal.Data;
 using Eihal.Data.Entites;
+using Eihal.Hubs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,14 +11,18 @@ using System.Data;
 namespace Eihal.Controllers
 {
 
+
     [Route("ServiceProvider")]
     [Authorize(Roles = "ServiceProvider")]
     public class ServiceProviderController : BaseController
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public ServiceProviderController(IWebHostEnvironment webHostEnvironment, ApplicationDbContext dbContext) : base(dbContext)
+        private readonly INotificationService _notificationService;
+
+        public ServiceProviderController(IWebHostEnvironment webHostEnvironment, INotificationService notificationService, ApplicationDbContext dbContext) : base(dbContext)
         {
             _webHostEnvironment = webHostEnvironment;
+            _notificationService = notificationService;
         }
 
         [Route("Profile")]
@@ -147,6 +152,7 @@ namespace Eihal.Controllers
             userServices.CreatedOn = DateTime.Now;
             _dbContext.UserServices.Add(userServices);
             _dbContext.SaveChanges();
+            _notificationService.SendMessage("omar", "test services");
             return Ok();
         }
 
