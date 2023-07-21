@@ -205,11 +205,12 @@
                         <label for="privillages-ddl" style="font-weight:bold;color:#00768c">Privillage:</label>
                         <!-- Dropdown list HTML element -->
                         <select class="form-control" id="privillages-ddl"></select>
-                    </div>      <div class="form-group">
+                    </div>      
+                 @*   <div class="form-group">
                         <label for="subPrivillages-ddl" style="font-weight:bold;color:#00768c">SubPrivillage:</label>
                         <!-- Dropdown list HTML element -->
                         <select class="form-control" id="subPrivillages-ddl"></select>
-                    </div>
+                    </div>*@
                 </form>
                 <div class="alert alert-danger hidden sm" role="alert">
                     <span id="error-msg-not-fill" style="display:none">Please fill all fields.</span>
@@ -262,23 +263,23 @@
                     });
                 }
 
-                   if ($('#subprivillages-ddl').children().length == 0) 
-                {
-                    $.ajax({
-                        url: '@Url.Action("GetSubPrivillagesDDL", "Common")',
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function (data) {
-                            // Clear existing options
-                            $('#subPrivillages-ddl').empty();
-                            // Populate the dropdown list
-                            var dropdown = $('#subPrivillages-ddl');
-                            $.each(data, function (index, item) {
-                                dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
-                            });
-                        }
-                    });
-                }
+                //   if ($('#subprivillages-ddl').children().length == 0) 
+                //{
+                //    $.ajax({
+                //        url: '@Url.Action("GetSubPrivillagesDDL", "Common")',
+                //        type: 'GET',
+                //        dataType: 'json',
+                //        success: function (data) {
+                //            // Clear existing options
+                //            $('#subPrivillages-ddl').empty();
+                //            // Populate the dropdown list
+                //            var dropdown = $('#subPrivillages-ddl');
+                //            $.each(data, function (index, item) {
+                //                dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                //            });
+                //        }
+                //    });
+                //}
             });
 
             $('#add-Service').click(function () {
@@ -288,7 +289,7 @@
                     Fee: $('#feeInput').val(),
                     IsActive:true,
                     PrivillageId: $('#privillages-ddl').val(),
-                    SubPrivillageId: $('#subPrivillages-ddl').val()
+                    //SubPrivillageId: $('#subPrivillages-ddl').val()
                 };
 
                 $.ajax({

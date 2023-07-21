@@ -60,7 +60,7 @@
         <tr>
             <th>#</th>
             <th>Privillage</th>
-            <th>SubPrivillage   </th>
+            @*<th>SubPrivillage   </th>*@
             <th>Title (English)</th>
             <th>Title (Arabic)</th>
             <th>Fee</th>
@@ -76,8 +76,8 @@
                 <td>@(startIndex + i + 1)</td>
                 @*<td>@services.PractitionerType.TitleEn</td>*@
                 <td>@services.Privillage?.TitleEn</td>
-                <td>@services.SubPrivillage?.TitleEn</td>
-                <td>@services.TitleEn</td>
+                @*<td>@services.SubPrivillage?.TitleEn</td>*@
+                @*<td>@services.TitleEn</td>*@
                 <td>@services.TitleEn</td>
                 <td>@services.TitleAr</td>
                 <td>@services.Fee</td>
@@ -151,11 +151,12 @@
                         <label for="privillages-ddl" style="font-weight:bold;color:#00768c">Privillage:</label>
                         <!-- Dropdown list HTML element -->
                         <select class="form-control" id="privillages-ddl-edit"></select>
-                    </div>      <div class="form-group">
+                    </div>    
+           @*         <div class="form-group">
                         <label for="subPrivillages-ddl" style="font-weight:bold;color:#00768c">SubPrivillage:</label>
                         <!-- Dropdown list HTML element -->
                         <select class="form-control" id="subPrivillages-ddl-edit"></select>
-                    </div>
+                    </div>*@
                  @*   <div class="form-group">
                         <label for="practitionerTypes-ddl-edit" style="font-weight:bold;color:#00768c">Practitioner Type:</label>
                         <!-- Dropdown list HTML element -->
@@ -252,23 +253,23 @@
                     });
                 }
 
-                   if ($('#subprivillages-ddl-edit').children().length == 0) 
-                {
-                    $.ajax({
-                        url: '@Url.Action("GetSubPrivillagesDDL", "Common")',
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function (data) {
-                            // Clear existing options
-                            $('#subPrivillages-ddl-edit').empty();
-                            // Populate the dropdown list
-                            var dropdown = $('#subPrivillages-ddl-edit');
-                            $.each(data, function (index, item) {
-                                dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
-                            });
-                        }
-                    });
-                }
+                //   if ($('#subprivillages-ddl-edit').children().length == 0) 
+                //{
+                //    $.ajax({
+                //        url: '@Url.Action("GetSubPrivillagesDDL", "Common")',
+                //        type: 'GET',
+                //        dataType: 'json',
+                //        success: function (data) {
+                //            // Clear existing options
+                //            $('#subPrivillages-ddl-edit').empty();
+                //            // Populate the dropdown list
+                //            var dropdown = $('#subPrivillages-ddl-edit');
+                //            $.each(data, function (index, item) {
+                //                dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                //            });
+                //        }
+                //    });
+                //}
             $.ajax({
                 url: '/Admin/GetService/' + id,
                 type: 'GET',
@@ -282,9 +283,9 @@
                 $('#titleArInputEdit').val(data.titleAr);
                 $('#titleEnInputEdit').val(data.titleEn);
                 $('#privillageEnInput').val(data.Privillage?.titleEn);
-                $('#subPrivillageEnInput').val(data.SubPrivillage?.titleEn);
+                //$('#subPrivillageEnInput').val(data.SubPrivillage?.titleEn);
                 $('#privillages-ddl-edit').val(data.privillageId);
-                $('#subPrivillages-ddl-edit').val(data.subPrivillageId);
+                //$('#subPrivillages-ddl-edit').val(data.subPrivillageId);
 
                 $('#titleId').val(data.id);
                 },
@@ -303,7 +304,7 @@
             Fee: $('#feeInputEdit').val(),
             TitleEn: $('#titleEnInputEdit').val(),
             PrivillageId: $('#privillages-ddl-edit').val(),
-            SubPrivillageId: $('#subPrivillages-ddl-edit').val(),
+            //SubPrivillageId: $('#subPrivillages-ddl-edit').val(),
             IsActive:true,
             Id: $('#titleId').val(),
         };
