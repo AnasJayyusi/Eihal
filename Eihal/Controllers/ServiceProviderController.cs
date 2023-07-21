@@ -54,7 +54,7 @@ namespace Eihal.Controllers
             (dateId == 2 && a.CreationDate >= DateTime.Now.AddDays(-7).Date) ||
             (dateId == 3 && a.CreationDate >= DateTime.Now.AddDays(-30).Date)
             )
-            && a.AssignedToUserId == currentUserId).ToList();
+            && a.AssignedToUserId == currentUserId).OrderByDescending(a => a.CreationDate).ToList();
 
             return PartialView("_IncomingRequests", model);
         }
@@ -73,7 +73,7 @@ namespace Eihal.Controllers
             (dateId == 2 && a.CreationDate >= DateTime.Now.AddDays(-7).Date) ||
             (dateId == 3 && a.CreationDate >= DateTime.Now.AddDays(-30).Date)
             )
-            && a.CreatedByUserId == currentUserId).ToList();
+            && a.CreatedByUserId == currentUserId).OrderByDescending(a=>a.CreationDate).ToList();
 
             return PartialView("_OutgoingRequests", model);
         }
