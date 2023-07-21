@@ -52,13 +52,26 @@ namespace Eihal.Controllers
             //    // Now, you have the current user ID (userId)
             //    // You can use it as needed
             //}
-            var model = _dbContext.Notifications.Where(a => a.AssignedToUserId == currentUserId).ToList();
-
+            var model = _dbContext.Notifications.Where(a => a.AssignedToUserId == currentUserId).OrderByDescending(a => a.CreationDate).ToList();
             // Pass the data to the view
             return PartialView("_NotificationsList", model);
 
         }
 
+        [HttpGet]
+        [Route("MarkAllNotificationsReaded")]
+        public ActionResult MarkAllNotificationsReaded()
+        {
+            var currentUserId = GetUserProfileId();
+ 
+            var model = _dbContext.Notifications.Where(a => a.AssignedToUserId == currentUserId).OrderByDescending(a => a.CreationDate).ToList();
+            foreach (var item in model)
+            {
+                item.IsRead = true;
+            }
+            _dbContext.SaveChanges();
+            return Ok();
+        }
 
     }
 }
