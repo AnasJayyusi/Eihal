@@ -1,6 +1,7 @@
 ﻿using Eihal.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
 namespace Eihal.Controllers
 {
@@ -141,41 +142,7 @@ namespace Eihal.Controllers
             return Json(dropdownData);
         }
 
-
-
-        [HttpGet]
-        [Route("GetInsuranceCompanies")]
-        public ActionResult GetInsuranceCompanies(string term)
-        {
-            var results = _dbContext.InsuranceCompanies
-                             .Where(w => w.IsActive)
-                             .Select(s => new { id = s.Id, text = s.TitleEn, textAr = s.TitleAr })
-                             .Where(x => string.IsNullOrEmpty(term) || x.text.Contains(term) || x.textAr.Contains(term))
-                             .ToList();
-
-            return Ok(new { results });
-        }
-
-
-
-        [HttpGet]
-        [Route("GetUserSpecialtiesDDL")]
-        public ActionResult GetUserSpecialtiesDDL(string term)
-        {
-            _loggedAspNetUserId = GetAspNetUserId();
-            var practitionerTypeId = _dbContext.UserProfiles
-                                                .Where(u => u.UserId == GetAspNetUserId())
-                                                .Select(u => u.PractitionerTypeId);
-
-            var results = _dbContext.Specialties
-                             .Where(w => w.IsActive && practitionerTypeId.Contains(w.PractitionerTypeId))
-                             .Select(s => new { id = s.Id, text = s.TitleEn, textAr = s.TitleAr })
-                             .Where(x => string.IsNullOrEmpty(term) || x.text.Contains(term) || x.textAr.Contains(term))
-                             .ToList();
-
-            return Ok(new { results });
-        }
-
+      
         #endregion
 
         #region Helper For Razor Page
@@ -194,6 +161,77 @@ namespace Eihal.Controllers
             }
 
             return isUsed;
+        }
+        #endregion
+
+        #region Select2 AutoComplete DDLS
+        [HttpGet]
+        [Route("GetInsuranceCompanies")]
+        public ActionResult GetInsuranceCompanies(string term)
+        {
+            var results = _dbContext.InsuranceCompanies
+                             .Where(w => w.IsActive)
+                             .Select(s => new { id = s.Id, text = s.TitleEn, textAr = s.TitleAr })
+                             .Where(x => string.IsNullOrEmpty(term) || x.text.Contains(term) || x.textAr.Contains(term))
+                             .ToList();
+
+            return Ok(new { results });
+        }
+
+
+        [HttpGet]
+        [Route("GetDoctorsProvider")]
+        public ActionResult GetDoctorsProvider(string term)
+        {
+            var query = from users in _dbContext.UserProfiles
+                        join userService in _dbContext.UserServices on users.Id equals userService.UserId
+                        select new
+                        {
+                            id = users.Id,
+                            text = userService.TitleEn,
+                            textAr = userService.TitleAr
+                        };
+
+            var result = query.Where(x => string.IsNullOrEmpty(term) || x.text.Contains(term) || x.textAr.Contains(term)).ToList();
+
+            return Ok(new { result });
+        }
+
+
+        [HttpGet]
+        [Route("GetAllServicesDLL")]
+        public ActionResult GetAllServicesDLL(string term)
+        {
+            var query = from services in _dbContext.Services
+                        join userService in _dbContext.UserServices on services.Id equals userService.ServiceId
+                        select new
+                        {
+                           id= services.Id,
+                           text= services.TitleEn,
+                           textAr= services.TitleAr
+                        };
+
+            var result = query.Where(x => string.IsNullOrEmpty(term) || x.text.Contains(term) || x.textAr.Contains(term)).ToList();
+
+            return Ok(new { result });
+        }
+
+        [HttpGet]
+        [Route("GetUserSpecialtiesDDL")]
+        public ActionResult GetUserSpecialtiesDDL(string term)
+        {
+            _loggedAspNetUserId = GetAspNetUserId();
+            var practitionerTypeId = _dbContext.UserProfiles
+                                                .Where(u => u.UserId == GetAspNetUserId())
+                                                .Select(u => u.PractitionerTypeId);
+
+            var results = _dbContext.Specialties
+                             .Where(w => w.IsActive && practitionerTypeId.Contains(w.PractitionerTypeId))
+                             .Select(s => new { id = s.Id, text = s.TitleEn, textAr = s.TitleAr })
+                             .Where(x => string.IsNullOrEmpty(term) || x.text.Contains(term) || x.textAr.Contains(term))
+                             .ToList();
+
+            return Ok(new { results });
         }
         #endregion
     }
