@@ -218,47 +218,77 @@
 
 @foreach (var item in Model)
 {
-    <div class="col-md-3 padding-top-25">
-        <div class="service-card">
-            <div class="service-card-body">
-                <h5 class="service-card-title"><strong>@item.TitleEn</strong></h5>
-                <div class="service-info-row">
-                    <div class="service-info-label">Price:</div>
-                    <div class="service-info-value">@item.Price</div>
-                </div>
-                <div class="service-info-row">
-                    <div class="service-info-label">Fee:</div>
-                    <div class="service-info-value">@item.Fee</div>
-                </div>
-                <div class="service-info-row">
-                    <div class="service-info-label">Status:</div>
-                    <div class="service-info-value">
-                        @if (item.Status == Eihal.Enums.ServicesStatusEnum.Pending)
-                        {
-                            <span class="status status-warning">@item.Status</span>
-                        }
-                        else if (item.Status == Eihal.Enums.ServicesStatusEnum.Approved)
-                        {
-                            <span class="status status-success">@item.Status</span>
-                        }
-                        else if (item.Status == Eihal.Enums.ServicesStatusEnum.Rejected)
-                        {
-                            <span class="status status-error"  data-toggle="modal" onclick="fillRejectionReason('@item.RejectionReason')" data-target="#RejectionReasonModal">@item.Status</span>
-                        }
-                        else
-                        {
-                            <span>@item.Status</span>
-                        }
+    if (item.Status != Eihal.Enums.ServicesStatusEnum.Rejected)
+    {
+        <div class="col-md-3 padding-top-25" >
+            <div class="service-card">
+                <div class="service-card-body">
+                    <h5 class="service-card-title"><strong>@item.TitleEn</strong></h5>
+                    <div class="service-info-row">
+                        <div class="service-info-label">Price:</div>
+                        <div class="service-info-value">@item.Price</div>
                     </div>
-                </div>
-                <div class="dots-container">
-                    <button class="dots-button" onclick="deleteService('@item.Id')">
-                        <i class="fas fa-trash-alt"></i>
-                    </button>
+                    <div class="service-info-row">
+                        <div class="service-info-label">Fee:</div>
+                        <div class="service-info-value">@item.Fee</div>
+                    </div>
+                    <div class="service-info-row">
+                        <div class="service-info-label">Status:</div>
+                        <div class="service-info-value">
+                            @if (item.Status == Eihal.Enums.ServicesStatusEnum.Pending)
+                            {
+                                <span class="status status-warning">@item.Status</span>
+                            }
+                            else if (item.Status == Eihal.Enums.ServicesStatusEnum.Approved)
+                            {
+                                <span class="status status-success">@item.Status</span>
+                            }
+                            else
+                            {
+                                <span>@item.Status</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="dots-container">
+                        <button class="dots-button" onclick="deleteService(event,'@item.Id')">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    }
+    else
+    {
+           <div class="col-md-3 padding-top-25"  data-toggle="modal" onclick="fillRejectionReason('@item.RejectionReason')" data-target="#RejectionReasonModal">
+            <div class="service-card">
+                <div class="service-card-body">
+                    <h5 class="service-card-title"><strong>@item.TitleEn</strong></h5>
+                    <div class="service-info-row">
+                        <div class="service-info-label">Price:</div>
+                        <div class="service-info-value">@item.Price</div>
+                    </div>
+                    <div class="service-info-row">
+                        <div class="service-info-label">Fee:</div>
+                        <div class="service-info-value">@item.Fee</div>
+                    </div>
+                    <div class="service-info-row">
+                        <div class="service-info-label">Status:</div>
+                        <div class="service-info-value">
+                          
+                                <span class="status status-error" >@item.Status</span>
+                          
+                        </div>
+                    </div>
+                    <div class="dots-container">
+                        <button class="dots-button" onclick="deleteService(event,'@item.Id')">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 }
 
 @if (Model.Count <= 0)

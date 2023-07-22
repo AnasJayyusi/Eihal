@@ -430,7 +430,7 @@
             }
             return null;
         }
-        function deleteService(id) {
+        function deleteService(event,id) {
             $.ajax({
                 url: '/ServiceProvider/DeleteUserService?Id=' + id, // Replace with the actual URL and action method to fetch the partial view
                 type: 'GET',
@@ -444,6 +444,8 @@
                     console.error('Error:', error);
                 }
             });
+              event.stopPropagation();
+    event.preventDefault();
         }
         function GetMyService() {
             var serviceContainer = $('#serviceContainer');
