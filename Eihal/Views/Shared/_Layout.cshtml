@@ -29,98 +29,104 @@
 
     <!-- Internal JavaScripts  Theme libraries-->
     <script src="~/vendor/bootstrap/js/bootstrap.bundle.js"></script>
+
+
     <style>
         .custom-notification {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  width: 300px;
-  background-color: #fff;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
-}
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 300px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
 
-.custom-notification-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px;
-  background-color: #007bff;
-  color: #fff;
-  border-radius: 5px 5px 0 0;
-}
+        .custom-notification-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px 5px 0 0;
+        }
 
-.custom-notification-title {
-  margin: 0;
-  font-size: 16px;
-}
+        .custom-notification-title {
+            margin: 0;
+            font-size: 16px;
+        }
 
-.custom-notification-close-btn {
-  border: none;
-  background: transparent;
-  color: #fff;
-  font-size: 18px;
-  cursor: pointer;
-}
+        .custom-notification-close-btn {
+            border: none;
+            background: transparent;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+        }
 
-.custom-notification-list {
-     margin: -24px;
-}
-.no-notification-container {
-  padding: 20px;
-  border: 1px solid #ccc;
-  background-color: #f9f9f9;
-  text-align: center;
-  max-width: 100%;
-  margin: 0 auto;
-}
-.notification-message {
-  font-size: 18px;
-  font-weight: bold;
-  color: #333;
-}
-.custom-notification-item {
-        padding: 10px;
-  display: flex;
-  align-items: flex-start;
-}
-.notification-close{
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-align: center;
-    align-items: center;
-    -ms-flex-pack: end;
-    justify-content: center;
-    padding-top:32px;
-    /*padding: 1rem;*/
-    /* border-top: 1px solid #dee2e6; */
-    border-bottom-right-radius: 0.3rem;
-    border-bottom-left-radius: 0.3rem;
-}
+        .custom-notification-list {
+            margin: -24px;
+        }
 
-.custom-notification-icon {
-  flex: 0 0 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 10px;
-  color: #007bff;
-}
+        .no-notification-container {
+            padding: 20px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            text-align: center;
+            max-width: 100%;
+            margin: 0 auto;
+        }
 
-.custom-notification-content {
-  flex: 1;
-}
+        .notification-message {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
 
-.custom-notification-message {
-  margin: 0;
-  font-size: 14px;
-  font-weight: 500;
-}
+        .custom-notification-item {
+            padding: 10px;
+            display: flex;
+            align-items: flex-start;
+        }
 
-.custom-notification-time {
-  font-size: 12px;
-  color: #777;
-}
+        .notification-close {
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-align: center;
+            align-items: center;
+            -ms-flex-pack: end;
+            justify-content: center;
+            padding-top: 32px;
+            /*padding: 1rem;*/
+            /* border-top: 1px solid #dee2e6; */
+            border-bottom-right-radius: 0.3rem;
+            border-bottom-left-radius: 0.3rem;
+        }
+
+        .custom-notification-icon {
+            flex: 0 0 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            color: #007bff;
+        }
+
+        .custom-notification-content {
+            flex: 1;
+        }
+
+        .custom-notification-message {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .custom-notification-time {
+            font-size: 12px;
+            color: #777;
+        }
 
     </style>
 
@@ -354,54 +360,53 @@
         <main role="main">
             @RenderBody()
         </main>
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="NotificationModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
+                <div class="modal-content" style="width:400px">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Notifications</h5>
+                        <h5 class="modal-title" id="NotificationModalLabel">Notifications</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
 
-  <div class="custom-notification-list" id="notificationContainer">
-   
-
+                        <div class="custom-notification-list" id="notificationContainer">
+                        </div>
+                    
                     </div>
-                    <div class="notification-close">
-                        <button style="width:200px" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <div class="modal-footer">
+                        <button  type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-  @*  <div class="container">
-    <div class="row p-1">
+        @*  <div class="container">
+        <div class="row p-1">
         <div class="col-1">User</div>
         <div class="col-5"><input type="text" id="userInput" /></div>
-    </div>
-    <div class="row p-1">
+        </div>
+        <div class="row p-1">
         <div class="col-1">Message</div>
         <div class="col-5"><input type="text" class="w-100" id="messageInput" /></div>
-    </div>
-    <div class="row p-1">
+        </div>
+        <div class="row p-1">
         <div class="col-6 text-end">
-            <input type="button" id="sendButton" value="Send Message" />
+        <input type="button" id="sendButton" value="Send Message" />
         </div>
-    </div>
-    <div class="row p-1">
+        </div>
+        <div class="row p-1">
         <div class="col-6">
-            <hr />
+        <hr />
         </div>
-    </div>
-    <div class="row p-1">
+        </div>
+        <div class="row p-1">
         <div class="col-6">
-            <ul id="messagesList"></ul>
+        <ul id="messagesList"></ul>
         </div>
-    </div>
-</div>
-   *@ 
+        </div>
+        </div>
+        *@
 </body>
 </html>
 
@@ -417,7 +422,7 @@
         background-color: rgba(0, 0, 0, 0.5); /* Adjust the opacity value (0.5) as needed */
     }
 
-  
+
     .loading-text {
         color: white;
         font-size: 16px;
@@ -428,58 +433,64 @@
 
 <script>
 
-        $(document).ready(function () {
-             $.ajax({
-        url: '/Notification/GetUserNotificationsCount',  // Replace 'your-api-url' with the actual API endpoint URL
-        method: 'GET',
-        success: function (response) {
-            // On success, loop through the response data and populate the dropdown options
-            //dropdown.append($('<option>').text(degree.titleEn).val(degree.id));
-            $(".notificationsCount").text(response);
-            //li.textContent = `${response} says `;
+    $(document).ready(function () {
+        $.ajax({
+            url: '/Notification/GetUserNotificationsCount',  // Replace 'your-api-url' with the actual API endpoint URL
+            method: 'GET',
+            success: function (response) {
+                // On success, loop through the response data and populate the dropdown options
+                //dropdown.append($('<option>').text(degree.titleEn).val(degree.id));
+                $(".notificationsCount").text(response);
+                //li.textContent = `${response} says `;
 
-            //$.each(response, function (index, item) {
-            //    li.textContent = `${item.titleEn} says `;
-            //});
-
-
-        },
-        error: function () {
-            console.log('Error occurred while retrieving degree data.');
-        }
-    });
-
-        })
-function showNotifications() {
-            var notificationContainer = $('#notificationContainer');
-    
-            $.ajax({
-                url: '/Notification/GetUserNotifications',
-                type: 'GET',
-                success: function (response) {
-                    notificationContainer.html(response);
-                    markAllNotificationsReaded();
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error:', error);
+                if ($(".notificationsCount").text() > 0)
+                {
+                    $("#notifications-count").removeClass("badge-light").addClass("badge-danger");
                 }
-            });
+
+                //$.each(response, function (index, item) {
+                //    li.textContent = `${item.titleEn} says `;
+                //});
+
+
+            },
+            error: function () {
+                console.log('Error occurred while retrieving degree data.');
+            }
+        });
+
+    })
+    function showNotifications() {
+        var notificationContainer = $('#notificationContainer');
+
+        $.ajax({
+            url: '/Notification/GetUserNotifications',
+            type: 'GET',
+            success: function (response) {
+                notificationContainer.html(response);
+                markAllNotificationsReaded();
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
     }
     function markAllNotificationsReaded() {
-            //var notificationContainer = $('#notificationContainer');
-    
-            $.ajax({
-                url: '/Notification/MarkAllNotificationsReaded',
-                type: 'GET',
-                success: function (response) {
-            $(".notificationsCount").text(0);
+        //var notificationContainer = $('#notificationContainer');
 
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error:', error);
-                }
-            });
-    console.log("omar omar omar");
+        $.ajax({
+            url: '/Notification/MarkAllNotificationsReaded',
+            type: 'GET',
+            success: function (response) {
+                $(".notificationsCount").text(0);
+                $("#notifications-count").removeClass("badge-danger").addClass("badge-light");
+
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
+        console.log("omar omar omar");
     }
     var currentUrl = window.location.href;
     if (currentUrl.includes("/ServiceProvider/Profile")) {

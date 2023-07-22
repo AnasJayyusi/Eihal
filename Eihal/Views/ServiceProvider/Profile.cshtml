@@ -140,10 +140,10 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p id="help-msg" style="text-transform:none">This message appear to complete your profile by adding Certifications by using attach button below to add new Certification. After that return to this message and press on click here</p>
+                <p id="help-msg" style="text-transform:none">This message appear to complete your profile by adding Certifications by using attach button below to add new Certification.then click on send to review   </p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+                <button onclick="scrollToSendReviewButton()" type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
             </div>
         </div>
     </div>
@@ -158,11 +158,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
-           function fillRejectionReason(rejectionReason) {
+        function fillRejectionReason(rejectionReason) {
             $("#rejectionReason").text(rejectionReason);
         }
 
-        function deleteService(event,id) {
+        function deleteService(event, id) {
             $.ajax({
                 url: '/ServiceProvider/DeleteUserService?Id=' + id, // Replace with the actual URL and action method to fetch the partial view
                 type: 'GET',
@@ -174,8 +174,8 @@
                     console.error('Error:', error);
                 }
             });
-              event.stopPropagation();
-    event.preventDefault();
+            event.stopPropagation();
+            event.preventDefault();
         }
         function GetMyService() {
             var serviceContainer = $('#serviceContainer');
@@ -217,7 +217,7 @@
                 // Perform a different action when the URL doesn't contain "something"
                 console.log("The URL does not contain 'MyProfile'.");
             }
-        
+
         })
 
         function openTab(evt, tabName) {
@@ -237,7 +237,7 @@
             document.getElementById(tabName).style.display = "block";
             evt.currentTarget.className += " active";
 
-          
+
         }
 
         function sendToReview() {
@@ -257,24 +257,30 @@
         }
 
 
+
+
         function setProfileStatus(profileStatus) {
+            debugger;
             // Remove any existing profile status elements
             $('#profile-status-container').empty();
 
-            var profileStatusElement = $('<div>').addClass('card-body d-flex align-items-center').css({
+            var profileStatusElement = $('<div id="status-div">').addClass('card-body d-flex align-items-center').css({
                 'padding': '10px',
             });
 
             var statusText = '';
             if (profileStatus === 'UnCompleted') {
                 profileStatusElement.css('background-color', 'rebeccapurple');
-                statusText = '<span style="font-weight: bold;">  Profile Status: UnCompleted </span> </br> Please complete your profile. Then <a id="reviewLink" href="#" onclick=sendToReview()  style="color: white; text-decoration: underline; font-weight: bold;">Click here or send the profile again from the send to review button</a>  to send your profile for review.';
+                statusText = '<span style="font-weight: bold;">  Profile Status: UnCompleted </span> </br> Please complete your profile,by adding Certifactions then send it to review  <a id="reviewLink" href="#" style="color: white; text-decoration: underline; font-weight: bold;">';
             } else if (profileStatus === 'UnderReview') {
                 profileStatusElement.css('background-color', 'darkcyan');
                 statusText = '<span style="font-weight: bold;"> Profile Status: Under Review</span>';
+                $("#active-profile-sign").hide()
+                $('#profile-status-container').click(false);
+
             } else if (profileStatus === 'Rejected') {
                 profileStatusElement.css('background-color', 'firebrick');
-                statusText = '<span style="font-weight: bold;"> Profile Status: Rejected</span>  to send your profile for review again. <a id="reviewLink" href="#" onclick=sendToReview()  style="color: white; text-decoration: underline; font-weight: bold;">Click here</a>';
+                statusText = '<span style="font-weight: bold;"> Profile Status: Rejected</span> Press here to check the rejection reason.</a>';
 
             } else if (profileStatus === 'Active') {
 
@@ -284,8 +290,8 @@
                 const tickMark = "<svg width=\"58\" height=\"45\" viewBox=\"0 0 58 45\" xmlns=\"http://www.w3.org/2000/svg\"><path fill=\"#fff\" fill-rule=\"nonzero\" d=\"M19.11 44.64L.27 25.81l5.66-5.66 13.18 13.18L52.07.38l5.65 5.65\"/></svg>";
                 buttonText.innerHTML = tickMark;
                 $("#send-icon").hide()
-               
-                
+
+
                 profileStatusElement.css('background-color', 'dodgerblue');
                 statusText = '<span style="font-weight: bold;"> Profile Status: Active</span>';
             }
@@ -294,28 +300,39 @@
             var statusDiv = $('<div>').append($('<span>').html(statusText));
             profileStatusElement.append(statusDiv);
 
-            var helpModalIcon = $('<div>').attr({
-                'data-toggle': 'modal',
-                'data-target': '#helpModal'
-            }).css({
-                'color': 'white',
-                'margin-left': 'auto',
-                'cursor': 'pointer'
-            }).html('<i style="font-size: larger;" class="fas fa-question-circle"></i>');
+            if (profileStatus != 'Active' && profileStatus != 'UnderReview') {
+                var helpModalIcon = $('<div>').attr({
+                    'data-toggle': 'modal',
+                    'data-target': '#helpModal'
+                }).css({
+                    'color': 'white',
+                    'margin-left': 'auto',
+                    'cursor': 'pointer'
+                }).html('<i style="font-size: larger;" class="fas fa-question-circle"></i>');
 
-            profileStatusElement.append(helpModalIcon);
-
-            // Append the profile status element to the container
-            $('#profile-status-container').append(profileStatusElement);
+                profileStatusElement.append(helpModalIcon);
+            }
+                // Append the profile status element to the container
+                $('#profile-status-container').append(profileStatusElement);
+          
         }
 
 
+        function scrollToSendReviewButton() {
+            document.getElementById("active-profile-sign").scrollIntoView();
+            shakeButton("#active-profile-sign", 20, 50, 200);
+        }
 
-
+        function shakeButton(selector, times, distance, duration) {
+            $(selector).css('position', 'relative');
+            for (var i = 0; i < times; i++) {
+                $(selector).animate({ left: (i % 2 === 0 ? distance : -distance) }, duration);
+            }
+            $(selector).animate({ left: 0 }, duration);
+        }
 
     </script>
 }
 
 
 
-<st
