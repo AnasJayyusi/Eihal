@@ -16,12 +16,21 @@
 
     .service-info-label {
         width: 30%;
-        font-size: 12px;
+        font-size: 14px;
+        font-weight:600;
+        color: darkcyan
+    }
+
+    .service-info-label-status {
+        font-size: 14px;
+        font-weight: 600;
+        color: darkcyan;
+        margin-right:5%;
     }
 
     .service-info-value {
-        width: 70%;
-        font-size: 12px;
+        font-size:18px;
+        font-weight:600;
     }
 
     .service-card {
@@ -185,7 +194,10 @@
         }
 
     .service-sub-title {
-        color: #00768c;
+        color: darkcyan;
+        width: 30%;
+        font-size: 14px;
+        font-weight: 600;
     }
 
     .status {
@@ -194,21 +206,28 @@
         padding: 4px 6px;
         border-radius: 4px;
         font-weight: bold;
+        border-radius:10%;
     }
 
     .status-success {
         background-color: #4CAF50;
         color: #ffffff;
+        font-size:15px;
+        border-radius: 10%;
     }
 
     .status-warning {
         background-color: #FFC107;
         color: #ffffff;
+        font-size: 15px;
+        border-radius: 10%;
     }
 
     .status-error {
         background-color: #FF0000;
         color: #ffffff;
+        font-size: 15px;
+        border-radius: 10%;
     }
 
     .padding-bottom-10 {
@@ -233,7 +252,7 @@
                         <div class="service-info-value">@item.Fee</div>
                     </div>
                     <div class="service-info-row">
-                        <div class="service-info-label">Status:</div>
+                        <div class="service-info-label-status">Status:</div>
                         <div class="service-info-value">
                             @if (item.Status == Eihal.Enums.ServicesStatusEnum.Pending)
                             {

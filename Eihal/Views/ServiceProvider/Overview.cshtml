@@ -434,7 +434,7 @@
                 $("#fullname-label").text(response.fullname);
                 $("#number-patients-label").text(response.numberPatients);
                 $("#review-label").text("(" + response.review + ")");
-                $("#insurance-label").text(response.insurance == "true" ? "Yes" : "No");
+                $("#insurance-label").text(response.insuranceAccept == true ? "Yes" : "No");
                 $("#bio-label").text(response.bio);
                 $("#speciality-label").text(response.speciality);
                 $("#certifications-label").text(response.certifactions);

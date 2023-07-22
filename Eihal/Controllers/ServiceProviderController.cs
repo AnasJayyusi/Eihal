@@ -73,7 +73,7 @@ namespace Eihal.Controllers
             (dateId == 2 && a.CreationDate >= DateTime.Now.AddDays(-7).Date) ||
             (dateId == 3 && a.CreationDate >= DateTime.Now.AddDays(-30).Date)
             )
-            && a.CreatedByUserId == currentUserId).OrderByDescending(a=>a.CreationDate).ToList();
+            && a.CreatedByUserId == currentUserId).OrderByDescending(a => a.CreationDate).ToList();
 
             return PartialView("_OutgoingRequests", model);
         }
@@ -191,7 +191,8 @@ namespace Eihal.Controllers
                 speciality = specialityNames ?? "No Speciality added yet.",
                 profilePicturePath = userProfile.ProfilePicturePath,
                 profileStatus = userProfile.ProfileStatus.ToString(),
-                rejectionReason = userProfile.RejectionReason
+                rejectionReason = userProfile.RejectionReason,
+                insuranceAccept = userProfile.InsuranceAccepted,
             };
 
             return Json(data);
@@ -625,11 +626,21 @@ namespace Eihal.Controllers
             userCompany.UserProfileId = userProfileId;
             userCompany.InsuranceCompanyId = id;
 
-            _dbContext.UserCompanies.Add(userCompany);
-            _dbContext.SaveChanges();
+            var uc = _dbContext.UserCompanies
+                                     .FirstOrDefault(w => w.UserProfileId == userProfileId && w.InsuranceCompanyId == id);
 
-            return Ok("Added successfully.");
+            var user = _dbContext.UserProfiles.Single(s => s.Id == userProfileId);
+            user.InsuranceAccepted = true;
+            _dbContext.UserProfiles.Update(user);
 
+            if (uc == null)
+            {
+                _dbContext.UserCompanies.Add(userCompany);
+                _dbContext.SaveChanges();
+                return Json("Added successfully.");
+            }
+            else
+                return Json("Already Exists.");
         }
 
 
@@ -653,7 +664,19 @@ namespace Eihal.Controllers
             var obj = _dbContext.UserCompanies.Single(w => w.InsuranceCompanyId == companyId && w.UserProfileId == userProfileId);
             _dbContext.UserCompanies.Remove(obj);
             _dbContext.SaveChanges();
-            return Ok("Deleted Successfully");
+
+            var isAnyCompanyAdded = _dbContext.UserCompanies.Any(w => w.UserProfileId == userProfileId);
+            var user = _dbContext.UserProfiles.Single(s => s.Id == userProfileId);
+            if (isAnyCompanyAdded)
+            {
+                user.InsuranceAccepted = true;
+            }
+            else
+                user.InsuranceAccepted = false;
+
+            _dbContext.UserProfiles.Update(user);
+            _dbContext.SaveChanges();
+            return Json("Deleted Successfully");
         }
     }
 }

@@ -373,10 +373,10 @@
 
                         <div class="custom-notification-list" id="notificationContainer">
                         </div>
-                    
+
                     </div>
                     <div class="modal-footer">
-                        <button  type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
                     </div>
                 </div>
             </div>
@@ -443,8 +443,7 @@
                 $(".notificationsCount").text(response);
                 //li.textContent = `${response} says `;
 
-                if ($(".notificationsCount").text() > 0)
-                {
+                if ($(".notificationsCount").text() > 0) {
                     $("#notifications-count").removeClass("badge-light").addClass("badge-danger");
                 }
 
@@ -459,7 +458,7 @@
             }
         });
 
-    })
+        })
     function showNotifications() {
         var notificationContainer = $('#notificationContainer');
 

@@ -120,7 +120,7 @@
 
 
     <div id="no-company-added" style="text-align:center">
-        <label class="label-WorkingHours" style="font-weight:bold">No Insurance Company Added</label>
+        <label class="label-WorkingHours" style="font-weight:bold">No Insurance Companines Added Yet.</label>
         <img src="~/icon/no-result-found-icon.png" width="25" height="25" />
         <span style="color:black"></span>
     </div>
@@ -729,7 +729,6 @@
     });
 
     function addInsuranceCompany() {
-        debugger;
         var companyId = $('.companies-autoComplete').val();
 
         $.ajax({
@@ -737,15 +736,13 @@
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-                toastr.success('Insurance Comapny Added successfully', 'Success !!');
             }
         });
+
+        setTimeout(getUserCompanies, 1000);
         toastr.success('Insurance Comapny Added successfully', 'Success !!');
 
-        getUserCompanies();
-
-
-
+        $(".companies-autoComplete").empty();
 
     }
 
@@ -804,6 +801,7 @@
                 toastr.error('Error occurred', 'Failed !!');
              }
          });
+        setTimeout(getUserCompanies, 1000);
     }
 
 
