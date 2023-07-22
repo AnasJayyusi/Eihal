@@ -369,7 +369,7 @@
 
             <div class="modal-footer" style="text-align:center">
                 <button type="button" class="btn btn-danger" data-dismiss="modal" id="close-add-service">Cancel</button>
-                <button onclick="sendServiceForReview()" type="button" class="btn btn-success" id="send-for-review-btn" style="background-color:#00768c" disabled>Add</button>
+                <button onclick="sendServiceForReview()"  data-dismiss="modal" type="button" class="btn btn-success" id="send-for-review-btn" style="background-color:#00768c" disabled>Add</button>
             </div>
         </div>
     </div>
@@ -401,8 +401,6 @@
                     console.error('Error:', error);
                 }
             });
-              event.stopPropagation();
-    event.preventDefault();
         }
 
         function GetAllService() {
@@ -431,6 +429,7 @@
             var serviceId = $("#service-id-input").val();
             var price = $("#price-input").val();
 
+           
             $.ajax({
                 url: '/ServiceProvider/AddUserService?serviceId=' + serviceId + '&price=' + price,
                 type: 'POST',
@@ -438,9 +437,9 @@
                 processData: false,
                 contentType: false,
                 success: function (response) {
+                    $("#close-add-service").trigger("click");
 
                     console.log(response);
-                    $("#close-add-service").trigger("click");
                     //loadUserProfileOverview();
                     toastr.success('Service sent for reveiew successfully', 'Success !!');
                     GetMyService();
