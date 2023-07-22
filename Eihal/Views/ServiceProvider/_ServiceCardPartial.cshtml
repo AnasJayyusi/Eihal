@@ -93,7 +93,7 @@
         .dots-button::before {
             content: "";
             position: absolute;
-            color: #007bff;
+            color: red;
             font-size: 20px;
             top: 50%;
             left: 50%;
@@ -233,6 +233,7 @@
     .padding-bottom-10 {
         padding-bottom: 10px;
     }
+
         .currency-amount span {
             /* Style for the currency amount itself */
             color: green; /* Custom color for the currency amount, change as desired */
@@ -275,7 +276,7 @@
                     </div>
                     <div class="dots-container">
                         <button class="dots-button" onclick="deleteService(event,'@item.Id')">
-                            <i class="fas fa-trash-alt"></i>
+                            <i style="color:red" class="fas fa-trash-alt"></i>
                         </button>
                     </div>
                 </div>
@@ -305,7 +306,7 @@
                         </div>
                     </div>
                     <div class="dots-container">
-                        <button class="dots-button" onclick="deleteService(event,'@item.Id')">
+                        <button  onclick="deleteService(event,'@item.Id')">
                             <i class="fas fa-trash-alt"></i>
                         </button>
                     </div>

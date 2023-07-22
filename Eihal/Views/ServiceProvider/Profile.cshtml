@@ -163,11 +163,16 @@
         }
 
         function deleteService(event, id) {
+            var confirmation = confirm("Are you sure you want to delete this service?"); // Show confirmation dialog
+            if (!confirmation) {
+                return; // If user cancels, do nothing
+            }
             $.ajax({
                 url: '/ServiceProvider/DeleteUserService?Id=' + id, // Replace with the actual URL and action method to fetch the partial view
                 type: 'GET',
                 success: function (response) {
                     //serviceContainer.html(response);
+                    toastr.success('Service removed successfully', 'Removed !!');
                     GetMyService();
                 },
                 error: function (xhr, status, error) {
