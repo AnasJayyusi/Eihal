@@ -679,6 +679,21 @@ namespace Eihal.Controllers
             _dbContext.SaveChanges();
             return Json("Deleted Successfully");
         }
+
+
+
+        [Route("GetAllPrivileges")]
+
+        public ActionResult GetAllPrivileges()
+        {
+            // Assuming you have a list of items to pass to the view
+            List<Services> model = _dbContext.Services.Where(a => a.IsActive).ToList(); // Replace with your logic to fetch the items
+
+            // Render the partial view and return it as HTML content
+            //string htmlContent = RenderPartialToString("_CardPartial", model); // Replace with the name of your partial view
+
+            return PartialView("PrivilegesOrder", model); // Replace with the name of your partial view
+        }
     }
 }
 
