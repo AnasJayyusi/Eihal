@@ -501,6 +501,26 @@
             document.getElementById('loadingSpinner').style.display = 'none';
         }, 3500);
     }
+
+    if (currentUrl.includes("/ServiceProvider/Referrals")) {
+        // Show the loading spinner
+        document.getElementById('loadingSpinner').style.display = 'block';
+
+        // Hide the loading spinner after 3 seconds
+        setTimeout(function () {
+            document.getElementById('loadingSpinner').style.display = 'none';
+        }, 2500);
+    }
+
+    if (currentUrl.includes("/ServiceProvider/AddServices")) {
+        // Show the loading spinner
+        document.getElementById('loadingSpinner').style.display = 'block';
+
+        // Hide the loading spinner after 3 seconds
+        setTimeout(function () {
+            document.getElementById('loadingSpinner').style.display = 'none';
+        }, 2500);
+    }
 </script>
 
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
