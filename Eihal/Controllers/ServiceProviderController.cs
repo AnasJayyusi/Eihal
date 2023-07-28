@@ -7,13 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.Design;
 using System.Data;
+using static Eihal.Areas.Identity.Pages.Account.LoginModel;
 
 namespace Eihal.Controllers
 {
 
 
     [Route("ServiceProvider")]
-    [Authorize(Roles = "ServiceProvider")]
+    [Authorize(Roles = "ServiceProvider,Beneficiary")]
     public class ServiceProviderController : BaseController
     {
         private readonly IWebHostEnvironment _webHostEnvironment;

@@ -3,7 +3,965 @@
 @inject IViewLocalizer Localizer
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
+<div id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <!-- End of Sidebar -->
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <!-- End of Topbar -->
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4" style="margin-top:125px;">
+                        @*  <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                        <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
+                        </a>*@
+                    </div>
+                    <!-- Content Row -->
+
+
+                    <div class="row">
+                        @Html.Partial("_Sidebar")
+                        <div class="col-xl-8 col-lg-8 ">
+
+                            <div id="profile-status-container" style="color:white"></div>
+
+                            <br />
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div class="tab-container card-header py-2 d-flex flex-row align-items-center justify-content-between">
+
+                                    <h6 style="color:#00768c" class="m-0 font-weight-bold text-primary">
+                                        <a style="color:#00768c" class="nav-link" href="index.html">
+                                            <i style="color:#00768c" class="fas fa-share-alt" aria-hidden="true"></i>
+                                            <span style="color:#00768c">Referrals</span>
+                                        </a>
+                                    </h6>
+                                    <div>
+                                        <button class="tab-button active" id="btnIncoming" onclick="openTab(event, 'tab1')">Incoming Requests</button>
+                                        <button class="tab-button" onclick="openTab(event, 'tab2')">Outgoing Requests</button>
+                                    </div>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+
+                                    <div id="tab1" class="tab-content" style="display: none;">
+
+                                        <!-- Add Ordeer -->
+                                        <div style="text-align: end; cursor:pointer">
+                                            <button onclick="openAddOrderModal()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddOrderModal">
+                                                <i style="font-size:25px" class="fas fa-add"></i> Add Order
+                                            </button>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="form-group mr-2 search-container" style="margin-top: 32px;">
+                                                <label for="filterInput-incoming"></label>
+                                                <input type="text" class="form-control margin-15-position-obselete" id="filterInput-incoming" onkeypress="searchUsingEnterButtonIncoming(event)" name="search" style=" background-color: #f2f2f2;" placeholder="Search for name" value="">
+                                                <i class="fas fa-search" style=" margin-right: 0.5%; color: #00768c;cursor:pointer" onclick="filterIncomingReferrals()"></i>
+                                            </div>
+                                            <div class="col-lg-3 col-12 padding-screen" style="padding-right:8px">
+                                                <label for="status-incoming-dll">Status</label>
+                                                <select class="form-control" id="status-incoming-ddl" onchange="filterIncomingReferrals()">
+                                                    <option value="0">All Statuses</option>
+                                                    <option value="@((int)Eihal.Enums.ReferralStatusEnum.UnderReview)">Under Review</option>
+                                                    <option value="@((int)Eihal.Enums.ReferralStatusEnum.Approved)">Approved</option>
+                                                    <option value="@((int)Eihal.Enums.ReferralStatusEnum.Rejected)">Rejected</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-3 col-12 padding-screen" style="padding-right:8px">
+                                                <label for="date-incoming-dll">Date</label>
+
+                                                <select class="form-control" id="date-incoming-ddl" onchange="filterIncomingReferrals()">
+                                                    <option value="0">All Dates</option>
+                                                    <option value="1">Today</option>
+                                                    <option value="2">7 days ago</option>
+                                                    <option value="3">30 days ago</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="container">
+
+                                            <div class="row" id="incomingRequestContainer">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="tab2" class="tab-content" style="display: none;">
+                                        <div class="row">
+                                            <div class="form-group mr-2 search-container" style="margin-top: 32px;">
+                                                <label for="filterInput-outgoing"></label>
+                                                <input type="text" class="form-control margin-15-position-obselete" id="filterInput-outgoing" onkeypress="searchUsingEnterButtonOutgoing(event)" name="search" style=" background-color: #f2f2f2;" placeholder="Search for name" value="">
+                                                <i class="fas fa-search" style=" margin-right: 0.5%; color: #00768c;cursor:pointer" onclick="filterOutgoingReferrals()"></i>
+                                            </div>
+                                            <div class="col-lg-3 col-12 padding-screen" style="padding-right:8px">
+                                                <label for="status-outgoing-dll">Status</label>
+                                                <select class="form-control" id="status-outgoing-ddl" onchange="filterOutgoingReferrals()">
+                                                    <option value="0">All Statuses</option>
+                                                    <option value="@((int)Eihal.Enums.ReferralStatusEnum.UnderReview)">Under Review</option>
+                                                    <option value="@((int)Eihal.Enums.ReferralStatusEnum.Approved)">Approved</option>
+                                                    <option value="@((int)Eihal.Enums.ReferralStatusEnum.Rejected)">Rejected</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-3 col-12 padding-screen" style="padding-right:8px">
+                                                <label for="date-outgoing-dll">Date</label>
+
+                                                <select class="form-control" id="date-outgoing-ddl" onchange="filterOutgoingReferrals()">
+                                                    <option value="0">All Dates</option>
+                                                    <option value="1">Today</option>
+                                                    <option value="2">7 days ago</option>
+                                                    <option value="3">30 days ago</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="container">
+                                            <div class="row" id="outgoingRequestContainer">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+        <!-- Footer -->
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+
+
+<div class="modal fade" id="AddOrderModal" tabindex="-1" role="dialog" aria-labelledby="EditUserProfileModal" aria-hidden="true">
+    <div class="modal-dialog custom-modal-dialog" style="max-width:600px" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AddOrderModal">Add Order </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row justify-content-center">
+                        <div>
+                            <div>
+                                <form id="msform">
+                                    <!-- progressbar -->
+                                    <ul id="progressbar">
+                                        <li class="active" id="account"><strong>Patient Info</strong></li>
+                                        <li id="personal"><strong>Services</strong></li>
+                                        <li id="payment"><strong>Doctors</strong></li>
+                                        <li id="confirm"><strong>Confrimation</strong></li>
+                                    </ul>
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div> <br> <!-- fieldsets -->
+                                    <fieldset>
+                                        <div class="form-card">
+                                            <div class="row">
+                                                <div class="col-7">
+                                                    <h2 class="fs-title">Patient Information:</h2>
+                                                </div>
+                                                <div class="col-5">
+                                                    <h2 class="steps">Step 1 - 4</h2>
+                                                </div>
+                                            </div>
+
+                                            @*Address*@
+                                            <div class="container">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label style="font-weight:bold;color:#00768c" for="fullname-edit-input">Full Name:*</label>
+                                                            <input type="text" class="form-control" id="fullname-edit-input" placeholder="Full Name" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label style="font-weight:bold;color:#00768c" for="phone-edit-input">Phone:*</label>
+                                                            <input type="text" class="form-control" id="phone-edit-input" placeholder="Phone" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label style="font-weight:bold;color:#00768c" for="email-edit-input">Email:</label>
+                                                            <input type="text" class="form-control" id="email-edit-input" placeholder="Email" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label style="font-weight:bold;color:#00768c" for="countries-ddl-edit">Country:</label>
+                                                            <select class="form-control" id="countries-ddl-edit" onchange="getStatesUserProfile(this.value)">
+                                                                <option value="">Select a Country</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label style="font-weight:bold;color:#00768c" for="states-ddl-edit">State:</label>
+                                                            <select class="form-control" id="states-ddl-edit" onchange="getCitesUserProfile(this.value)">
+                                                                <option value="">Select a State</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label style="font-weight:bold;color:#00768c" for="cities-ddl-edit">City:</label>
+                                                            <select class="form-control" id="cities-ddl-edit">
+                                                                <option value="">Select a City</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <label style="font-weight:bold;color:#00768c" for="cities-ddl-edit">Gender:</label>
+                                                        <div class="form-group">
+                                                            <input type="radio" name="gender" id="female" class="input-hidden" />
+                                                            <label for="female">
+                                                                <img src="~/images/female.png" class="selectOptionStyle" alt="Female" /> <span>Female</span>
+                                                            </label>
+
+                                                            <input type="radio" name="gender" id="male" class="input-hidden" />
+                                                            <label for="male">
+                                                                <img src="~/images/male.png" class="selectOptionStyle" alt="Male" />Male
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <label style="font-weight:bold;color:#00768c" for="cities-ddl-edit">Age:</label>
+                                                        <div class="form-group">
+                                                            <input type="radio" name="age" id="child" class="input-hidden" />
+                                                            <label for="child">
+                                                                <img src="~/images/child.png" class="selectOptionStyle" alt="child" /> 4 - 10 Years
+                                                            </label>
+
+                                                            <input type="radio" name="age" id="teenager" class="input-hidden" />
+                                                            <label for="teenager">
+                                                                <img src="~/images/teenager.png" class="selectOptionStyle" alt="Male" /> 11 - 25 Years
+                                                            </label>
+
+                                                            <input type="radio" name="age" id="young" class="input-hidden" />
+                                                            <label for="young">
+                                                                <img src="~/images/young.png" class="selectOptionStyle" alt="Male" />26 - 50 Years
+                                                            </label>
+
+                                                            <input type="radio" name="age" id="Aged" class="input-hidden" />
+                                                            <label for="Aged">
+                                                                <img src="~/images/Aged.png" class="selectOptionStyle" alt="Male" /> > 50 Years
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label style="font-weight:bold;color:#00768c">Does the patient have a chronic disease?</label> <span style="color:gray;font-style:italic">(if not leave it empty)</span>
+                                                            <div class="form-check">
+                                                                <textarea spellcheck="false" data-ms-editor="true" style="background-color: rgb(255, 255, 255); background-size: 100% 1.2em; background-image: linear-gradient(353deg, transparent 79px, rgb(171, 206, 212) 79px, rgb(171, 206, 212) 81px, transparent 81px), linear-gradient(rgb(238, 238, 238) 0.1em, transparent 0.1em); height: 196px;">
+                                                            </textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+
+
+
+                                        </div>
+                                        <input type="button" name="next" class="next action-button" value="Next" />
+                                    </fieldset>
+                                    <fieldset>
+                                        <div class="form-card">
+                                            <div class="row">
+                                                <div class="col-7">
+                                                    <h2 class="fs-title">Services:</h2>
+                                                </div>
+                                                <div class="col-5">
+                                                    <h2 class="steps">Step 2 - 4</h2>
+                                                </div>
+                                            </div>
+
+                                            <label class="fieldlabels">Services:</label>
+
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <select class="services-multiSelect" multiple>
+                                                    </select>
+
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                        <input type="button" name="next" class="next action-button" value="Next" />
+                                        <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
+                                    </fieldset>
+                                    <fieldset>
+                                        <div class="form-card">
+                                            <div class="row">
+                                                <div class="col-7">
+                                                    <h2 class="fs-title">Doctor:</h2>
+                                                </div>
+                                                <div class="col-5">
+                                                    <h2 class="steps">Step 3 - 4</h2>
+                                                </div>
+                                            </div>
+                                            <label class="fieldlabels">Doctor:</label>
+
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <select class="doctor-autoComplete" name="doctor">
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <input type="button" name="next" class="next action-button" value="Submit" />
+                                        <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
+                                    </fieldset>
+                                    <fieldset>
+                                        <div class="form-card">
+                                            <div class="row">
+                                                <div class="col-7">
+                                                    <h2 class="fs-title">Finish:</h2>
+                                                </div>
+                                                <div class="col-5">
+                                                    <h2 class="steps">Step 4 - 4</h2>
+                                                </div>
+                                            </div> <br><br>
+                                            <h2 class="purple-text text-center"><strong>SUCCESS !</strong></h2> <br>
+                                            <div class="row justify-content-center">
+                                                <div class="col-3"> <img src="https://i.imgur.com/GwStPmg.png" class="fit-image"> </div>
+                                            </div> <br><br>
+                                            <div class="row justify-content-center">
+                                                <div class="col-7 text-center">
+                                                    <h5 class="purple-text text-center">You Have Successfully Send The Order</h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="close-overview">Cancel</button>
+                @*<button onclick="updateProfile()" type="button" class="btn btn-success" style="background-color:#00768c">Update</button>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+
+
+    <script>
+
+        function changeImage() {
+            const gender = document.querySelector('input[name="gender"]:checked').value;
+            const image = document.getElementById('image');
+
+            if (gender === 'male') {
+                image.src = '/images/male.png';
+                image.alt = 'Male Image';
+            } else if (gender === 'female') {
+                image.src = '/images/female.png';
+                image.alt = 'Female Image';
+            } else {
+                // Handle the case when no radio button is selected or unexpected value
+                image.src = 'male.png';
+                image.alt = 'Default Image';
+            }
+        }
+
+        function searchUsingEnterButtonIncoming(event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                filterIncomingReferrals();
+                ;
+            }
+        }
+
+        function searchUsingEnterButtonOutgoing(event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                filterOutgoingReferrals();
+                ;
+            }
+        }
+
+
+        function filterIncomingReferrals() {
+            var name = $('#filterInput-incoming').val();
+
+            var incomingContainer = $('#incomingRequestContainer');
+            var statusId = $('#status-incoming-ddl').val();
+            var dateId = $('#date-incoming-ddl').val();
+
+            $.ajax({
+                url: '/ServiceProvider/GetUserIncomingRequests?name=' + name + '&statusId=' + statusId + '&dateId=' + dateId, // Replace with the actual URL and action method to fetch the partial view
+                type: 'GET',
+                success: function (response) {
+                    incomingContainer.html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
+
+        function filterOutgoingReferrals() {
+            var name = $('#filterInput-outgoing').val();
+
+            var outgoingContainer = $('#outgoingRequestContainer');
+            var statusId = $('#status-outgoing-ddl').val();
+            var dateId = $('#date-outgoing-ddl').val();
+
+            $.ajax({
+                url: '/ServiceProvider/GetUserOutgoingRequests?name=' + name + '&statusId=' + statusId + '&dateId=' + dateId, // Replace with the actual URL and action method to fetch the partial view
+                type: 'GET',
+                success: function (response) {
+                    outgoingContainer.html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
+
+        function setCookie(name, value, days) {
+            var expires = "";
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + value + expires + "; path=/";
+        }
+
+        $(document).ready(function () {
+            var currentUrl = window.location.href;
+            if (currentUrl.includes("Referrals")) {
+                $("#referrals-li").addClass("activeLink");
+                $("#referrals-text").addClass("activeLink");
+            } else {
+                console.log("The URL does not contain 'Referrals'.");
+            }
+            document.getElementsByClassName('active')[0].click();
+
+
+        })
+
+        function openTab(evt, tabName) {
+            // Hide all tab content
+            var tabContent = document.getElementsByClassName("tab-content");
+            for (var i = 0; i < tabContent.length; i++) {
+                tabContent[i].style.display = "none";
+            }
+
+            // Remove 'active' class from all tab buttons
+            var tabButtons = document.getElementsByClassName("tab-button");
+            for (var i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].className = tabButtons[i].className.replace(" active", "");
+            }
+
+            // Show the selected tab content and set the corresponding button as active
+            document.getElementById(tabName).style.display = "block";
+            if (tabName == 'tab1') {
+                filterIncomingReferrals();
+            } else {
+                filterOutgoingReferrals();
+            }
+            evt.currentTarget.className += " active";
+        }
+
+    </script>
+}
+
+
+
 <style>
+
+
+    #heading {
+        text-transform: uppercase;
+        color: #00768c;
+        font-weight: normal
+    }
+
+    #msform {
+        text-align: center;
+        position: relative;
+        margin-top: 20px
+    }
+
+        #msform fieldset {
+            background: white;
+            border: 0 none;
+            border-radius: 0.5rem;
+            box-sizing: border-box;
+            width: 100%;
+            margin: 0;
+            padding-bottom: 20px;
+            position: relative
+        }
+
+    .form-card {
+        text-align: left
+    }
+
+    #msform fieldset:not(:first-of-type) {
+        display: none
+    }
+
+    #msform input,
+    #msform textarea {
+        padding: 8px 15px 8px 15px;
+        border: 1px solid #ccc;
+        border-radius: 0px;
+        margin-bottom: 25px;
+        margin-top: 2px;
+        width: 100%;
+        box-sizing: border-box;
+        font-family: montserrat;
+        color: #2C3E50;
+        background-color: #ECEFF1;
+        font-size: 16px;
+        letter-spacing: 1px
+    }
+
+        #msform input:focus,
+        #msform textarea:focus {
+            -moz-box-shadow: none !important;
+            -webkit-box-shadow: none !important;
+            box-shadow: none !important;
+            border: 1px solid #00768c;
+            outline-width: 0
+        }
+
+    #msform .action-button {
+        width: 100px;
+        background: #00768c;
+        font-weight: bold;
+        color: white;
+        border: 0 none;
+        border-radius: 0px;
+        cursor: pointer;
+        padding: 10px 5px;
+        margin: 10px 0px 10px 5px;
+        float: right
+    }
+
+        #msform .action-button:hover,
+        #msform .action-button:focus {
+            background-color: #00768c
+        }
+
+    #msform .action-button-previous {
+        width: 100px;
+        background: #616161;
+        font-weight: bold;
+        color: white;
+        border: 0 none;
+        border-radius: 0px;
+        cursor: pointer;
+        padding: 10px 5px;
+        margin: 10px 5px 10px 0px;
+        float: right
+    }
+
+        #msform .action-button-previous:hover,
+        #msform .action-button-previous:focus {
+            background-color: #000000
+        }
+
+    .card {
+        z-index: 0;
+        border: none;
+        position: relative
+    }
+
+    .fs-title {
+        font-size: 25px;
+        color: #00768c;
+        margin-bottom: 15px;
+        font-weight: normal;
+        text-align: left
+    }
+
+    .purple-text {
+        color: #00768c;
+        font-weight: normal
+    }
+
+    .steps {
+        font-size: 25px;
+        color: gray;
+        margin-bottom: 10px;
+        font-weight: normal;
+        text-align: right
+    }
+
+    .fieldlabels {
+        color: gray;
+        text-align: left
+    }
+
+    #progressbar {
+        margin-bottom: 30px;
+        overflow: hidden;
+        color: lightgrey
+    }
+
+        #progressbar .active {
+            color: #00768c
+        }
+
+        #progressbar li {
+            list-style-type: none;
+            font-size: 15px;
+            width: 25%;
+            float: left;
+            position: relative;
+            font-weight: 400
+        }
+
+        #progressbar #account:before {
+            font-family: FontAwesome;
+            content: "\f298"
+        }
+
+        #progressbar #personal:before {
+            font-family: FontAwesome;
+            content: "\f007"
+        }
+
+        #progressbar #payment:before {
+            font-family: FontAwesome;
+            content: "\f030"
+        }
+
+        #progressbar #confirm:before {
+            font-family: FontAwesome;
+            content: "\f00c"
+        }
+
+        #progressbar li:before {
+            width: 50px;
+            height: 50px;
+            line-height: 45px;
+            display: block;
+            font-size: 20px;
+            color: #ffffff;
+            background: lightgray;
+            border-radius: 50%;
+            margin: 0 auto 10px auto;
+            padding: 2px
+        }
+
+        #progressbar li:after {
+            content: '';
+            width: 100%;
+            height: 2px;
+            background: lightgray;
+            position: absolute;
+            left: 0;
+            top: 25px;
+            z-index: -1
+        }
+
+        #progressbar li.active:before,
+        #progressbar li.active:after {
+            background: #00768c
+        }
+
+    .progress {
+        height: 20px
+    }
+
+    .progress-bar {
+        background-color: #00768c
+    }
+
+    .fit-image {
+        width: 100%;
+        object-fit: cover
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+
+        var current_fs, next_fs, previous_fs; //fieldsets
+        var opacity;
+        var current = 1;
+        var steps = $("fieldset").length;
+
+        setProgressBar(current);
+
+        $(".next").click(function () {
+
+            current_fs = $(this).parent();
+            next_fs = $(this).parent().next();
+
+            //Add Class Active
+            $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+
+            //show the next fieldset
+            next_fs.show();
+            //hide the current fieldset with style
+            current_fs.animate({ opacity: 0 }, {
+                step: function (now) {
+                    // for making fielset appear animation
+                    opacity = 1 - now;
+
+                    current_fs.css({
+                        'display': 'none',
+                        'position': 'relative'
+                    });
+                    next_fs.css({ 'opacity': opacity });
+                },
+                duration: 500
+            });
+            setProgressBar(++current);
+        });
+
+        $(".previous").click(function () {
+
+            current_fs = $(this).parent();
+            previous_fs = $(this).parent().prev();
+
+            //Remove class active
+            $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+
+            //show the previous fieldset
+            previous_fs.show();
+
+            //hide the current fieldset with style
+            current_fs.animate({ opacity: 0 }, {
+                step: function (now) {
+                    // for making fielset appear animation
+                    opacity = 1 - now;
+
+                    current_fs.css({
+                        'display': 'none',
+                        'position': 'relative'
+                    });
+                    previous_fs.css({ 'opacity': opacity });
+                },
+                duration: 500
+            });
+            setProgressBar(--current);
+        });
+
+        function setProgressBar(curStep) {
+            var percent = parseFloat(100 / steps) * curStep;
+            percent = percent.toFixed();
+            $(".progress-bar")
+                .css("width", percent + "%")
+        }
+
+        $(".submit").click(function () {
+            return false;
+        })
+
+    });
+
+    function getStates(countryId) {
+        $.ajax({
+            url: '@Url.Action("GetStatesDDL", "ServiceProvider")' + '?countryId=' + countryId,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                // Clear existing options
+                $('#states-ddl-wk').empty();
+                // Populate the dropdown list
+                var dropdown = $('#states-ddl-wk');
+                // Add default option
+                dropdown.append($('<option></option>').val('').text('Select a state'));
+                $.each(data, function (index, item) {
+                    dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                });
+            }
+        });
+    }
+
+    function getCites(stateId) {
+        $.ajax({
+            url: '@Url.Action("GetCitiesDDL", "ServiceProvider")' + '?stateId=' + stateId,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                // Clear existing options
+                $('#cities-ddl-wk').empty();
+                // Populate the dropdown list
+                var dropdown = $('#cities-ddl-wk');
+                dropdown.append($('<option></option>').val('').text('Select a city'));
+                $.each(data, function (index, item) {
+                    dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                });
+            }
+        });
+    }
+
+    function getDistricts(cityId) {
+        $.ajax({
+            url: '@Url.Action("GetDistricts", "ServiceProvider")' + '?cityId=' + cityId,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                // Clear existing options
+                $('#districts-ddl-wk').empty();
+                // Populate the dropdown list
+                var dropdown = $('#districts-ddl-wk');
+                dropdown.append($('<option></option>').val('').text('Select a District'));
+                $.each(data, function (index, item) {
+                    dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                });
+            }
+        });
+    }
+
+
+    function openAddOrderModal() {
+        $('.services-multiSelect').select2({
+            theme: "classic",
+            placeholder: 'Select an service',
+            width: '100%',
+            ajax: {
+                url: '@Url.Action("GetAllServicesDLL", "Common")',
+                cache: false
+            }
+        });
+
+        $('.doctor-autoComplete').select2({
+            theme: "classic",
+            placeholder: 'Select an doctor',
+            width: '100%',
+            ajax: {
+                url: '@Url.Action("GetDoctorsProvider", "Common")',
+                cache: false
+            }
+        });
+
+        $.ajax({
+            url: '@Url.Action("GetCountriesDDL", "ServiceProvider")',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                // Clear existing options
+                $('#countries-ddl-wk').empty();
+                // Populate the dropdown list
+                var dropdown = $('#countries-ddl-wk');
+                // Add default option
+                dropdown.append($('<option></option>').val('').text('Select a country'));
+                $.each(data, function (index, item) {
+                    dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                });
+            }
+        });
+        GetAllService()
+
+    }
+
+
+    function GetAllService() {
+        var serviceContainer = $('#allServiceContainer');
+
+        $.ajax({
+            url: '/ServiceProvider/AllServiceCardPartial', // Replace with the actual URL and action method to fetch the partial view
+            type: 'GET',
+            success: function (response) {
+                serviceContainer.html(response);
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
+    }
+
+</script>
+
+<style>
+
+    .radio-wrapper {
+        flex: 1; /* Take remaining space */
+        display: flex;
+        justify-content: flex-end; /* Align radio buttons to the right */
+    }
+
+    .image-wrapper {
+        margin-right: 10px; /* Add some spacing between radio buttons and image */
+    }
+
+    .input-wrapper {
+        display: flex;
+        flex-direction: column; /* Display radio buttons in a column */
+        margin-right: 10px; /* Add some spacing between radio buttons and image */
+    }
+
+    .input-hidden {
+        position: absolute;
+        left: -9999px;
+    }
+
+    input[type=radio]:checked + label > img {
+        border: 1px solid #fff;
+        box-shadow: 0 0 3px 3px #00768c;
+    }
+
+    /* Stuff after this is only to make things more pretty */
+    input[type=radio] + label > img {
+        /*border: 1px dashed #444;*/
+        width: 75px;
+        height: 75px;
+        transition: 500ms all;
+    }
+
+    input[type=radio]:checked + label > img {
+        /*transform: rotateZ(-10deg) rotateX(10deg);*/
+    }
+
 
     .hide {
         display: none;
@@ -207,877 +1165,3 @@
             color: #888;
         }
 </style>
-
-<div id="page-top">
-
-    <!-- Page Wrapper -->
-    <div id="wrapper">
-
-        <!-- Sidebar -->
-        <!-- End of Sidebar -->
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
-
-            <!-- Main Content -->
-            <div id="content">
-
-                <!-- Topbar -->
-                <!-- End of Topbar -->
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
-                    <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4" style="margin-top:125px;">
-                        @*  <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-                        <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
-                        </a>*@
-                    </div>
-                    <!-- Content Row -->
-
-
-                    <div class="row">
-                        @Html.Partial("_Sidebar")
-                        <div class="col-xl-8 col-lg-8 ">
-
-                            <div id="profile-status-container" style="color:white"></div>
-
-                            <br />
-                            <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
-                                <div class="tab-container card-header py-2 d-flex flex-row align-items-center justify-content-between">
-
-                                    <h6 style="color:#00768c" class="m-0 font-weight-bold text-primary">
-                                        <a style="color:#00768c" class="nav-link" href="index.html">
-                                            <i style="color:#00768c" class="fas fa-share-alt" aria-hidden="true"></i>
-                                            <span style="color:#00768c">Referrals</span>
-                                        </a>
-                                    </h6>
-                                    <div>
-                                        <button class="tab-button active" id="btnIncoming" onclick="openTab(event, 'tab1')">Incoming Requests</button>
-                                        <button class="tab-button" onclick="openTab(event, 'tab2')">Outgoing Requests</button>
-                                    </div>
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-
-                                    <div id="tab1" class="tab-content" style="display: none;">
-
-                                        <!-- Add Ordeer -->
-                                        <div style="text-align: end; cursor:pointer">
-                                            <button onclick="openAddOrderModal()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddOrderModal">
-                                                <i style="font-size:25px" class="fas fa-add"></i> Add Order
-                                            </button>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="form-group mr-2 search-container" style="margin-top: 32px;">
-                                                <label for="filterInput-incoming"></label>
-                                                <input type="text" class="form-control margin-15-position-obselete" id="filterInput-incoming" onkeypress="searchUsingEnterButtonIncoming(event)" name="search" style=" background-color: #f2f2f2;" placeholder="Search for name" value="">
-                                                <i class="fas fa-search" style=" margin-right: 0.5%; color: #00768c;cursor:pointer" onclick="filterIncomingReferrals()"></i>
-                                            </div>
-                                            <div class="col-lg-3 col-12 padding-screen" style="padding-right:8px">
-                                                <label for="status-incoming-dll">Status</label>
-                                                <select class="form-control" id="status-incoming-ddl" onchange="filterIncomingReferrals()">
-                                                    <option value="0">All Statuses</option>
-                                                    <option value="@((int)Eihal.Enums.ReferralStatusEnum.UnderReview)">Under Review</option>
-                                                    <option value="@((int)Eihal.Enums.ReferralStatusEnum.Approved)">Approved</option>
-                                                    <option value="@((int)Eihal.Enums.ReferralStatusEnum.Rejected)">Rejected</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-lg-3 col-12 padding-screen" style="padding-right:8px">
-                                                <label for="date-incoming-dll">Date</label>
-
-                                                <select class="form-control" id="date-incoming-ddl" onchange="filterIncomingReferrals()">
-                                                    <option value="0">All Dates</option>
-                                                    <option value="1">Today</option>
-                                                    <option value="2">7 days ago</option>
-                                                    <option value="3">30 days ago</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="container">
-
-                                            <div class="row" id="incomingRequestContainer">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div id="tab2" class="tab-content" style="display: none;">
-                                        <div class="row">
-                                            <div class="form-group mr-2 search-container" style="margin-top: 32px;">
-                                                <label for="filterInput-outgoing"></label>
-                                                <input type="text" class="form-control margin-15-position-obselete" id="filterInput-outgoing" onkeypress="searchUsingEnterButtonOutgoing(event)" name="search" style=" background-color: #f2f2f2;" placeholder="Search for name" value="">
-                                                <i class="fas fa-search" style=" margin-right: 0.5%; color: #00768c;cursor:pointer" onclick="filterOutgoingReferrals()"></i>
-                                            </div>
-                                            <div class="col-lg-3 col-12 padding-screen" style="padding-right:8px">
-                                                <label for="status-outgoing-dll">Status</label>
-                                                <select class="form-control" id="status-outgoing-ddl" onchange="filterOutgoingReferrals()">
-                                                    <option value="0">All Statuses</option>
-                                                    <option value="@((int)Eihal.Enums.ReferralStatusEnum.UnderReview)">Under Review</option>
-                                                    <option value="@((int)Eihal.Enums.ReferralStatusEnum.Approved)">Approved</option>
-                                                    <option value="@((int)Eihal.Enums.ReferralStatusEnum.Rejected)">Rejected</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-lg-3 col-12 padding-screen" style="padding-right:8px">
-                                                <label for="date-outgoing-dll">Date</label>
-
-                                                <select class="form-control" id="date-outgoing-ddl" onchange="filterOutgoingReferrals()">
-                                                    <option value="0">All Dates</option>
-                                                    <option value="1">Today</option>
-                                                    <option value="2">7 days ago</option>
-                                                    <option value="3">30 days ago</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="container">
-                                            <div class="row" id="outgoingRequestContainer">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- /.container-fluid -->
-
-        </div>
-        <!-- End of Main Content -->
-        <!-- Footer -->
-        <!-- End of Footer -->
-
-    </div>
-    <!-- End of Content Wrapper -->
-
-</div>
-
-
-<div class="modal fade" id="AddOrderModal" tabindex="-1" role="dialog" aria-labelledby="EditUserProfileModal" aria-hidden="true">
-    <div class="modal-dialog custom-modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="AddOrderModal">Add Order </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="container-fluid">
-                    <div class="row justify-content-center">
-                        <div>
-                            <div>
-                                <form id="msform">
-                                    <!-- progressbar -->
-                                    <ul id="progressbar">
-                                        <li class="active" id="account"><strong>Patient Info</strong></li>
-                                        <li id="personal"><strong>Services</strong></li>
-                                        <li id="payment"><strong>Doctors</strong></li>
-                                        <li id="confirm"><strong>Confrimation</strong></li>
-                                    </ul>
-                                    <div class="progress">
-                                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div> <br> <!-- fieldsets -->
-                                    <fieldset>
-                                        <div class="form-card">
-                                            <div class="row">
-                                                <div class="col-7">
-                                                    <h2 class="fs-title">Patient Information:</h2>
-                                                </div>
-                                                <div class="col-5">
-                                                    <h2 class="steps">Step 1 - 4</h2>
-                                                </div>
-                                            </div>
-                                            <label class="fieldlabels">Full Name: *</label>
-                                            <input type="text" id="fullname-input" name="fullname-input" placeholder="Full Name" />
-
-                                            <label class="fieldlabels">Phone: *</label>
-                                            <input type="text" id="phone-input" name="phone-input" placeholder="05********" />
-                                            <label class="fieldlabels">Email:</label>
-                                            <input type="text" id="email-input" name="email-input" placeholder="Email" />
-
-                                            <label class="fieldlabels">Gender:</label>
-                                            <input style="width:15%" type="radio" id="gender-input" name="gender" value="Male" />Male
-                                            <input style="width:15%" type="radio" id="gender-input" name="gender" value="Female" />Female
-                                            <br />
-                                            <label class="fieldlabels">Age:</label>
-                                            <br />
-                                            <input style="width:15%" type="radio" id="gender-age" name="age" value="4To10" />4 Years To 10
-                                            <input style="width:15%" type="radio" id="gender-age" name="age" value="10To25" />10 Years To 25
-                                            <br />
-                                            <input style="width:15%" type="radio" id="gender-age" name="age" value="25To50" />25 Years To 50
-                                            <input style="width:15%" type="radio" id="gender-age" name="age" value="50To100" />50 Years To 100
-
-                                            <br />
-                                            <input style="width:15%" type="checkbox" id="chronic-disease" name="chronic-disease" />Dose the patient have a chronic disease?
-
-                                            <table>
-                                                <tr>
-                                                    <td class="td-WorkingHours">
-                                                        <label class="label-WorkingHours" for="states-ddl-wk">Country:</label>
-                                                    </td>
-                                                    <td class="td-WorkingHours">
-                                                        <select class="form-control" id="countries-ddl-wk" onchange="getStates(this.value)">
-                                                            <option value="">Select a Country</option>
-                                                        </select>
-                                                    </td>
-                                                    <td>
-                                                        <label class="label-WorkingHours" for="states-ddl-wk">State:</label>
-                                                    </td>
-                                                    <td class="td-WorkingHours">
-                                                        <select class="form-control" id="states-ddl-wk" onchange="getCites(this.value)">
-                                                            <option value="">Select a State</option>
-                                                        </select>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="td-WorkingHours">
-                                                        <label class="label-WorkingHours" for="cities-ddl-wk">City:</label>
-                                                    </td>
-                                                    <td class="td-WorkingHours">
-                                                        <select class="form-control" id="cities-ddl-wk" onchange="getDistricts(this.value)">
-                                                            <option value="">Select a City</option>
-                                                        </select>
-                                                    </td>
-                                                    <td>
-                                                        <label class="label-WorkingHours" for="districts-ddl-wk">District:</label>
-                                                    </td>
-                                                    <td class="td-WorkingHours">
-                                                        <select class="form-control" id="districts-ddl-wk">
-                                                            <option value="">Select a District</option>
-                                                        </select>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                        <input type="button" name="next" class="next action-button" value="Next" />
-                                    </fieldset>
-                                    <fieldset>
-                                        <div class="form-card">
-                                            <div class="row">
-                                                <div class="col-7">
-                                                    <h2 class="fs-title">Services:</h2>
-                                                </div>
-                                                <div class="col-5">
-                                                    <h2 class="steps">Step 2 - 4</h2>
-                                                </div>
-                                            </div>
-
-                                            <label class="fieldlabels">Services:</label>
-
-                                            <div class="form-group">
-                                                <div class="col-md-12">
-                                                    <select class="services-multiSelect" multiple>
-                                                    </select>
-
-                                                </div>
-                                            </div>
-
-
-                                        </div>
-                                        <input type="button" name="next" class="next action-button" value="Next" />
-                                        <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
-                                    </fieldset>
-                                    <fieldset>
-                                        <div class="form-card">
-                                            <div class="row">
-                                                <div class="col-7">
-                                                    <h2 class="fs-title">Doctor:</h2>
-                                                </div>
-                                                <div class="col-5">
-                                                    <h2 class="steps">Step 3 - 4</h2>
-                                                </div>
-                                            </div>
-                                            <label class="fieldlabels">Doctor:</label>
-
-                                            <div class="form-group">
-                                                <div class="col-md-12">
-                                                    <select class="doctor-autoComplete" name="doctor">
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <input type="button" name="next" class="next action-button" value="Submit" />
-                                        <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
-                                    </fieldset>
-                                    <fieldset>
-                                        <div class="form-card">
-                                            <div class="row">
-                                                <div class="col-7">
-                                                    <h2 class="fs-title">Finish:</h2>
-                                                </div>
-                                                <div class="col-5">
-                                                    <h2 class="steps">Step 4 - 4</h2>
-                                                </div>
-                                            </div> <br><br>
-                                            <h2 class="purple-text text-center"><strong>SUCCESS !</strong></h2> <br>
-                                            <div class="row justify-content-center">
-                                                <div class="col-3"> <img src="https://i.imgur.com/GwStPmg.png" class="fit-image"> </div>
-                                            </div> <br><br>
-                                            <div class="row justify-content-center">
-                                                <div class="col-7 text-center">
-                                                    <h5 class="purple-text text-center">You Have Successfully Send The Order</h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </fieldset>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal" id="close-overview">Cancel</button>
-                @*<button onclick="updateProfile()" type="button" class="btn btn-success" style="background-color:#00768c">Update</button>*@
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-
-
-@section Scripts {
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script>
-                  function searchUsingEnterButtonIncoming(event){  if (event.keyCode === 13) {
-             event.preventDefault(); 
-                filterIncomingReferrals();
-;
-    }}
-
-           function searchUsingEnterButtonOutgoing(event){  if (event.keyCode === 13) {
-             event.preventDefault(); 
-                filterOutgoingReferrals();
-;
-    }}
-
-
-        function filterIncomingReferrals() {
-            var name = $('#filterInput-incoming').val();
-
-            var incomingContainer = $('#incomingRequestContainer');
-            var statusId = $('#status-incoming-ddl').val();
-            var dateId = $('#date-incoming-ddl').val();
-
-            $.ajax({
-                url: '/ServiceProvider/GetUserIncomingRequests?name=' + name + '&statusId=' + statusId + '&dateId=' + dateId, // Replace with the actual URL and action method to fetch the partial view
-                type: 'GET',
-                success: function (response) {
-                    incomingContainer.html(response);
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error:', error);
-                }
-            });
-        }
-
-        function filterOutgoingReferrals() {
-            var name = $('#filterInput-outgoing').val();
-
-            var outgoingContainer = $('#outgoingRequestContainer');
-            var statusId = $('#status-outgoing-ddl').val();
-            var dateId = $('#date-outgoing-ddl').val();
-
-            $.ajax({
-                url: '/ServiceProvider/GetUserOutgoingRequests?name=' + name + '&statusId=' + statusId + '&dateId=' + dateId, // Replace with the actual URL and action method to fetch the partial view
-                type: 'GET',
-                success: function (response) {
-                    outgoingContainer.html(response);
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error:', error);
-                }
-            });
-        }
-
-        function setCookie(name, value, days) {
-            var expires = "";
-            if (days) {
-                var date = new Date();
-                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                expires = "; expires=" + date.toUTCString();
-            }
-            document.cookie = name + "=" + value + expires + "; path=/";
-        }
-
-        $(document).ready(function () {
-            var currentUrl = window.location.href;
-            if (currentUrl.includes("Referrals")) {
-                $("#referrals-li").addClass("activeLink");
-                $("#referrals-text").addClass("activeLink");
-            } else {
-                console.log("The URL does not contain 'Referrals'.");
-            }
-            document.getElementsByClassName('active')[0].click();
-
-
-        })
-
-        function openTab(evt, tabName) {
-            // Hide all tab content
-            var tabContent = document.getElementsByClassName("tab-content");
-            for (var i = 0; i < tabContent.length; i++) {
-                tabContent[i].style.display = "none";
-            }
-
-            // Remove 'active' class from all tab buttons
-            var tabButtons = document.getElementsByClassName("tab-button");
-            for (var i = 0; i < tabButtons.length; i++) {
-                tabButtons[i].className = tabButtons[i].className.replace(" active", "");
-            }
-
-            // Show the selected tab content and set the corresponding button as active
-            document.getElementById(tabName).style.display = "block";
-            if (tabName == 'tab1') {
-                filterIncomingReferrals();
-            } else {
-                filterOutgoingReferrals();
-            }
-            evt.currentTarget.className += " active";
-        }
-
-    </script>
-}
-
-
-
-<style>
-
-
-    #heading {
-        text-transform: uppercase;
-        color: #00768c;
-        font-weight: normal
-    }
-
-    #msform {
-        text-align: center;
-        position: relative;
-        margin-top: 20px
-    }
-
-        #msform fieldset {
-            background: white;
-            border: 0 none;
-            border-radius: 0.5rem;
-            box-sizing: border-box;
-            width: 100%;
-            margin: 0;
-            padding-bottom: 20px;
-            position: relative
-        }
-
-    .form-card {
-        text-align: left
-    }
-
-    #msform fieldset:not(:first-of-type) {
-        display: none
-    }
-
-    #msform input,
-    #msform textarea {
-        padding: 8px 15px 8px 15px;
-        border: 1px solid #ccc;
-        border-radius: 0px;
-        margin-bottom: 25px;
-        margin-top: 2px;
-        width: 100%;
-        box-sizing: border-box;
-        font-family: montserrat;
-        color: #2C3E50;
-        background-color: #ECEFF1;
-        font-size: 16px;
-        letter-spacing: 1px
-    }
-
-        #msform input:focus,
-        #msform textarea:focus {
-            -moz-box-shadow: none !important;
-            -webkit-box-shadow: none !important;
-            box-shadow: none !important;
-            border: 1px solid #00768c;
-            outline-width: 0
-        }
-
-    #msform .action-button {
-        width: 100px;
-        background: #00768c;
-        font-weight: bold;
-        color: white;
-        border: 0 none;
-        border-radius: 0px;
-        cursor: pointer;
-        padding: 10px 5px;
-        margin: 10px 0px 10px 5px;
-        float: right
-    }
-
-        #msform .action-button:hover,
-        #msform .action-button:focus {
-            background-color: #311B92
-        }
-
-    #msform .action-button-previous {
-        width: 100px;
-        background: #616161;
-        font-weight: bold;
-        color: white;
-        border: 0 none;
-        border-radius: 0px;
-        cursor: pointer;
-        padding: 10px 5px;
-        margin: 10px 5px 10px 0px;
-        float: right
-    }
-
-        #msform .action-button-previous:hover,
-        #msform .action-button-previous:focus {
-            background-color: #000000
-        }
-
-    .card {
-        z-index: 0;
-        border: none;
-        position: relative
-    }
-
-    .fs-title {
-        font-size: 25px;
-        color: #00768c;
-        margin-bottom: 15px;
-        font-weight: normal;
-        text-align: left
-    }
-
-    .purple-text {
-        color: #00768c;
-        font-weight: normal
-    }
-
-    .steps {
-        font-size: 25px;
-        color: gray;
-        margin-bottom: 10px;
-        font-weight: normal;
-        text-align: right
-    }
-
-    .fieldlabels {
-        color: gray;
-        text-align: left
-    }
-
-    #progressbar {
-        margin-bottom: 30px;
-        overflow: hidden;
-        color: lightgrey
-    }
-
-        #progressbar .active {
-            color: #00768c
-        }
-
-        #progressbar li {
-            list-style-type: none;
-            font-size: 15px;
-            width: 25%;
-            float: left;
-            position: relative;
-            font-weight: 400
-        }
-
-        #progressbar #account:before {
-            font-family: FontAwesome;
-            content: "\f13e"
-        }
-
-        #progressbar #personal:before {
-            font-family: FontAwesome;
-            content: "\f007"
-        }
-
-        #progressbar #payment:before {
-            font-family: FontAwesome;
-            content: "\f030"
-        }
-
-        #progressbar #confirm:before {
-            font-family: FontAwesome;
-            content: "\f00c"
-        }
-
-        #progressbar li:before {
-            width: 50px;
-            height: 50px;
-            line-height: 45px;
-            display: block;
-            font-size: 20px;
-            color: #ffffff;
-            background: lightgray;
-            border-radius: 50%;
-            margin: 0 auto 10px auto;
-            padding: 2px
-        }
-
-        #progressbar li:after {
-            content: '';
-            width: 100%;
-            height: 2px;
-            background: lightgray;
-            position: absolute;
-            left: 0;
-            top: 25px;
-            z-index: -1
-        }
-
-        #progressbar li.active:before,
-        #progressbar li.active:after {
-            background: #00768c
-        }
-
-    .progress {
-        height: 20px
-    }
-
-    .progress-bar {
-        background-color: #00768c
-    }
-
-    .fit-image {
-        width: 100%;
-        object-fit: cover
-    }
-</style>
-
-<script>
-    $(document).ready(function () {
-
-        var current_fs, next_fs, previous_fs; //fieldsets
-        var opacity;
-        var current = 1;
-        var steps = $("fieldset").length;
-
-        setProgressBar(current);
-
-        $(".next").click(function () {
-
-            current_fs = $(this).parent();
-            next_fs = $(this).parent().next();
-
-            //Add Class Active
-            $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
-
-            //show the next fieldset
-            next_fs.show();
-            //hide the current fieldset with style
-            current_fs.animate({ opacity: 0 }, {
-                step: function (now) {
-                    // for making fielset appear animation
-                    opacity = 1 - now;
-
-                    current_fs.css({
-                        'display': 'none',
-                        'position': 'relative'
-                    });
-                    next_fs.css({ 'opacity': opacity });
-                },
-                duration: 500
-            });
-            setProgressBar(++current);
-        });
-
-        $(".previous").click(function () {
-
-            current_fs = $(this).parent();
-            previous_fs = $(this).parent().prev();
-
-            //Remove class active
-            $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
-
-            //show the previous fieldset
-            previous_fs.show();
-
-            //hide the current fieldset with style
-            current_fs.animate({ opacity: 0 }, {
-                step: function (now) {
-                    // for making fielset appear animation
-                    opacity = 1 - now;
-
-                    current_fs.css({
-                        'display': 'none',
-                        'position': 'relative'
-                    });
-                    previous_fs.css({ 'opacity': opacity });
-                },
-                duration: 500
-            });
-            setProgressBar(--current);
-        });
-
-        function setProgressBar(curStep) {
-            var percent = parseFloat(100 / steps) * curStep;
-            percent = percent.toFixed();
-            $(".progress-bar")
-                .css("width", percent + "%")
-        }
-
-        $(".submit").click(function () {
-            return false;
-        })
-
-    });
-
-    function getStates(countryId) {
-        $.ajax({
-            url: '@Url.Action("GetStatesDDL", "ServiceProvider")' + '?countryId=' + countryId,
-            type: 'GET',
-            dataType: 'json',
-            success: function (data) {
-                // Clear existing options
-                $('#states-ddl-wk').empty();
-                // Populate the dropdown list
-                var dropdown = $('#states-ddl-wk');
-                // Add default option
-                dropdown.append($('<option></option>').val('').text('Select a state'));
-                $.each(data, function (index, item) {
-                    dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
-                });
-            }
-        });
-    }
-
-    function getCites(stateId) {
-        $.ajax({
-            url: '@Url.Action("GetCitiesDDL", "ServiceProvider")' + '?stateId=' + stateId,
-            type: 'GET',
-            dataType: 'json',
-            success: function (data) {
-                // Clear existing options
-                $('#cities-ddl-wk').empty();
-                // Populate the dropdown list
-                var dropdown = $('#cities-ddl-wk');
-                dropdown.append($('<option></option>').val('').text('Select a city'));
-                $.each(data, function (index, item) {
-                    dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
-                });
-            }
-        });
-    }
-
-    function getDistricts(cityId) {
-        $.ajax({
-            url: '@Url.Action("GetDistricts", "ServiceProvider")' + '?cityId=' + cityId,
-            type: 'GET',
-            dataType: 'json',
-            success: function (data) {
-                // Clear existing options
-                $('#districts-ddl-wk').empty();
-                // Populate the dropdown list
-                var dropdown = $('#districts-ddl-wk');
-                dropdown.append($('<option></option>').val('').text('Select a District'));
-                $.each(data, function (index, item) {
-                    dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
-                });
-            }
-        });
-    }
-
-
-    function openAddOrderModal() 
-    {
-        $('.services-multiSelect').select2({
-            theme: "classic",
-            placeholder: 'Select an service',
-            width: '100%',
-            ajax: {
-                url: '@Url.Action("GetAllServicesDLL", "Common")',
-                cache: false
-            }
-        });
-
-        $('.doctor-autoComplete').select2({
-            theme: "classic",
-            placeholder: 'Select an doctor',
-            width: '100%',
-            ajax: {
-                url: '@Url.Action("GetDoctorsProvider", "Common")',
-                cache: false
-            }
-        });
-
-        $.ajax({
-            url: '@Url.Action("GetCountriesDDL", "ServiceProvider")',
-            type: 'GET',
-            dataType: 'json',
-            success: function (data) {
-                // Clear existing options
-                $('#countries-ddl-wk').empty();
-                // Populate the dropdown list
-                var dropdown = $('#countries-ddl-wk');
-                // Add default option
-                dropdown.append($('<option></option>').val('').text('Select a country'));
-                $.each(data, function (index, item) {
-                    dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
-                });
-            }
-        });
-        GetAllService()
-
-    }
-
-
-    function GetAllService() {
-        var serviceContainer = $('#allServiceContainer');
-
-        $.ajax({
-            url: '/ServiceProvider/AllServiceCardPartial', // Replace with the actual URL and action method to fetch the partial view
-            type: 'GET',
-            success: function (response) {
-                serviceContainer.html(response);
-            },
-            error: function (xhr, status, error) {
-                console.error('Error:', error);
-            }
-        });
-    }
-
-</script>
-
-<style>
-    table-WorkingHours {
-        border-collapse: collapse;
-    }
-
-    th-WorkingHours, td-WorkingHours {
-        border: 0px;
-        padding: 5px;
-        text-align: center;
-    }
-
-    .label-WorkingHours {
-        font-weight: bold;
-        color: #00768c;
-        margin: 10px
-    }
-</style>
-<style>
-    .row-wk {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 10px;
-    }
-
-    .form-group-wk {
-        flex: 0 0 48%;
-    }
-
-
-
-    .form-control-wk {
-        padding: 5px;
-    }
-</style>
-

@@ -7,7 +7,7 @@ namespace Eihal.Controllers
 {
 
     [Route("Notification")]
-    [Authorize(Roles = "Administrator,ServiceProvider")]
+    [Authorize(Roles = "Administrator,ServiceProvider,Beneficiary")]
     public class NotificationController : BaseController
     {
         private readonly UserManager<IdentityUser> _userManager;

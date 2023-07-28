@@ -264,7 +264,7 @@
                             <td>
                                 <div class="form-group">
                                     <label style="font-weight:bold;color:#00768c" for="countries-ddl-edit">Country:</label>
-                                    <select class="form-control" id="countries-ddl-edit" onchange="getStates(this.value)">
+                                    <select class="form-control" id="countries-ddl-edit" onchange="getStatesUserProfile(this.value)">
                                         <option value="">Select a Country</option>
                                     </select>
                                 </div>
@@ -275,7 +275,7 @@
                             <td>
                                 <div class="form-group">
                                     <label style="font-weight:bold;color:#00768c" for="states-ddl-edit">State:</label>
-                                    <select class="form-control" id="states-ddl-edit" onchange="getCites(this.value)">
+                                    <select class="form-control" id="states-ddl-edit" onchange="getCitesUserProfile(this.value)">
                                         <option value="">Select a State</option>
                                     </select>
                                 </div>
@@ -436,6 +436,9 @@
                 $("#review-label").text("(" + response.review + ")");
                 $("#insurance-label").text(response.insuranceAccept == true ? "Yes" : "No");
                 $("#bio-label").text(response.bio);
+                if (response.speciality == "" || response.speciality == null)
+                $("#speciality-label").text("No Speciality Added Yet.");
+                else
                 $("#speciality-label").text(response.speciality);
                 $("#certifications-label").text(response.certifactions);
                 if (response.profileStatus == "Rejected")
@@ -530,7 +533,7 @@
                 setTimeout(function () {
                     $("#full-name-edit-input").val(response.fullName);
                     $("#bio-edit-input").val(response.bio);
-                    $("#account-type-edit-input").val(response.accountTypeId);
+                    $("#accountTypes-ddl-edit").val(response.accountTypeId);
                     $("#practitioner-edit-input").val(response.practitionerTypeId);
                     $("#phone-edit-input").val(response.phoneNumber);
                     $("#email-edit-input").val(response.email);
@@ -541,12 +544,15 @@
 
                     $("#speciality-edit-multiSelect").val(response.speciliaties);
 
-                    var speciliatiesIds = response.speciliaties.split(",");
-                    var specialtiesTitlesEn = response.specialtiesTitlesEn.split(",");
-                    $.each(speciliatiesIds, function (index, item) {
-                        var option = new Option(specialtiesTitlesEn[index], speciliatiesIds[index], true, true);
-                        $('.speciality-edit-multiSelect').append(option).trigger('change');
-                    });
+                    if (response.speciliaties != null) {
+                        var speciliatiesIds = response.speciliaties.split(",");
+                        var specialtiesTitlesEn = response.specialtiesTitlesEn.split(",");
+                        $.each(speciliatiesIds, function (index, item) {
+                            var option = new Option(specialtiesTitlesEn[index], speciliatiesIds[index], true, true);
+                            $('.speciality-edit-multiSelect').append(option).trigger('change');
+                        });
+                    }
+
                 }, 300); // Delay for 1 second (1000 milliseconds)
             },
             error: function (error) {
@@ -572,7 +578,8 @@
         image.src = URL.createObjectURL(event.target.files[0]);
     }
 
-    function getStates(countryId) {
+    function getStatesUserProfile(countryId) {
+        debugger;
         $.ajax({
             url: '@Url.Action("GetStatesDDL", "ServiceProvider")' + '?countryId=' + countryId,
             type: 'GET',
@@ -591,7 +598,7 @@
         });
     }
 
-    function getCites(stateId) {
+    function getCitesUserProfile(stateId) {
         $.ajax({
             url: '@Url.Action("GetCitiesDDL", "ServiceProvider")' + '?stateId=' + stateId,
             type: 'GET',
@@ -835,7 +842,7 @@
     .send-review-btn, .tick {
         display: flex;
         justify-content: center;
-        margin-left:auto;
+        margin-left: auto;
         align-items: center;
         font-family: sans-serif;
     }

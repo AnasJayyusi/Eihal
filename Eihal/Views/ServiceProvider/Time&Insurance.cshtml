@@ -611,7 +611,7 @@
               
                 // Name , Location 
                 $("#clinic-name-lable").text(response.clinicName)
-                $("#clinic-location-lable").text(response.countryName + " " + response.stateName + " " + response.cityName + " " + response.districtName)
+                $("#clinic-location-lable").text(response.countryName + "-" + response.stateName + "-" + response.cityName + "-" + response.districtName)
 
                 // Sunday
                 $("#sunday-OpenAt").text(convertTo12HourFormat(response.sundayOpenAt));

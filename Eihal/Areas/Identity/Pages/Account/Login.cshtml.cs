@@ -112,14 +112,11 @@ namespace Eihal.Areas.Identity.Pages.Account
                     var user = await _userManager.FindByNameAsync(username);
                     var userRole = await _userManager.GetRolesAsync(user);
                     _logger.LogInformation("User logged in.");
-                    if (userRole.Contains(UserRolesEnum.Beneficiary.ToString()))
-                    {
-                        return RedirectToAction("Profile", "Beneficiary");
-                    }
-                    if (userRole.Contains(UserRolesEnum.ServiceProvider.ToString()))
+                    if (userRole.Contains(UserRolesEnum.Beneficiary.ToString()) || userRole.Contains(UserRolesEnum.ServiceProvider.ToString()))
                     {
                         return RedirectToAction("Profile", "ServiceProvider");
                     }
+                    
                     if (userRole.Contains(UserRolesEnum.Administrator.ToString()))
                     {
                         return RedirectToAction("Dashboard", "Admin");

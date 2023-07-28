@@ -20,11 +20,7 @@ namespace Eihal.Controllers
         public IActionResult Index()
         {
 
-            if (User.IsInRole(UserRolesEnum.Beneficiary.ToString()))
-            {
-                return RedirectToAction("Profile", "ServiceProvider");
-            }
-            if (User.IsInRole(UserRolesEnum.ServiceProvider.ToString()))
+            if (User.IsInRole(UserRolesEnum.Beneficiary.ToString()) || User.IsInRole(UserRolesEnum.ServiceProvider.ToString()))
             {
                 return RedirectToAction("Profile", "ServiceProvider");
             }
