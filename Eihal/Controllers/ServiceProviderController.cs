@@ -96,8 +96,10 @@ namespace Eihal.Controllers
 
         public ActionResult MyServiceCardPartial()
         {
+            var currentUserId = GetUserProfileId();
+
             // Assuming you have a list of items to pass to the view
-            List<UserServices> model = _dbContext.UserServices.Where(a => a.Status != Enums.ServicesStatusEnum.Deleted).ToList(); // Replace with your logic to fetch the items
+            List<UserServices> model = _dbContext.UserServices.Where(a => a.UserId == currentUserId  && a.Status != Enums.ServicesStatusEnum.Deleted).ToList(); // Replace with your logic to fetch the items
 
             // Render the partial view and return it as HTML content
             //string htmlContent = RenderPartialToString("_CardPartial", model); // Replace with the name of your partial view
@@ -110,7 +112,7 @@ namespace Eihal.Controllers
         {
             // Assuming you have a list of items to pass to the view
             var currentUserId = GetUserProfileId();
-            var currentUserServices = _dbContext.UserServices.Where(a => a.Status != Enums.ServicesStatusEnum.Deleted).Select(a => a.ServiceId);
+            var currentUserServices = _dbContext.UserServices.Where(a => a.UserId == currentUserId && a.Status != Enums.ServicesStatusEnum.Deleted).Select(a => a.ServiceId);
             var services = _dbContext.Services.Where(a => a.IsActive && !currentUserServices.Contains(a.Id)).ToList();
             // Render the partial view and return it as HTML content
             //string htmlContent = RenderPartialToString("_CardPartial", model); // Replace with the name of your partial view
