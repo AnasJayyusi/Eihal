@@ -56,74 +56,106 @@
                                 <!-- Card Body -->
                                 <div class="card-body" style="min-height:500px">
 
+                                    <!-- InComing Tab -->
                                     <div id="tab1" class="tab-content" style="display: none;">
 
                                         @Html.Partial("OrderPopup")
-                                      
 
-                                        <div class="row">
-                                            <div class="form-group mr-2 search-container" style="margin-top: 32px;">
-                                                <label for="filterInput-incoming"></label>
-                                                <input type="text" class="form-control margin-15-position-obselete" id="filterInput-incoming" onkeypress="searchUsingEnterButtonIncoming(event)" name="search" style=" background-color: #f2f2f2;" placeholder="Search for name" value="">
-                                                <i class="fas fa-search" style=" margin-right: 0.5%; color: #00768c;cursor:pointer" onclick="filterIncomingReferrals()"></i>
+                                        <div class="row" style="padding-left: 4%;">
+                                            <div class="col-md-5">
+                                                <div class="form-group">
+                                                    <label style="font-weight:bold;color:white" for="accountTypes-ddl-edit">Search:</label>
+                                                    <div class="input-group">
+                                                        <input style="background:#f2f2f2" onkeyup="filterIncomingReferrals()" id="filterInput-incoming" onkeypress="searchUsingEnterButtonIncoming(event)" placeholder="Search for name" type="search" class="form-control" />
+                                                        <div class="input-group-append">
+                                                            <button onclick="filterIncomingReferrals()" id="search-button" type="button" class="btn btn-primary">
+                                                                <i class="fas fa-search"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="col-lg-3 col-12 padding-screen" style="padding-right:8px">
-                                                <label for="status-incoming-dll">Status</label>
-                                                <select class="form-control" id="status-incoming-ddl" onchange="filterIncomingReferrals()">
-                                                    <option value="0">All Statuses</option>
-                                                    <option value="@((int)Eihal.Enums.ReferralStatusEnum.UnderReview)">Under Review</option>
-                                                    <option value="@((int)Eihal.Enums.ReferralStatusEnum.Approved)">Approved</option>
-                                                    <option value="@((int)Eihal.Enums.ReferralStatusEnum.Rejected)">Rejected</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-lg-3 col-12 padding-screen" style="padding-right:8px">
-                                                <label for="date-incoming-dll">Date</label>
 
-                                                <select class="form-control" id="date-incoming-ddl" onchange="filterIncomingReferrals()">
-                                                    <option value="0">All Dates</option>
-                                                    <option value="1">Today</option>
-                                                    <option value="2">7 days ago</option>
-                                                    <option value="3">30 days ago</option>
-                                                </select>
+                                            <div class="col-md-3">
+                                                <!-- Label for Status dropdown -->
+                                                <div class="form-group" style="margin-left: 10px;margin-bottom: 5%;">
+                                                    <label style="font-weight:bold;color:#00768c" for="accountTypes-ddl-edit">Status:</label>
+                                                    <select class="form-control" id="status-incoming-ddl" onchange="filterIncomingReferrals()">
+                                                        <option value="0">All Statuses</option>
+                                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.UnderReview)">Under Review</option>
+                                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.Approved)">Approved</option>
+                                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.Rejected)">Rejected</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <!-- Label for Date dropdown -->
+                                                <div class="form-group" style="margin-left: 10px;margin-bottom: 5%;">
+                                                    <label style="font-weight:bold;color:#00768c" for="accountTypes-ddl-edit">Date:</label>
+                                                    <select class="form-control" id="date-incoming-ddl" onchange="filterIncomingReferrals()">
+                                                        <option value="0">All Dates</option>
+                                                        <option value="1">Today</option>
+                                                        <option value="2">7 days ago</option>
+                                                        <option value="3">30 days ago</option>
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="container">
 
-                                            <div class="row" id="incomingRequestContainer">
-                                            </div>
+                                    <div class="container">
+                                        <div class="row" id="incomingRequestContainer">
                                         </div>
                                     </div>
-                                    <div id="tab2" class="tab-content" style="display: none;">
-                                        @Html.Partial("OrderPopup")
-                                        <div class="row">
-                                            <div class="form-group mr-2 search-container" style="margin-top: 32px;">
-                                                <label for="filterInput-outgoing"></label>
-                                                <input type="text" class="form-control margin-15-position-obselete" id="filterInput-outgoing" onkeypress="searchUsingEnterButtonOutgoing(event)" name="search" style=" background-color: #f2f2f2;" placeholder="Search for name" value="">
-                                                <i class="fas fa-search" style=" margin-right: 0.5%; color: #00768c;cursor:pointer" onclick="filterOutgoingReferrals()"></i>
-                                            </div>
-                                            <div class="col-lg-3 col-12 padding-screen" style="padding-right:8px">
-                                                <label for="status-outgoing-dll">Status</label>
-                                                <select class="form-control" id="status-outgoing-ddl" onchange="filterOutgoingReferrals()">
-                                                    <option value="0">All Statuses</option>
-                                                    <option value="@((int)Eihal.Enums.ReferralStatusEnum.UnderReview)">Under Review</option>
-                                                    <option value="@((int)Eihal.Enums.ReferralStatusEnum.Approved)">Approved</option>
-                                                    <option value="@((int)Eihal.Enums.ReferralStatusEnum.Rejected)">Rejected</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-lg-3 col-12 padding-screen" style="padding-right:8px">
-                                                <label for="date-outgoing-dll">Date</label>
+                                </div>
 
-                                                <select class="form-control" id="date-outgoing-ddl" onchange="filterOutgoingReferrals()">
-                                                    <option value="0">All Dates</option>
-                                                    <option value="1">Today</option>
-                                                    <option value="2">7 days ago</option>
-                                                    <option value="3">30 days ago</option>
-                                                </select>
+                                    <!-- Outgoing Tab -->
+                                <div id="tab2" class="tab-content" style="display: none;">
+                                    @Html.Partial("OrderPopup")
+                                        <div class="row" style="padding-left: 4%;">
+                                            <div class="col-md-5">
+                                                <div class="form-group">
+                                                    <label style="font-weight:bold;color:white" for="accountTypes-ddl-edit">Search:</label>
+                                                    <div class="input-group">
+                                                        <input style="background:#f2f2f2" onkeyup="filterOutgoingReferrals()" id="filterInput-outgoing" onkeypress="searchUsingEnterButtonOutgoing(event)" placeholder="Search for name" type="search" class="form-control" />
+                                                        <div class="input-group-append">
+                                                            <button onclick="filterOutgoingReferrals()" id="search-button" type="button" class="btn btn-primary">
+                                                                <i class="fas fa-search"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <!-- Label for Status dropdown -->
+                                                <div class="form-group" style="margin-left: 10px;margin-bottom: 5%;">
+                                                    <label style="font-weight:bold;color:#00768c" for="accountTypes-ddl-edit">Status:</label>
+                                                    <select class="form-control" id="status-outgoing-ddl" onchange="filterOutgoingReferrals()">
+                                                        <option value="0">All Statuses</option>
+                                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.UnderReview)">Under Review</option>
+                                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.Approved)">Approved</option>
+                                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.Rejected)">Rejected</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <!-- Label for Date dropdown -->
+                                                <div class="form-group" style="margin-left: 10px;margin-bottom: 5%;">
+                                                    <label style="font-weight:bold;color:#00768c" for="accountTypes-ddl-edit">Date:</label>
+                                                    <select class="form-control" id="date-outgoing-ddl" onchange="filterOutgoingReferrals()">
+                                                        <option value="0">All Dates</option>
+                                                        <option value="1">Today</option>
+                                                        <option value="2">7 days ago</option>
+                                                        <option value="3">30 days ago</option>
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="container">
-                                            <div class="row" id="outgoingRequestContainer">
-                                            </div>
+                                
+                                    <div class="container">
+                                        <div class="row" id="outgoingRequestContainer">
                                         </div>
                                     </div>
                                 </div>
@@ -132,16 +164,16 @@
                     </div>
                 </div>
             </div>
-            <!-- /.container-fluid -->
-
         </div>
-        <!-- End of Main Content -->
-        <!-- Footer -->
-        <!-- End of Footer -->
+        <!-- /.container-fluid -->
 
     </div>
-    <!-- End of Content Wrapper -->
+    <!-- End of Main Content -->
+    <!-- Footer -->
+    <!-- End of Footer -->
 
+</div>
+<!-- End of Content Wrapper -->
 </div>
 
 
@@ -313,16 +345,16 @@
 
                                             <div class="input-group">
                                                 <div class="form-outline">
-                                                    <input onkeyup="searchOnPrivileges()" id="search-input" type="search"  class="form-control" />
+                                                    <input onkeyup="searchOnPrivileges()" id="search-input" type="search" class="form-control" />
                                                 </div>
                                                 <button onclick="searchOnPrivileges()" style="height:40px" id="search-button" type="button" class="btn btn-primary">
-                                                    <i  class="fas fa-search"></i>
+                                                    <i class="fas fa-search"></i>
                                                 </button>
                                             </div>
-                                                    <div class="container">
-                                                        <div class="row" id="privilegesContainer">
-                                                        </div>
-                                                    </div>
+                                            <div class="container">
+                                                <div class="row" id="privilegesContainer">
+                                                </div>
+                                            </div>
                                             <div class="no-results-section" style="display:none">
                                                 <img src="~/images/NoResult.png" alt="No Results Found Icon">
                                                 <p>No Privileges Found.</p>

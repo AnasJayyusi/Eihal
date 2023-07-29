@@ -1,14 +1,15 @@
 ﻿@model List<Eihal.Data.Entites.ReferralRequest>
-            @foreach (var referral in Model)
+@foreach (var referral in Model)
 {
-    <div class="col-md-4 padding-top-25" >
+    <div class="col-md-4 padding-top-25">
         <div class="referral-card" style="    border: 1px solid #eadfdf;
-    border-radius: 10px;width: 350px;font-size: 13px;">
+    border-radius: 10px;font-size: 13px;">
             <div class="referral-card-body">
                 <h5 class="referral-card-title"><i class="fa-regular fa-user"></i><strong style="color:black;padding: 20px;">@referral.AssignedToUser.FullName </strong></h5>
                 <div class="referral-info-row">
-                    <div class="referral-info-label" style="padding:10px"><span style="color:#00768c;">ID</span> <span style="color:gray">  @referral.Id.ToString("D4")   </span> <span style="color:#00768c;padding-left: 25px;"> Date</span> <span style="color:gray">@referral.CreationDate.ToString("yyyy/MM/dd")</span></div>
-                    <div class="referral-info-label"  style="padding:10px"><span style="color:#00768c;">Status</span>   @if (referral.Status == Eihal.Enums.ReferralStatusEnum.UnderReview)
+                    <div class="referral-info-label" style="padding:10px"><span class="ref-info-label">ID</span> <span style="color:gray">  @referral.Id.ToString("D4")   </span> <span class="ref-info-label" style="padding-left: 25px;"> Date</span> <span style="color:gray">@referral.CreationDate.ToString("yyyy/MM/dd")</span></div>
+                    <div class="referral-info-label" style="padding:10px">
+                        <span style="color:#00768c;">Status</span>   @if (referral.Status == Eihal.Enums.ReferralStatusEnum.UnderReview)
                         {
                             <span class="status status-warning">Under Review</span>
                         }
@@ -19,20 +20,35 @@
                         else if (referral.Status == Eihal.Enums.ReferralStatusEnum.Rejected)
                         {
                             <span class="status status-error">@referral.Status</span>
-                        }   <span style="color:#00768c;padding-left: 25px;"> Service</span><span style="color:gray"> @referral.Service.TitleEn </span></div>
+                        }
+                        <br>
+                        <br>
+                        <span class="ref-info-label"> Privilege Name</span><span style="color:gray"> @referral.Service.TitleEn </span>
+                    </div>
                 </div>
-  
+
             </div>
         </div>
     </div>
 }
 
-   @if(Model.Count == 0)
-    {
-            <div class="no-results-section" style="padding-top:70px">
-                                                <img src="~/images/NoResult.png" style="width: 150px;
+@if (Model.Count == 0)
+{
+    <div class="no-results-section" style="padding-top:70px">
+        <img src="~/images/NoResult.png" style="width: 150px;
     height: 150px;" width="150px" height="150px" alt="No Results Found Icon">
-                                                <p>No outgoing requests found.</p>
-                                            </div>
-    }
+        <p>No outgoing requests found.</p>
+    </div>
+}
 
+
+
+
+<style>
+    .ref-info-label {
+        width: 30%;
+        font-size: 14px;
+        font-weight: 600;
+        color: darkcyan;
+    }
+</style>
