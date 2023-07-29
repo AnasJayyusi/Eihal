@@ -85,11 +85,18 @@ namespace Eihal.Controllers
         [Route("AddServices")]
         public IActionResult AddServices()
         {
+            //used for filter // view only the priv that's related to the user Practitioner Type
+
             var currentUserId = GetUserProfileId();
-            var currentUserServices = _dbContext.UserServices.Where(a => a.Status != Enums.ServicesStatusEnum.Deleted).Select(a => a.ServiceId);
-            var services = _dbContext.Services.Where(a => a.IsActive && !currentUserServices.Contains(a.Id)).ToList();
-            //var services = _dbContext.Services.Where(a => a.IsActive).ToList();
-            return View(services);
+            var userPractitionerTypeId = _dbContext.UserProfiles.Where(a => a.Id == currentUserId).Select(a => a.PractitionerTypeId).FirstOrDefault();
+
+            var previllages = 
+                           (from p in _dbContext.Privillages 
+                           join c in _dbContext.ClinicalSpecialities on p.ClinicalSpecialityId equals c.Id
+                           where p.IsActive && c.PractitionerTypeId == userPractitionerTypeId
+                           select p).Take(8).ToList();
+
+            return View(previllages);
         }
 
         [Route("MyServiceCardPartial")]
@@ -108,16 +115,29 @@ namespace Eihal.Controllers
         }
         [Route("AllServiceCardPartial")]
 
-        public ActionResult AllServiceCardPartial()
+        public ActionResult AllServiceCardPartial(string privillagesIds,string kw)
         {
-            // Assuming you have a list of items to pass to the view
             var currentUserId = GetUserProfileId();
-            var currentUserServices = _dbContext.UserServices.Where(a => a.UserId == currentUserId && a.Status != Enums.ServicesStatusEnum.Deleted).Select(a => a.ServiceId);
-            var services = _dbContext.Services.Where(a => a.IsActive && !currentUserServices.Contains(a.Id)).ToList();
-            // Render the partial view and return it as HTML content
-            //string htmlContent = RenderPartialToString("_CardPartial", model); // Replace with the name of your partial view
+            var userPractitionerTypeId = _dbContext.UserProfiles.Where(a => a.Id == currentUserId).Select(a => a.PractitionerTypeId).FirstOrDefault();
 
-            return PartialView("_AllServiceCardPartial", services); // Replace with the name of your partial view
+            var currentUserServices = _dbContext.UserServices.Where(a => a.UserId == currentUserId && a.Status != Enums.ServicesStatusEnum.Deleted).Select(a => a.ServiceId);
+            var services = from s in _dbContext.Services
+                           join p in _dbContext.Privillages on s.PrivillageId equals p.Id
+                           join c in _dbContext.ClinicalSpecialities on p.ClinicalSpecialityId equals c.Id
+                           where s.IsActive && !currentUserServices.Contains(s.Id) && c.PractitionerTypeId == userPractitionerTypeId
+                           select s;
+
+            if (privillagesIds != "All")
+            {
+                var listOfIDs = privillagesIds.Split(',').Select(int.Parse).ToList();
+                services = services.Where(a => a.PrivillageId != null && listOfIDs.Contains(a.PrivillageId.Value));
+            }
+            if (!string.IsNullOrEmpty(kw))
+            {
+                services = services.Where(a => a.TitleEn.Contains(kw));
+            }
+
+            return PartialView("_AllServiceCardPartial", services.ToList()); // Replace with the name of your partial view
         }
         [Route("DeleteUserService")]
         public ActionResult DeleteUserService(int Id)

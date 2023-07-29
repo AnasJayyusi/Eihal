@@ -1,9 +1,15 @@
-﻿@model List<Eihal.Data.Entites.Services>
+﻿@model List<Eihal.Data.Entites.Privillage>
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
 <style>
+    button.active {
+    background-color: #00768c;
+    color: #fff;
+    /* Add any other styles you want for active buttons */
+}
+
     .activeLink {
         color: #00768c;
         font-weight: bold;
@@ -279,7 +285,7 @@
 
                                 </div>
                             </div>
-                            <div class="card shadow mb-4">
+                            <div class="card shadow mb-4" >
                                 <!-- Card Header - Dropdown -->
                                 <div class="tab-container card-header py-3 d-flex flex-row align-items-center justify-content-between">
 
@@ -299,44 +305,33 @@
                                 <div class="row">
                                     <div class="form-group mr-2 search-container">
                                         <input type="text" class="form-control margin-15-position-obselete" id="filterInput" name="search" style="margin-top: 75px; background-color: #f2f2f2;" placeholder="Search" value="">
-                                        <i class="fas fa-search" style="margin-top: 28px; margin-right: 2.5%; color: #00768c;cursor:pointer" onclick="search()"></i>
+                                        <i class="fas fa-search" style="margin-top: 28px; margin-right: 2.5%; color: #00768c;cursor:pointer"  onclick="GetAllService()"></i>
                                     </div>
 
                                 </div>
-                        @*        <div class="row" style="padding-top: 40px;padding-left: 35px;">
-    
-                                    <div style="padding-right:5px;    ">
-                                        <button style="border-radius: 5px;">All</button>
-                                    </div>
-                                    <div style="padding-right:5px;border-radius: 5px;">
-                                        <button style="border-radius: 5px;">Service 1 </button>
-                                    </div>    <div style="padding-right:5px;    border-radius: 5px;">
-                                        <button style="border-radius: 5px;">Service 2 </button>
-                                    </div>    <div style="padding-right:5px;    border-radius: 5px;">
-                                        <button style="border-radius: 5px;">Service 3 </button>
-                                    </div>    <div style="padding-right:5px;    border-radius: 5px;">
-                                        <button style="border-radius: 5px;">Service 4 </button>
-                                    </div>    <div style="padding-right:5px;    border-radius: 5px;">
-                                        <button style="border-radius: 5px;">Service 5 </button>
-                                    </div>    <div style="padding-right:5px;    border-radius: 5px;">
-                                        <button style="border-radius: 5px;">Service 6 </button>
-                                    </div>    <div style="padding-right:5px;    border-radius: 5px;">
-                                        <button style="border-radius: 5px;">Service 7 </button>
-                                    </div>    <div style="padding-right:5px;    border-radius: 5px;">
-                                        <button style="border-radius: 5px;">Service 8 </button>
-                                    </div>
-                                </div>*@
+                         <div class="row privillages" style="padding-top: 40px; padding-left: 35px;">
+    <div style="padding-right: 7px;">
+        <button style="border-radius: 5px;padding:7px;padding-left:30px;padding-right:30px;border-color:#dcdbdb" data-value="All"  class="active">All</button>
+    </div>
+    @foreach(var prev in Model){
+    <div style="padding-right: 7px; border-radius: 5px;">
+        <button style="border-radius: 5px;padding:7px;border-color:#dcdbdb" data-value="@prev.Id">@prev.TitleEn</button>
+    </div>
+    }
+
+</div>
+
 
                                 <!-- Card Body -->
-                                <div class="card-body">
+                                <div class="card-body" style="min-height:500px">
                                     <div id="tab2" class="tab-content">
                                         <div class="container">
-                                            <div class="row" id="allServiceContainer">
+                                            <div class="row" id="allServiceContainer" >
                                             </div>
-                                            <div class="no-results-section" style="display:none">
+                                    @*        <div class="no-results-section" style="display:none">
                                                 <img src="~/images/NoResult.png" alt="No Results Found Icon">
                                                 <p>No Services Added Yet.</p>
-                                            </div>
+                                            </div>*@
                                         </div>
                                     </div>
 
@@ -467,15 +462,73 @@
                 }
             });
         }
+            function getActiveButtons() {
+        const buttons = document.querySelectorAll('.privillages button'); // Get all buttons in the row
+        const activeButtons = [];
+
+        buttons.forEach((button) => {
+            if (button.classList.contains('active')) {
+                activeButtons.push(button.getAttribute('data-value'));
+            }
+        });
+
+        return activeButtons;
+    }
+      function getButtonByDataValue(dataValue) {
+        const buttons = document.querySelectorAll('.privillages button');
+        for (const button of buttons) {
+            if (button.getAttribute('data-value') === dataValue) {
+                return button;
+            }
+        }
+        return null; // Return null if no button with the specified data-value is found
+    }
+
+       function handleButtonClick(event) {
+        const button = event.target;
+        const isActive = button.classList.contains('active');
+        if(button.getAttribute('data-value') === 'All'){
+               const buttons = document.querySelectorAll('.privillages button');
+            buttons.forEach((btn) => {
+                if(btn.getAttribute('data-value') === 'All'){
+            button.classList.add('active');
+                }else{
+                btn.classList.remove('active');
+                }
+            });
+        }else{
+
+var activeButton=getButtonByDataValue("All");
+activeButton.classList.remove('active');
+        if (isActive) {
+            button.classList.remove('active');
+        } else {
+            button.classList.add('active');
+        }
+        }
+
+           const activeButtons = document.querySelectorAll('.privillages button.active');
+        if (activeButtons.length === 0) {
+            const allButton = document.querySelector('.privillages button[data-value="All"]');
+            allButton.classList.add('active');
+        }
+        GetAllService();
+    }
 
         function GetAllService() {
             var serviceContainer = $('#allServiceContainer');
-
+            var listOfIDsString= getActiveButtons();
+              var titleText = $("#filterInput").val();
             $.ajax({
-                url: '/ServiceProvider/AllServiceCardPartial', // Replace with the actual URL and action method to fetch the partial view
+                url: '/ServiceProvider/AllServiceCardPartial?privillagesIds='+listOfIDsString+"&kw="+titleText, // Replace with the actual URL and action method to fetch the partial view
                 type: 'GET',
+                        data: { privillagesIds: listOfIDsString }, // Send the list of IDs as a query parameter 'ids'
+
                 success: function (response) {
                     serviceContainer.html(response);
+
+                            //search();
+
                 },
                 error: function (xhr, status, error) {
                     console.error('Error:', error);
@@ -536,28 +589,48 @@
         $(document).ready(function () {
             GetMyService();
             GetAllService();
+                 const buttons = document.querySelectorAll('.privillages button');
+    buttons.forEach((button) => {
+        button.addEventListener('click', handleButtonClick);
+    });
+
+
             // Get the current URL
             var currentUrl = window.location.href;
             var resultCount = 0; // Variable to keep track of the number of results
             // Filter the service cards based on the title
-            $('#filterInput').on('keyup', function () {
-                var value = $(this).val().toLowerCase();
-                $('.service-card-title').filter(function () {
-                    var isMatch = $(this).text().toLowerCase().indexOf(value) > -1;
-                    $(this).parent().parent().parent().toggle(isMatch);
-                    if (isMatch === true) {
-                        resultCount++;
-                    } else {
-                    }
+            //$('#filterInput').on('keyup', function () {
+            //    var value = $(this).val().toLowerCase();
+            //    $('.service-card-title').filter(function () {
+            //        var isMatch = $(this).text().toLowerCase().indexOf(value) > -1;
+            //        $(this).parent().parent().parent().toggle(isMatch);
+            //        if (isMatch === true) {
+            //            resultCount++;
+            //        } else {
+            //        }
 
-                });
-                if (resultCount <= 0) {
-                    $('.no-results-section').show(); // Assuming you have a "no-results" element to display the message
-                } else {
-                    $('.no-results-section').hide();
-                }
-                resultCount = 0;
-            });
+            //    });
+            //    if (resultCount <= 0) {
+            //        $('.no-results-section').show(); // Assuming you have a "no-results" element to display the message
+            //    } else {
+            //        $('.no-results-section').hide();
+            //    }
+            //    resultCount = 0;
+            //});
+
+              // Get the input field
+    const filterInput = document.getElementById("filterInput");
+
+    // Add event listener for 'keydown' event
+    filterInput.addEventListener("keydown", function(event) {
+        // Check if the key pressed is Enter (key value 'Enter')
+        if (event.key === 'Enter') {
+            // Call the filtering function, which is GetAllService() in this case
+            GetAllService();
+            // Prevent the default behavior of the Enter key (form submission)
+            event.preventDefault();
+        }
+    });
             // Check if the URL contains a specific segment
             if (currentUrl.includes("Services")) {
                 // Perform an action when the URL contains "something"
