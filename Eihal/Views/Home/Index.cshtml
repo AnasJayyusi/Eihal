@@ -32,65 +32,18 @@
             </div>
         </div>
 
-        <form class="form-contain" id="search-doctors" action="https://eihal.paths.sa/search-doctors" method="GET">
-            <input type="hidden" name="_token" value="wvWsm0XjwGINPWNPIYQ2Jqt1HSbQspywkcnKWPtL">
+        <form class="form-contain" id="search-doctors" action="Home/Doctors" method="GET">
+            @*<input type="hidden" name="_token" value="wvWsm0XjwGINPWNPIYQ2Jqt1HSbQspywkcnKWPtL">*@
             <div class="row">
-                <input type="hidden" name="homepage_search" value="1">
+                @*<input type="hidden" name="serviceId" value="1">*@
                 <div class="col-lg-2 col-12 padding-screen">
                     <div class="form-group round-left">
                         <div class="form-data select-box">
-                            <select name="speciality" class="form-control">
+                            <select name="serviceId"  id="services-ddl"  class="form-control">
                                 <option value="">
-                                    Select a specialty
+                                    Choose service
                                 </option>
 
-                                <option value="12">
-                                    Dental Hygienist
-                                </option>
-
-                                <option value="14">
-                                    Advanced General Practic
-                                </option>
-
-                                <option value="16">
-                                    Family Dentistry
-                                </option>
-
-                                <option value="17">
-                                    Restorative
-                                </option>
-
-                                <option value="18">
-                                    Prosthodontics
-                                </option>
-
-                                <option value="19">
-                                    Endodontics
-                                </option>
-
-                                <option value="20">
-                                    Orthodontics
-                                </option>
-
-                                <option value="21">
-                                    Oral and Maxillofacial Surgery
-                                </option>
-
-                                <option value="22">
-                                    Periodontics
-                                </option>
-
-                                <option value="23">
-                                    Oral Medicin
-                                </option>
-
-                                <option value="44">
-                                    Pediatric Dentistry
-                                </option>
-
-                                <option value="55">
-                                    General Practice
-                                </option>
                             </select>
                         </div>
                     </div>
@@ -99,18 +52,12 @@
                 <div class="col-lg-2 col-12 padding-screen">
                     <div class="form-group">
                         <div class="form-data select-box">
-                            <select name="city" id="city_id" class="form-control">
+                            <select name="cityId" id="cities-ddl" class="form-control">
                                 <option value="">
                                     Choose city
                                 </option>
 
-                                <option value="2">
-                                    Riyadh
-                                </option>
-
-                                <option value="4">
-                                    Makka
-                                </option>
+                              
                             </select>
                         </div>
                     </div>
@@ -119,7 +66,7 @@
                 <div class="col-lg-2 col-12 padding-screen">
                     <div class="form-group">
                         <div class="form-data select-box">
-                            <select name="area" id="area_id" class="form-control">
+                            <select name="disctrictId" id="disctricts-ddl" class="form-control">
                                 <option value="">
                                     Choose District
                                 </option>
@@ -131,7 +78,7 @@
                 <div class="col-lg-4 col-12 padding-screen">
                     <div class="form-group round-right">
                         <div class="form-data">
-                            <input type="text" name="name" class="form-control" placeholder="Or search by name" />
+                            <input type="text" name="name" id="filterName" class="form-control" placeholder="Or search by name" />
 
                             <a href="#" class="btn-contain">
                                 @*  <img src="~/images/user.svg
@@ -309,8 +256,60 @@
 
 @section Scripts {
     <script type="text/javascript">
+         $.ajax({
+                url: '@Url.Action("GetCitiesDDL", "Common")',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Clear existing options
+                    $('#cities-ddl').empty();
+                    // Populate the dropdown list
+                    var dropdown = $('#cities-ddl');
+                    dropdown.append($('<option></option>').val(0).text('Choose Cities'));
+
+                    $.each(data, function (index, item) {
+                        dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                    });
+                }
+            });
+                    $.ajax({
+                url: '@Url.Action("GetDistrictsDDL", "Common")',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Clear existing options
+                    $('#disctricts-ddl').empty();
+                    // Populate the dropdown list
+                    var dropdown = $('#disctricts-ddl');
+                    dropdown.append($('<option></option>').val(0).text('Choose District'));
+
+                    $.each(data, function (index, item) {
+                        dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                    });
+                }
+            });
         $(document).ready(function () {
+                  $.ajax({
+                url: '@Url.Action("GetServicesDDL", "Common")',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Clear existing options
+                    $('#services-ddl').empty();
+                    // Populate the dropdown list
+                    var dropdown = $('#services-ddl');
+                    dropdown.append($('<option></option>').val(0).text('Choose Services'));
+
+                    $.each(data, function (index, item) {
+                        dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                    });
+                }
+            });
+
             $(".owl-carousel").owlCarousel({ items: 1 });
+
+
+
         });
 
         $('form').submit(function () {

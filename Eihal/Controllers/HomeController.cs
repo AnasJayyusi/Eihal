@@ -62,9 +62,24 @@ namespace Eihal.Controllers
         {
             return View();
         }
-        public IActionResult Doctors()
+        public IActionResult Doctors(string name, int serviceId, int cityId, int disctrictId)
         {
-            var doctors = _dbContext.UserProfiles.Include(a => a.TimeClinicLocation).ThenInclude(a=>a.City).Include(x => x.Certifications).ThenInclude(a => a.Degree).Include(a=> a.PractitionerType).Include(a=>a.City).Where(a =>a.ProfileStatus == ProfileStatus.Active && a.AccountTypeId == 1).ToList();
+            List<int> ids = new List<int>();
+            if (serviceId > 0)
+            {
+                ids = _dbContext.UserServices.Where(a => a.ServiceId == serviceId).Select(a => a.UserId).ToList();
+
+            }
+            name = string.IsNullOrEmpty(name) ? string.Empty : name;
+            var doctors = _dbContext.UserProfiles.Include(a => a.TimeClinicLocation).ThenInclude(a => a.City).Include(a => a.InsuranceCompanies).Include(x => x.Certifications).ThenInclude(a => a.Degree).Include(a => a.PractitionerType).Include(x => x.City).Where(a => a.ProfileStatus == ProfileStatus.Active && a.AccountTypeId == 1
+                       && (name == String.Empty || a.FullName.Contains(name))
+                        && (serviceId == 0 || ids.Contains(a.Id))
+                        && (cityId == 0 || a.TimeClinicLocation.CityId == cityId)
+                        && (disctrictId == 0 || a.TimeClinicLocation.DistrictId == disctrictId)
+                       
+
+            ).ToList();
+      
             return View(doctors);
         }
         public ActionResult FillDoctorsList(string name,int serviceId,int cityId,int disctrictId,int sortBy,int insuranceType)

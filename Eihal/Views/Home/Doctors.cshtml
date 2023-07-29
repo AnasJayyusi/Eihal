@@ -382,7 +382,7 @@
                             </select>
                         </div>            <div class="col-lg-4 col-12 padding-screen">
                             <select class="form-control" id="disctricts-ddl" onchange="filterDoctors()">
-                                <option value="">All Disctrict</option>
+                                <option value="">All District</option>
                             </select>
                         </div>
                     </div>
@@ -449,7 +449,7 @@
                     $('#disctricts-ddl').empty();
                     // Populate the dropdown list
                     var dropdown = $('#disctricts-ddl');
-                    dropdown.append($('<option></option>').val(0).text('All Disctricts'));
+                    dropdown.append($('<option></option>').val(0).text('All Districts'));
 
                     $.each(data, function (index, item) {
                         dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
@@ -488,8 +488,9 @@
                     });
                 }
             });
-
-
+             setTimeout(function () {
+            setSelectedOptions();
+    }, 1000);
 
         });
         function searchUsingEnterButton(event){  if (event.keyCode === 13) {
@@ -533,6 +534,52 @@
                 }
             });
         }
+           function getQueryParamsFromCurrentURL() {
+               //debugger;
+        const params = {};
+        const urlParams = new URLSearchParams(window.location.search);
+        for (const [key, value] of urlParams) {
+            params[key] = value;
+        }
+        return params;
+    }
+    function setSelectedOptions() {
+        const queryParams = getQueryParamsFromCurrentURL();
+
+        const serviceDropdown = document.getElementById('services-ddl');
+        const cityDropdown = document.getElementById('cities-ddl');
+        const districtDropdown = document.getElementById('disctricts-ddl');
+        const nameField=   document.getElementById('filterInput');
+
+            //var name = $('#filterInput').val();
+
+        // Set selected option for Service dropdown
+        if (queryParams.serviceId) {
+            serviceDropdown.value = queryParams.serviceId;
+        } else {
+            serviceDropdown.value = ''; // Default value if serviceId is not present in the query string
+        }
+
+        // Set selected option for City dropdown
+        if (queryParams.cityId) {
+            cityDropdown.value = queryParams.cityId;
+        } else {
+            cityDropdown.value = ''; // Default value if cityId is not present in the query string
+        }
+
+        // Set selected option for District dropdown
+        if (queryParams.disctrictId) {
+            districtDropdown.value = queryParams.disctrictId;
+        } else {
+            districtDropdown.value = ''; // Default value if disctrictId is not present in the query string
+        }
+
+            if (queryParams.name) {
+            nameField.value = queryParams.name;
+        } else {
+            nameField.value = ''; // Default value if serviceId is not present in the query string
+        }
+    }
     </script>
 }
 
