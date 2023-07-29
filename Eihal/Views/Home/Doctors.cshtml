@@ -538,14 +538,20 @@
                //debugger;
         const params = {};
         const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.toString() === "") {
+        return null;
+    }
+
         for (const [key, value] of urlParams) {
             params[key] = value;
         }
         return params;
     }
     function setSelectedOptions() {
+        debugger;
         const queryParams = getQueryParamsFromCurrentURL();
-
+        if(queryParams == null)
+        return;
         const serviceDropdown = document.getElementById('services-ddl');
         const cityDropdown = document.getElementById('cities-ddl');
         const districtDropdown = document.getElementById('disctricts-ddl');
