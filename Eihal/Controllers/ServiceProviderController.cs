@@ -714,7 +714,7 @@ namespace Eihal.Controllers
             .Join(_dbContext.UserServices,
                 s => s.Id,
                 us => us.ServiceId,
-                (s, us) => new SupportServiceModal { ServiceId = s.Id, TitleEn = s.TitleEn, TitleAr = s.TitleAr }) // Include columns you want from both tables
+                (s, us) => new SupportServiceModal { ServiceId = s.Id, TitleEn = s.TitleEn, TitleAr = s.TitleAr  }) // Include columns you want from both tables
             .Distinct()
             .ToList();
 

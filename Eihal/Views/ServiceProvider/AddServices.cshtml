@@ -5,10 +5,10 @@
 
 <style>
     button.active {
-    background-color: #00768c;
-    color: #fff;
-    /* Add any other styles you want for active buttons */
-}
+        background-color: #00768c;
+        color: #fff;
+        /* Add any other styles you want for active buttons */
+    }
 
     .activeLink {
         color: #00768c;
@@ -26,7 +26,7 @@
         background-color: #00333f;
     }
 
- 
+
 
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
@@ -39,7 +39,7 @@
         -moz-appearance: textfield;
     }
 
-  
+
     .margin-15-position-obselete {
         position: absolute;
         margin: 10px;
@@ -204,28 +204,28 @@
         }
 
     /*.color-changing-button {
-              background-color: #007bff;
-              color: #fff;
-              border: none;
-              border-radius: 4px;
-              padding: 12px 20px;
-              font-size: 16px;
-              cursor: pointer;
-              transition: background-color 0.3s, transform 0.3s;
-            }
+                  background-color: #007bff;
+                  color: #fff;
+                  border: none;
+                  border-radius: 4px;
+                  padding: 12px 20px;
+                  font-size: 16px;
+                  cursor: pointer;
+                  transition: background-color 0.3s, transform 0.3s;
+                }
 
-            .color-changing-button:hover {
-              background-color: #0056b3;
-              transform: scale(1.05);
-            }
+                .color-changing-button:hover {
+                  background-color: #0056b3;
+                  transform: scale(1.05);
+                }
 
-            .color-changing-button:focus {
-              outline: none;
-            }
+                .color-changing-button:focus {
+                  outline: none;
+                }
 
-            .color-changing-button:active {
-              transform: scale(0.95);
-            }*/
+                .color-changing-button:active {
+                  transform: scale(0.95);
+                }*/
 
 
 </style>
@@ -284,7 +284,7 @@
 
                                 </div>
                             </div>
-                            <div class="card shadow mb-4" >
+                            <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
                                 <div class="tab-container card-header py-3 d-flex flex-row align-items-center justify-content-between">
 
@@ -304,31 +304,32 @@
                                 <div class="row">
                                     <div class="form-group mr-2 search-container">
                                         <input type="text" class="form-control margin-15-position-obselete" id="filterInput" name="search" style="margin-top: 75px; background-color: #f2f2f2;" placeholder="Search" value="">
-                                        <i class="fas fa-search" style="margin-top: 28px; margin-right: 2.5%; color: #00768c;cursor:pointer"  onclick="GetAllService()"></i>
+                                        <i class="fas fa-search" style="margin-top: 28px; margin-right: 2.5%; color: #00768c;cursor:pointer" onclick="GetAllService()"></i>
                                     </div>
                                 </div>
-                         <div class="row privillages" style="padding-top: 40px; padding-left: 35px;">
-    <div style="padding-right: 7px;">
-        <button style="border-radius: 5px;padding:7px;padding-left:30px;padding-right:30px;border-color:#dcdbdb" data-value="All"  class="active">All</button>
-    </div>
-    @foreach(var prev in Model){
-    <div style="padding-right: 7px; border-radius: 5px;">
-        <button style="border-radius: 5px;padding:7px;border-color:#dcdbdb" data-value="@prev.Id">@prev.TitleEn</button>
-    </div>
-    }
+                                <div class="row privillages" style="padding-top: 40px; padding-left: 35px;">
+                                    <div style="padding-right: 7px;">
+                                        <button style="border-radius: 5px;padding:7px;padding-left:30px;padding-right:30px;border-color:transparent" data-value="All" class="active">All <span class="circle">1</span></button>
+                                    </div>
+                                    @foreach (var prev in Model)
+                                    {
+                                        <div style="padding-right: 7px; border-radius: 5px;">
+                                            <button style="border-radius: 5px;padding:7px;border-color:transparent" data-value="@prev.Id">@prev.TitleEn</button>
+                                        </div>
+                                    }
 
-</div>
+                                </div>
 
 
                                 <!-- Card Body -->
                                 <div class="card-body" style="min-height:500px">
                                     <div id="tab2" class="tab-content">
                                         <div class="container">
-                                            <div class="row" id="allServiceContainer" >
+                                            <div class="row" id="allServiceContainer">
                                             </div>
-                                    @*        <div class="no-results-section" style="display:none">
-                                                <img src="~/images/NoResult.png" alt="No Results Found Icon">
-                                                <p>No Services Added Yet.</p>
+                                            @*        <div class="no-results-section" style="display:none">
+                                            <img src="~/images/NoResult.png" alt="No Results Found Icon">
+                                            <p>No Services Added Yet.</p>
                                             </div>*@
                                         </div>
                                     </div>
@@ -462,72 +463,72 @@
                 }
             });
         }
-            function getActiveButtons() {
-        const buttons = document.querySelectorAll('.privillages button'); // Get all buttons in the row
-        const activeButtons = [];
+        function getActiveButtons() {
+            const buttons = document.querySelectorAll('.privillages button'); // Get all buttons in the row
+            const activeButtons = [];
 
-        buttons.forEach((button) => {
-            if (button.classList.contains('active')) {
-                activeButtons.push(button.getAttribute('data-value'));
-            }
-        });
-
-        return activeButtons;
-    }
-      function getButtonByDataValue(dataValue) {
-        const buttons = document.querySelectorAll('.privillages button');
-        for (const button of buttons) {
-            if (button.getAttribute('data-value') === dataValue) {
-                return button;
-            }
-        }
-        return null; // Return null if no button with the specified data-value is found
-    }
-
-       function handleButtonClick(event) {
-        const button = event.target;
-        const isActive = button.classList.contains('active');
-        if(button.getAttribute('data-value') === 'All'){
-               const buttons = document.querySelectorAll('.privillages button');
-            buttons.forEach((btn) => {
-                if(btn.getAttribute('data-value') === 'All'){
-            button.classList.add('active');
-                }else{
-                btn.classList.remove('active');
+            buttons.forEach((button) => {
+                if (button.classList.contains('active')) {
+                    activeButtons.push(button.getAttribute('data-value'));
                 }
             });
-        }else{
 
-var activeButton=getButtonByDataValue("All");
-activeButton.classList.remove('active');
-        if (isActive) {
-            button.classList.remove('active');
-        } else {
-            button.classList.add('active');
+            return activeButtons;
         }
+        function getButtonByDataValue(dataValue) {
+            const buttons = document.querySelectorAll('.privillages button');
+            for (const button of buttons) {
+                if (button.getAttribute('data-value') === dataValue) {
+                    return button;
+                }
+            }
+            return null; // Return null if no button with the specified data-value is found
         }
 
-           const activeButtons = document.querySelectorAll('.privillages button.active');
-        if (activeButtons.length === 0) {
-            const allButton = document.querySelector('.privillages button[data-value="All"]');
-            allButton.classList.add('active');
+        function handleButtonClick(event) {
+            const button = event.target;
+            const isActive = button.classList.contains('active');
+            if (button.getAttribute('data-value') === 'All') {
+                const buttons = document.querySelectorAll('.privillages button');
+                buttons.forEach((btn) => {
+                    if (btn.getAttribute('data-value') === 'All') {
+                        button.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+            } else {
+
+                var activeButton = getButtonByDataValue("All");
+                activeButton.classList.remove('active');
+                if (isActive) {
+                    button.classList.remove('active');
+                } else {
+                    button.classList.add('active');
+                }
+            }
+
+            const activeButtons = document.querySelectorAll('.privillages button.active');
+            if (activeButtons.length === 0) {
+                const allButton = document.querySelector('.privillages button[data-value="All"]');
+                allButton.classList.add('active');
+            }
+            GetAllService();
         }
-        GetAllService();
-    }
 
         function GetAllService() {
             var serviceContainer = $('#allServiceContainer');
-            var listOfIDsString= getActiveButtons();
-              var titleText = $("#filterInput").val();
+            var listOfIDsString = getActiveButtons();
+            var titleText = $("#filterInput").val();
             $.ajax({
-                url: '/ServiceProvider/AllServiceCardPartial?privillagesIds='+listOfIDsString+"&kw="+titleText, // Replace with the actual URL and action method to fetch the partial view
+                url: '/ServiceProvider/AllServiceCardPartial?privillagesIds=' + listOfIDsString + "&kw=" + titleText, // Replace with the actual URL and action method to fetch the partial view
                 type: 'GET',
-                        data: { privillagesIds: listOfIDsString }, // Send the list of IDs as a query parameter 'ids'
+                data: { privillagesIds: listOfIDsString }, // Send the list of IDs as a query parameter 'ids'
 
                 success: function (response) {
                     serviceContainer.html(response);
 
-                            //search();
+                    //search();
 
                 },
                 error: function (xhr, status, error) {
@@ -589,10 +590,10 @@ activeButton.classList.remove('active');
         $(document).ready(function () {
             GetMyService();
             GetAllService();
-                 const buttons = document.querySelectorAll('.privillages button');
-    buttons.forEach((button) => {
-        button.addEventListener('click', handleButtonClick);
-    });
+            const buttons = document.querySelectorAll('.privillages button');
+            buttons.forEach((button) => {
+                button.addEventListener('click', handleButtonClick);
+            });
 
 
             // Get the current URL
@@ -618,19 +619,19 @@ activeButton.classList.remove('active');
             //    resultCount = 0;
             //});
 
-              // Get the input field
-    const filterInput = document.getElementById("filterInput");
+            // Get the input field
+            const filterInput = document.getElementById("filterInput");
 
-    // Add event listener for 'keydown' event
-    filterInput.addEventListener("keydown", function(event) {
-        // Check if the key pressed is Enter (key value 'Enter')
-        if (event.key === 'Enter') {
-            // Call the filtering function, which is GetAllService() in this case
-            GetAllService();
-            // Prevent the default behavior of the Enter key (form submission)
-            event.preventDefault();
-        }
-    });
+            // Add event listener for 'keydown' event
+            filterInput.addEventListener("keydown", function (event) {
+                // Check if the key pressed is Enter (key value 'Enter')
+                if (event.key === 'Enter') {
+                    // Call the filtering function, which is GetAllService() in this case
+                    GetAllService();
+                    // Prevent the default behavior of the Enter key (form submission)
+                    event.preventDefault();
+                }
+            });
             // Check if the URL contains a specific segment
             if (currentUrl.includes("Services")) {
                 // Perform an action when the URL contains "something"
@@ -661,23 +662,23 @@ activeButton.classList.remove('active');
 
             //});
         })
-                        //document.addEventListener('DOMContentLoaded', function() {
-                        //  const button = document.getElementById('myButton');
+                                //document.addEventListener('DOMContentLoaded', function() {
+                                //  const button = document.getElementById('myButton');
 
-                        //  function getRandomColor() {
-                        //    const letters = '0123456789ABCDEF';
-                        //    let color = '#';
-                        //    for (let i = 0; i < 6; i++) {
-                        //      color += letters[Math.floor(Math.random() * 16)];
-                        //    }
-                        //    return color;
-                        //  }
+                                //  function getRandomColor() {
+                                //    const letters = '0123456789ABCDEF';
+                                //    let color = '#';
+                                //    for (let i = 0; i < 6; i++) {
+                                //      color += letters[Math.floor(Math.random() * 16)];
+                                //    }
+                                //    return color;
+                                //  }
 
-                        //  setInterval(() => {
-                        //    const randomColor = getRandomColor();
-                        //    button.style.backgroundColor = randomColor;
-                        //  }, 2000); // Change color every 2 seconds (adjust the interval as needed)
-                        //});
+                                //  setInterval(() => {
+                                //    const randomColor = getRandomColor();
+                                //    button.style.backgroundColor = randomColor;
+                                //  }, 2000); // Change color every 2 seconds (adjust the interval as needed)
+                                //});
 
     </script>
 
