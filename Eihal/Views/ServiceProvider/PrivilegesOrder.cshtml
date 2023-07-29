@@ -1,0 +1,201 @@
+﻿@model List<Eihal.Data.Entites.Services>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+<style>
+    .service-card {
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        position: relative;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+    .service-card-body {
+        background-color: #f8f9fa;
+    }
+
+    .service-weight-700 {
+        color: #00768c;
+        font-weight: 700;
+    }
+
+    .service-card-title {
+        color: #00768c;
+        font-size: 18px;
+        margin-bottom: 10px;
+        color: #00768c
+    }
+
+    .service-card-text {
+        color: #666;
+        margin-bottom: 5px;
+    }
+
+
+    .dots-container {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .dots-button {
+        background: none;
+        border: none;
+        color: #007bff;
+        font-size: 18px;
+        padding: 0;
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .dots-button::before {
+            content: "";
+            position: absolute;
+            color: red;
+            font-size: 20px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .dots-button::after {
+            content: "";
+            position: absolute;
+            background-color: #007bff;
+            width: 4px;
+            height: 4px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .dots-button::before,
+        .dots-button::after {
+            border-radius: 50%;
+        }
+
+        .dots-button::after {
+            top: 54%;
+        }
+
+        .dots-button::before {
+            top: 46%;
+        }
+
+    .activeLink {
+        color: #00768c;
+        font-weight: bold;
+        pointer-events: none;
+        cursor: not-allowed;
+        background-color: whitesmoke
+    }
+
+    #menu .nav-item:hover {
+        /* Add your desired styles for hover state */
+        background-color: #e0e0e0;
+        color: #333;
+    }
+
+
+    .tab-header {
+        display: flex;
+        justify-content: space-between;
+        background-color: #f1f1f1;
+    }
+
+    .padding-top-25 {
+        padding-top: 25px;
+    }
+
+    .tab-button {
+        background-color: inherit;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 10px 20px;
+        transition: background-color 0.3s;
+        border-radius: 12px;
+        margin: 5px;
+    }
+
+        .tab-button:hover {
+            background-color: #ddd;
+        }
+
+        .tab-button.active {
+            background-color: #00768c;
+            color: white
+        }
+
+    .tab-content {
+        background-color: #fff;
+    }
+
+    .no-results {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        margin-top: 20px;
+        padding: 20px;
+        font-size: 18px;
+    }
+
+        .no-results img {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 10px;
+        }
+
+        .no-results p {
+            margin: 0;
+        }
+</style>
+
+
+@foreach (var item in Model)
+{
+    <div class="col-md-3 padding-top-25">
+
+        <div class="service-card">
+            <div class="service-card-body">
+                <h5 class="service-card-title" >@item.TitleEn</h5>
+                <div class="row col-12" >
+                    <div class="col-8">
+                        <span class="service-sub-title" style="display: inline-block;">Price:</span>
+                        <span style="display: inline-block; margin-left: 5px;">@item.Fee</span>
+                    </div>
+                </div>
+                <div class="dots-container">
+                    <button class="dots-button" data-toggle="modal" onclick="fillAddServicePage('@item.Id','@item.TitleAr','@item.TitleEn','@item.Fee')" data-target="#AddServiceModal">
+                        <i class="fas fa-plus" style="font-size: 18px;"></i>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+}
+@if (Model.Count <= 0)
+{
+    <div class="no-results">
+        <img src="~/images/NoResult.png" alt="No Results Found Icon">
+        <p>No Privilege Added Yet.</p>
+    </div>
+
+}

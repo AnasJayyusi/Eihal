@@ -160,7 +160,7 @@
             </div>
             <div class="modal-body">
                 <div class="container-fluid">
-                    <div class="row justify-content-center">
+                    <div id="main-class-modal" class="row justify-content-center">
                         <div>
                             <div>
                                 <form id="msform">
@@ -243,12 +243,12 @@
                                                         <label style="font-weight:bold;color:#00768c" for="cities-ddl-edit">Gender:</label>
                                                         <div class="form-group">
                                                             <input type="radio" name="gender" id="female" class="input-hidden" style="padding:5px" />
-                                                            <label for="female" >
+                                                            <label for="female">
                                                                 <img src="~/images/female.png" class="selectOptionStyle" alt="Female" /> <span>&nbsp  &nbsp Female</span>
                                                             </label>
 
                                                             <input type="radio" name="gender" id="male" class="input-hidden" style="padding:5px" />
-                                                            <label for="male" >
+                                                            <label for="male">
                                                                 <img src="~/images/male.png" class="selectOptionStyle" alt="Male" />&nbsp  &nbsp Male
                                                             </label>
                                                         </div>
@@ -307,14 +307,29 @@
                                         <div class="form-card">
                                             <div class="row">
                                                 <div class="col-7">
-                                                    <h2 class="fs-title">Services:</h2>
+                                                    <h2 class="fs-title">Privileges:</h2>
                                                 </div>
                                                 <div class="col-5">
                                                     <h2 class="steps">Step 2 - 4</h2>
                                                 </div>
                                             </div>
 
-                                            <label class="fieldlabels">Services:</label>
+                                            <div class="input-group">
+                                                <div class="form-outline">
+                                                    <input onkeyup="searchOnPrivileges()" id="search-input" type="search"  class="form-control" />
+                                                </div>
+                                                <button onclick="searchOnPrivileges()" style="height:40px" id="search-button" type="button" class="btn btn-primary">
+                                                    <i  class="fas fa-search"></i>
+                                                </button>
+                                            </div>
+                                                    <div class="container">
+                                                        <div class="row" id="privilegesContainer">
+                                                        </div>
+                                                    </div>
+                                            <div class="no-results-section" style="display:none">
+                                                <img src="~/images/NoResult.png" alt="No Results Found Icon">
+                                                <p>No Privileges Found.</p>
+                                            </div>
 
 
                                         </div>
@@ -733,7 +748,14 @@
         setProgressBar(current);
 
         $(".next").click(function () {
-
+            var styleAttributeValue = $(".progress-bar").attr("style");
+            // Check if the "style" attribute contains the style "width: 50%;"
+            if (styleAttributeValue && styleAttributeValue.includes("width: 50%;")) {
+                $("#main-class-modal").addClass("row justify-content-center");
+            } else {
+               
+                   $("#main-class-modal").removeClass("row justify-content-center");
+            }
             current_fs = $(this).parent();
             next_fs = $(this).parent().next();
 
@@ -760,6 +782,13 @@
         });
 
         $(".previous").click(function () {
+            var styleAttributeValue = $(".progress-bar").attr("style");
+            if (styleAttributeValue && styleAttributeValue.includes("width: 50%;")) {
+               $("#main-class-modal").addClass("row justify-content-center");
+            } else {
+              
+                   $("#main-class-modal").removeClass("row justify-content-center");
+            }
 
             current_fs = $(this).parent();
             previous_fs = $(this).parent().prev();
@@ -905,19 +934,19 @@
                 });
             }
         });
-        GetAllService()
+        getAllPrivileges()
 
     }
 
-
-    function GetAllService() {
-        var serviceContainer = $('#allServiceContainer');
+    function getAllPrivileges() {
+        var privilegesContainer = $('#privilegesContainer');
 
         $.ajax({
-            url: '/ServiceProvider/AllServiceCardPartial', // Replace with the actual URL and action method to fetch the partial view
+            url: '/ServiceProvider/GetAllPrivileges', // Replace with the actual URL and action method to fetch the partial view
             type: 'GET',
             success: function (response) {
-                serviceContainer.html(response);
+                privilegesContainer.html(response);
+
             },
             error: function (xhr, status, error) {
                 console.error('Error:', error);
@@ -925,6 +954,27 @@
         });
     }
 
+    function searchOnPrivileges(value) {
+        var resultCount = 0; // Variable to keep track of the number of results
+         var value =$("#search-input").val().toLowerCase();
+                $('.service-card-title').filter(function () {
+                    var isMatch = $(this).text().toLowerCase().indexOf(value) > -1;
+                    $(this).parent().parent().parent().toggle(isMatch);
+                    if (isMatch === true) {
+                        resultCount++;
+                    } else {
+                    }
+
+                });
+                if (resultCount <= 0) {
+                    $('.no-results-section').show(); // Assuming you have a "no-results" element to display the message
+                } else {
+                    $('.no-results-section').hide();
+                }
+                resultCount = 0;
+    }
+
+  
 </script>
 
 <style>
