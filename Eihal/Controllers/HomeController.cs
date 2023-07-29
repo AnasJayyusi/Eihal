@@ -19,7 +19,11 @@ namespace Eihal.Controllers
 
         public IActionResult Index()
         {
+            return View();
+        }
 
+        public IActionResult MyProfile()
+        {
             if (User.IsInRole(UserRolesEnum.Beneficiary.ToString()) || User.IsInRole(UserRolesEnum.ServiceProvider.ToString()))
             {
                 return RedirectToAction("Profile", "ServiceProvider");
@@ -28,8 +32,10 @@ namespace Eihal.Controllers
             {
                 return RedirectToAction("Dashboard", "Admin");
             }
-            return View();
+            else return View();
         }
+
+
 
         #region Culture
         [HttpGet]

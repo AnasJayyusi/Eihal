@@ -1,6 +1,7 @@
 ﻿using Eihal.Data;
 using Eihal.Data.Entites;
 using Eihal.Hubs;
+using Eihal.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -90,11 +91,11 @@ namespace Eihal.Controllers
             var currentUserId = GetUserProfileId();
             var userPractitionerTypeId = _dbContext.UserProfiles.Where(a => a.Id == currentUserId).Select(a => a.PractitionerTypeId).FirstOrDefault();
 
-            var previllages = 
-                           (from p in _dbContext.Privillages 
-                           join c in _dbContext.ClinicalSpecialities on p.ClinicalSpecialityId equals c.Id
-                           where p.IsActive && c.PractitionerTypeId == userPractitionerTypeId
-                           select p).Take(8).ToList();
+            var previllages =
+                           (from p in _dbContext.Privillages
+                            join c in _dbContext.ClinicalSpecialities on p.ClinicalSpecialityId equals c.Id
+                            where p.IsActive && c.PractitionerTypeId == userPractitionerTypeId
+                            select p).Take(8).ToList();
 
             return View(previllages);
         }
@@ -106,7 +107,7 @@ namespace Eihal.Controllers
             var currentUserId = GetUserProfileId();
 
             // Assuming you have a list of items to pass to the view
-            List<UserServices> model = _dbContext.UserServices.Where(a => a.UserId == currentUserId  && a.Status != Enums.ServicesStatusEnum.Deleted).ToList(); // Replace with your logic to fetch the items
+            List<UserServices> model = _dbContext.UserServices.Where(a => a.UserId == currentUserId && a.Status != Enums.ServicesStatusEnum.Deleted).ToList(); // Replace with your logic to fetch the items
 
             // Render the partial view and return it as HTML content
             //string htmlContent = RenderPartialToString("_CardPartial", model); // Replace with the name of your partial view
@@ -115,7 +116,7 @@ namespace Eihal.Controllers
         }
         [Route("AllServiceCardPartial")]
 
-        public ActionResult AllServiceCardPartial(string privillagesIds,string kw)
+        public ActionResult AllServiceCardPartial(string privillagesIds, string kw)
         {
             var currentUserId = GetUserProfileId();
             var userPractitionerTypeId = _dbContext.UserProfiles.Where(a => a.Id == currentUserId).Select(a => a.PractitionerTypeId).FirstOrDefault();
@@ -704,12 +705,19 @@ namespace Eihal.Controllers
 
 
 
-        [Route("GetAllPrivileges")]
+        [Route("GetAvailablePrivileges")]
 
-        public ActionResult GetAllPrivileges()
+        public ActionResult GetAvailablePrivileges()
         {
             // Assuming you have a list of items to pass to the view
-            List<Services> model = _dbContext.Services.Where(a => a.IsActive).ToList(); // Replace with your logic to fetch the items
+            var model = _dbContext.Services
+            .Join(_dbContext.UserServices,
+                s => s.Id,
+                us => us.ServiceId,
+                (s, us) => new SupportServiceModal { ServiceId = s.Id, TitleEn = s.TitleEn, TitleAr = s.TitleAr }) // Include columns you want from both tables
+            .Distinct()
+            .ToList();
+
 
             // Render the partial view and return it as HTML content
             //string htmlContent = RenderPartialToString("_CardPartial", model); // Replace with the name of your partial view

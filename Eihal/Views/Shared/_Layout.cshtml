@@ -324,14 +324,14 @@
                                         </a>
 
                                         <div class="dropdown-content">
-                                            <a class="nav-link text-dark  linkButton" asp-area="" asp-controller="Home" asp-action="Index">My Profile </a>
-                                            <a class="nav-link text-dark linkButton" asp-area="" asp-controller="Doctor" asp-action="Index">My Order </a>
+                                            <a class="nav-link text-dark  linkButton" asp-area="" asp-controller="Home" asp-action="MyProfile">My Profile </a>
+                                            <a class="nav-link text-dark linkButton" asp-area="" asp-controller="ServiceProvider" asp-action="Referrals">My Order </a>
 
 
                                             <a style="text-transform: none;" class="my-profile-button" asp-area="Identity" asp-page="/Account/Logout">
                                                 Logout
                                                 <span>
-                                                    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                                    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("MyProfile", "Home", new { area = "" })">
                                                         <button style="text-transform: none;" class="my-profile-button" type="submit"></button>
                                                     </form>
                                                 </span>
