@@ -149,6 +149,7 @@
             <div class="col-md-12">
                 <h5 class="font-weight-bold">Speciality</h5>
                 <span id="speciality-label" class="text-black"></span>
+                <ul id="listSpeciality"></ul>
             </div>
         </div>
         <div class="row mt-4">
@@ -436,10 +437,21 @@
                 $("#review-label").text("(" + response.review + ")");
                 $("#insurance-label").text(response.insuranceAccept == true ? "Yes" : "No");
                 $("#bio-label").text(response.bio);
-                if (response.speciality == "" || response.speciality == null)
-                $("#speciality-label").text("No Speciality Added Yet.");
-                else
-                $("#speciality-label").text(response.speciality);
+                if (response.speciality == "" || response.speciality == null) {
+                    $("#speciality-label").show()
+                    $("#speciality-label").text("No Speciality Added Yet.");
+                }
+                else {
+                    $("#speciality-label").show()
+                    // Step 1: Split the string into an array using comma as the delimiter
+                    var dataArray = response.speciality.split(',');
+                    // Step 2: Iterate through the array and create <li> elements
+                    dataArray.forEach(function (item) {
+                        // Step 3: Append each <li> element to the container with id "listContainer"
+                        $('#listSpeciality').append('<li style="color:black"> ♦ ' + item + '</li>');
+                    });
+                }
+
                 $("#certifications-label").text(response.certifactions);
                 if (response.profileStatus == "Rejected")
                     $("#help-msg").text("Rejection Reason Is :" + response.rejectionReason)
