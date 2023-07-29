@@ -6743,3 +6743,8 @@ body {
     .no-results-section p {
         margin: 0;
     }
+
+.add-edit-btn {
+    border-radius: 25px !important;
+    font-size: 15px !important;
+}

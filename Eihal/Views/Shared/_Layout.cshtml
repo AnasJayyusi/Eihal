@@ -310,7 +310,7 @@
                                 }
                                 else
                                 {
-                                    <div id="loadingSpinner" class="loading-spinner">
+                                    <div id="loadingSpinner" class="loading-spinner" style="display:none">
                                         <!-- Add your loading spinner HTML here -->
                                         <!-- For example, you can use a GIF or a CSS-based spinner -->
                                         <img src="~/icon/spinner-loading.gif" alt="Loading" />
@@ -320,7 +320,7 @@
 
                                     <div class="dropdown">
                                         <a href="#">
-                                            <img style="border-radius:30%" id="user-image-layout" src="" width="40" height="40" alt="user-image-profile">
+                                            <img style="border-radius:30%" id="user-image-layout" src="" width="40" height="40" alt="user-image-profile" onerror="this.src='/users/images/Default-User-Profile.jpg'">
                                         </a>
 
                                         <div class="dropdown-content">
@@ -419,7 +419,7 @@
         left: 50%;
         transform: translate(-50%, -50%);
         z-index: 9999;
-        background-color: rgba(0, 0, 0, 0.5); /* Adjust the opacity value (0.5) as needed */
+        background-color: rgba(0, 0, 0, 0.1); /* Adjust the opacity value (0.5) as needed */
     }
 
 
