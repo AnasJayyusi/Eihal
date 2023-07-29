@@ -1,0 +1,490 @@
+﻿  <!-- Add Order -->
+<div style="text-align: end; cursor:pointer">
+    <button onclick="openAddOrderModal()" type="button" class="btn btn-primary add-edit-btn" data-toggle="modal" data-target="#AddOrderModal">
+        <i style="font-size:18px" class="fas fa-add"></i> Add Order
+    </button>
+</div>
+
+
+<script>
+
+    function loadSteps() {
+        var current_fs, next_fs, previous_fs; //fieldsets
+        var opacity;
+        var current = 1;
+        var steps = $("fieldset").length;
+
+        setProgressBar(current);
+
+        $(".next").click(function () {
+            var styleAttributeValue = $(".progress-bar").attr("style");
+            // Check if the "style" attribute contains the style "width: 50%;"
+            if (styleAttributeValue && styleAttributeValue.includes("width: 50%;")) {
+                $("#main-class-modal").addClass("row justify-content-center");
+            } else {
+
+                $("#main-class-modal").removeClass("row justify-content-center");
+            }
+            current_fs = $(this).parent();
+            next_fs = $(this).parent().next();
+
+            //Add Class Active
+            $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+
+            //show the next fieldset
+            next_fs.show();
+            //hide the current fieldset with style
+            current_fs.animate({ opacity: 0 }, {
+                step: function (now) {
+                    // for making fielset appear animation
+                    opacity = 1 - now;
+
+                    current_fs.css({
+                        'display': 'none',
+                        'position': 'relative'
+                    });
+                    next_fs.css({ 'opacity': opacity });
+                },
+                duration: 500
+            });
+            setProgressBar(++current);
+        });
+
+        $(".previous").click(function () {
+            var styleAttributeValue = $(".progress-bar").attr("style");
+            if (styleAttributeValue && styleAttributeValue.includes("width: 50%;")) {
+                $("#main-class-modal").addClass("row justify-content-center");
+            } else {
+
+                $("#main-class-modal").removeClass("row justify-content-center");
+            }
+
+            current_fs = $(this).parent();
+            previous_fs = $(this).parent().prev();
+
+            //Remove class active
+            $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+
+            //show the previous fieldset
+            previous_fs.show();
+
+            //hide the current fieldset with style
+            current_fs.animate({ opacity: 0 }, {
+                step: function (now) {
+                    // for making fielset appear animation
+                    opacity = 1 - now;
+
+                    current_fs.css({
+                        'display': 'none',
+                        'position': 'relative'
+                    });
+                    previous_fs.css({ 'opacity': opacity });
+                },
+                duration: 500
+            });
+            setProgressBar(--current);
+        });
+
+        function setProgressBar(curStep) {
+            var percent = parseFloat(100 / steps) * curStep;
+            percent = percent.toFixed();
+            $(".progress-bar")
+                .css("width", percent + "%")
+        }
+
+        $(".submit").click(function () {
+            return false;
+        })
+
+        // Event listener for the "Cancel" button
+        $("#close-order").click(function () {
+            // Reset the form to Step 1
+            $("#patient-info").css("opacity", "");
+            $("fieldset").hide();
+            $("fieldset:first").show();
+            $("#progressbar li").removeClass("active");
+            $("#progressbar li:first").addClass("active");
+            setProgressBar(1);
+            current = 1;
+        });
+    }
+
+    function getStates(countryId) {
+        $.ajax({
+            url: '@Url.Action("GetStatesDDL", "ServiceProvider")' + '?countryId=' + countryId,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                // Clear existing options
+                $('#states-ddl-wk').empty();
+                // Populate the dropdown list
+                var dropdown = $('#states-ddl-wk');
+                // Add default option
+                dropdown.append($('<option></option>').val('').text('Select a state'));
+                $.each(data, function (index, item) {
+                    dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                });
+            }
+        });
+    }
+
+    function getCites(stateId) {
+        $.ajax({
+            url: '@Url.Action("GetCitiesDDL", "ServiceProvider")' + '?stateId=' + stateId,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                // Clear existing options
+                $('#cities-ddl-wk').empty();
+                // Populate the dropdown list
+                var dropdown = $('#cities-ddl-wk');
+                dropdown.append($('<option></option>').val('').text('Select a city'));
+                $.each(data, function (index, item) {
+                    dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                });
+            }
+        });
+    }
+
+    function getDistricts(cityId) {
+        $.ajax({
+            url: '@Url.Action("GetDistricts", "ServiceProvider")' + '?cityId=' + cityId,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                // Clear existing options
+                $('#districts-ddl-wk').empty();
+                // Populate the dropdown list
+                var dropdown = $('#districts-ddl-wk');
+                dropdown.append($('<option></option>').val('').text('Select a District'));
+                $.each(data, function (index, item) {
+                    dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                });
+            }
+        });
+    }
+
+
+    function openAddOrderModal() {
+        loadSteps();
+        $('.services-multiSelect').select2({
+            theme: "classic",
+            placeholder: 'Select an service',
+            width: '100%',
+            ajax: {
+                url: '@Url.Action("GetAllServicesDLL", "Common")',
+                cache: false
+            }
+        });
+
+        $('.doctor-autoComplete').select2({
+            theme: "classic",
+            placeholder: 'Select an doctor',
+            width: '100%',
+            ajax: {
+                url: '@Url.Action("GetDoctorsProvider", "Common")',
+                cache: false
+            }
+        });
+
+        $.ajax({
+            url: '@Url.Action("GetCountriesDDL", "ServiceProvider")',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                // Clear existing options
+                $('#countries-ddl-wk').empty();
+                // Populate the dropdown list
+                var dropdown = $('#countries-ddl-wk');
+                // Add default option
+                dropdown.append($('<option></option>').val('').text('Select a country'));
+                $.each(data, function (index, item) {
+                    dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                });
+            }
+        });
+        getAllPrivileges()
+
+    }
+
+    function getAllPrivileges() {
+        var privilegesContainer = $('#privilegesContainer');
+
+        $.ajax({
+            url: '/ServiceProvider/GetAllPrivileges', // Replace with the actual URL and action method to fetch the partial view
+            type: 'GET',
+            success: function (response) {
+                privilegesContainer.html(response);
+
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
+    }
+
+    function searchOnPrivileges(value) {
+        var resultCount = 0; // Variable to keep track of the number of results
+        var value = $("#search-input").val().toLowerCase();
+        $('.service-card-title').filter(function () {
+            var isMatch = $(this).text().toLowerCase().indexOf(value) > -1;
+            $(this).parent().parent().parent().toggle(isMatch);
+            if (isMatch === true) {
+                resultCount++;
+            } else {
+            }
+
+        });
+        if (resultCount <= 0) {
+            $('.no-results-section').show(); // Assuming you have a "no-results" element to display the message
+        } else {
+            $('.no-results-section').hide();
+        }
+        resultCount = 0;
+    }
+
+
+</script>
+
+<style>
+
+    .radio-wrapper {
+        flex: 1; /* Take remaining space */
+        display: flex;
+        justify-content: flex-end; /* Align radio buttons to the right */
+    }
+
+    .image-wrapper {
+        margin-right: 10px; /* Add some spacing between radio buttons and image */
+    }
+
+    .input-wrapper {
+        display: flex;
+        flex-direction: column; /* Display radio buttons in a column */
+        margin-right: 10px; /* Add some spacing between radio buttons and image */
+    }
+
+    .input-hidden {
+        position: absolute;
+        left: -9999px;
+    }
+
+    input[type=radio]:checked + label > img {
+        border: 1px solid #fff;
+        box-shadow: 0 0 3px 3px #00768c;
+    }
+
+    /* Stuff after this is only to make things more pretty */
+    input[type=radio] + label > img {
+        /*border: 1px dashed #444;*/
+        width: 75px;
+        height: 75px;
+        transition: 500ms all;
+    }
+
+    input[type=radio]:checked + label > img {
+        /*transform: rotateZ(-10deg) rotateX(10deg);*/
+    }
+
+
+    .hide {
+        display: none;
+    }
+
+    .activeLink {
+        color: #00768c;
+        font-weight: bold;
+        pointer-events: none;
+        cursor: not-allowed;
+        background-color: whitesmoke
+    }
+
+    #menu .nav-item:hover {
+        /* Add your desired styles for hover state */
+        background-color: #e0e0e0;
+        color: #333;
+    }
+
+
+    .tab-header {
+        display: flex;
+        justify-content: space-between;
+        background-color: #f1f1f1;
+    }
+
+    .tab-button {
+        background-color: inherit;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 10px 20px;
+        transition: background-color 0.3s;
+        border-radius: 12px;
+        margin: 5px;
+    }
+
+        .tab-button:hover {
+            background-color: #ddd;
+        }
+
+        .tab-button.active {
+            background-color: #00768c;
+            color: white
+        }
+
+    .tab-content {
+        background-color: #fff;
+    }
+
+    .referral-card {
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        position: relative;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+
+        .referral-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+    .referral-card-body {
+        background-color: white;
+        padding: 20px;
+    }
+
+    .referral-card-title {
+        color: #333;
+        font-size: 18px;
+        margin-bottom: 10px;
+        color: #00768c
+    }
+
+    .referral-card-text {
+        color: #666;
+        margin-bottom: 5px;
+    }
+
+
+    .dots-container {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .dots-button {
+        background: none;
+        border: none;
+        color: red;
+        font-size: 18px;
+        padding: 0;
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .dots-button::before {
+            position: absolute;
+            color: #007bff;
+            font-size: 20px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .dots-button::after {
+            content: "";
+            position: absolute;
+            background-color: #007bff;
+            width: 4px;
+            height: 4px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .dots-button::before,
+        .dots-button::after {
+            border-radius: 50%;
+        }
+
+        .dots-button::after {
+            top: 54%;
+        }
+
+        .dots-button::before {
+            top: 46%;
+        }
+
+    .no-results {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        margin-top: 20px;
+        padding: 20px;
+        font-size: 18px;
+    }
+
+        .no-results img {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 10px;
+        }
+
+        .no-results p {
+            margin: 0;
+        }
+
+    .status {
+        text-align: center;
+        font-size: 10px;
+        padding: 4px 6px;
+        border-radius: 4px;
+        font-weight: bold;
+    }
+
+    .status-success {
+        background-color: #4CAF50;
+        color: #ffffff;
+    }
+
+    .status-warning {
+        background-color: #FFC107;
+        color: #ffffff;
+    }
+
+    .status-error {
+        background-color: #FF0000;
+        color: #ffffff;
+    }
+
+    .search-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        width: 35%;
+    }
+
+        .search-container input {
+            padding-right: 30px; /* Add space for the search icon */
+        }
+
+        .search-container i {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+        }
+</style>
