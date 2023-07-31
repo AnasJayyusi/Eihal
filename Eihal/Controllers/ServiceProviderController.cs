@@ -138,7 +138,7 @@ namespace Eihal.Controllers
                 services = services.Where(a => a.TitleEn.Contains(kw));
             }
 
-            return PartialView("_AllServiceCardPartial", services.ToList()); // Replace with the name of your partial view
+            return PartialView("_AllServiceCardPartial", services.Include(a=>a.Privillage).ThenInclude(a=>a.ClinicalSpeciality).ToList()); // Replace with the name of your partial view
         }
         [Route("DeleteUserService")]
         public ActionResult DeleteUserService(int Id)

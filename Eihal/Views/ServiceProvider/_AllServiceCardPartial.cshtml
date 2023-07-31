@@ -173,12 +173,15 @@
     <div class="col-md-3 padding-top-25">
         <div class="service-card">
             <div class="service-card-body">
-                <h5 class="service-card-title" >@item.TitleEn</h5>
+                <div>
+                           <img style="border-radius:30%" id="user-image-layout" src="@(item.Privillage.ClinicalSpeciality.LogoUrl)" width="30" height="30" alt="user-image-profile" onerror="this.src='/users/images/Default-User-Profile.jpg'">
+                           </div>
+                        <div class="status status-clinical" style="display: inline-block;margin-top:5%;margin-bottom:5%">
+    <span>@item.Privillage.ClinicalSpeciality.TitleEn</span>
+</div>
+
                 <div class="row col-12" >
-                    <div class="col-8">
-                        <span class="service-sub-title" style="display: inline-block;">Fee:</span>
-                        <span style="display: inline-block; margin-left: 5px;">@item.Fee</span>
-                    </div>
+                        <span style="display: inline-block; margin-left: 5px;">@item.TitleEn</span>
                 </div>
                 <div class="dots-container">
                     <button class="dots-button" data-toggle="modal" onclick="fillAddServicePage('@item.Id','@item.TitleAr','@item.TitleEn','@item.Fee')" data-target="#AddServiceModal">
