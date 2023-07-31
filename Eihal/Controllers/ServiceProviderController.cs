@@ -95,7 +95,7 @@ namespace Eihal.Controllers
                            (from p in _dbContext.Privillages
                             join c in _dbContext.ClinicalSpecialities on p.ClinicalSpecialityId equals c.Id
                             where p.IsActive && c.PractitionerTypeId == userPractitionerTypeId
-                            select p).Take(8).ToList();
+                            select p).ToList();
 
             return View(previllages);
         }

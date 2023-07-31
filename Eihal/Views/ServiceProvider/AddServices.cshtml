@@ -4,6 +4,33 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
 <style>
+    .scroll-container {
+    max-height: 100%;
+    overflow-y: auto;
+    display: flex;
+}
+
+/* Customize the scrollbar */
+.scroll-container::-webkit-scrollbar {
+    width: 1px;
+    height:5px;
+
+}
+
+.scroll-container::-webkit-scrollbar-track {
+    background-color: #f1f1f1;  
+    border-radius: 5px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+}
+
+.privillages > div {
+    padding: 5px; /* Adjust the padding as needed */
+}
+
+
     button.active {
     background-color: #00768c;
     color: #fff;
@@ -307,17 +334,19 @@
                                         <i class="fas fa-search" style="margin-top: 28px; margin-right: 2.5%; color: #00768c;cursor:pointer"  onclick="GetAllService()"></i>
                                     </div>
                                 </div>
-                         <div class="row privillages" style="padding-top: 40px; padding-left: 35px;">
-    <div style="padding-right: 7px;">
-        <button style="border-radius: 5px;padding:7px;padding-left:30px;padding-right:30px;border-color:#dcdbdb" data-value="All"  class="active">All</button>
+<div class="scroll-container" style="padding-top:45px">
+    <div class="row privillages" style="padding-top: 40px; padding-left: 35px; white-space: nowrap;display:contents">
+        <div style="padding-right: 7px;">
+            <button style="border-radius: 5px; padding: 7px; padding-left: 30px; padding-right: 30px; border-color: #dcdbdb;" data-value="All" class="active">All</button>
+        </div>
+        @foreach(var prev in Model){
+        <div style="padding-right: 7px; border-radius: 5px;">
+            <button style="border-radius: 5px; padding: 7px; border-color: #dcdbdb;" data-value="@prev.Id">@prev.TitleEn</button>
+        </div>
+        }
     </div>
-    @foreach(var prev in Model){
-    <div style="padding-right: 7px; border-radius: 5px;">
-        <button style="border-radius: 5px;padding:7px;border-color:#dcdbdb" data-value="@prev.Id">@prev.TitleEn</button>
-    </div>
-    }
-
 </div>
+
 
 
                                 <!-- Card Body -->
