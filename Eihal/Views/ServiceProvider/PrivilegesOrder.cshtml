@@ -1,4 +1,4 @@
-﻿@model List<Eihal.Data.Entites.Services>
+﻿@model List<Eihal.Models.SupportServiceModal>
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 <style>
@@ -176,13 +176,13 @@
             <div class="service-card-body">
                 <h5 class="service-card-title" >@item.TitleEn</h5>
                 <div class="row col-12" >
-                    <div class="col-8">
+                   @* <div class="col-8">
                         <span class="service-sub-title" style="display: inline-block;">Price:</span>
                         <span style="display: inline-block; margin-left: 5px;">@item.Fee</span>
-                    </div>
+                    </div>*@
                 </div>
                 <div class="dots-container">
-                    <button class="dots-button" data-toggle="modal" onclick="fillAddServicePage('@item.Id','@item.TitleAr','@item.TitleEn','@item.Fee')" data-target="#AddServiceModal">
+                    <button class="dots-button" data-toggle="modal" onclick="fillAddServicePage('@item.ServiceId','@item.TitleAr','@item.TitleEn')" data-target="#AddServiceModal">
                         <i class="fas fa-plus" style="font-size: 18px;"></i>
                     </button>
                 </div>
