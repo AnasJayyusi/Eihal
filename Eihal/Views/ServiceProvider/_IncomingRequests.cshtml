@@ -2,7 +2,7 @@
 
 @foreach (var referral in Model)
 {
-    <div class="col-md-4 padding-top-25">
+    <div class="col-md-4 padding-top-25" data-toggle="modal"   data-target="#RefApproveRejectModal">
         <div class="referral-card" style="    border: 1px solid #eadfdf;
     border-radius: 10px;font-size: 13px;">
             <div class="referral-card-body">
@@ -52,3 +52,34 @@
     color: darkcyan;
 }
 </style>
+
+<!------------------------------ Approve/Reject  -------------------->
+<div class="modal fade" id="RefApproveRejectModal" tabindex="-1" role="dialog" aria-labelledby="RefApproveRejectModal" aria-hidden="true">
+    <div class="modal-dialog custom-modal-dialog" style="max-width: 400px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="RefApproveRejectModal">Approve / Reject </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                    <!-- Add your modal content here -->
+                    <div style="padding: 10px; display: flex; justify-content: center;">
+                        <div style="max-width: 300px;">
+                            <div class="form-group">
+                                <label style="font-weight: bold; color: #00768c;" id="rejectionReason"></label>
+                              
+                            </div>
+
+                        </div>
+                    </div>
+            </div>
+
+            <div class="modal-footer" style="text-align:center">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="close-add-service">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
