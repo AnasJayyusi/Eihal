@@ -1,4 +1,6 @@
-﻿namespace Eihal.Models
+﻿using Eihal.Enums;
+
+namespace Eihal.Models
 {
     public class SupportServiceModal
     {
@@ -7,6 +9,7 @@
         public string TitleAr { get; set; }
         public string Fee { get; set; }
         public string Price { get; set; }
+        public ServicesStatusEnum Status { get; set; }
 
     }
 }

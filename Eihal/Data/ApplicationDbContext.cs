@@ -44,6 +44,7 @@ namespace Eihal.Data
         public DbSet<InsuranceCompany> InsuranceCompanies { get; set; }
         public DbSet<TimeClinicLocation> TimeClinicLocations { get; set; }
         public DbSet<UserCompany> UserCompanies { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
 
     }
 }

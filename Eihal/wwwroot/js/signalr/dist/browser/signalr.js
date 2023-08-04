@@ -453,7 +453,6 @@ class ConsoleLogger {
                     this.out.info(msg);
                     break;
                 default:
-                    // console.debug only goes to attached debuggers in Node, so we use console.log for Trace and Debug
                     this.out.log(msg);
                     break;
             }

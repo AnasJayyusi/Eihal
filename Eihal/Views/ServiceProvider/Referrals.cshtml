@@ -103,15 +103,15 @@
                                             </div>
                                         </div>
 
-                                    <div class="container">
-                                        <div class="row" id="incomingRequestContainer">
+                                        <div class="container">
+                                            <div class="row" id="incomingRequestContainer">
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
                                     <!-- Outgoing Tab -->
-                                <div id="tab2" class="tab-content" style="display: none;">
-                                    @Html.Partial("OrderPopup")
+                                    <div id="tab2" class="tab-content" style="display: none;">
+                                        @Html.Partial("OrderPopup")
                                         <div class="row" style="padding-left: 4%;">
                                             <div class="col-md-5">
                                                 <div class="form-group">
@@ -153,9 +153,10 @@
                                                 </div>
                                             </div>
                                         </div>
-                                
-                                    <div class="container">
-                                        <div class="row" id="outgoingRequestContainer">
+
+                                        <div class="container">
+                                            <div class="row" id="outgoingRequestContainer">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -164,16 +165,15 @@
                     </div>
                 </div>
             </div>
+            <!-- /.container-fluid -->
+
         </div>
-        <!-- /.container-fluid -->
+        <!-- End of Main Content -->
+        <!-- Footer -->
+        <!-- End of Footer -->
 
     </div>
-    <!-- End of Main Content -->
-    <!-- Footer -->
-    <!-- End of Footer -->
-
-</div>
-<!-- End of Content Wrapper -->
+    <!-- End of Content Wrapper -->
 </div>
 
 
@@ -213,122 +213,7 @@
                                                     <h2 class="steps">Step 1 - 4</h2>
                                                 </div>
                                             </div>
-
-                                            @*Address*@
-                                            <div class="container">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label style="font-weight:bold;color:#00768c" for="fullname-edit-input">Full Name:<span style="color:red">*</span></label>
-                                                            <input type="text" class="form-control" id="fullname-edit-input" placeholder="Full Name" required>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label style="font-weight:bold;color:#00768c" for="phone-edit-input">Phone:<span style="color:red">*</span></label>
-                                                            <input type="text" class="form-control" id="phone-edit-input" placeholder="Phone" required>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label style="font-weight:bold;color:#00768c" for="email-edit-input">Email:</label>
-                                                            <input type="text" class="form-control" id="email-edit-input" placeholder="Email" required>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-md-4">
-                                                        <div class="form-group">
-                                                            <label style="font-weight:bold;color:#00768c" for="countries-ddl-edit">Country:</label>
-                                                            <select class="form-control" id="countries-ddl-edit" onchange="getStatesUserProfile(this.value)">
-                                                                <option value="">Select a Country</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <div class="form-group">
-                                                            <label style="font-weight:bold;color:#00768c" for="states-ddl-edit">State:</label>
-                                                            <select class="form-control" id="states-ddl-edit" onchange="getCitesUserProfile(this.value)">
-                                                                <option value="">Select a State</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <div class="form-group">
-                                                            <label style="font-weight:bold;color:#00768c" for="cities-ddl-edit">City:</label>
-                                                            <select class="form-control" id="cities-ddl-edit">
-                                                                <option value="">Select a City</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-md-8 offset-4">
-                                                        <label style="font-weight:bold;color:#00768c" for="cities-ddl-edit">Gender:</label>
-                                                        <div class="form-group">
-                                                            <input type="radio" name="gender" id="female" class="input-hidden" style="padding:5px" />
-                                                            <label for="female">
-                                                                <img src="~/images/female.png" class="selectOptionStyle" alt="Female" /> <span>&nbsp  &nbsp Female</span>
-                                                            </label>
-
-                                                            <input type="radio" name="gender" id="male" class="input-hidden" style="padding:5px" />
-                                                            <label for="male">
-                                                                <img src="~/images/male.png" class="selectOptionStyle" alt="Male" />&nbsp  &nbsp Male
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <label style="font-weight:bold;color:#00768c" for="cities-ddl-edit">Age:</label>
-                                                        <div class="form-group">
-                                                            <input type="radio" name="age" id="child" class="input-hidden" />
-                                                            <label for="child">
-                                                                <img src="~/images/child.png" class="selectOptionStyle" alt="child" /> 4 - 10 Years
-                                                            </label>
-
-                                                            <input type="radio" name="age" id="teenager" class="input-hidden" />
-                                                            <label for="teenager">
-                                                                <img src="~/images/teenager.png" class="selectOptionStyle" alt="Male" /> 11 - 25 Years
-                                                            </label>
-
-                                                            <input type="radio" name="age" id="young" class="input-hidden" />
-                                                            <label for="young">
-                                                                <img src="~/images/young.png" class="selectOptionStyle" alt="Male" />26 - 50 Years
-                                                            </label>
-
-                                                            <input type="radio" name="age" id="Aged" class="input-hidden" />
-                                                            <label for="Aged">
-                                                                <img src="~/images/Aged.png" class="selectOptionStyle" alt="Male" /> > 50 Years
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label style="font-weight:bold;color:#00768c">Does the patient have a chronic disease?</label> <span style="color:gray;font-style:italic">(if not leave it empty)</span>
-                                                            <div class="form-check">
-                                                                <textarea spellcheck="false" data-ms-editor="true" style="background-color: rgb(255, 255, 255); background-size: 100% 1.2em; background-image: linear-gradient(0deg, transparent 79px, rgb(171, 206, 212) 79px, rgb(171, 206, 212) 81px, transparent 81px), linear-gradient(rgb(238, 238, 238) 0.1em, transparent 0.1em); height: 196px;">
-                                                            </textarea>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-
-
-
-
+                                            @Html.Partial("PatientInfo")
                                         </div>
                                         <input type="button" name="next" class="next action-button" value="Next" />
                                     </fieldset>
@@ -347,10 +232,18 @@
                                             <h6 style="color:#00768c">
                                                 Selected Privilege  <span style="color:gray;font-style:italic">(Note: the doctor will appers based on these selection)</span>
                                             </h6>
-                                              <div class="no-results-section" style="display:block">
+
+                                            @*selection*@
+                                            <div class="container">
+                                                <div class="row" id="selection-privileges">
+                                                </div>
+                                            </div>
+
+                                            <div id="NoResult-div" class="no-results-section" style="display:block">
                                                 <img src="~/images/NoResult.png" alt="No Results Found Icon">
                                                 <p>No Privileges Selected Yet.</p>
                                             </div>
+
                                             <hr />
                                             <div class="input-group">
                                                 <div class="form-outline">
@@ -377,21 +270,17 @@
                                     <fieldset>
                                         <div class="form-card">
                                             <div class="row">
-                                                <div class="col-7">
-                                                    <h2 class="fs-title">Doctor:</h2>
-                                                </div>
-                                                <div class="col-5">
+
+                                                <div class="col-12">
                                                     <h2 class="steps">Step 3 - 4</h2>
                                                 </div>
                                             </div>
-                                            <label class="fieldlabels">Doctor:</label>
+                                                <h6 style="color:#00768c">
+                                                  <h2 class="fs-title">Doctors</h2>
+                                            </h6>
 
-                                            <div class="form-group">
-                                                <div class="col-md-12">
-                                                    <select class="doctor-autoComplete" name="doctor">
-                                                    </select>
-                                                </div>
-                                            </div>
+                                          
+                                            @Html.Partial("DoctorsOrder")
                                         </div>
                                         <input type="button" name="next" class="next action-button" value="Submit" />
                                         <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
@@ -561,6 +450,8 @@
             evt.currentTarget.className += " active";
         }
 
+
+     
     </script>
 }
 

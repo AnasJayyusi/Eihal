@@ -364,7 +364,7 @@
                     <input type="hidden" name="_token" value="P9gMRWSZXiKVb1HY0oTRjpAhSnhUQU6JAmVkQpN8">
                     <div class="row">
                         <div class="form-group mr-2 search-container">
-                            <input type="text" class="form-control margin-15-position-obselete" id="filterInput"  onkeypress="searchUsingEnterButton(event)" name="search" style=" background-color: #f2f2f2;" placeholder="Search" value="">
+                            <input type="text" class="form-control margin-15-position-obselete" id="filterInput" onkeypress="searchUsingEnterButton(event)" name="search" style=" background-color: #f2f2f2;" placeholder="Search" value="">
                             <i class="fas fa-search" style=" margin-right: 0.5%; color: #00768c;cursor:pointer" onclick="filterDoctors()"></i>
                         </div>
 
@@ -403,7 +403,7 @@
                     <div style="padding-bottom:10px">
                         <select class="form-control" id="insurance-ddl" onchange="filterDoctors()">
                             <option value="0">All Insurance Companies</option>
-                      @*      <option value="1">Included </option>
+                            @*      <option value="1">Included </option>
                             <option value="2">Excluded </option>*@
                         </select>
                     </div>
@@ -455,7 +455,7 @@
                     });
                 }
             });
-                $.ajax({
+            $.ajax({
                 url: '@Url.Action("GetInsuranceCompaniesDDL", "Common")',
                 type: 'GET',
                 dataType: 'json',
@@ -487,16 +487,17 @@
                     });
                 }
             });
-             setTimeout(function () {
-            setSelectedOptions();
-    }, 1000);
+            setTimeout(function () {
+                setSelectedOptions();
+            }, 1000);
 
         });
-        function searchUsingEnterButton(event){  if (event.keyCode === 13) {
-             event.preventDefault(); 
+        function searchUsingEnterButton(event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
                 filterDoctors();
-;
-    }
+                ;
+            }
         }
         function filterDoctors() {
             var doctorsContainer = $('#doctorsListContainer');
@@ -533,58 +534,56 @@
                 }
             });
         }
-           function getQueryParamsFromCurrentURL() {
-               //debugger;
-        const params = {};
-        const urlParams = new URLSearchParams(window.location.search);
+        function getQueryParamsFromCurrentURL() {
+            const params = {};
+            const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.toString() === "") {
-        return null;
-    }
+                return null;
+            }
 
-        for (const [key, value] of urlParams) {
-            params[key] = value;
+            for (const [key, value] of urlParams) {
+                params[key] = value;
+            }
+            return params;
         }
-        return params;
-    }
-    function setSelectedOptions() {
-        debugger;
-        const queryParams = getQueryParamsFromCurrentURL();
-        if(queryParams == null)
-        return;
-        const serviceDropdown = document.getElementById('services-ddl');
-        const cityDropdown = document.getElementById('cities-ddl');
-        const districtDropdown = document.getElementById('disctricts-ddl');
-        const nameField=   document.getElementById('filterInput');
+        function setSelectedOptions() {
+            const queryParams = getQueryParamsFromCurrentURL();
+            if (queryParams == null)
+                return;
+            const serviceDropdown = document.getElementById('services-ddl');
+            const cityDropdown = document.getElementById('cities-ddl');
+            const districtDropdown = document.getElementById('disctricts-ddl');
+            const nameField = document.getElementById('filterInput');
 
             //var name = $('#filterInput').val();
 
-        // Set selected option for Service dropdown
-        if (queryParams.serviceId) {
-            serviceDropdown.value = queryParams.serviceId;
-        } else {
-            serviceDropdown.value = ''; // Default value if serviceId is not present in the query string
-        }
+            // Set selected option for Service dropdown
+            if (queryParams.serviceId) {
+                serviceDropdown.value = queryParams.serviceId;
+            } else {
+                serviceDropdown.value = ''; // Default value if serviceId is not present in the query string
+            }
 
-        // Set selected option for City dropdown
-        if (queryParams.cityId) {
-            cityDropdown.value = queryParams.cityId;
-        } else {
-            cityDropdown.value = ''; // Default value if cityId is not present in the query string
-        }
+            // Set selected option for City dropdown
+            if (queryParams.cityId) {
+                cityDropdown.value = queryParams.cityId;
+            } else {
+                cityDropdown.value = ''; // Default value if cityId is not present in the query string
+            }
 
-        // Set selected option for District dropdown
-        if (queryParams.disctrictId) {
-            districtDropdown.value = queryParams.disctrictId;
-        } else {
-            districtDropdown.value = ''; // Default value if disctrictId is not present in the query string
-        }
+            // Set selected option for District dropdown
+            if (queryParams.disctrictId) {
+                districtDropdown.value = queryParams.disctrictId;
+            } else {
+                districtDropdown.value = ''; // Default value if disctrictId is not present in the query string
+            }
 
             if (queryParams.name) {
-            nameField.value = queryParams.name;
-        } else {
-            nameField.value = ''; // Default value if serviceId is not present in the query string
+                nameField.value = queryParams.name;
+            } else {
+                nameField.value = ''; // Default value if serviceId is not present in the query string
+            }
         }
-    }
     </script>
 }
 

@@ -5,10 +5,6 @@
     </button>
 </div>
 
-
-
-
-
 <script>
 
     function loadSteps() {
@@ -31,6 +27,11 @@
             current_fs = $(this).parent();
             next_fs = $(this).parent().next();
 
+
+            if (current == 2) {
+                getDDLsOptions();
+                getAvailableDoctors();
+            }
             //Add Class Active
             $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
 
@@ -167,28 +168,8 @@
         });
     }
 
-
     function openAddOrderModal() {
         loadSteps();
-        $('.services-multiSelect').select2({
-            theme: "classic",
-            placeholder: 'Select an service',
-            width: '100%',
-            ajax: {
-                url: '@Url.Action("GetAllServicesDLL", "Common")',
-                cache: false
-            }
-        });
-
-        $('.doctor-autoComplete').select2({
-            theme: "classic",
-            placeholder: 'Select an doctor',
-            width: '100%',
-            ajax: {
-                url: '@Url.Action("GetDoctorsProvider", "Common")',
-                cache: false
-            }
-        });
 
         $.ajax({
             url: '@Url.Action("GetCountriesDDL", "ServiceProvider")',
@@ -196,9 +177,9 @@
             dataType: 'json',
             success: function (data) {
                 // Clear existing options
-                $('#countries-ddl-wk').empty();
+                $('#countries-ddl-edit').empty();
                 // Populate the dropdown list
-                var dropdown = $('#countries-ddl-wk');
+                var dropdown = $('#countries-ddl-edit');
                 // Add default option
                 dropdown.append($('<option></option>').val('').text('Select a country'));
                 $.each(data, function (index, item) {
@@ -226,6 +207,23 @@
         });
     }
 
+
+    function getAvailableDoctors() {
+        var doctorsContainer = $('#doctorsContainer');
+        var servicesIds = $("#selectedServicesIds").val()
+        $.ajax({
+            url: '/ServiceProvider/GetAvailableDoctors?serviceIds=' + servicesIds, // Replace with the actual URL and action method to fetch the partial view
+            type: 'GET',
+            success: function (response) {
+                doctorsContainer.html(response);
+
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
+    }
+
     function searchOnPrivileges(value) {
         var resultCount = 0; // Variable to keep track of the number of results
         var value = $("#search-input").val().toLowerCase();
@@ -244,6 +242,173 @@
             $('.no-results-section').hide();
         }
         resultCount = 0;
+    }
+
+    function getDDLsOptions() {
+        $(document).ready(function () {
+            $.ajax({
+                url: '@Url.Action("GetCitiesDDL", "Common")',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Clear existing options
+                    $('#cities-ddl').empty();
+                    // Populate the dropdown list
+                    var dropdown = $('#cities-ddl');
+                    dropdown.append($('<option></option>').val(0).text('All Cities'));
+
+                    $.each(data, function (index, item) {
+                        dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                    });
+                }
+            });
+
+
+            $.ajax({
+                url: '@Url.Action("GetDistrictsDDL", "Common")',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Clear existing options
+                    $('#disctricts-ddl').empty();
+                    // Populate the dropdown list
+                    var dropdown = $('#disctricts-ddl');
+                    dropdown.append($('<option></option>').val(0).text('All Districts'));
+
+                    $.each(data, function (index, item) {
+                        dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                    });
+                }
+            });
+            $.ajax({
+                url: '@Url.Action("GetInsuranceCompaniesDDL", "Common")',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Clear existing options
+                    $('#insurance-ddl').empty();
+                    // Populate the dropdown list
+                    var dropdown = $('#insurance-ddl');
+                    dropdown.append($('<option></option>').val(0).text('All Insurance Companies'));
+
+                    $.each(data, function (index, item) {
+                        dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                    });
+                }
+            });
+            $.ajax({
+                url: '@Url.Action("GetServicesDDL", "Common")',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Clear existing options
+                    $('#services-ddl').empty();
+                    // Populate the dropdown list
+                    var dropdown = $('#services-ddl');
+                    dropdown.append($('<option></option>').val(0).text('All Services'));
+
+                    $.each(data, function (index, item) {
+                        dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                    });
+                }
+            });
+            setTimeout(function () {
+                setSelectedOptions();
+            }, 1000);
+
+        });
+        function searchUsingEnterButton(event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                filterDoctors();
+                ;
+            }
+        }
+        function filterDoctors() {
+            var doctorsContainer = $('#doctorsListContainer');
+            var serviceId = $('#services-ddl').val();
+            var disctrictId = $('#disctricts-ddl').val();
+
+            var cityId = $('#cities-ddl').val();
+            var sortBy = $('#sort-ddl').val();
+            var insuranceType = $('#insurance-ddl').val();
+            var name = $('#filterInput').val();
+
+            $.ajax({
+                url: '/Home/FillDoctorsList?name=' + name + '&serviceId=' + serviceId + '&cityId=' + cityId + '&disctrictId=' + disctrictId + '&sortBy=' + sortBy + '&insuranceType=' + insuranceType, // Replace with the actual URL and action method to fetch the partial view
+                type: 'GET',
+                success: function (response) {
+                    doctorsContainer.html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
+        function fillDoctorDetails(userId) {
+            var userDetailsContainer = $('#userDetailsContainer');
+
+            $.ajax({
+                url: '/Home/GetUserDetailsById?userId=' + userId,
+                type: 'GET',
+                success: function (response) {
+                    userDetailsContainer.html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
+        function getQueryParamsFromCurrentURL() {
+            const params = {};
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.toString() === "") {
+                return null;
+            }
+
+            for (const [key, value] of urlParams) {
+                params[key] = value;
+            }
+            return params;
+        }
+        function setSelectedOptions() {
+            const queryParams = getQueryParamsFromCurrentURL();
+            if (queryParams == null)
+                return;
+            const serviceDropdown = document.getElementById('services-ddl');
+            const cityDropdown = document.getElementById('cities-ddl');
+            const districtDropdown = document.getElementById('disctricts-ddl');
+            const nameField = document.getElementById('filterInput');
+
+            //var name = $('#filterInput').val();
+
+            // Set selected option for Service dropdown
+            if (queryParams.serviceId) {
+                serviceDropdown.value = queryParams.serviceId;
+            } else {
+                serviceDropdown.value = ''; // Default value if serviceId is not present in the query string
+            }
+
+            // Set selected option for City dropdown
+            if (queryParams.cityId) {
+                cityDropdown.value = queryParams.cityId;
+            } else {
+                cityDropdown.value = ''; // Default value if cityId is not present in the query string
+            }
+
+            // Set selected option for District dropdown
+            if (queryParams.disctrictId) {
+                districtDropdown.value = queryParams.disctrictId;
+            } else {
+                districtDropdown.value = ''; // Default value if disctrictId is not present in the query string
+            }
+
+            if (queryParams.name) {
+                nameField.value = queryParams.name;
+            } else {
+                nameField.value = ''; // Default value if serviceId is not present in the query string
+            }
+        }
     }
 
 
@@ -354,7 +519,7 @@
     .referral-card-body {
         background-color: white;
         padding: 2%;
-        border-radius:50%
+        border-radius: 50%
     }
 
     .referral-card-title {
@@ -651,7 +816,7 @@
 
         #progressbar #payment:before {
             font-family: FontAwesome;
-            content: "\f030"
+            content: "\f0f0"
         }
 
         #progressbar #confirm:before {

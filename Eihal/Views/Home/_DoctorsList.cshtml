@@ -5,12 +5,12 @@
     @foreach (var doc in Model)
     {
         <div class="col-md-@(Model.Count > 1?'4':'8') padding-top-25">
-            <div class="doctor-card" style="    border: 1px solid #eadfdf;
-    border-radius: 10px;">
+            <div class="doctor-card" style="border: 1px solid #eadfdf; border-radius: 10px;">
+   
                 <div class="doctor-card-body">
                     <div class="row" style="    padding-bottom: 25px;">
                         <h5 class="doctor-card-title" style="color: black;">
-                            <img style="border-radius:50%" id="user-image-layout" src="/users/images/@(doc.UserId).jpg" width="70" height="70" alt="user-image-profile" onerror="this.src='/users/images/Default-User-Profile.jpg'">
+                                <img style="border-radius:50%" id="user-image-layout" src="@(doc.ProfilePicturePath) width="70" height="70" alt="user-image-profile" onerror="this.src='/users/images/Default-User-Profile.jpg'">
                         </h5>
                         <span style="font-size:10px;margin:auto">
                             <i class="fa fa-star" aria-hidden="true"></i>
@@ -19,15 +19,15 @@
                         </span>
                         @if (doc.InsuranceAccepted == true)
                         {
-                            <div class="service-info-value" style="margin-top: -25px;
-    margin-left: 100px;">
+                            <div class="service-info-value" style="margin-top: -25px;margin-left: 100px;">
+    
                                 <span class="status status-default">Insurance Accpeted</span>
                             </div>
                         }
                         else
                         {
-                            <div class="service-info-value" style="margin-top: -25px;
-    margin-left: 100px;">
+                            <div class="service-info-value" style="margin-top: -25px;margin-left: 100px;">
+    
                                 <span class="status status-warning">Insurance Rejected</span>
                             </div>
 

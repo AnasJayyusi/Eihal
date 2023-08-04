@@ -1,11 +1,13 @@
 ﻿using Eihal.Data;
 using Eihal.Data.Entites;
+using Eihal.Enums;
 using Eihal.Hubs;
 using Eihal.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SixLabors.ImageSharp;
 using System.ComponentModel.Design;
 using System.Data;
 using static Eihal.Areas.Identity.Pages.Account.LoginModel;
@@ -714,7 +716,10 @@ namespace Eihal.Controllers
             .Join(_dbContext.UserServices,
                 s => s.Id,
                 us => us.ServiceId,
-                (s, us) => new SupportServiceModal { ServiceId = s.Id, TitleEn = s.TitleEn, TitleAr = s.TitleAr  }) // Include columns you want from both tables
+                (s, us) => new SupportServiceModal
+                { ServiceId = s.Id, TitleEn = s.TitleEn, TitleAr = s.TitleAr  , Status = us.Status })
+                .Where(us=>us.Status == ServicesStatusEnum.Approved
+                ) // Include columns you want from both tables
             .Distinct()
             .ToList();
 
@@ -723,6 +728,40 @@ namespace Eihal.Controllers
             //string htmlContent = RenderPartialToString("_CardPartial", model); // Replace with the name of your partial view
 
             return PartialView("PrivilegesOrder", model); // Replace with the name of your partial view
+        }
+
+
+        [Route("GetAvailableDoctors")]
+        public ActionResult GetAvailableDoctors(string serviceIds, string name, int cityId, int disctrictId)
+        {
+
+            var servicesIds = serviceIds?.Split(',')?.Select(Int32.Parse)?.ToList();
+
+            var ids = _dbContext.UserServices
+                                            .Where(a => servicesIds.Contains(a.ServiceId))
+                                            .Select(a => a.UserId).ToList();
+
+            
+            name = string.IsNullOrEmpty(name) ? string.Empty : name;
+
+            var doctors = _dbContext.UserProfiles
+                                    .Include(a => a.TimeClinicLocation)
+                                    .ThenInclude(a => a.City)
+                                    .Include(a => a.InsuranceCompanies)
+                                    .Include(x => x.Certifications)
+                                    .ThenInclude(a => a.Degree)
+                                    .Include(a => a.PractitionerType)
+                                    .Include(x => x.City)
+                                    .Where(a => a.ProfileStatus == ProfileStatus.Active && a.AccountTypeId == 1
+                                         && (name == String.Empty || a.FullName.Contains(name))
+                                         && (ids.Contains(a.Id))
+                                         && (cityId == 0 || a.TimeClinicLocation.CityId == cityId)
+                                         && (disctrictId == 0 || a.TimeClinicLocation.DistrictId == disctrictId)).ToList();
+
+
+
+            return PartialView("AvailableDoctorsList", doctors); // Replace with the name of your partial view
+
         }
     }
 }

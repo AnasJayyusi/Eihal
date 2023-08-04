@@ -591,7 +591,6 @@
     }
 
     function getStatesUserProfile(countryId) {
-        debugger;
         $.ajax({
             url: '@Url.Action("GetStatesDDL", "ServiceProvider")' + '?countryId=' + countryId,
             type: 'GET',

@@ -14,8 +14,23 @@
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
         }
 
+
+    .service-card-delete {
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        position: relative;
+        cursor: cell;
+        transition: transform 0.3s ease;
+    }
+
+        .service-card-delete:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+
     .service-card-body {
         background-color: #f8f9fa;
+        padding: 5%;
     }
 
     .service-weight-700 {
@@ -24,6 +39,13 @@
     }
 
     .service-card-title {
+        color: #00768c;
+        font-size: 18px;
+        margin-bottom: 10px;
+        color: #00768c
+    }
+
+    .service-card-title-added {
         color: #00768c;
         font-size: 18px;
         margin-bottom: 10px;
@@ -170,22 +192,23 @@
 
 @foreach (var item in Model)
 {
+    <input id="selectedServicesIds" hidden>
     <div class="col-md-3 padding-top-25">
 
         <div class="service-card">
-            <div class="service-card-body">
-                <h5 class="service-card-title" >@item.TitleEn</h5>
-                <div class="row col-12" >
-                   @* <div class="col-8">
-                        <span class="service-sub-title" style="display: inline-block;">Price:</span>
-                        <span style="display: inline-block; margin-left: 5px;">@item.Fee</span>
-                    </div>*@
+            <div onclick="addToSelectionList(@item.ServiceId ,'@item.TitleEn','@item.TitleAr')" class="service-card-body">
+                <h5 class="service-card-title">@item.TitleEn</h5>
+                <div class="row col-12">
+                    @* <div class="col-8">
+                <span class="service-sub-title" style="display: inline-block;">Price:</span>
+                <span style="display: inline-block; margin-left: 5px;">@item.Fee</span>
+                </div>*@
                 </div>
-                <div class="dots-container">
-                    <button class="dots-button" data-toggle="modal" onclick="fillAddServicePage('@item.ServiceId','@item.TitleAr','@item.TitleEn')" data-target="#AddServiceModal">
-                        <i class="fas fa-plus" style="font-size: 18px;"></i>
-                    </button>
-                </div>
+                @* <div class="dots-container">
+            <button class="dots-button" data-toggle="modal" onclick="fillAddServicePage('@item.ServiceId','@item.TitleAr','@item.TitleEn')" data-target="#AddServiceModal">
+            <i class="fas fa-plus" style="font-size: 18px;"></i>
+            </button>
+            </div>*@
             </div>
 
         </div>
@@ -195,7 +218,57 @@
 {
     <div class="no-results">
         <img src="~/images/NoResult.png" alt="No Results Found Icon">
-        <p > No Privilege Added Yet.</p>
+        <p> No Privilege Added Yet.</p>
     </div>
 
 }
+
+
+<script>
+    function addToSelectionList(id, titleEn, titleAr) {
+        // Get the dynamic values from somewhere (e.g., user input or API response)
+        var dynamicId = id;
+        var dynamicTitle = titleEn;
+        if ($("#selectedServicesIds").val().length == 0)
+            $("#selectedServicesIds").val(id);
+        else{
+            var selectedServicesIds = $("#selectedServicesIds").val() + "," + id;
+            $("#selectedServicesIds").val(selectedServicesIds)
+        }
+
+        // Construct the HTML snippet with the dynamic values
+        var htmlToAppend = `
+                                                            <div onclick="deleteSelection(${dynamicId})" id="${dynamicId}" class="col-md-3 padding-top-25">
+                                                                <div class="service-card">
+                                                                    <div class="service-card-body">
+                                                                                <h5 class="service-card-title-added">${dynamicTitle}</h5>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        `;
+
+        // Append the HTML snippet to the element with ID "selection-privileges"
+        $("#selection-privileges").append(htmlToAppend);
+
+        checkResultCount()
+    }
+
+    function deleteSelection(id) {
+        $("#" + id).remove();
+        if ($("#selectedServicesIds").val().length == 1)
+            $("#selectedServicesIds").val('');
+        else {
+            var selectedServicesIds = $("#selectedServicesIds").val().replace(","+id,"");
+            $("#selectedServicesIds").val(selectedServicesIds)
+        }
+        checkResultCount()
+    }
+
+    function checkResultCount() {
+        var numberOfSelections = $(".service-card-title-added").length;
+        if (numberOfSelections == 0)
+            $("#NoResult-div").show()
+        else
+            $("#NoResult-div").hide()
+    }
+</script>

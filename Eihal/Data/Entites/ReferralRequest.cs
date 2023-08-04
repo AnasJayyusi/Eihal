@@ -6,7 +6,6 @@ namespace Eihal.Data.Entites
     public class ReferralRequest
     {
         public int Id { get; set; }
-    
         public ReferralStatusEnum Status { get; set; }
         public ReferralTypeEnum Type { get; set; }
         public DateTime CreationDate { get; set; }
@@ -19,5 +18,10 @@ namespace Eihal.Data.Entites
         public Services Service { get; set; }
         [ForeignKey(nameof(Service))]
         public int ServiceId { get; set; }
+        public OrderDetail Order { get; set; }
+        [ForeignKey(nameof(Order))]
+        public int OrderId { get; set; }
+
+
     }
 }

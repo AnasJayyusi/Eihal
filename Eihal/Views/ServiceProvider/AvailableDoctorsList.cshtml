@@ -1,0 +1,56 @@
+﻿@model List<Eihal.Data.Entites.UserProfile>
+
+<div class="row col-md-12" id="doctorsListContainer">
+
+    @foreach (var doc in Model)
+    {
+        
+        <div class="col-md-4 padding-top-25">
+            <div class="doctor-card selectable" id="@(doc.Id)" onclick="handleDoubleClick(this)" style="border: 1px solid #eadfdf;">
+                <div class="doctor-card-body">
+                    <div class="row" style="    padding-bottom: 25px;">
+                        <h5 class="doctor-card-title" style="color: black;">
+                            <img style="border-radius:50%;" src="@(doc.ProfilePicturePath)" width="70" height="70" alt="user-image-profile" onerror="this.src='/users/images/Default-User-Profile.jpg'">
+                        </h5>
+                        <span style="font-size:10px;margin:auto">
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                            <label style="font-weight:bold">Reviews</label> <img src="/icon/Doctor/review-icon.png" width="25" height="25">
+                            <span id="review-label" style="color:black"></span>
+                        </span>
+                        @if (doc.InsuranceAccepted == true)
+                        {
+                            <div class="service-info-value" style="margin-top: -25px; font-size:10px;margin-left: 100px;">
+                                <span>Insurance : Yes</span>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="service-info-value" style="margin-top: -25px; font-size:10px;margin-left: 100px;">
+                                <span>Insurance : No</span>
+                            </div>
+                        }
+
+                    </div>
+                    <h5 class="doctor-card-title">@doc.FullName</h5>
+                    <h5 class="doctor-card-title" style="font-size:11px">@doc.PractitionerType.TitleEn</h5>
+
+                    @foreach (var certificate in doc.Certifications.Take(2))
+                    {
+                        <h5 class="doctor-card-title" style="font-size:14px;color:black">@certificate.Degree.TitleEn - @certificate.UniversityNameEn</h5>
+                    }
+                    <span>
+
+
+                        @if (doc.TimeClinicLocation != null && doc.TimeClinicLocation.City != null)
+                        {
+                            <img width="15px" src="/icon/location-icon-default.png" alt="" style="margin-right: 5px;">
+                            <strong style="font-size: 13px;">@doc.TimeClinicLocation?.City?.TitleEn</strong>
+
+                        }
+                    </span>
+                </div>
+                <span class="check-icon">&#10004;</span>
+            </div>
+        </div>
+    }
+</div>
