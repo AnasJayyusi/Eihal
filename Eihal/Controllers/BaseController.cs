@@ -1,6 +1,9 @@
 ﻿using Eihal.Data;
+using Eihal.Data.Entites;
+using Eihal.Enums;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using static Eihal.Data.SharedEnum;
 
 namespace Eihal.Controllers
 {
@@ -54,5 +57,30 @@ namespace Eihal.Controllers
             cookieOptions.Path = "/";
             Response.Cookies.Append("userImagePath", GetUserImage(), cookieOptions);
         }
+
+
+        public void PushNewNotifications(NotificationTypeEnum type, int fromUserId, int toUserId, string? additionalData)
+        {
+            var notification = new Notification();
+            notification.CreatedByUserId = fromUserId;
+            notification.AssignedToUserId = toUserId;
+            notification.CreationDate = DateTime.Now;
+
+            switch (type)
+            {
+                case NotificationTypeEnum.NewOrder:
+                    notification.TitleAr = "طلب جديد";
+                    notification.TitleEn = "New Order";
+                    notification.MessageEn = $"New Have New Order With ID {additionalData}";
+                    notification.MessageAr = $"لديك طلب جديد رقم الطلب {additionalData}";
+                    break;
+            }
+
+            _dbContext.Notifications.Add(notification);
+            _dbContext.SaveChanges();
+
+        }
+
     }
 }
+

@@ -7,6 +7,56 @@
 
 <script>
 
+
+    function sendOrderRequest() {
+        
+        // Get all the input values
+        var fullname = $("#fullname-edit-input").val();
+        var phone = $("#phone-edit-input").val();
+        var email = $("#email-edit-input").val();
+        var country = $("#countries-ddl-edit").val();
+        var state = $("#states-ddl-edit").val();
+        var city = $("#cities-ddl-edit").val();
+        var gender = $('input[name="gender"]:checked').val();
+        var age = $('input[name="age"]:checked').val();
+        var chronicDisease = $('#chronicDisease').val().trim();
+        var selectedServicesIds = $("#selectedServicesIds").val();
+        var doctorId = $(".selected").attr('id');
+
+        // Prepare the data to be sent as JSON
+        var orderDetailsModal = {
+            'FullName': fullname,
+            'Phone': phone,
+            'Email': email,
+            'Country': country,
+            'State': state,
+            'City': city,
+            'Gender': gender,
+            'Age': age,
+            'ChronicDisease': chronicDisease,
+            'SelectedServicesIds': selectedServicesIds,
+            'DoctorId': doctorId
+        };
+
+        // Send the data using AJAX
+        $.ajax({
+            type: "POST", // Change this to your desired HTTP method (POST, GET, PUT, DELETE, etc.)
+            url: '@Url.Action("SendOrderRequest", "ServiceProvider")',
+            data: JSON.stringify(orderDetailsModal),
+            contentType: "application/json",
+            success: function (response) {
+                // Handle the response from the server if needed
+                toastr.success("Order sent successfully!", 'Send !!');
+            },
+            error: function (xhr, status, error) {
+                // Handle any errors that occur during the AJAX call
+                toastr.error("Error sending Order!", 'Send !!');
+            }
+        });
+
+    }
+
+
     function loadSteps() {
         var current_fs, next_fs, previous_fs; //fieldsets
         var opacity;

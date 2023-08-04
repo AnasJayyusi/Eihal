@@ -19,6 +19,7 @@ namespace Eihal.Data.Entites
         public int? SubPrivillageId { get; set; }
         public Privillage? Privillage { get; set; }
         public SubPrivillage? SubPrivillage { get; set; }
+        public List<OrderDetail> OrderDetails { get; set; }
 
     }
 }

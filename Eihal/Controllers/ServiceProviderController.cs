@@ -50,7 +50,7 @@ namespace Eihal.Controllers
             var currentUserId = GetUserProfileId();
             if (string.IsNullOrEmpty(name))
                 name = string.Empty;
-            var model = _dbContext.ReferralRequests.Include(a => a.Service).Include(a => a.CreatedByUser).Include(a => a.AssignedToUser).Where(a =>
+            var model = _dbContext.ReferralRequests.Include(a => a.Order).Include(a => a.CreatedByUser).Include(a => a.AssignedToUser).Where(a =>
             (a.CreatedByUser.FullName.Contains(name) || name == string.Empty)
             && (statusId == 0 || (int)a.Status == statusId)
             && (dateId == 0 ||
@@ -69,7 +69,7 @@ namespace Eihal.Controllers
             var currentUserId = GetUserProfileId();
             if (string.IsNullOrEmpty(name))
                 name = string.Empty;
-            var model = _dbContext.ReferralRequests.Include(a => a.Service).Include(a => a.CreatedByUser).Include(a => a.AssignedToUser).Where(a =>
+            var model = _dbContext.ReferralRequests.Include(a => a.Order).Include(a => a.CreatedByUser).Include(a => a.AssignedToUser).Where(a =>
             (a.AssignedToUser.FullName.Contains(name) || name == string.Empty)
             && (statusId == 0 || (int)a.Status == statusId)
             && (dateId == 0 ||
@@ -140,7 +140,7 @@ namespace Eihal.Controllers
                 services = services.Where(a => a.TitleEn.Contains(kw));
             }
 
-            return PartialView("_AllServiceCardPartial", services.Include(a=>a.Privillage).ThenInclude(a=>a.ClinicalSpeciality).ToList()); // Replace with the name of your partial view
+            return PartialView("_AllServiceCardPartial", services.Include(a => a.Privillage).ThenInclude(a => a.ClinicalSpeciality).ToList()); // Replace with the name of your partial view
         }
         [Route("DeleteUserService")]
         public ActionResult DeleteUserService(int Id)
@@ -717,8 +717,8 @@ namespace Eihal.Controllers
                 s => s.Id,
                 us => us.ServiceId,
                 (s, us) => new SupportServiceModal
-                { ServiceId = s.Id, TitleEn = s.TitleEn, TitleAr = s.TitleAr  , Status = us.Status })
-                .Where(us=>us.Status == ServicesStatusEnum.Approved
+                { ServiceId = s.Id, TitleEn = s.TitleEn, TitleAr = s.TitleAr, Status = us.Status })
+                .Where(us => us.Status == ServicesStatusEnum.Approved
                 ) // Include columns you want from both tables
             .Distinct()
             .ToList();
@@ -741,7 +741,7 @@ namespace Eihal.Controllers
                                             .Where(a => servicesIds.Contains(a.ServiceId))
                                             .Select(a => a.UserId).ToList();
 
-            
+
             name = string.IsNullOrEmpty(name) ? string.Empty : name;
 
             var doctors = _dbContext.UserProfiles
@@ -762,6 +762,60 @@ namespace Eihal.Controllers
 
             return PartialView("AvailableDoctorsList", doctors); // Replace with the name of your partial view
 
+        }
+
+        [HttpPost]
+        [Route("SendOrderRequest")]
+        public IActionResult SendOrderRequest([FromBody] OrderDetailsModal orderDetailsModal)
+        {
+            if (orderDetailsModal == null)
+            {
+                return BadRequest("OrderDetail data is null.");
+            }
+
+            var servicesIds = orderDetailsModal.SelectedServicesIds?.Split(',')?.Select(Int32.Parse)?.ToList();
+            var services = _dbContext.Services.Where(a => servicesIds.Contains(a.Id)).ToList();
+
+
+            var orderDetail = new OrderDetail()
+            {
+                PatientName = orderDetailsModal.FullName,
+                PhoneNumber = orderDetailsModal.Phone,
+                Email = orderDetailsModal.Email,
+                Age = (Age)Convert.ToInt32(orderDetailsModal.Age),
+                ChronicDisease = orderDetailsModal.ChronicDisease,
+                Services = services,
+                DoctorId = Convert.ToInt32(orderDetailsModal.DoctorId),
+                CountryId = Convert.ToInt32(orderDetailsModal.Country),
+                CityId = Convert.ToInt32(orderDetailsModal.City),
+                StateId = Convert.ToInt32(orderDetailsModal.State),
+            };
+
+            _dbContext.OrderDetails.Add(orderDetail);
+            var orderId = _dbContext.SaveChanges();
+
+            var referralRequest = new ReferralRequest()
+            {
+                Status = ReferralStatusEnum.UnderReview,
+                CreationDate = DateTime.Now,
+                CreatedByUserId = GetUserProfileId(),
+                AssignedToUserId = Convert.ToInt32(orderDetailsModal.DoctorId),
+                OrderId = orderDetail.Id
+            };
+
+            _dbContext.ReferralRequests.Add(referralRequest);
+            _dbContext.SaveChanges();
+
+            var referralRequestId = referralRequest.Id;
+            string requestNumber = referralRequestId.ToString("#0000");
+
+            PushNewNotifications(SharedEnum.NotificationTypeEnum.NewOrder, GetUserProfileId(), Convert.ToInt32(orderDetailsModal.DoctorId), requestNumber);
+
+            _notificationService.SendMessage("omar", "You Have New Order" + requestNumber);
+
+            // Return a response indicating success
+
+            return Ok("Order Send successfully.");
         }
     }
 }

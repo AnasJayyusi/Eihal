@@ -15,9 +15,6 @@ namespace Eihal.Data.Entites
         [ForeignKey(nameof(AssignedToUser))]
         public int AssignedToUserId { get; set; }
         public UserProfile AssignedToUser { get; set; }
-        public Services Service { get; set; }
-        [ForeignKey(nameof(Service))]
-        public int ServiceId { get; set; }
         public OrderDetail Order { get; set; }
         [ForeignKey(nameof(Order))]
         public int OrderId { get; set; }

@@ -21,5 +21,7 @@ namespace Eihal.Hubs
             //await _hubContext.Clients.User(userId).SendAsync("ReceiveMessage", message);
             await _hubContext.Clients.All.SendAsync("ReceiveMessage",userId, message);
         }
+
+        
     }
 }
