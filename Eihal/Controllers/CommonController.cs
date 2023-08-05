@@ -123,10 +123,10 @@ namespace Eihal.Controllers
 
         [HttpGet]
         [Route("GetDistrictsDDL")]
-        public ActionResult GetDisctrictsDDL()
+        public ActionResult GetDisctrictsDDL(int cityId)
         {
             // Retrieve the data for the dropdown list
-            var dropdownData = _dbContext.Districts.ToList();
+            var dropdownData = _dbContext.Districts.Where(a=>a.CityId == cityId).ToList();
 
             // Pass the data to the view
             return Json(dropdownData);

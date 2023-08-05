@@ -376,7 +376,7 @@
                             </select>
                         </div>
                         <div class="col-lg-4 col-12 padding-screen" style="padding-right:8px">
-                            <select class="form-control" id="cities-ddl" onchange="filterDoctors()">
+                            <select class="form-control" id="cities-ddl" onchange="GetDistrictsThenFilter()">
                                 <option value="">All Cities</option>
                             </select>
                         </div>            <div class="col-lg-4 col-12 padding-screen">
@@ -438,23 +438,8 @@
                 }
             });
 
-
-            $.ajax({
-                url: '@Url.Action("GetDistrictsDDL", "Common")',
-                type: 'GET',
-                dataType: 'json',
-                success: function (data) {
-                    // Clear existing options
-                    $('#disctricts-ddl').empty();
-                    // Populate the dropdown list
-                    var dropdown = $('#disctricts-ddl');
-                    dropdown.append($('<option></option>').val(0).text('All Districts'));
-
-                    $.each(data, function (index, item) {
-                        dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
-                    });
-                }
-            });
+             
+      
             $.ajax({
                 url: '@Url.Action("GetInsuranceCompaniesDDL", "Common")',
                 type: 'GET',
@@ -499,6 +484,27 @@
                 ;
             }
         }
+        function GetDistrictsThenFilter(){
+                var cityId = $('#cities-ddl').val();
+
+                  $.ajax({
+                url: '@Url.Action("GetDistrictsDDL", "Common")'+"?cityId="+cityId,
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Clear existing options
+                    $('#disctricts-ddl').empty();
+                    // Populate the dropdown list
+                    var dropdown = $('#disctricts-ddl');
+                    dropdown.append($('<option></option>').val(0).text('All Districts'));
+                    $.each(data, function (index, item) {
+                        dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                    });
+                    filterDoctors();
+                }
+            });
+        }
+
         function filterDoctors() {
             var doctorsContainer = $('#doctorsListContainer');
             var serviceId = $('#services-ddl').val();
@@ -508,7 +514,7 @@
             var sortBy = $('#sort-ddl').val();
             var insuranceType = $('#insurance-ddl').val();
             var name = $('#filterInput').val();
-
+            //GetDistricts();
             $.ajax({
                 url: '/Home/FillDoctorsList?name=' + name + '&serviceId=' + serviceId + '&cityId=' + cityId + '&disctrictId=' + disctrictId + '&sortBy=' + sortBy + '&insuranceType=' + insuranceType, // Replace with the actual URL and action method to fetch the partial view
                 type: 'GET',
@@ -546,13 +552,44 @@
             }
             return params;
         }
+                     function GetDistricts(selectedDistrictId){
+            var cityId = $('#cities-ddl').val();
+
+                  $.ajax({
+                url: '@Url.Action("GetDistrictsDDL", "Common")'+"?cityId="+cityId,
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Clear existing options
+                    $('#disctricts-ddl').empty();
+                    // Populate the dropdown list
+                    var dropdown = $('#disctricts-ddl');
+                    dropdown.append($('<option></option>').val(0).text('All Districts'));
+                    $.each(data, function (index, item) {
+                        dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                    });
+            const districtDropdown = document.getElementById('disctricts-ddl');
+
+            // Set selected option for District dropdown
+            if (selectedDistrictId) {
+                districtDropdown.value = selectedDistrictId;
+            } else {
+                districtDropdown.value = ''; // Default value if disctrictId is not present in the query string
+            }
+                }
+            });
+        }
         function setSelectedOptions() {
             const queryParams = getQueryParamsFromCurrentURL();
             if (queryParams == null)
                 return;
             const serviceDropdown = document.getElementById('services-ddl');
             const cityDropdown = document.getElementById('cities-ddl');
-            const districtDropdown = document.getElementById('disctricts-ddl');
+            debugger;
+            if(queryParams.cityId > 0){
+                GetDistricts(queryParams.disctrictId);
+            }
+
             const nameField = document.getElementById('filterInput');
 
             //var name = $('#filterInput').val();
@@ -571,12 +608,6 @@
                 cityDropdown.value = ''; // Default value if cityId is not present in the query string
             }
 
-            // Set selected option for District dropdown
-            if (queryParams.disctrictId) {
-                districtDropdown.value = queryParams.disctrictId;
-            } else {
-                districtDropdown.value = ''; // Default value if disctrictId is not present in the query string
-            }
 
             if (queryParams.name) {
                 nameField.value = queryParams.name;

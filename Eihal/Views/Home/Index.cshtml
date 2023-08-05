@@ -52,7 +52,7 @@
                 <div class="col-lg-2 col-12 padding-screen">
                     <div class="form-group">
                         <div class="form-data select-box">
-                            <select name="cityId" id="cities-ddl" class="form-control">
+                            <select name="cityId" id="cities-ddl" class="form-control" onchange="GetDistricts()">
                                 <option value="">
                                     Choose city
                                 </option>
@@ -256,6 +256,29 @@
 
 @section Scripts {
     <script type="text/javascript">
+
+
+                function GetDistricts(){
+            var cityId = $('#cities-ddl').val();
+
+                  $.ajax({
+                url: '@Url.Action("GetDistrictsDDL", "Common")'+"?cityId="+cityId,
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Clear existing options
+                    $('#disctricts-ddl').empty();
+                    // Populate the dropdown list
+                    var dropdown = $('#disctricts-ddl');
+                    dropdown.append($('<option></option>').val(0).text('Choose District'));
+                    $.each(data, function (index, item) {
+                        dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                    });
+                }
+            });
+        }
+
+
          $.ajax({
                 url: '@Url.Action("GetCitiesDDL", "Common")',
                 type: 'GET',
@@ -272,22 +295,22 @@
                     });
                 }
             });
-                    $.ajax({
-                url: '@Url.Action("GetDistrictsDDL", "Common")',
-                type: 'GET',
-                dataType: 'json',
-                success: function (data) {
-                    // Clear existing options
-                    $('#disctricts-ddl').empty();
-                    // Populate the dropdown list
-                    var dropdown = $('#disctricts-ddl');
-                    dropdown.append($('<option></option>').val(0).text('Choose District'));
+            //        $.ajax({
+            //    url: '@Url.Action("GetDistrictsDDL", "Common")',
+            //    type: 'GET',
+            //    dataType: 'json',
+            //    success: function (data) {
+            //        // Clear existing options
+            //        $('#disctricts-ddl').empty();
+            //        // Populate the dropdown list
+            //        var dropdown = $('#disctricts-ddl');
+            //        dropdown.append($('<option></option>').val(0).text('Choose District'));
 
-                    $.each(data, function (index, item) {
-                        dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
-                    });
-                }
-            });
+            //        $.each(data, function (index, item) {
+            //            dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+            //        });
+            //    }
+            //});
         $(document).ready(function () {
                   $.ajax({
                 url: '@Url.Action("GetServicesDDL", "Common")',
