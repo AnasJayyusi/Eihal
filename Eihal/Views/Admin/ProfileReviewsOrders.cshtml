@@ -85,7 +85,8 @@
                 </div>
                 <div id="rejectReasonContainer" style="display: none;">
                     <label for="rejectReason">Reason:</label>
-                    <input type="text" id="rejectReason" class="form-control">
+                    @*<input type="text" id="rejectReason" class="form-control">*@
+                    <textarea id="rejectReason" rows="4" cols="50" class="form-control"></textarea>
                 </div>
             </div>
             <div class="modal-footer">
@@ -126,7 +127,14 @@
                     newRow.append($('<td>').text(row.fullName));
                     newRow.append($('<td>').text(row.email));
                     newRow.append($('<td>').text(row.phoneNumber));
-                    newRow.append($('<td>').text(row.practitionerType.titleEn));
+                    if (row.practitionerType == null) {
+                        //row.practitionerType.titleEn = "Beneficiray"
+                        //row.practitionerType.titleEn = "مستفيد"
+                        newRow.append($('<td>').text("Beneficiray"));
+                    }
+                    else {
+                        newRow.append($('<td>').text(row.practitionerType.titleEn));
+                    }
 
                     var statusText;
                     if (row.profileStatus === 0) {
@@ -184,8 +192,7 @@
                     $("#approve").hide()
                     $("#reject").hide()
                 }
-                else 
-                {
+                else {
                     $("#approve").show()
                     $("#reject").show()
                 }
@@ -266,7 +273,7 @@
         }
         else {
             var userProfileId = parseInt($("#userProfileId").text(), 10);
-            var rejectReason =$("#rejectReason").val();
+            var rejectReason = $("#rejectReason").val();
             $("#close-ProfileModal").trigger("click");
 
             $.ajax({
@@ -306,6 +313,6 @@
         });
     }
 
-   
+
 </script>
 

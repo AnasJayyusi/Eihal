@@ -442,7 +442,9 @@
                     $("#speciality-label").text("No Speciality Added Yet.");
                 }
                 else {
-                    $("#speciality-label").show()
+                    debugger;
+                    $('#listSpeciality').empty()
+                    $("#speciality-label").hide()
                     // Step 1: Split the string into an array using comma as the delimiter
                     var dataArray = response.speciality.split(',');
                     // Step 2: Iterate through the array and create <li> elements

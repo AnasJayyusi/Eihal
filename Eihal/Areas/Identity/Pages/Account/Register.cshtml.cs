@@ -112,7 +112,9 @@ namespace Eihal.Areas.Identity.Pages.Account
             string debug = "Start";
 
 
+
             returnUrl ??= Url.Content("~/");
+            
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser();

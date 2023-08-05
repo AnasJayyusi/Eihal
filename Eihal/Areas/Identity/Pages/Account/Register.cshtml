@@ -93,7 +93,7 @@
                                     </label>
 
                                     <div id="phone-div" class="form-data">
-                                        <input asp-for="Input.PhoneNumber" name="PhoneNumber" placeholder="Example: 05123456" class="form-control" maxlength="10" onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))" aria-required="true" placeholder="Phone Number" required />
+                                        <input asp-for="Input.PhoneNumber" name="PhoneNumber" onkeyup="checkPhoneNumber()" placeholder="Example: 05123456" class="form-control" maxlength="10" onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))" aria-required="true" placeholder="Phone Number" required />
                                         <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
                                         <p id="phoneError" style="display:none; color:#FF0000;font-size:12px;text-align:left;"> Phone Number Is Already Exists.</p>
                                     </div>
@@ -237,32 +237,7 @@
             showErrorlabel = true;
         }
 
-        if ($("#Input_PhoneNumber").val().length == 0) {
-            $('#phone-div').css("border", "solid 1px red");
-            showErrorlabel = true;
 
-        }
-        else {
-            var phoneNumber = $("#Input_PhoneNumber").val()
-            $.ajax({
-                url: '/Common/CheckPhoneNumber?phoneNumber=' + phoneNumber,
-                type: 'GET',
-                dataType: 'json',
-                success: function (data) {
-                    if (data == true) {
-                        $('#phone-div').css("border", "solid 1px red");
-                        $('#phoneError').show();
-                        showErrorlabel = true;
-                    }
-                    else {
-                        $('#phoneError').hide();
-                        showErrorlabel = false;
-                    }
-
-                }
-            });
-
-        }
 
         if ($("#Input_Email").val().length == 0) {
             $('#email-div').css("border", "solid 1px red")
@@ -343,6 +318,42 @@
     });
 
     function checkPhoneNumber(phoneNumber) {
+        debugger;
+        if ($("#Input_PhoneNumber").val().length == 0) {
+            $('#phone-div').css("border", "solid 1px red");
+            showErrorlabel = true;
+
+        }
+        else {
+            var phoneNumber = $("#Input_PhoneNumber").val()
+            $.ajax({
+                url: '/Common/CheckPhoneNumber?phoneNumber=' + phoneNumber,
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    if (data == true) {
+                        $('#phone-div').css("border", "solid 1px red");
+                        $('#phoneError').show();
+                        $("#registerSubmit").prop('disabled', true);
+                        $("#registerSubmit").css('background', "darkgray");
+                        $("#registerSubmit").css('cursor', "not-allowed");
+                        showErrorlabel = true;
+                    }
+                    else {
+                        $('#phoneError').hide();
+                        $('#phone-div').css("border", "");
+                        showErrorlabel = false;
+                        $("#registerSubmit").prop('disabled', false);
+                        $("#registerSubmit").css('background', "");
+                        $("#registerSubmit").css('cursor', "pointer");
+                    }
+
+                }
+            });
+
+        }
+
+
 
     }
 

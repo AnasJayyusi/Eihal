@@ -71,7 +71,7 @@ namespace Eihal.Controllers
                 case NotificationTypeEnum.NewOrder:
                     notification.TitleAr = "طلب جديد";
                     notification.TitleEn = "New Order";
-                    notification.MessageEn = $"New Have New Order With ID {additionalData}";
+                    notification.MessageEn = $"You Have New Order With ID {additionalData}";
                     notification.MessageAr = $"لديك طلب جديد رقم الطلب {additionalData}";
                     break;
                 case NotificationTypeEnum.ApprovedOrder:

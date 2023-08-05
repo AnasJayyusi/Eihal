@@ -87,7 +87,7 @@ namespace Eihal.Controllers
         public ActionResult ApproveReferal(int refId)
         {
             var currentUserId = GetUserProfileId();
-       
+
             var referralRequest = _dbContext.ReferralRequests.Where(a => a.Id == refId && a.AssignedToUserId == currentUserId && a.Status == ReferralStatusEnum.UnderReview).First();
 
             referralRequest.Status = ReferralStatusEnum.Approved;
@@ -104,7 +104,7 @@ namespace Eihal.Controllers
         public ActionResult RejectReferal(int refId)
         {
             var currentUserId = GetUserProfileId();
-       
+
             var referralRequest = _dbContext.ReferralRequests.Where(a => a.Id == refId && a.AssignedToUserId == currentUserId && a.Status == ReferralStatusEnum.UnderReview).First();
 
             referralRequest.Status = ReferralStatusEnum.Rejected;
@@ -434,6 +434,8 @@ namespace Eihal.Controllers
 
             if (!string.IsNullOrEmpty(form["SpecialtiesIds"]))
                 userProfile.SpecialtiesIds = form["SpecialtiesIds"];
+            else
+                userProfile.SpecialtiesIds = null;
 
             if (!string.IsNullOrEmpty(userProfile.SpecialtiesIds))
             {
