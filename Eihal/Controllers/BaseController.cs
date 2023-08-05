@@ -74,6 +74,18 @@ namespace Eihal.Controllers
                     notification.MessageEn = $"New Have New Order With ID {additionalData}";
                     notification.MessageAr = $"لديك طلب جديد رقم الطلب {additionalData}";
                     break;
+                case NotificationTypeEnum.ApprovedOrder:
+                    notification.TitleAr = "قبول طلب";
+                    notification.TitleEn = "Approved Order";
+                    notification.MessageEn = $"Order With ID {additionalData} Approved";
+                    notification.MessageAr = $"طلب رقم الطلب {additionalData} مقبول";
+                    break;
+                case NotificationTypeEnum.RejectOrder:
+                    notification.TitleAr = "رفض طلب";
+                    notification.TitleEn = "Reject Order";
+                    notification.MessageEn = $"Order With ID {additionalData} Rejected";
+                    notification.MessageAr = $"طلب رقم الطلب {additionalData} مرفوض";
+                    break;
             }
 
             _dbContext.Notifications.Add(notification);

@@ -25,8 +25,8 @@
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4" style="margin-top:125px;">
                         @*  <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-                        <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
-                        </a>*@
+                            <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
+                            </a>*@
                     </div>
                     <!-- Content Row -->
 
@@ -275,10 +275,10 @@
                                                     <h2 class="steps">Step 3 - 4</h2>
                                                 </div>
                                             </div>
-                                                <h6 style="color:#00768c">
-                                                  <h2 class="fs-title">Doctors</h2>
+                                            <h6 style="color:#00768c">
+                                                <h2 class="fs-title">Doctors</h2>
                                             </h6>
-                                          
+
                                             @Html.Partial("DoctorsOrder")
                                         </div>
                                         <input type="button" onclick="sendOrderRequest()" name="next" class="next action-button" value="Submit" />
@@ -324,134 +324,178 @@
 
 
 @section Scripts {
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 
 
-    <script>
+<script>
 
-        function changeImage() {
-            const gender = document.querySelector('input[name="gender"]:checked').value;
-            const image = document.getElementById('image');
+            function changeImage() {
+                const gender = document.querySelector('input[name="gender"]:checked').value;
+                const image = document.getElementById('image');
 
-            if (gender === 'male') {
-                image.src = '/images/male.png';
-                image.alt = 'Male Image';
-            } else if (gender === 'female') {
-                image.src = '/images/female.png';
-                image.alt = 'Female Image';
-            } else {
-                // Handle the case when no radio button is selected or unexpected value
-                image.src = 'male.png';
-                image.alt = 'Default Image';
-            }
-        }
-
-        function searchUsingEnterButtonIncoming(event) {
-            if (event.keyCode === 13) {
-                event.preventDefault();
-                filterIncomingReferrals();
-                ;
-            }
-        }
-
-        function searchUsingEnterButtonOutgoing(event) {
-            if (event.keyCode === 13) {
-                event.preventDefault();
-                filterOutgoingReferrals();
-                ;
-            }
-        }
-
-
-        function filterIncomingReferrals() {
-            var name = $('#filterInput-incoming').val();
-
-            var incomingContainer = $('#incomingRequestContainer');
-            var statusId = $('#status-incoming-ddl').val();
-            var dateId = $('#date-incoming-ddl').val();
-
-            $.ajax({
-                url: '/ServiceProvider/GetUserIncomingRequests?name=' + name + '&statusId=' + statusId + '&dateId=' + dateId, // Replace with the actual URL and action method to fetch the partial view
-                type: 'GET',
-                success: function (response) {
-                    incomingContainer.html(response);
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error:', error);
+                if (gender === 'male') {
+                    image.src = '/images/male.png';
+                    image.alt = 'Male Image';
+                } else if (gender === 'female') {
+                    image.src = '/images/female.png';
+                    image.alt = 'Female Image';
+                } else {
+                    // Handle the case when no radio button is selected or unexpected value
+                    image.src = 'male.png';
+                    image.alt = 'Default Image';
                 }
-            });
-        }
+            }
 
-        function filterOutgoingReferrals() {
-            var name = $('#filterInput-outgoing').val();
-
-            var outgoingContainer = $('#outgoingRequestContainer');
-            var statusId = $('#status-outgoing-ddl').val();
-            var dateId = $('#date-outgoing-ddl').val();
-
-            $.ajax({
-                url: '/ServiceProvider/GetUserOutgoingRequests?name=' + name + '&statusId=' + statusId + '&dateId=' + dateId, // Replace with the actual URL and action method to fetch the partial view
-                type: 'GET',
-                success: function (response) {
-                    outgoingContainer.html(response);
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error:', error);
+            function searchUsingEnterButtonIncoming(event) {
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                    filterIncomingReferrals();
+                    ;
                 }
-            });
-        }
-
-        function setCookie(name, value, days) {
-            var expires = "";
-            if (days) {
-                var date = new Date();
-                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                expires = "; expires=" + date.toUTCString();
-            }
-            document.cookie = name + "=" + value + expires + "; path=/";
-        }
-
-        $(document).ready(function () {
-            var currentUrl = window.location.href;
-            if (currentUrl.includes("Referrals")) {
-                $("#referrals-li").addClass("activeLink");
-                $("#referrals-text").addClass("activeLink");
-            } else {
-                console.log("The URL does not contain 'Referrals'.");
-            }
-            document.getElementsByClassName('active')[0].click();
-
-
-        })
-
-        function openTab(evt, tabName) {
-            // Hide all tab content
-            var tabContent = document.getElementsByClassName("tab-content");
-            for (var i = 0; i < tabContent.length; i++) {
-                tabContent[i].style.display = "none";
             }
 
-            // Remove 'active' class from all tab buttons
-            var tabButtons = document.getElementsByClassName("tab-button");
-            for (var i = 0; i < tabButtons.length; i++) {
-                tabButtons[i].className = tabButtons[i].className.replace(" active", "");
+            function searchUsingEnterButtonOutgoing(event) {
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                    filterOutgoingReferrals();
+                    ;
+                }
             }
 
-            // Show the selected tab content and set the corresponding button as active
-            document.getElementById(tabName).style.display = "block";
-            if (tabName == 'tab1') {
-                filterIncomingReferrals();
-            } else {
-                filterOutgoingReferrals();
+
+            function filterIncomingReferrals() {
+                var name = $('#filterInput-incoming').val();
+
+                var incomingContainer = $('#incomingRequestContainer');
+                var statusId = $('#status-incoming-ddl').val();
+                var dateId = $('#date-incoming-ddl').val();
+
+                $.ajax({
+                    url: '/ServiceProvider/GetUserIncomingRequests?name=' + name + '&statusId=' + statusId + '&dateId=' + dateId, // Replace with the actual URL and action method to fetch the partial view
+                    type: 'GET',
+                    success: function (response) {
+                        incomingContainer.html(response);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
             }
-            evt.currentTarget.className += " active";
-        }
+
+            function filterOutgoingReferrals() {
+                var name = $('#filterInput-outgoing').val();
+
+                var outgoingContainer = $('#outgoingRequestContainer');
+                var statusId = $('#status-outgoing-ddl').val();
+                var dateId = $('#date-outgoing-ddl').val();
+
+                $.ajax({
+                    url: '/ServiceProvider/GetUserOutgoingRequests?name=' + name + '&statusId=' + statusId + '&dateId=' + dateId, // Replace with the actual URL and action method to fetch the partial view
+                    type: 'GET',
+                    success: function (response) {
+                        outgoingContainer.html(response);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            }
+
+            function setCookie(name, value, days) {
+                var expires = "";
+                if (days) {
+                    var date = new Date();
+                    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                    expires = "; expires=" + date.toUTCString();
+                }
+                document.cookie = name + "=" + value + expires + "; path=/";
+            }
+
+            $(document).ready(function () {
+                var currentUrl = window.location.href;
+                if (currentUrl.includes("Referrals")) {
+                    $("#referrals-li").addClass("activeLink");
+                    $("#referrals-text").addClass("activeLink");
+                } else {
+                    console.log("The URL does not contain 'Referrals'.");
+                }
+                document.getElementsByClassName('active')[0].click();
 
 
-     
-    </script>
+            })
+
+            function openTab(evt, tabName) {
+                // Hide all tab content
+                var tabContent = document.getElementsByClassName("tab-content");
+                for (var i = 0; i < tabContent.length; i++) {
+                    tabContent[i].style.display = "none";
+                }
+
+                // Remove 'active' class from all tab buttons
+                var tabButtons = document.getElementsByClassName("tab-button");
+                for (var i = 0; i < tabButtons.length; i++) {
+                    tabButtons[i].className = tabButtons[i].className.replace(" active", "");
+                }
+
+                // Show the selected tab content and set the corresponding button as active
+                document.getElementById(tabName).style.display = "block";
+                if (tabName == 'tab1') {
+                    filterIncomingReferrals();
+                } else {
+                    filterOutgoingReferrals();
+                }
+                evt.currentTarget.className += " active";
+            }
+
+        // JavaScript function to toggle the dropdown menu
+    function toggleDropdown() {
+      const dropdownMenu = document.getElementById('dropdownMenu');
+      dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+    }
+
+    // JavaScript functions for approve and reject actions
+    function approve(refId) {
+
+                $.ajax({
+                    url: '/ServiceProvider/ApproveReferal?refId=' + refId,
+                    type: 'GET',
+                    success: function (response) {
+            toastr.success('Referrals approved successfully', 'Success !!');
+            filterIncomingReferrals();
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+    }    function reject(refId) {
+
+                $.ajax({
+                    url: '/ServiceProvider/RejectReferal?refId=' + refId,
+                    type: 'GET',
+                    success: function (response) {
+            toastr.success('Referrals rejected successfully', 'Success !!');
+            filterIncomingReferrals();
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+    }
+
+ 
+
+    // Event listener to close dropdown when clicking outside the dots container
+    document.addEventListener('click', function(event) {
+      const dotsContainer = document.querySelector('.dots-container');
+      if (!dotsContainer.contains(event.target)) {
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        dropdownMenu.style.display = 'none';
+      }
+    });
+
+</script>
 }
 
 

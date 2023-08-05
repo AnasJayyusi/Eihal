@@ -82,6 +82,43 @@ namespace Eihal.Controllers
             return PartialView("_OutgoingRequests", model);
         }
 
+        [Route("ApproveReferal")]
+
+        public ActionResult ApproveReferal(int refId)
+        {
+            var currentUserId = GetUserProfileId();
+       
+            var referralRequest = _dbContext.ReferralRequests.Where(a => a.Id == refId && a.AssignedToUserId == currentUserId && a.Status == ReferralStatusEnum.UnderReview).First();
+
+            referralRequest.Status = ReferralStatusEnum.Approved;
+            _dbContext.SaveChanges();
+            var referralRequestId = referralRequest.Id;
+            string requestNumber = referralRequestId.ToString("#0000");
+            PushNewNotifications(SharedEnum.NotificationTypeEnum.ApprovedOrder, GetUserProfileId(), referralRequest.CreatedByUserId, requestNumber);
+
+            _notificationService.SendMessage("omar", "Order" + requestNumber);
+            return Ok();
+        }
+        [Route("RejectReferal")]
+
+        public ActionResult RejectReferal(int refId)
+        {
+            var currentUserId = GetUserProfileId();
+       
+            var referralRequest = _dbContext.ReferralRequests.Where(a => a.Id == refId && a.AssignedToUserId == currentUserId && a.Status == ReferralStatusEnum.UnderReview).First();
+
+            referralRequest.Status = ReferralStatusEnum.Rejected;
+            _dbContext.SaveChanges();
+            var referralRequestId = referralRequest.Id;
+            string requestNumber = referralRequestId.ToString("#0000");
+            PushNewNotifications(SharedEnum.NotificationTypeEnum.RejectOrder, GetUserProfileId(), referralRequest.CreatedByUserId, requestNumber);
+
+            _notificationService.SendMessage("omar", "Order" + requestNumber);
+            return Ok();
+        }
+
+
+
         #endregion
 
 

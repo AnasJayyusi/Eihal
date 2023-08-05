@@ -2,7 +2,7 @@
 
 @foreach (var referral in Model)
 {
-    <div class="col-md-4 padding-top-25" data-toggle="modal"   data-target="#RefApproveRejectModal">
+    <div class="col-md-4 padding-top-25" >
         <div class="referral-card" style="    border: 1px solid #eadfdf;
     border-radius: 10px;font-size: 13px;">
             <div class="referral-card-body">
@@ -27,6 +27,17 @@
                         <br>
                         @*<span class="ref-info-label"> Privilege Name</span><span style="color:gray"> @referral.Service.TitleEn </span>*@
                     </div>
+                    @if(referral.Status==Eihal.Enums.ReferralStatusEnum.UnderReview ){
+                 <div class="dots-container">
+  <i onclick="toggleDropdown()">
+    <i style="color:#eadfdf" class="fas fa-ellipsis-v"></i>
+  </i>
+  <div class="dropdown" id="dropdownMenu">
+    <div class="option" onclick="approve(@(referral.Id))">Approve</div>
+    <div class="option" onclick="reject(@(referral.Id))">Reject</div>
+  </div>
+</div>
+                    }
                 </div>
 
             </div>
@@ -83,3 +94,55 @@
     </div>
 </div>
 
+<style>
+    /* Add CSS styles to position and style the dropdown */
+/* Add CSS styles to position and style the dropdown */
+.dots-container {
+  position: relative;
+}
+
+.dropdown {
+  display: none;
+  position: absolute;
+  top: 25px;
+  right: 0;
+  background-color: #fff;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 5px;
+}
+
+.option {
+  cursor: pointer;
+  padding: 5px;
+}
+
+/* Add hover effect */
+.option:hover {
+  background-color: #f1f1f1; /* Change the background color to your preferred color */
+}
+
+/* Add hover effect for the selected item */
+.option.selected:hover {
+  background-color: #e0e0e0; /* Change the background color to your preferred color */
+}
+
+/* Add your own styles as needed */
+
+/* Add your own styles as needed */
+
+</style>
+
+@section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        // JavaScript function to toggle the dropdown menu
+    //function toggleDropdown() {
+    //  const dropdownMenu = document.getElementById('dropdownMenu');
+    //  dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+    //}
+
+ 
+
+    </script>
+}

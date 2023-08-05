@@ -10,7 +10,9 @@
 
         public enum NotificationTypeEnum
         {
-            NewOrder = 1
+            NewOrder = 1,
+            ApprovedOrder = 2, 
+            RejectOrder =3 
         }
     }
 }
