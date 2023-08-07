@@ -4,6 +4,7 @@
     {
         public enum AccountTypeEnum
         {
+            Admin = 0,
             ServiceProvider = 1,
             Beneficiary = 2
         }
@@ -12,7 +13,13 @@
         {
             NewOrder = 1,
             ApprovedOrder = 2, 
-            RejectOrder =3 
+            RejectOrder =3,
+            SendProfileToReview=4,
+            RejectProfile=5,
+               
         }
+
+  
+
     }
 }

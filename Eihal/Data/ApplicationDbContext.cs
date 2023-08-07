@@ -1,6 +1,7 @@
 ﻿using Eihal.Data.Entites;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using System.Security.Cryptography.X509Certificates;
 
 namespace Eihal.Data
@@ -17,6 +18,8 @@ namespace Eihal.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<UserProfile>().HasQueryFilter(f => f.AccountTypeId != 0); // Ignore Admin User From All Queries
+            modelBuilder.Entity<UserServices>().HasQueryFilter(f => f.UserId != 0); // Ignore Admin User From All Queries
             modelBuilder.Entity<UserCompany>().HasKey(sc => new { sc.UserProfileId, sc.InsuranceCompanyId });
             base.OnModelCreating(modelBuilder);
         }

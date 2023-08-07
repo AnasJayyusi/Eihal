@@ -1,4 +1,5 @@
 ﻿using Eihal.Data;
+using Eihal.Hubs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +10,7 @@ namespace Eihal.Controllers
     [Route("Common")]
     public class CommonController : BaseController
     {
-        public CommonController(ApplicationDbContext dbContext) : base(dbContext)
+        public CommonController(ApplicationDbContext dbContext, INotificationService notificationService) : base(dbContext, notificationService)
         {
         }
 

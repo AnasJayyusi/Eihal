@@ -1,4 +1,5 @@
 ﻿using Eihal.Data;
+using Eihal.Hubs;
 using Eihal.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +13,7 @@ namespace Eihal.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ApplicationDbContext dbContext, ILogger<HomeController> logger) : base(dbContext)
+        public HomeController(ApplicationDbContext dbContext, ILogger<HomeController> logger, INotificationService notificationService) : base(dbContext, notificationService)
         {
             _logger = logger;
         }

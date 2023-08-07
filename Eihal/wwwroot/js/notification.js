@@ -19,7 +19,9 @@ connection.on("ReceiveMessage", function (user, message) {
             //dropdown.append($('<option>').text(degree.titleEn).val(degree.id));
             $(".notificationsCount").text(response);
             //li.textContent = `${response} says `;
-
+            if ($(".notificationsCount").text() > 0 || response > 0) {
+                $("#notifications-count").removeClass("badge-light").addClass("badge-danger");
+            }
             //$.each(response, function (index, item) {
             //    li.textContent = `${item.titleEn} says `;
             //});

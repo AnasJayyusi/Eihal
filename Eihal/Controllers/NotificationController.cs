@@ -1,4 +1,5 @@
 ﻿using Eihal.Data;
+using Eihal.Hubs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +13,7 @@ namespace Eihal.Controllers
     {
         private readonly UserManager<IdentityUser> _userManager;
 
-        public NotificationController(UserManager<IdentityUser> userManager,ApplicationDbContext dbContext) : base(dbContext)
+        public NotificationController(UserManager<IdentityUser> userManager,ApplicationDbContext dbContext, INotificationService notificationService) : base(dbContext, notificationService)
         {
             _userManager = userManager;
         }

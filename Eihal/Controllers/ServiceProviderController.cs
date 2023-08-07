@@ -4,13 +4,9 @@ using Eihal.Enums;
 using Eihal.Hubs;
 using Eihal.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SixLabors.ImageSharp;
-using System.ComponentModel.Design;
 using System.Data;
-using static Eihal.Areas.Identity.Pages.Account.LoginModel;
 
 namespace Eihal.Controllers
 {
@@ -21,12 +17,11 @@ namespace Eihal.Controllers
     public class ServiceProviderController : BaseController
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
-        private readonly INotificationService _notificationService;
 
-        public ServiceProviderController(IWebHostEnvironment webHostEnvironment, INotificationService notificationService, ApplicationDbContext dbContext) : base(dbContext)
+
+        public ServiceProviderController(IWebHostEnvironment webHostEnvironment, ApplicationDbContext dbContext, INotificationService notificationService) : base(dbContext, notificationService)
         {
             _webHostEnvironment = webHostEnvironment;
-            _notificationService = notificationService;
         }
 
         [Route("Profile")]
@@ -94,9 +89,9 @@ namespace Eihal.Controllers
             _dbContext.SaveChanges();
             var referralRequestId = referralRequest.Id;
             string requestNumber = referralRequestId.ToString("#0000");
-            PushNewNotifications(SharedEnum.NotificationTypeEnum.ApprovedOrder, GetUserProfileId(), referralRequest.CreatedByUserId, requestNumber);
+            PushNewNotification(SharedEnum.NotificationTypeEnum.ApprovedOrder, GetUserProfileId(), referralRequest.CreatedByUserId, requestNumber);
 
-            _notificationService.SendMessage("omar", "Order" + requestNumber);
+
             return Ok();
         }
         [Route("RejectReferal")]
@@ -111,9 +106,9 @@ namespace Eihal.Controllers
             _dbContext.SaveChanges();
             var referralRequestId = referralRequest.Id;
             string requestNumber = referralRequestId.ToString("#0000");
-            PushNewNotifications(SharedEnum.NotificationTypeEnum.RejectOrder, GetUserProfileId(), referralRequest.CreatedByUserId, requestNumber);
+            PushNewNotification(SharedEnum.NotificationTypeEnum.RejectOrder, GetUserProfileId(), referralRequest.CreatedByUserId, requestNumber);
 
-            _notificationService.SendMessage("omar", "Order" + requestNumber);
+
             return Ok();
         }
 
@@ -215,7 +210,6 @@ namespace Eihal.Controllers
             userServices.CreatedOn = DateTime.Now;
             _dbContext.UserServices.Add(userServices);
             _dbContext.SaveChanges();
-            _notificationService.SendMessage("omar", "test services");
             return Ok();
         }
 
@@ -403,6 +397,7 @@ namespace Eihal.Controllers
             userProfile.ProfileStatus = ProfileStatus.UnderReview;
             _dbContext.UserProfiles.Update(userProfile);
             _dbContext.SaveChanges();
+            PushNewNotification(SharedEnum.NotificationTypeEnum.SendProfileToReview, GetUserProfileId(), _adminUserProfileId, GetShortName());
             return Json(ProfileStatus.UnderReview.ToString());
         }
 
@@ -848,9 +843,8 @@ namespace Eihal.Controllers
             var referralRequestId = referralRequest.Id;
             string requestNumber = referralRequestId.ToString("#0000");
 
-            PushNewNotifications(SharedEnum.NotificationTypeEnum.NewOrder, GetUserProfileId(), Convert.ToInt32(orderDetailsModal.DoctorId), requestNumber);
+            PushNewNotification(SharedEnum.NotificationTypeEnum.NewOrder, GetUserProfileId(), Convert.ToInt32(orderDetailsModal.DoctorId), requestNumber);
 
-            _notificationService.SendMessage("omar", "You Have New Order" + requestNumber);
 
             // Return a response indicating success
 

@@ -1,5 +1,6 @@
 ﻿using Eihal.Data;
 using Eihal.Data.Entites;
+using Eihal.Hubs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -15,7 +16,7 @@ namespace Eihal.Controllers
     public class AdminController : BaseController
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public AdminController(ApplicationDbContext dbContext, IWebHostEnvironment webHostEnvironment) : base(dbContext)
+        public AdminController(ApplicationDbContext dbContext, IWebHostEnvironment webHostEnvironment, INotificationService notificationService) : base(dbContext, notificationService)
         {
             _webHostEnvironment = webHostEnvironment;
         }
@@ -1918,14 +1919,14 @@ namespace Eihal.Controllers
                 ViewBag.SuccessMessage = isSuccessDelete;
             }
 
-            return View(_dbContext.Services.Include(a=>a.Privillage).Include(a=>a.SubPrivillage).ToList());
+            return View(_dbContext.Services.Include(a => a.Privillage).Include(a => a.SubPrivillage).ToList());
         }
 
 
         [Route("GetServices")]
         public IActionResult ServicesList()
         {
-            var services = _dbContext.Services.Include(a=>a.Privillage).Include(a=>a.SubPrivillage).ToList();
+            var services = _dbContext.Services.Include(a => a.Privillage).Include(a => a.SubPrivillage).ToList();
             return PartialView("ServicesList", services);
         }
 
@@ -2434,6 +2435,7 @@ namespace Eihal.Controllers
             userProfile.RejectionReason = rejectionReason;
             _dbContext.UserProfiles.Update(userProfile);
             _dbContext.SaveChanges();
+            PushNewNotification(NotificationTypeEnum.RejectProfile, GetUserProfileId(), id);
             return Json(ProfileStatus.UnderReview.ToString());
         }
 
