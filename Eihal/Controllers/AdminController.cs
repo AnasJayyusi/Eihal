@@ -1739,11 +1739,14 @@ namespace Eihal.Controllers
         {
             // Retrieve the practitioner type from the database using the id
             var city = _dbContext.Cities.Find(id);
-
-            if (city == null)
+            var isUsed = _dbContext.TimeClinicLocations.Any(a => a.CityId == id);
+            if (city == null || isUsed)
             {
                 // Handle the case where the practitioner type doesn't exist
                 TempData["isSuccessDelete"] = false;
+                TempData["isFromDeleteRequest"] = true;
+
+                return RedirectToAction("Cities");
             }
 
             // Remove the practitioner type from the DbSet

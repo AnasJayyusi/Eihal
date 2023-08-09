@@ -223,7 +223,10 @@
             setTimeout(function () {
                 $('.alert-success').fadeOut();
             }, 3000);
-
+               // Hide the error message after 2 seconds
+                        setTimeout(function () {
+                            $('.alert-danger').addClass('hidden');
+                        }, 5000);
 
             $('#openNewCityModal').click(function () {
                 $('#titleArInput').val("");
