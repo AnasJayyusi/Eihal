@@ -47,7 +47,7 @@
                 <a class="collapse-item @(currentPath.Contains("MasterList/Specialties".ToString().ToLower()) == true ? "active" : "")" asp-area="" asp-controller="Admin" asp-action="Specialties">Specialties</a>
                 <a class="collapse-item @(currentPath.Contains("Subspecialties".ToString().ToLower()) == true ? "active" : "")" asp-area="" asp-controller="Admin" asp-action="Subspecialties">Subspecialties</a>
                 <a class="collapse-item @(currentPath.Contains("ClinicalSpecialities".ToString().ToLower()) == true ? "active" : "")" asp-area="" asp-controller="Admin" asp-action="ClinicalSpecialities">Clinical Specialities</a>
-                <a class="collapse-item @(currentPath.Contains("Privillages".ToString().ToLower()) == true ? "active" : "")" asp-area="" asp-controller="Admin" asp-action="Privillages">Privileges</a>
+                @*<a class="collapse-item @(currentPath.Contains("Privillages".ToString().ToLower()) == true ? "active" : "")" asp-area="" asp-controller="Admin" asp-action="Privillages">Privileges</a>*@
                 @*<a class="collapse-item @(currentPath.Contains("SubPrivillages".ToString().ToLower()) == true ? "active" : "")" asp-area="" asp-controller="Admin" asp-action="SubPrivillages">Sub Privileges</a>*@
                 <a class="collapse-item @(currentPath.Contains("Services".ToString().ToLower()) == true ? "active" : "")" asp-area="" asp-controller="Admin" asp-action="Services">Services</a>
                 <a class="collapse-item @(currentPath.Contains("Countries".ToString().ToLower()) == true ? "active" : "")" asp-area="" asp-controller="Admin" asp-action="Countries">Countries</a>

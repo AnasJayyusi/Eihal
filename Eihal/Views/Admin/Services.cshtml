@@ -202,9 +202,9 @@
                         <input type="number" class="form-control" id="feeInput" required>
                     </div>
                     <div class="form-group">
-                        <label for="privillages-ddl" style="font-weight:bold;color:#00768c">Privilege:</label>
+                        <label for="clinicalSpecialities-ddl" style="font-weight:bold;color:#00768c">Clinical Speciality:</label>
                         <!-- Dropdown list HTML element -->
-                        <select class="form-control" id="privillages-ddl"></select>
+                        <select class="form-control" id="clinicalSpecialities-ddl"></select>
                     </div>      
                  @*   <div class="form-group">
                         <label for="subPrivillages-ddl" style="font-weight:bold;color:#00768c">SubPrivillage:</label>
@@ -245,17 +245,17 @@
                 $('#titleEnInput').val("");
                 $('#feeInput').val("");
 
-                if ($('#privillages-ddl').children().length == 0) 
+                if ($('#clinicalSpecialities-ddl').children().length == 0) 
                 {
                     $.ajax({
-                        url: '@Url.Action("GetPrivillagesDDL", "Common")',
+                        url: '@Url.Action("GetClinicalSpecialitiesDDL", "Common")',
                         type: 'GET',
                         dataType: 'json',
                         success: function (data) {
                             // Clear existing options
-                            $('#privillages-ddl').empty();
+                            $('#clinicalSpecialities-ddl').empty();
                             // Populate the dropdown list
-                            var dropdown = $('#privillages-ddl');
+                            var dropdown = $('#clinicalSpecialities-ddl');
                             $.each(data, function (index, item) {
                                 dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
                             });
@@ -288,7 +288,7 @@
                     TitleEn: $('#titleEnInput').val(),
                     Fee: $('#feeInput').val(),
                     IsActive:true,
-                    PrivillageId: $('#privillages-ddl').val(),
+                    ClinicalSpecialityId: $('#clinicalSpecialities-ddl').val(),
                     //SubPrivillageId: $('#subPrivillages-ddl').val()
                 };
 

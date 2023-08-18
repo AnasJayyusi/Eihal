@@ -931,6 +931,13 @@ namespace Eihal.Controllers
             var privillages = _dbContext.Privillages.Single(w => w.Id == id);
             return privillages;
         }
+             [HttpGet]
+        //[Route("GetPrivillage/{id}")]
+        //public Privillage GetPrivillage(int id)
+        //{
+        //    var privillages = _dbContext.Privillages.Single(w => w.Id == id);
+        //    return privillages;
+        //}
 
         [Route("GetPrivillagesList")]
         public IActionResult GetPrivillagesList()
@@ -1921,15 +1928,15 @@ namespace Eihal.Controllers
                 // Use the value as needed
                 ViewBag.SuccessMessage = isSuccessDelete;
             }
-
-            return View(_dbContext.Services.Include(a => a.Privillage).Include(a => a.SubPrivillage).ToList());
+            var services = _dbContext.Services.Include(a => a.ClinicalSpeciality).ToList();
+            return View(services);
         }
 
 
         [Route("GetServices")]
         public IActionResult ServicesList()
         {
-            var services = _dbContext.Services.Include(a => a.Privillage).Include(a => a.SubPrivillage).ToList();
+            var services = _dbContext.Services.Include(a => a.ClinicalSpeciality).ToList();
             return PartialView("ServicesList", services);
         }
 
@@ -2055,7 +2062,7 @@ namespace Eihal.Controllers
         [Route("GetService/{id}")]
         public Services GetService(int id)
         {
-            var services = _dbContext.Services.Single(w => w.Id == id);
+            var services = _dbContext.Services.Include(a=>a.ClinicalSpeciality).Single(w => w.Id == id);
             return services;
         }
         #endregion

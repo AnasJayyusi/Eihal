@@ -125,13 +125,13 @@ namespace Eihal.Controllers
             var currentUserId = GetUserProfileId();
             var userPractitionerTypeId = _dbContext.UserProfiles.Where(a => a.Id == currentUserId).Select(a => a.PractitionerTypeId).FirstOrDefault();
 
-            var previllages =
-                           (from p in _dbContext.Privillages
-                            join c in _dbContext.ClinicalSpecialities on p.ClinicalSpecialityId equals c.Id
-                            where p.IsActive && c.PractitionerTypeId == userPractitionerTypeId
-                            select p).ToList();
+            var clinicalSpecialities =
+                           (
+                            from c in _dbContext.ClinicalSpecialities 
+                            where c.IsActive && c.PractitionerTypeId == userPractitionerTypeId
+                            select c).ToList();
 
-            return View(previllages);
+            return View(clinicalSpecialities);
         }
 
         [Route("MyServiceCardPartial")]
@@ -150,29 +150,29 @@ namespace Eihal.Controllers
         }
         [Route("AllServiceCardPartial")]
 
-        public ActionResult AllServiceCardPartial(string privillagesIds, string kw)
+        public ActionResult AllServiceCardPartial(string clinicalSpecialitiesIds, string kw)
         {
             var currentUserId = GetUserProfileId();
             var userPractitionerTypeId = _dbContext.UserProfiles.Where(a => a.Id == currentUserId).Select(a => a.PractitionerTypeId).FirstOrDefault();
 
             var currentUserServices = _dbContext.UserServices.Where(a => a.UserId == currentUserId && a.Status != Enums.ServicesStatusEnum.Deleted).Select(a => a.ServiceId);
             var services = from s in _dbContext.Services
-                           join p in _dbContext.Privillages on s.PrivillageId equals p.Id
-                           join c in _dbContext.ClinicalSpecialities on p.ClinicalSpecialityId equals c.Id
+                           //join p in _dbContext.Privillages on s.PrivillageId equals p.Id
+                           join c in _dbContext.ClinicalSpecialities on s.ClinicalSpecialityId equals c.Id
                            where s.IsActive && !currentUserServices.Contains(s.Id) && c.PractitionerTypeId == userPractitionerTypeId
                            select s;
 
-            if (privillagesIds != "All")
+            if (clinicalSpecialitiesIds != "All")
             {
-                var listOfIDs = privillagesIds.Split(',').Select(int.Parse).ToList();
-                services = services.Where(a => a.PrivillageId != null && listOfIDs.Contains(a.PrivillageId.Value));
+                var listOfIDs = clinicalSpecialitiesIds.Split(',').Select(int.Parse).ToList();
+                services = services.Where(a => a.ClinicalSpecialityId != null && listOfIDs.Contains(a.ClinicalSpecialityId.Value));
             }
             if (!string.IsNullOrEmpty(kw))
             {
                 services = services.Where(a => a.TitleEn.Contains(kw));
             }
 
-            return PartialView("_AllServiceCardPartial", services.Include(a => a.Privillage).ThenInclude(a => a.ClinicalSpeciality).ToList()); // Replace with the name of your partial view
+            return PartialView("_AllServiceCardPartial", services.Include(a => a.ClinicalSpeciality).ToList()); // Replace with the name of your partial view
         }
         [Route("DeleteUserService")]
         public ActionResult DeleteUserService(int Id)
