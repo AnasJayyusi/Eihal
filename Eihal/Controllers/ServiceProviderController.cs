@@ -3,10 +3,12 @@ using Eihal.Data.Entites;
 using Eihal.Enums;
 using Eihal.Hubs;
 using Eihal.Models;
+using Eihal.Tools;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
+using Eihal.Dto;
 
 namespace Eihal.Controllers
 {
@@ -127,7 +129,7 @@ namespace Eihal.Controllers
 
             var clinicalSpecialities =
                            (
-                            from c in _dbContext.ClinicalSpecialities 
+                            from c in _dbContext.ClinicalSpecialities
                             where c.IsActive && c.PractitionerTypeId == userPractitionerTypeId
                             select c).ToList();
 
@@ -157,7 +159,7 @@ namespace Eihal.Controllers
 
             var currentUserServices = _dbContext.UserServices.Where(a => a.UserId == currentUserId && a.Status != Enums.ServicesStatusEnum.Deleted).Select(a => a.ServiceId);
             var services = from s in _dbContext.Services
-                           //join p in _dbContext.Privillages on s.PrivillageId equals p.Id
+                               //join p in _dbContext.Privillages on s.PrivillageId equals p.Id
                            join c in _dbContext.ClinicalSpecialities on s.ClinicalSpecialityId equals c.Id
                            where s.IsActive && !currentUserServices.Contains(s.Id) && c.PractitionerTypeId == userPractitionerTypeId
                            select s;
@@ -850,6 +852,53 @@ namespace Eihal.Controllers
 
             return Ok("Order Send successfully.");
         }
+
+
+        [HttpGet]
+        [Route("ExportReport")]
+        [AllowAnonymous]
+        public ActionResult ExportReport(int referralRequestId = 19)
+        {
+            PdfReportGenerator reportGenerator = new PdfReportGenerator();
+            // Get Logo Image
+            string imagePath = GetFileFullPath(_webHostEnvironment, "images", "logo.png");
+
+            // Set Title
+            string reportName = string.Format("Invoice" + DateTime.Now.ToString("yyyyMMdd") + "-" + ".pdf");
+
+
+            var obj = _dbContext.ReferralRequests.Include(i => i.Order)
+                                                 .Include(i => i.AssignedToUser)
+                                                 .Include(i => i.CreatedByUser)
+                                                 .Single(w => w.Id == referralRequestId);
+
+            var timeClinicLocations = _dbContext.TimeClinicLocations
+                                       .Where(w => w.UserProfileId == obj.AssignedToUserId)
+                                       .FirstOrDefault();
+
+            var masterDetails = new MasterDetailsDto()
+            {
+                OrderDate = obj.CreationDate.ToString("MM/dd/yyyy"),
+                DoctorName = obj.AssignedToUser.FullName,
+                ClinicName = timeClinicLocations.ClinicName ?? "Not Defined Yet.",
+                OrderNo = obj.Id.ToString("#0000"),
+                PatientName = obj.Order.PatientName,
+                RequestFrom = obj.CreatedByUser.FullName
+            };
+
+            MemoryStream reportFile = reportGenerator.GenerateReport(imagePath, masterDetails);
+
+            // Return File
+            return File(reportFile, "application/pdf", reportName);
+        }
     }
 }
 
+public class Customer
+{
+    public int CustomerId { get; set; }
+    public string CustomerName { get; set; }
+    public string Address { get; set; }
+    public string Email { get; set; }
+    public string ZipCode { get; set; }
+}

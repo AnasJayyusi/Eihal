@@ -175,7 +175,9 @@
     </div>
     <!-- End of Content Wrapper -->
 </div>
-
+<div class="col-md-12 text-align-right">
+    <button class="btn btn-success" type="button">@Html.ActionLink("Create PDF", "ExportReport", "ServiceProvider", null)</button>
+</div>
 
 <!-- Add Order Modal -->
 <div class="modal fade" id="AddOrderModal" tabindex="-1" role="dialog" aria-labelledby="EditUserProfileModal" aria-hidden="true">
@@ -451,7 +453,7 @@
 
         // JavaScript function to toggle the dropdown menu
         function toggleDropdown() {
-            debugger;
+            
             const dropdownMenu = document.getElementById('dropdownMenu');
             dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
         }
@@ -492,7 +494,7 @@
             //ToDo: Handle This Code Later On 
              //Event listener to close dropdown when clicking outside the dots container
             document.addEventListener('mouseout', function (event) {
-            debugger;
+            
                 const dotsContainer = document.querySelector('.referral-card');
                 if (dotsContainer != null && dotsContainer != undefined && !dotsContainer.contains(event.target)) {
                     const dropdownMenu = document.getElementById('dropdownMenu');

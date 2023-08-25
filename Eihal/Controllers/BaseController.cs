@@ -1,6 +1,5 @@
 ﻿using Eihal.Data;
 using Eihal.Data.Entites;
-using Eihal.Enums;
 using Eihal.Hubs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -126,7 +125,11 @@ namespace Eihal.Controllers
         }
 
 
-
+        public string GetFileFullPath(IWebHostEnvironment _webHostEnvironment,string folderName ,string fileName)
+        {
+            //Build the File Path.  
+            return Path.Combine(_webHostEnvironment.WebRootPath, folderName, fileName) ;
+        }
     }
 }
 

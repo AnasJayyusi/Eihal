@@ -20,8 +20,6 @@ namespace Eihal.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
-
-
         [HttpGet]
         [Route("DownloadFileFromFolder")]
         public FileResult DownloadFileFromFolder(string fileName)
