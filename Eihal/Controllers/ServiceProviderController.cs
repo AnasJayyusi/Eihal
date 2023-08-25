@@ -857,7 +857,7 @@ namespace Eihal.Controllers
         [HttpGet]
         [Route("ExportReport")]
         [AllowAnonymous]
-        public ActionResult ExportReport(int referralRequestId = 19)
+        public ActionResult ExportReport(int referralRequestId = 23)
         {
             PdfReportGenerator reportGenerator = new PdfReportGenerator();
             // Get Logo Image
@@ -866,27 +866,99 @@ namespace Eihal.Controllers
             // Set Title
             string reportName = string.Format("Invoice" + DateTime.Now.ToString("yyyyMMdd") + "-" + ".pdf");
 
-
-            var obj = _dbContext.ReferralRequests.Include(i => i.Order)
+            // Get Referral Requests 
+            var referralReq = _dbContext.ReferralRequests.Include(i => i.Order)
                                                  .Include(i => i.AssignedToUser)
                                                  .Include(i => i.CreatedByUser)
                                                  .Single(w => w.Id == referralRequestId);
 
-            var timeClinicLocations = _dbContext.TimeClinicLocations
-                                       .Where(w => w.UserProfileId == obj.AssignedToUserId)
-                                       .FirstOrDefault();
+            // Get Clinic Name
+            var clinicName = _dbContext.TimeClinicLocations
+                                                .Where(w => w.UserProfileId == referralReq.AssignedToUserId)
+                                                .Select(s => s.ClinicName)
+                                                .FirstOrDefault();
 
-            var masterDetails = new MasterDetailsDto()
+
+            // Get Order Details
+            var orderDetails = _dbContext.OrderDetails
+                                         .Include(i => i.Services)
+                                         .Where(w => w.Id == referralReq.OrderId)
+                                         .ToList();
+
+
+
+
+            var reportDto = new ReportDto();
+
+            reportDto.MasterDetails = new MasterDetailsDto()
             {
-                OrderDate = obj.CreationDate.ToString("MM/dd/yyyy"),
-                DoctorName = obj.AssignedToUser.FullName,
-                ClinicName = timeClinicLocations.ClinicName ?? "Not Defined Yet.",
-                OrderNo = obj.Id.ToString("#0000"),
-                PatientName = obj.Order.PatientName,
-                RequestFrom = obj.CreatedByUser.FullName
+                OrderDate = referralReq.CreationDate.ToString("MM/dd/yyyy"),
+                DoctorName = referralReq.AssignedToUser.FullName,
+                ClinicName = clinicName ?? "Not Defined Yet.",
+                OrderNo = referralReq.Id.ToString("#0000"),
+                PatientName = referralReq.Order.PatientName,
+                RequestFrom = referralReq.CreatedByUser.FullName
             };
 
-            MemoryStream reportFile = reportGenerator.GenerateReport(imagePath, masterDetails);
+            List<DataTableDto> dataSource = new List<DataTableDto>();
+            foreach (var order in orderDetails)
+            {
+                int totalQty = 0;
+                double totalUnitPrice = 0;
+                double totalPrice = 0;
+                double totalVatPercentage = 0;
+                double totalVatValue = 0;
+                double totalNetWithVat = 0;
+                foreach (var svc in order.Services)
+                {
+                    var dataTableDto = new DataTableDto();
+                    dataTableDto.ServiceCode = svc.Id.ToString();
+                    dataTableDto.ServiceDesc = svc.TitleAr;
+                    dataTableDto.Qty = 1;
+
+                    // Total Qty
+                    totalQty = totalQty + dataTableDto.Qty;
+
+                    dataTableDto.UnitPrice = _dbContext.UserServices.Single(w => w.ServiceId == svc.Id && w.UserId == referralReq.AssignedToUserId).Price;
+                    // Total totalPrice
+                    totalUnitPrice = totalUnitPrice + dataTableDto.UnitPrice;
+
+                    dataTableDto.Total = dataTableDto.UnitPrice * dataTableDto.Qty;
+                    // Total totalVatPercentage
+                    totalPrice = totalPrice + dataTableDto.Total;
+
+                    dataTableDto.VatPercentage = 25.0;
+                    // Total totalVatPercentage
+                    totalVatPercentage = totalVatPercentage + dataTableDto.VatPercentage;
+
+                    dataTableDto.VatValue = (dataTableDto.Total * 25.0) / 100;
+
+                    // Total totalVatPercentage
+                    totalVatValue = totalVatValue + dataTableDto.VatValue;
+
+                    dataTableDto.NetWithVat = (dataTableDto.Total * 25.0) / 100;
+
+                    // Total totalNetWithVat
+                    totalNetWithVat = totalNetWithVat + dataTableDto.NetWithVat;
+
+                    dataSource.Add(dataTableDto);
+                }
+                var total = new DataTableDto();
+                // For Total Rows
+                total.ServiceCode = "#";
+                total.ServiceDesc = "Total Amount";
+                total.Qty = totalQty;
+                total.UnitPrice = totalUnitPrice;
+                total.Total = totalPrice;
+                total.VatValue = totalVatValue;
+                total.VatPercentage = totalVatPercentage;
+                total.NetWithVat = totalNetWithVat;
+                dataSource.Add(total);
+
+            }
+
+            reportDto.DataTable = dataSource;
+            MemoryStream reportFile = reportGenerator.GenerateReport(imagePath, reportDto);
 
             // Return File
             return File(reportFile, "application/pdf", reportName);
