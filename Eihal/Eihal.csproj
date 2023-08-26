@@ -1857,6 +1857,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Common\" />
     <Folder Include="wwwroot\images\InsuranceLogo\" />
     <Folder Include="wwwroot\users\attachments\" />
   </ItemGroup>

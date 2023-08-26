@@ -1,11 +1,9 @@
 using Eihal.Data;
-using Eihal.Helper;
 using Eihal.Hubs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
-using System.Configuration;
 using System.Globalization;
 
 string logger = string.Empty;
@@ -39,7 +37,8 @@ try
     builder.Services.AddSingleton<INotificationService, NotificationService>();
     builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation()
          .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
-            .AddDataAnnotationsLocalization(); 
+         .AddDataAnnotationsLocalization(); 
+
     builder.Services.AddRazorPages();
     logger = "AddRazorPages Applied";
 
