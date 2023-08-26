@@ -22,7 +22,7 @@ namespace Eihal.Data.Entites
         public List<OrderDetail> OrderDetails { get; set; }
         [ForeignKey(nameof(ClinicalSpeciality))]
         public int? ClinicalSpecialityId { get; set; }
-        public ClinicalSpeciality ClinicalSpeciality { get; set; }
+        public ClinicalSpeciality? ClinicalSpeciality { get; set; }
 
     }
 }
