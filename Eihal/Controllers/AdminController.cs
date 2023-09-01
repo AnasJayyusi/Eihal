@@ -1098,6 +1098,77 @@ namespace Eihal.Controllers
             return PartialView("SubPrivillages", SubPrivillages);
         }
         #endregion
+        #region GeneralSettings
+        [Route("Settings/GeneralSettings")]
+        public IActionResult GeneralSettings()
+        {
+            // Retrieve the value from TempData
+            bool? isFromDeleteRequest = TempData["isFromDeleteRequest"] as bool?;
+            bool? isSuccessDelete = TempData["isSuccessDelete"] as bool?;
+
+            if (isFromDeleteRequest != null && isSuccessDelete != null)
+            {
+                // Clear the TempData value to avoid persisting it across subsequent requests
+                TempData.Remove("isFromDeleteRequest");
+                TempData.Remove("isSuccessDelete");
+
+                // Use the value as needed
+                ViewBag.SuccessMessage = isSuccessDelete;
+            }
+
+            return View(_dbContext.GeneralSettings.FirstOrDefault());
+        }
+
+        [HttpPost]
+        [Route("Settings/UpdateGeneralSetting")]
+
+        public IActionResult UpdateGeneralSetting(GeneralSettings updatedSetting)
+        {
+            var generalSettings = _dbContext.GeneralSettings.FirstOrDefault();
+            if (generalSettings == null)
+                generalSettings = new GeneralSettings();
+            generalSettings.VatValue = updatedSetting.VatValue;
+            generalSettings.IBAN = updatedSetting.IBAN;
+            generalSettings.SitePercentage = updatedSetting.SitePercentage;
+
+            if (generalSettings.Id ==0 )
+                _dbContext.GeneralSettings.Add(generalSettings);
+                _dbContext.SaveChanges();
+            // Update the existing GeneralSettings record (e.g., in a database)
+            //YourRepository.UpdateGeneralSettings(updatedSetting); // Replace with your actual update logic
+            return RedirectToAction("GeneralSettings");
+        }
+        #endregion
+        #region ServicesReport
+        [Route("Reports/ServicesReport")]
+        public IActionResult ServicesReport()
+        {
+            // Retrieve the value from TempData
+            bool? isFromDeleteRequest = TempData["isFromDeleteRequest"] as bool?;
+            bool? isSuccessDelete = TempData["isSuccessDelete"] as bool?;
+
+            if (isFromDeleteRequest != null && isSuccessDelete != null)
+            {
+                // Clear the TempData value to avoid persisting it across subsequent requests
+                TempData.Remove("isFromDeleteRequest");
+                TempData.Remove("isSuccessDelete");
+
+                // Use the value as needed
+                ViewBag.SuccessMessage = isSuccessDelete;
+            }
+            ViewBag.GeneralSettings = _dbContext.GeneralSettings.FirstOrDefault();
+            return View(_dbContext.UserServices.Where(a => a.Status == Enums.ServicesStatusEnum.Completed).Include(a => a.UserProfile).ToList());
+        }
+
+        [Route("GetServicesReport")]
+        public IActionResult GetServicesReport()
+        {
+            ViewBag.GeneralSettings = _dbContext.GeneralSettings.FirstOrDefault();
+
+            var userServices = _dbContext.UserServices.Where(a => a.Status == Enums.ServicesStatusEnum.Completed).Include(a => a.UserProfile).ToList();
+            return PartialView("ServicesReportList", userServices);
+        }
+        #endregion
 
         #region UserServices
         [Route("Users/ServiceReviewRequests")]

@@ -72,6 +72,32 @@
             </div>
         </div>
     </li>
+      
+
+    <li class="nav-item @(currentPath.Contains("Reports".ToString().ToLower()) == true ? "active" : "")">
+        <a class="nav-link  @(currentPath.Contains("Reports".ToString().ToLower()) == true ? "" : "collapsed")" href="#" data-toggle="collapse" data-target="#collapseReports"
+           aria-expanded="true" aria-controls="collapseReports">
+            <i class="fas fa-fw fa-memo"></i>
+            <span>Reports</span>
+        </a>
+        <div id="collapseReports" class="collapse @(currentPath.Contains("Reports".ToString().ToLower()) == true ? "show" : "")" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item @(currentPath.Contains("ServicesReport".ToString().ToLower()) == true ? "active" : "")" asp-area="" asp-controller="Admin" asp-action="ServicesReport">Service Report</a>
+            </div>
+        </div>
+    </li>
+        <li class="nav-item @(currentPath.Contains("Settings".ToString().ToLower()) == true ? "active" : "")">
+        <a class="nav-link  @(currentPath.Contains("Settings".ToString().ToLower()) == true ? "" : "collapsed")" href="#" data-toggle="collapse" data-target="#collapseSettings"
+           aria-expanded="true" aria-controls="collapseSettings">
+            <i class="fas fa-fw fa-setting"></i>
+            <span>General Settings</span>
+        </a>
+        <div id="collapseSettings" class="collapse @(currentPath.Contains("Settings".ToString().ToLower()) == true ? "show" : "")" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item @(currentPath.Contains("GeneralSettings".ToString().ToLower()) == true ? "active" : "")" asp-area="" asp-controller="Admin" asp-action="GeneralSettings">General Settings</a>
+            </div>
+        </div>
+    </li>
 
 
     <!-- Divider -->

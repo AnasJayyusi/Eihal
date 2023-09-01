@@ -26,6 +26,7 @@ namespace Eihal.Data
 
         public DbSet<Services> Services { get; set; }
         public DbSet<UserServices> UserServices { get; set; }
+        public DbSet<GeneralSettings> GeneralSettings { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<AccountType> AccountTypes { get; set; }
         public DbSet<PractitionerType> PractitionerTypes { get; set; }
