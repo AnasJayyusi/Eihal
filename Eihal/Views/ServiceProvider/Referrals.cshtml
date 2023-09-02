@@ -85,6 +85,7 @@
                                                         <option value="@((int)Eihal.Enums.ReferralStatusEnum.UnderReview)">Under Review</option>
                                                         <option value="@((int)Eihal.Enums.ReferralStatusEnum.Approved)">Approved</option>
                                                         <option value="@((int)Eihal.Enums.ReferralStatusEnum.Rejected)">Rejected</option>
+                                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.Completed)">Completed</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -136,6 +137,7 @@
                                                         <option value="@((int)Eihal.Enums.ReferralStatusEnum.UnderReview)">Under Review</option>
                                                         <option value="@((int)Eihal.Enums.ReferralStatusEnum.Approved)">Approved</option>
                                                         <option value="@((int)Eihal.Enums.ReferralStatusEnum.Rejected)">Rejected</option>
+                                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.Completed)">Completed</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -452,9 +454,9 @@
         }
 
         // JavaScript function to toggle the dropdown menu
-        function toggleDropdown() {
+        function toggleDropdown(id) {
             
-            const dropdownMenu = document.getElementById('dropdownMenu');
+            const dropdownMenu = document.getElementById('dropdownMenu'+id);
             dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
         }
 
@@ -466,6 +468,19 @@
                 type: 'GET',
                 success: function (response) {
                     toastr.success('Referrals approved successfully', 'Success !!');
+                    filterIncomingReferrals();
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        }        function complete(refId) {
+
+            $.ajax({
+                url: '/ServiceProvider/CompleteReferal?refId=' + refId,
+                type: 'GET',
+                success: function (response) {
+                    toastr.success('Referrals completed successfully', 'Success !!');
                     filterIncomingReferrals();
                 },
                 error: function (xhr, status, error) {

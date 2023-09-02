@@ -7,6 +7,7 @@ namespace Eihal.Data.Entites
     {
         public int Id { get; set; }
         public ReferralStatusEnum Status { get; set; }
+        public DateTime? CompletionDate { get; set; }
         public ReferralTypeEnum Type { get; set; }
         public DateTime CreationDate { get; set; }
         [ForeignKey(nameof(CreatedByUser))]

@@ -1,4 +1,4 @@
-﻿@model List<Eihal.Data.Entites.UserServices>
+﻿@model List<Eihal.Models.ServicesReport>
 
 @{
     var defaultPageSize = 5; // Default number of items per page
@@ -9,7 +9,7 @@
     }
 
     var searchQuery = Context.Request.Query["search"].ToString().Trim();
-    var filteredItems = string.IsNullOrEmpty(searchQuery) ? Model : Model.Where(p => p.TitleEn.ToLower().Contains(searchQuery.ToLower()) || p.TitleAr.ToLower().Contains(searchQuery.ToLower())).ToList();
+    var filteredItems = string.IsNullOrEmpty(searchQuery) ? Model : Model.Where(p => p.ServiceNameEn.ToLower().Contains(searchQuery.ToLower()) || p.ServiceNameAr.ToLower().Contains(searchQuery.ToLower())).ToList();
     var totalItems = filteredItems.Count;
 
     var pageSizeParam = Context.Request.Query["pageSize"].ToString();
@@ -61,9 +61,11 @@
     <thead>
         <tr>
             <th>#</th>
-            <th>Name</th>
-            <th>Title (English)</th>
+            <th>Created By</th>
+            <th>Assigned To 
+                </th>
             <th>Title (Arabic)</th>
+            <th>Title (English)</th>
             <th>Price</th>
             <th>Fee</th>
             <th>Fee +  (@(vatValue*100))% vat</th>
@@ -76,9 +78,10 @@
             var userServices = visibleItems[i];
             <tr>
                 <td>@(startIndex + i + 1)</td>
-                <td>@userServices.UserProfile.FullName</td>
-                <td>@userServices.TitleEn</td>
-                <td>@userServices.TitleAr</td>
+                <td>@userServices.CreatedByUserName</td>
+                <td>@userServices.AssignedToUserName</td>
+                <td>@userServices.ServiceNameAr</td>
+                <td>@userServices.ServiceNameEn</td>
                 <td>@userServices.Price</td>
                 <td>@userServices.Fee</td>
            <td>@(userServices.Fee + (userServices.Fee * vatValue))</td>

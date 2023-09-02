@@ -95,6 +95,23 @@ namespace Eihal.Controllers
 
 
             return Ok();
+        }        [Route("CompleteReferal")]
+
+        public ActionResult CompleteReferal(int refId)
+        {
+            var currentUserId = GetUserProfileId();
+
+            var referralRequest = _dbContext.ReferralRequests.Where(a => a.Id == refId && a.AssignedToUserId == currentUserId && a.Status == ReferralStatusEnum.Approved).First();
+
+            referralRequest.Status = ReferralStatusEnum.Completed;
+            referralRequest.CompletionDate = DateTime.Now;
+            _dbContext.SaveChanges();
+            //var referralRequestId = referralRequest.Id;
+            //string requestNumber = referralRequestId.ToString("#0000");
+            //PushNewNotification(SharedEnum.NotificationTypeEnum.ApprovedOrder, GetUserProfileId(), referralRequest.CreatedByUserId, requestNumber);
+
+
+            return Ok();
         }
         [Route("RejectReferal")]
 

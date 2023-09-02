@@ -1,6 +1,7 @@
 ﻿using Eihal.Data;
 using Eihal.Data.Entites;
 using Eihal.Hubs;
+using Eihal.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -1157,7 +1158,29 @@ namespace Eihal.Controllers
                 ViewBag.SuccessMessage = isSuccessDelete;
             }
             ViewBag.GeneralSettings = _dbContext.GeneralSettings.FirstOrDefault();
-            return View(_dbContext.UserServices.Where(a => a.Status == Enums.ServicesStatusEnum.Completed).Include(a => a.UserProfile).ToList());
+            var data = _dbContext.ReferralRequests.Where(a => a.Status == Enums.ReferralStatusEnum.Completed).Include(a => a.AssignedToUser).Include(a => a.CreatedByUser).Include(a => a.Order).ThenInclude(a => a.Services).ToList();
+            List<ServicesReport> userServicesList = new List<ServicesReport>();
+            foreach (var item in data)
+            {
+                ServicesReport userService = new ServicesReport();
+                userService.CreatedByUserName = item.CreatedByUser.FullName;
+                userService.AssignedToUserName = item.AssignedToUser.FullName;
+                foreach(var serv in item.Order.Services)
+                {
+                    userService.ServiceNameAr = serv.TitleAr;
+                    userService.ServiceNameEn = serv.TitleEn;
+                    userService.Fee = serv.Fee;
+                    //must changed
+                    //must changed
+                    //must changed
+                    //must changed
+                    //must changed
+                    //must changed
+                    userService.Price = 100;
+                    userServicesList.Add(userService);
+                }
+            }
+            return View(userServicesList);
         }
 
         [Route("GetServicesReport")]
@@ -1165,8 +1188,23 @@ namespace Eihal.Controllers
         {
             ViewBag.GeneralSettings = _dbContext.GeneralSettings.FirstOrDefault();
 
-            var userServices = _dbContext.UserServices.Where(a => a.Status == Enums.ServicesStatusEnum.Completed).Include(a => a.UserProfile).ToList();
-            return PartialView("ServicesReportList", userServices);
+            var data = _dbContext.ReferralRequests.Where(a => a.Status == Enums.ReferralStatusEnum.Completed).Include(a => a.AssignedToUser).Include(a => a.CreatedByUser).Include(a => a.Order).ThenInclude(a => a.Services).ToList();
+            List<ServicesReport> userServicesList = new List<ServicesReport>();
+            foreach (var item in data)
+            {
+                ServicesReport userService = new ServicesReport();
+                userService.CreatedByUserName = item.CreatedByUser.FullName;
+                userService.AssignedToUserName = item.AssignedToUser.FullName;
+                foreach (var serv in item.Order.Services)
+                {
+                    userService.ServiceNameAr = serv.TitleAr;
+                    userService.ServiceNameEn = serv.TitleEn;
+                    userService.Fee = serv.Fee;
+                    userService.Price = 100;
+                    userServicesList.Add(userService);
+                }
+            }
+            return PartialView("ServicesReportList", userServicesList);
         }
         #endregion
 

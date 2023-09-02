@@ -19,7 +19,7 @@
                         {
                             <span class="status status-warning">Under Review</span>
                         }
-                        else if (referral.Status == Eihal.Enums.ReferralStatusEnum.Approved)
+                        else if (referral.Status == Eihal.Enums.ReferralStatusEnum.Approved || referral.Status == Eihal.Enums.ReferralStatusEnum.Completed)
                         {
                             <span class="status status-success">@referral.Status</span>
                         }
@@ -27,6 +27,7 @@
                         {
                             <span class="status status-error">@referral.Status</span>
                         }
+                        
                         <br>
                         <br>
                         @*<span class="ref-info-label"> Privilege Name</span><span style="color:gray"> @referral.Service.TitleEn </span>*@
@@ -34,12 +35,22 @@
                     @if (referral.Status == Eihal.Enums.ReferralStatusEnum.UnderReview)
                     {
                         <div class="dots-container">
-                            <i onclick="toggleDropdown()">
+                            <i onclick="toggleDropdown(@(referral.Id))">
                                 <i style="color:#eadfdf" class="fas fa-ellipsis-v"></i>
                             </i>
-                            <div class="dropdown-card" id="dropdownMenu">
+                            <div class="dropdown-card" id="dropdownMenu@(referral.Id)">
                                 <div class="option" onclick="approve(@(referral.Id))">Approve</div>
                                 <div class="option" onclick="reject(@(referral.Id))">Reject</div>
+                            </div>
+                        </div>
+                    }else if (referral.Status == Eihal.Enums.ReferralStatusEnum.Approved)
+                    {
+                                <div class="dots-container">
+                            <i onclick="toggleDropdown(@(referral.Id))">
+                                <i style="color:#eadfdf" class="fas fa-ellipsis-v"></i>
+                            </i>
+                            <div class="dropdown-card" id="dropdownMenu@(referral.Id)">
+                                <div class="option" onclick="complete(@(referral.Id))">Complete</div>
                             </div>
                         </div>
                     }

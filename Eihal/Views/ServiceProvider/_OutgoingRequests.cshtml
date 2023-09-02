@@ -13,7 +13,7 @@
                         {
                             <span class="status status-warning">Under Review</span>
                         }
-                        else if (referral.Status == Eihal.Enums.ReferralStatusEnum.Approved)
+                        else if (referral.Status == Eihal.Enums.ReferralStatusEnum.Approved  || referral.Status == Eihal.Enums.ReferralStatusEnum.Completed)
                         {
                             <span class="status status-success">@referral.Status</span>
                         }
