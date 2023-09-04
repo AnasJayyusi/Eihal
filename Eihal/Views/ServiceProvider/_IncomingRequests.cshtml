@@ -53,6 +53,16 @@
                                 <div class="option" onclick="complete(@(referral.Id))">Complete</div>
                             </div>
                         </div>
+                    }else if (referral.Status == Eihal.Enums.ReferralStatusEnum.Completed)
+                    {
+                                <div class="dots-container">
+                            <i onclick="toggleDropdown(@(referral.Id))">
+                                <i style="color:#eadfdf" class="fas fa-ellipsis-v"></i>
+                            </i>
+                            <div class="dropdown-card" id="dropdownMenu@(referral.Id)">
+                                <div class="option" >@Html.ActionLink("Report", "ExportReport", "ServiceProvider",new {referralRequestId= referral.Id})</div>
+                            </div>
+                        </div>
                     }
                 </div>
 
