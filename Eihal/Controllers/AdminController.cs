@@ -1207,6 +1207,57 @@ namespace Eihal.Controllers
             return PartialView("ServicesReportList", userServicesList);
         }
         #endregion
+        #region Feedbacks
+        [Route("Users/Feedbacks")]
+        public IActionResult Feedbacks()
+        {
+            // Retrieve the value from TempData
+            bool? isFromDeleteRequest = TempData["isFromDeleteRequest"] as bool?;
+            bool? isSuccessDelete = TempData["isSuccessDelete"] as bool?;
+
+            if (isFromDeleteRequest != null && isSuccessDelete != null)
+            {
+                // Clear the TempData value to avoid persisting it across subsequent requests
+                TempData.Remove("isFromDeleteRequest");
+                TempData.Remove("isSuccessDelete");
+
+                // Use the value as needed
+                ViewBag.SuccessMessage = isSuccessDelete;
+            }
+
+            return View(_dbContext.Feedbacks.ToList());
+        }
+
+        [Route("GetFeedbacks")]
+        public IActionResult GetFeedbacks()
+        {
+            var feedbacks = _dbContext.Feedbacks.ToList();
+            return PartialView("FeedbacksList", feedbacks);
+        }
+        [HttpGet]
+        [Route("UpdatefeedbacksStatus/{id}/{isActive}")]
+        public IActionResult UpdatefeedbacksStatus(int id, bool isSeen)
+        {
+            // Logic to update the status of the practitioner type with the given ID
+            try
+            {
+                var practitionerType = _dbContext.Feedbacks.SingleOrDefault(p => p.Id == id);
+                if (practitionerType == null)
+                {
+                    return NotFound();
+                }
+
+                practitionerType.StatusId = isSeen ? Enums.FeedbackStatusEnum.Seen: Enums.FeedbackStatusEnum.Unread;
+                _dbContext.SaveChanges();
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while updating the status.");
+            }
+        }
+        #endregion
 
         #region UserServices
         [Route("Users/ServiceReviewRequests")]

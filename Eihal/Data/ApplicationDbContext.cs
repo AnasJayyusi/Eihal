@@ -33,6 +33,7 @@ namespace Eihal.Data
         public DbSet<ProfessionalRank> ProfessionalRanks { get; set; }
         public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<ReferralRequest> ReferralRequests { get; set; }
+        public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Specialty> Specialties { get; set; }
         public DbSet<Subspecialty> Subspecialty { get; set; }

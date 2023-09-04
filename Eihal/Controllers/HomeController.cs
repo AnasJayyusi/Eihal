@@ -1,4 +1,5 @@
 ﻿using Eihal.Data;
+using Eihal.Data.Entites;
 using Eihal.Hubs;
 using Eihal.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -35,7 +36,19 @@ namespace Eihal.Controllers
             }
             else return View();
         }
+        [HttpPost]
+        public ActionResult AddNewFeedback(string name, string contact, string email, string message)
+        {
+            Feedback feedback = new Feedback();
+            feedback.Name = name;
+            feedback.Phone = contact;
+            feedback.Email = email;
+            feedback.Message = message;
+            _dbContext.Feedbacks.Add(feedback);
+            _dbContext.SaveChanges();
+            return Ok("Added Successfully !!");
 
+        }
 
 
         #region Culture

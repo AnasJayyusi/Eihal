@@ -1,15 +1,14 @@
-﻿@model List<Eihal.Data.Entites.ClinicalSpeciality>
+﻿@model List<Eihal.Data.Entites.Feedback>
 <head>
     <!-- Custom styles for this template-->
     <link href="~/css/sb-admin-2.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
 
     <style>
         .hidden {
             display: none;
         }
-
 
         .toast-container {
             position: fixed;
@@ -31,10 +30,11 @@
     </style>
 </head>
 
+
 <!-- Toaster -->
 <div id="toast-container" class="toast-container toast-center">
     <div class="alert alert-success hidden" role="alert">
-        The Clinical Speciality Added/Updated Successfully!
+        The Feedback Updated Successfully!
     </div>
 
     @if (@ViewBag.SuccessMessage != null)
@@ -43,7 +43,7 @@
         {
             <text>
                 <div class="alert alert-success" role="alert">
-                    Clinical Speciality deleted successfully!
+                    Feedback deleted successfully!
                 </div>
             </text>
         }
@@ -78,7 +78,7 @@
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h6 style="font-weight:bold;color:#00768c " class="h6 mb-0 ">  Master List  &#8658; Clinical Speciality</h6>
+                        <h6 style="font-weight:bold;color:#00768c " class="h6 mb-0 ">  Users  &#8658; Feebacks</h6>
 
 
                         <!--ToDo:Move To Partial View -->
@@ -89,9 +89,9 @@
                             </a>
 
                             <div class="dropdown-content">
-                                 <a class="nav-link text-dark  linkButton" asp-area="" asp-controller="Home" asp-action="Index">My Profile </a>
+                       @*          <a class="nav-link text-dark  linkButton" asp-area="" asp-controller="Home" asp-action="Index">My Profile </a>
                                 <a class="nav-link text-dark linkButton" asp-area="" asp-controller="Doctor" asp-action="Index">My Order </a>
-
+*@
 
                                 <a type="submit" style="text-transform: none;" class="my-profile-button" asp-area="Identity" asp-page="/Account/Logout">
                                     Logout
@@ -112,6 +112,19 @@
                             </div>
                         </div>
 
+                        @*    <a asp-area="Identity" asp-page="/Account/Logout" class="drop-name">
+                        <span>
+
+                        <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                        <i style="color:white" class='fas fa-sign-out-alt'></i>
+                        <button type="submit" style="background-color:#0D6EFD" class="badge badge-primary">LOGOUT</button>
+                        </form>
+
+                        </span>
+
+                        </a>*@
+
+
 
                     </div>
                     <!-- Content Row -->
@@ -121,10 +134,8 @@
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
                                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Clinical Speciality</h6>
-                                    <div style="text-align: end; cursor:pointer">
-                                        <button id="openNewClinicalSpecialityModal" type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#AddNewClinicalSpeciality">  <i class="fa fa-plus text-white-50"></i>  </button>
-                                    </div>
+                                    <h6 class="m-0 font-weight-bold text-primary">Feedbacks</h6>
+                             
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
@@ -132,7 +143,7 @@
                                     <br />
 
                                     <div class="table-responsive" id="dataTableContainer">
-                                        @Html.Partial("ClinicalSpecialitiesList", Model)
+                                        @Html.Partial("FeedbacksList", Model)
 
                                     </div>
                                 </div>
@@ -158,45 +169,6 @@
 </div>
 
 
-<div class="modal fade" id="AddNewClinicalSpeciality" tabindex="-1" role="dialog" aria-labelledby="AddNewClinicalSpecialityModal" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="AddNewClinicalSpecialityModal">Add</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <!-- Add your modal content here -->
-                <form>
-                    <div class="form-group">
-                        <label style="font-weight:bold;color:#00768c" for="titleEnInput">Title (English):</label>
-                        <input type="text" class="form-control" id="titleEnInput" required>
-                    </div>
-                    <div class="form-group">
-                        <label style="font-weight:bold;color:#00768c" for="titleArInput">Title (Arabic):</label>
-                        <input type="text" class="form-control" id="titleArInput" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="practitionerTypes-ddl" style="font-weight:bold;color:#00768c">Practitioner Type:</label>
-                        <!-- Dropdown list HTML element -->
-                        <select class="form-control" id="practitionerTypes-ddl"></select>
-                    </div>
-                </form>
-                <div class="alert alert-danger hidden sm" role="alert">
-                    <span id="error-msg-not-fill" style="display:none">Please fill all fields.</span>
-                    <span id="error-msg-duplicate" style="display:none">The details for the Clinical Speciality have already been added.</span>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button id="close-add-ClinicalSpeciality" type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                <button id="add-ClinicalSpeciality" type="button" class="btn btn-success" style="background-color:#00768c">Save</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 
 
 
@@ -205,54 +177,29 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
         $(document).ready(function () {
-
             // Hide the success message after 2 seconds
             setTimeout(function () {
                 $('.alert-success').fadeOut();
             }, 3000);
-
-
-            $('#openNewClinicalSpecialityModal').click(function () {
-                $('#titleArInput').val("");
-                $('#titleEnInput').val("");
-
-                if ($('#practitionerTypes-ddl').children().length == 0) {
-                    $.ajax({
-                        url: '@Url.Action("GetPractitionerTypesDDL", "Common")',
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function (data) {
-                            // Clear existing options
-                            $('#practitionerTypes-ddl').empty();
-                            // Populate the dropdown list
-                            var dropdown = $('#practitionerTypes-ddl');
-                            $.each(data, function (index, item) {
-                                dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
-                            });
-                        }
-                    });
-                }
-            });
-
-            $('#add-ClinicalSpeciality').click(function () {
-                var clinicalSpeciality = {
+       
+            $('#add-UserServices').click(function () {
+                var userServices = {
                     TitleAr: $('#titleArInput').val(),
                     TitleEn: $('#titleEnInput').val(),
-                    IsActive:true,
-                    PractitionerTypeId: $('#practitionerTypes-ddl').val()
+                    IsActive: true,
                 };
 
                 $.ajax({
-                    url: '/Admin/AddClinicalSpeciality', // Replace with your actual API endpoint URL
+                    url: '/Admin/AddUserServices', // Replace with your actual API endpoint URL
                     type: 'POST',
-                    data: JSON.stringify(clinicalSpeciality),
+                    data: JSON.stringify(userServices),
                     contentType: 'application/json',
                     success: function (response) {
                         // Show the success message
                         $('.alert-success').removeClass('hidden').hide().fadeIn();
                         // Close the modal after the success message fades out
-                        $("#close-add-ClinicalSpeciality").trigger("click");
-                        $('#dataTableContainer').load('/Admin/GetClinicalSpecialities');
+                        $("#close-add-UserServices").trigger("click");
+                        $('#dataTableContainer').load('/Admin/GetUserServices');
 
                         // Hide the success message after 2 seconds
                         setTimeout(function () {
@@ -264,16 +211,7 @@
                         // Show the error message
                         $('.alert-danger').removeClass('hidden');
                         var msg = xhr.responseText;
-                          
-                        if (msg == "Please fill all fields.") {
-                            $('#error-msg-not-fill').show();
-                            $('#error-msg-duplicate').hide();
-                        }
-
-                        if (msg == "The details for the clinical speciality have already been added.") {
-                            $('#error-msg-not-fill').hide();
-                            $('#error-msg-duplicate').show();
-                        }
+                        $('#error-msg-add').text(msg.toString());
                         // Hide the error message after 2 seconds
                         setTimeout(function () {
                             $('.alert-danger').addClass('hidden');
@@ -283,9 +221,5 @@
                 });
             });
         });
-
-
     </script>
 }
-
-<!-- Dropdown list HTML element -->
