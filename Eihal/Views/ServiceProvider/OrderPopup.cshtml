@@ -47,6 +47,7 @@
             success: function (response) {
                 // Handle the response from the server if needed
                 toastr.success("Order sent successfully!", 'Send !!');
+                resetForm();
             },
             error: function (xhr, status, error) {
                 // Handle any errors that occur during the AJAX call
@@ -66,6 +67,22 @@
 
     }
 
+    function resetForm() {
+        $("#fullname-edit-input").val("");
+        $("#phone-edit-input").val("");
+        $("#email-edit-input").val("");
+        $("#countries-ddl-edit").val("");
+        $("#states-ddl-edit").val("");
+        $("#cities-ddl-edit").val("");
+        $('input[name="gender"]:checked').val("");
+        $('input[name="age"]:checked').val("");
+        $('#chronicDisease').val("");
+        $("#selectedServicesIds").val("");
+        $('input[name=gender]').prop('checked', false);
+        $('input[name=age]').prop('checked', false);
+        $("#selection-privileges").empty();
+    }
+
 
     function loadSteps() {
         var current_fs, next_fs, previous_fs; //fieldsets
@@ -75,13 +92,31 @@
 
         setProgressBar(current);
 
+        $("#nextToSelectPrivilege").prop('disabled', true)
+        $("#nextToSelectPrivilege").css("background", "gray");
+        $("#nextToSelectPrivilege").css("cursor", "not-allowed");
+
+        $("#nextToSelectDoctor").prop('disabled', true)
+        $("#nextToSelectDoctor").css("background", "gray");
+        $("#nextToSelectDoctor").css("cursor", "not-allowed");
+
+
+        $("#submitRequest").prop('disabled', true)
+        $("#submitRequest").css("background", "gray");
+        $("#submitRequest").css("cursor", "not-allowed");
+
+        
+
+
         $(".next").click(function () {
             var styleAttributeValue = $(".progress-bar").attr("style");
             // Check if the "style" attribute contains the style "width: 50%;"
             if (styleAttributeValue && styleAttributeValue.includes("width: 50%;")) {
                 $("#main-class-modal").addClass("row justify-content-center");
+
             } else {
 
+          
                 $("#main-class-modal").removeClass("row justify-content-center");
             }
             current_fs = $(this).parent();

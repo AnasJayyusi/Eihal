@@ -376,7 +376,21 @@
 
         // Add 'selected' class to the double-clicked div
         element.classList.add('selected');
+
+
+        if ($(".selected").attr('id') == undefined || $(".selected").attr('id') == null || $(".selected").attr('id') == -1) {
+            $("#submitRequest").prop('disabled', true)
+            $("#submitRequest").css("background", "gray");
+            $("#submitRequest").css("cursor", "not-allowed")
+        }
+        else {
+            $("#submitRequest").prop('disabled', false)
+            $("#submitRequest").css("background", "");
+            $("#submitRequest").css("cursor", "");
+        }
     }
+
+  
 </script>
 <style>
     .selectable {

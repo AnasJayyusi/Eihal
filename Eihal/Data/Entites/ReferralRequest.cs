@@ -13,10 +13,12 @@ namespace Eihal.Data.Entites
         [ForeignKey(nameof(CreatedByUser))]
         public int CreatedByUserId { get; set; }
         public UserProfile CreatedByUser { get; set; }
+
         [ForeignKey(nameof(AssignedToUser))]
         public int AssignedToUserId { get; set; }
         public UserProfile AssignedToUser { get; set; }
         public OrderDetail Order { get; set; }
+
         [ForeignKey(nameof(Order))]
         public int OrderId { get; set; }
 

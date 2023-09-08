@@ -4,7 +4,7 @@
         <div class="col-md-12">
             <div class="form-group">
                 <label style="font-weight:bold;color:#00768c" for="fullname-edit-input">Full Name:<span style="color:red">*</span></label>
-                <input type="text" class="form-control" id="fullname-edit-input" placeholder="Full Name" required>
+                <input onkeyup="canNext()" type="text" class="form-control" id="fullname-edit-input" placeholder="Full Name" required>
             </div>
         </div>
     </div>
@@ -13,7 +13,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label style="font-weight:bold;color:#00768c" for="phone-edit-input">Phone:<span style="color:red">*</span></label>
-                <input type="text" class="form-control" id="phone-edit-input" placeholder="Phone" required>
+                <input onkeyup="canNext()" type="number" class="form-control" id="phone-edit-input" placeholder="Phone" required>
             </div>
         </div>
         <div class="col-md-6">
@@ -52,8 +52,8 @@
     </div>
 
     <div class="row">
-        <div class="col-md-8 offset-4">
-            <label style="font-weight:bold;color:#00768c" >Gender:</label>
+        <div class="col-md-8">
+            <label style="font-weight:bold;color:#00768c">Gender:</label>
             <div class="form-group">
                 <input type="radio" name="gender" id="female" class="input-hidden" style="padding:5px" value="0" />
                 <label for="female">
@@ -70,7 +70,7 @@
 
     <div class="row">
         <div class="col-md-12">
-            <label style="font-weight:bold;color:#00768c" >Age:</label>
+            <label style="font-weight:bold;color:#00768c">Age:</label>
             <div class="form-group">
                 <input type="radio" name="age" id="child" class="input-hidden" value="0" />
                 <label for="child">
@@ -145,5 +145,20 @@
                 });
             }
         });
+    }
+
+    function canNext() {
+        if ($("#fullname-edit-input").val().length != 0 && $("#phone-edit-input").val().length == 0) {
+            $("#nextToSelectPrivilege").prop('disabled', true)
+            $("#nextToSelectPrivilege").css("background", "gray");
+            $("#nextToSelectPrivilege").css("cursor", "not-allowed");
+        }
+        else 
+        {
+            $("#selection-privileges").empty();
+            $("#nextToSelectPrivilege").prop('disabled', false)
+            $("#nextToSelectPrivilege").css("background", "");
+            $("#nextToSelectPrivilege").css("cursor", "pointer");
+        }
     }
 </script>

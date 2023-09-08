@@ -50,6 +50,7 @@ namespace Eihal.Data
         public DbSet<TimeClinicLocation> TimeClinicLocations { get; set; }
         public DbSet<UserCompany> UserCompanies { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<OrderServiceDetail> OrderServiceDetails { get; set; }
 
     }
 }
