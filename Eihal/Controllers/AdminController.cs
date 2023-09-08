@@ -1099,6 +1099,7 @@ namespace Eihal.Controllers
             return PartialView("SubPrivillages", SubPrivillages);
         }
         #endregion
+
         #region GeneralSettings
         [Route("Settings/GeneralSettings")]
         public IActionResult GeneralSettings()
@@ -1140,6 +1141,7 @@ namespace Eihal.Controllers
             return RedirectToAction("GeneralSettings");
         }
         #endregion
+
         #region ServicesReport
         [Route("Reports/ServicesReport")]
         public IActionResult ServicesReport()
@@ -1207,8 +1209,9 @@ namespace Eihal.Controllers
             return PartialView("ServicesReportList", userServicesList);
         }
         #endregion
+
         #region Feedbacks
-        [Route("Users/Feedbacks")]
+        [Route("Settings/Feedbacks")]
         public IActionResult Feedbacks()
         {
             // Retrieve the value from TempData

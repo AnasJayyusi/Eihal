@@ -146,15 +146,15 @@
                                         @*@Html.Partial("ServicesReportList", Model)*@
                                             <form method="post" action="UpdateGeneralSetting">
                                                 @Html.AntiForgeryToken()
-        <div class="form-group">
+        <div class="form-group col-md-4">
             <label for="vatValue">VAT</label>
             <input type="number" id="vatValue" name="vatValue" maxlength="3" min="0" max="100" class="form-control" value="@Model?.VatValue"  />
         </div>
-        <div class="form-group">
+        <div class="form-group col-md-4">
             <label for="sitePercentage">Site Percentage</label>
             <input type="number" id="sitePercentage" maxlength="3" min="0" max="100" name="sitePercentage" class="form-control" value="@Model?.SitePercentage" />
         </div>
-        <div class="form-group">
+        <div class="form-group col-md-4">
             <label for="iban">IBAN</label>
             <input type="text" id="iban" name="iban" class="form-control" maxlength="34" value="@Model?.IBAN" />
         </div>
