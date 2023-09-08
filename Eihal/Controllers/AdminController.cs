@@ -1235,7 +1235,7 @@ namespace Eihal.Controllers
             return PartialView("FeedbacksList", feedbacks);
         }
         [HttpGet]
-        [Route("UpdatefeedbacksStatus/{id}/{isActive}")]
+        [Route("UpdatefeedbacksStatus/{id}/{isSeen}")]
         public IActionResult UpdatefeedbacksStatus(int id, bool isSeen)
         {
             // Logic to update the status of the practitioner type with the given ID
