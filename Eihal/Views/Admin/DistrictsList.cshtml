@@ -70,25 +70,25 @@
     <tbody>
         @for (int i = 0; i < visibleItems.Count; i++)
         {
-            var city = visibleItems[i];
+            var district = visibleItems[i];
             <tr>
                 <td>@(startIndex + i + 1)</td>
-                <td>@city.Country.TitleEn</td>
-                <td>@city.State.TitleEn</td>
-                <td>@city.City.TitleEn</td>
-                <td>@city.TitleEn</td>
-                <td>@city.TitleAr</td>
+                <td>@district.Country.TitleEn</td>
+                <td>@district.State.TitleEn</td>
+                <td>@district.City.TitleEn</td>
+                <td>@district.TitleEn</td>
+                <td>@district.TitleAr</td>
                 <td>
                     <li class="list-inline-item">
-                        <button onclick="getDistrict(@city.Id)" href="#" class="btn btn-success btn-sm rounded-pill" type="button" data-toggle="modal" data-target="#EditDistrict" data-placement="top" title="Edit">
+                        <button onclick="getDistrict(@district.Id)" href="#" class="btn btn-success btn-sm rounded-pill" type="button" data-toggle="modal" data-target="#EditDistrict" data-placement="top" title="Edit">
                             <i class="fa fa-edit"></i>
                         </button>
                     </li>
                     <li class="list-inline-item">
-                        <a href="#" class="btn btn-danger btn-sm rounded-pill" data-toggle="modal" data-target="#confirmDeleteModal_@city.Id"><i class="fa fa-trash"></i></a>
+                        <a href="#" class="btn btn-danger btn-sm rounded-pill" data-toggle="modal" data-target="#confirmDeleteModal_@district.Id"><i class="fa fa-trash"></i></a>
                     </li>
                     <!-- Confirm Delete Modal -->
-                    <div class="modal fade" id="confirmDeleteModal_@city.Id" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="confirmDeleteModal_@district.Id" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -102,7 +102,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                    <a href="/Admin/Deletecity/@city.Id" class="btn btn-danger" id="deleteButton">Delete</a>
+                                    <a href="/Admin/DeleteDistrict/@district.Id" class="btn btn-danger" id="deleteButton">Delete</a>
                                 </div>
                             </div>
                         </div>

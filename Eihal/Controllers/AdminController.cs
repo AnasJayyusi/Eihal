@@ -932,7 +932,7 @@ namespace Eihal.Controllers
             var privillages = _dbContext.Privillages.Single(w => w.Id == id);
             return privillages;
         }
-             [HttpGet]
+        [HttpGet]
         //[Route("GetPrivillage/{id}")]
         //public Privillage GetPrivillage(int id)
         //{
@@ -1099,6 +1099,7 @@ namespace Eihal.Controllers
             return PartialView("SubPrivillages", SubPrivillages);
         }
         #endregion
+
         #region GeneralSettings
         [Route("Settings/GeneralSettings")]
         public IActionResult GeneralSettings()
@@ -1132,14 +1133,15 @@ namespace Eihal.Controllers
             generalSettings.IBAN = updatedSetting.IBAN;
             generalSettings.SitePercentage = updatedSetting.SitePercentage;
 
-            if (generalSettings.Id ==0 )
+            if (generalSettings.Id == 0)
                 _dbContext.GeneralSettings.Add(generalSettings);
-                _dbContext.SaveChanges();
+            _dbContext.SaveChanges();
             // Update the existing GeneralSettings record (e.g., in a database)
             //YourRepository.UpdateGeneralSettings(updatedSetting); // Replace with your actual update logic
             return RedirectToAction("GeneralSettings");
         }
         #endregion
+
         #region ServicesReport
         [Route("Reports/ServicesReport")]
         public IActionResult ServicesReport()
@@ -1158,30 +1160,38 @@ namespace Eihal.Controllers
                 ViewBag.SuccessMessage = isSuccessDelete;
             }
             ViewBag.GeneralSettings = _dbContext.GeneralSettings.FirstOrDefault();
-            var data = _dbContext.ReferralRequests.Where(a => a.Status == Enums.ReferralStatusEnum.Completed).Include(a => a.AssignedToUser).Include(a => a.CreatedByUser).Include(a => a.Order).ThenInclude(a => a.Services).ToList();
+
+            var referralRequests = _dbContext.ReferralRequests.Where(a => a.Status == Enums.ReferralStatusEnum.Completed)
+                                                  .Include(a => a.AssignedToUser)
+                                                  .Include(a => a.CreatedByUser)
+                                                  .Include(a => a.Order)
+                                                  .ThenInclude(a => a.Services).ToList();
+
             List<ServicesReport> userServicesList = new List<ServicesReport>();
-            foreach (var item in data)
+            foreach (var referralRequest in referralRequests)
             {
-                ServicesReport userService = new ServicesReport();
-                userService.CreatedByUserName = item.CreatedByUser.FullName;
-                userService.AssignedToUserName = item.AssignedToUser.FullName;
-                foreach(var serv in item.Order.Services)
+                // Initial object Service Report For One Row
+                ServicesReport serviceReport = new ServicesReport();
+                serviceReport.CreatedByUserName = referralRequest.CreatedByUser.FullName;
+                serviceReport.AssignedToUserName = referralRequest.AssignedToUser.FullName;
+
+                var orderServiceDetails = _dbContext.OrderServiceDetails.Where(w => w.OrderDetailId == referralRequest.OrderId);
+
+                // Filling Prices From Order Service Deatils To Avoid Issue when change Price  
+                foreach (var osd in orderServiceDetails)
                 {
-                    userService.ServiceNameAr = serv.TitleAr;
-                    userService.ServiceNameEn = serv.TitleEn;
-                    userService.Fee = serv.Fee;
-                    //must changed
-                    //must changed
-                    //must changed
-                    //must changed
-                    //must changed
-                    //must changed
-                    userService.Price = 100;
-                    userServicesList.Add(userService);
+                    serviceReport.ServiceNameAr = osd.TitleAr;
+                    serviceReport.ServiceNameEn = osd.TitleEn;
+
+                    serviceReport.Fee = osd.Fee;
+                    serviceReport.Price = osd.Price;
+
+                    userServicesList.Add(serviceReport);
                 }
             }
             return View(userServicesList);
         }
+
 
         [Route("GetServicesReport")]
         public IActionResult GetServicesReport()
@@ -1207,8 +1217,9 @@ namespace Eihal.Controllers
             return PartialView("ServicesReportList", userServicesList);
         }
         #endregion
+
         #region Feedbacks
-        [Route("Users/Feedbacks")]
+        [Route("Settings/Feedbacks")]
         public IActionResult Feedbacks()
         {
             // Retrieve the value from TempData
@@ -1247,7 +1258,7 @@ namespace Eihal.Controllers
                     return NotFound();
                 }
 
-                practitionerType.StatusId = isSeen ? Enums.FeedbackStatusEnum.Seen: Enums.FeedbackStatusEnum.Unread;
+                practitionerType.StatusId = isSeen ? Enums.FeedbackStatusEnum.Seen : Enums.FeedbackStatusEnum.Unread;
                 _dbContext.SaveChanges();
 
                 return Ok();
@@ -1459,7 +1470,7 @@ namespace Eihal.Controllers
             //// Set the value in TempData
             //TempData["isFromDeleteRequest"] = true;
 
-
+            PushNewNotification(SharedEnum.NotificationTypeEnum.ApprovedNewService, GetUserProfileId(), _adminUserProfileId, GetShortName());
 
             return RedirectToAction("Dashboard");
         }
@@ -1479,6 +1490,7 @@ namespace Eihal.Controllers
             {
                 userServices.RejectionReason = string.Empty;
             }
+            PushNewNotification(SharedEnum.NotificationTypeEnum.RejectNewService, GetUserProfileId(), _adminUserProfileId, GetShortName());
             _dbContext.SaveChanges();
 
 
@@ -1906,8 +1918,8 @@ namespace Eihal.Controllers
         {
             // Retrieve the practitioner type from the database using the id
             var city = _dbContext.Cities.Find(id);
-            var isUsed = _dbContext.TimeClinicLocations.Any(a => a.CityId == id);
-            if (city == null || isUsed)
+            var IsLinked = _dbContext.TimeClinicLocations.Any(a => a.CityId == id) || _dbContext.UserProfiles.Any(a => a.CityId == id);
+            if (city == null || IsLinked)
             {
                 // Handle the case where the practitioner type doesn't exist
                 TempData["isSuccessDelete"] = false;
@@ -2222,7 +2234,7 @@ namespace Eihal.Controllers
         [Route("GetService/{id}")]
         public Services GetService(int id)
         {
-            var services = _dbContext.Services.Include(a=>a.ClinicalSpeciality).Single(w => w.Id == id);
+            var services = _dbContext.Services.Include(a => a.ClinicalSpeciality).Single(w => w.Id == id);
             return services;
         }
         #endregion
@@ -2340,10 +2352,14 @@ namespace Eihal.Controllers
             // Retrieve the practitioner type from the database using the id
             var degree = _dbContext.Degrees.Find(id);
 
-            if (degree == null)
+            bool isLinked = _dbContext.Certifications.Any(w => w.DegreeId == id);
+
+            if (degree == null || isLinked)
             {
                 // Handle the case where the practitioner type doesn't exist
                 TempData["isSuccessDelete"] = false;
+                TempData["isFromDeleteRequest"] = true;
+                return RedirectToAction("Degrees");
             }
 
             // Remove the practitioner type from the DbSet

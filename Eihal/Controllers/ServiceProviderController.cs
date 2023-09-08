@@ -95,8 +95,9 @@ namespace Eihal.Controllers
 
 
             return Ok();
-        }        [Route("CompleteReferal")]
+        }
 
+        [Route("CompleteReferal")]
         public ActionResult CompleteReferal(int refId)
         {
             var currentUserId = GetUserProfileId();
@@ -229,6 +230,8 @@ namespace Eihal.Controllers
             userServices.CreatedOn = DateTime.Now;
             _dbContext.UserServices.Add(userServices);
             _dbContext.SaveChanges();
+
+            PushNewNotification(SharedEnum.NotificationTypeEnum.SendNewService, GetUserProfileId(), _adminUserProfileId, GetShortName());
             return Ok();
         }
 
@@ -829,35 +832,64 @@ namespace Eihal.Controllers
             var servicesIds = orderDetailsModal.SelectedServicesIds?.Split(',')?.Select(Int32.Parse)?.ToList();
             var services = _dbContext.Services.Where(a => servicesIds.Contains(a.Id)).ToList();
 
-
             var orderDetail = new OrderDetail()
             {
                 PatientName = orderDetailsModal.FullName,
                 PhoneNumber = orderDetailsModal.Phone,
-                Email = orderDetailsModal.Email,
-                Age = (Age)Convert.ToInt32(orderDetailsModal.Age),
-                ChronicDisease = orderDetailsModal.ChronicDisease,
+                Email = string.IsNullOrEmpty(orderDetailsModal.Email) ? "" : orderDetailsModal.Email,
+                Age = orderDetailsModal.Age != null ? (Age)Convert.ToInt32(orderDetailsModal.Age) : Age.Undefined,
+                ChronicDisease = string.IsNullOrEmpty(orderDetailsModal.ChronicDisease) ? "" : orderDetailsModal.ChronicDisease,
                 Services = services,
                 DoctorId = Convert.ToInt32(orderDetailsModal.DoctorId),
-                CountryId = Convert.ToInt32(orderDetailsModal.Country),
-                CityId = Convert.ToInt32(orderDetailsModal.City),
-                StateId = Convert.ToInt32(orderDetailsModal.State),
+                CountryId = string.IsNullOrEmpty(orderDetailsModal.Country) ? null : Convert.ToInt32(orderDetailsModal.Country),
+                CityId = string.IsNullOrEmpty(orderDetailsModal.City) ? null : Convert.ToInt32(orderDetailsModal.City),
+                StateId = string.IsNullOrEmpty(orderDetailsModal.State) ? null : Convert.ToInt32(orderDetailsModal.State)
             };
 
             _dbContext.OrderDetails.Add(orderDetail);
             var orderId = _dbContext.SaveChanges();
 
+
+            var vatValue = _dbContext.GeneralSettings.Single().VatValue;
+            var createdByUserId = GetUserProfileId();
+
             var referralRequest = new ReferralRequest()
             {
                 Status = ReferralStatusEnum.UnderReview,
                 CreationDate = DateTime.Now,
-                CreatedByUserId = GetUserProfileId(),
+                CreatedByUserId = createdByUserId,
                 AssignedToUserId = Convert.ToInt32(orderDetailsModal.DoctorId),
                 OrderId = orderDetail.Id
             };
 
             _dbContext.ReferralRequests.Add(referralRequest);
             _dbContext.SaveChanges();
+
+
+            var orderServiceDetails = new List<OrderServiceDetail>();
+            foreach (var serviceId in servicesIds)
+            {
+                var userServiceDetails = _dbContext.UserServices
+                                                   .Include(i => i.Service)
+                                                   .Where(w => w.UserId == orderDetail.DoctorId)
+                                                   .Single();
+
+                var price = userServiceDetails.Price;
+                var fee = userServiceDetails.Fee;
+
+                var obj = new OrderServiceDetail()
+                {
+                    OrderDetailId = orderId,
+                    Price = price,
+                    Fee = fee,
+                    ServiceId= serviceId,
+                    TitleAr = userServiceDetails.TitleAr,
+                    TitleEn = userServiceDetails.TitleEn,
+                };
+                orderServiceDetails.Add(obj);
+                _dbContext.SaveChanges();
+            }
+
 
             var referralRequestId = referralRequest.Id;
             string requestNumber = referralRequestId.ToString("#0000");

@@ -89,8 +89,8 @@
                             </a>
 
                             <div class="dropdown-content">
-                                 <a class="nav-link text-dark  linkButton" asp-area="" asp-controller="Home" asp-action="Index">My Profile </a>
-                                <a class="nav-link text-dark linkButton" asp-area="" asp-controller="Doctor" asp-action="Index">My Order </a>
+                                 @*<a class="nav-link text-dark  linkButton" asp-area="" asp-controller="Home" asp-action="Index">My Profile </a>*@
+                                @*<a class="nav-link text-dark linkButton" asp-area="" asp-controller="Doctor" asp-action="Index">My Order </a>*@
 
 
                                 <a type="submit" style="text-transform: none;" class="my-profile-button" asp-area="Identity" asp-page="/Account/Logout">
@@ -216,6 +216,12 @@
             setTimeout(function () {
                 $('.alert-success').fadeOut();
             }, 3000);
+
+
+            setTimeout(function () {
+                $('.alert-danger').fadeOut();
+            }, 3000);
+         
 
             $('#openNewPractitionerModal').click(function () {
                 $('#titleArInput').val("");

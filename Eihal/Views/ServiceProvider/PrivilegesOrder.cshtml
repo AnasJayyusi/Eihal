@@ -226,31 +226,67 @@
 
 <script>
     function addToSelectionList(id, titleEn, titleAr) {
+        debugger;
         // Get the dynamic values from somewhere (e.g., user input or API response)
         var dynamicId = id;
         var dynamicTitle = titleEn;
-        if ($("#selectedServicesIds").val().length == 0)
+        if ($("#selectedServicesIds").val().length == 0) {
             $("#selectedServicesIds").val(id);
-        else{
-            var selectedServicesIds = $("#selectedServicesIds").val() + "," + id;
-            $("#selectedServicesIds").val(selectedServicesIds)
+            appendServiceCard(dynamicId, dynamicTitle)
         }
+        else {
+            var selectedSvcs = $("#selectedServicesIds").val();
+            var arrayOfSelected = selectedSvcs.split(",");
+            if (arrayOfSelected.includes(id.toString())) {
+                toastr.error('You are already add this Services', 'Warning !!');
+            }
+            else {
+                var selectedServicesIds = $("#selectedServicesIds").val() + "," + id;
+                $("#selectedServicesIds").val(selectedServicesIds)
+
+
+                appendServiceCard(dynamicId, dynamicTitle)
+            }
+
+        }
+
+        canNextToDoctor();
+        checkResultCount();
+    }
+
+
+    function canNextToDoctor()
+    {
+        if ($("#selectedServicesIds").val().length == 0)
+        {
+            $("#nextToSelectDoctor").prop('disabled', true)
+            $("#nextToSelectDoctor").css("background", "gray");
+            $("#nextToSelectDoctor").css("cursor", "not-allowed");
+        }
+        else 
+        {
+       
+            $("#nextToSelectDoctor").prop('disabled', false)
+            $("#nextToSelectDoctor").css("background", "");
+            $("#nextToSelectDoctor").css("cursor", "");
+        }
+    }
+
+    function appendServiceCard(dynamicId, dynamicTitle) {
 
         // Construct the HTML snippet with the dynamic values
         var htmlToAppend = `
-                                                            <div onclick="deleteSelection(${dynamicId})" id="${dynamicId}" class="col-md-3 padding-top-25">
-                                                                <div class="service-card">
-                                                                    <div class="service-card-body">
-                                                                                <h5 class="service-card-title-added">${dynamicTitle}</h5>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        `;
+                                                                            <div onclick="deleteSelection(${dynamicId})" id="${dynamicId}" class="col-md-3 padding-top-25">
+                                                                                <div class="service-card">
+                                                                                    <div class="service-card-body">
+                                                                                                <h5 class="service-card-title-added">${dynamicTitle}</h5>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        `;
 
         // Append the HTML snippet to the element with ID "selection-privileges"
         $("#selection-privileges").append(htmlToAppend);
-
-        checkResultCount()
     }
 
     function deleteSelection(id) {
@@ -258,10 +294,11 @@
         if ($("#selectedServicesIds").val().length == 1)
             $("#selectedServicesIds").val('');
         else {
-            var selectedServicesIds = $("#selectedServicesIds").val().replace(","+id,"");
+            var selectedServicesIds = $("#selectedServicesIds").val().replace("," + id, "");
             $("#selectedServicesIds").val(selectedServicesIds)
         }
         checkResultCount()
+        canNextToDoctor()
     }
 
     function checkResultCount() {

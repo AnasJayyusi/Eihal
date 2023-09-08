@@ -115,6 +115,26 @@ namespace Eihal.Controllers
                     notification.MessageEn = $"Your Profile Rejected";
                     notification.MessageAr = $"تم رفض صفحتك الشخصية";
                     break;
+
+                case NotificationTypeEnum.SendNewService:
+                    notification.TitleAr = "خدمه جديده";
+                    notification.TitleEn = "New Service";
+                    notification.MessageEn = $"You have new add service request review from {additionalData}";
+                    notification.MessageAr = $" تم ارسال طلب اضافة خدمه جديد من {additionalData}";
+                    break;
+                case NotificationTypeEnum.ApprovedNewService:
+                    notification.TitleAr = "موافقه";
+                    notification.TitleEn = "Approved";
+                    notification.MessageEn = $"Your new service was approved";
+                    notification.MessageAr = $"تم الموفقه على خدمتك الجديده";
+                    break;
+                case NotificationTypeEnum.RejectNewService:
+                    notification.TitleAr = "رفض";
+                    notification.TitleEn = "Reject";
+                    notification.MessageEn = $"Your new service was reject";
+                    notification.MessageAr = $"تم رفض خدمتك الجديده";
+                    break;
+
             }
 
             _dbContext.Notifications.Add(notification);

@@ -29,6 +29,8 @@ namespace Eihal.Data.Entites
         public State? State { get; set; }
         public City? City { get; set; }
         #endregion
+        public List <OrderServiceDetail> OrderServicesDetails { get; set; }
+
     }
 }
 
@@ -40,6 +42,7 @@ public enum Gender
 
 public enum Age
 {
+    Undefined = -1,
     Child = 0, // 4 - 10 
     Teenager = 1, // 11 -25
     Young = 2, // 26 - 50
