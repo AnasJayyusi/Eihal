@@ -792,11 +792,14 @@ namespace Eihal.Controllers
         {
 
             var servicesIds = serviceIds?.Split(',')?.Select(Int32.Parse)?.ToList();
+            var servicesIdLength = servicesIds.Count();
 
             var ids = _dbContext.UserServices
-                                            .Where(a => servicesIds.Contains(a.ServiceId))
-                                            .Select(a => a.UserId).ToList();
-
+                                    .Where(a => servicesIds.Contains(a.ServiceId))
+                                    .GroupBy(us => us.UserId)
+                                    .Where(g => g.Select(us => us.ServiceId).Distinct().Count() == servicesIdLength)
+                                    .Select(g => g.Key)
+                                    .ToList();
 
             name = string.IsNullOrEmpty(name) ? string.Empty : name;
 
@@ -879,17 +882,17 @@ namespace Eihal.Controllers
 
                 var obj = new OrderServiceDetail()
                 {
-                    OrderDetailId = orderId,
+                    OrderDetailId = orderDetail.Id,
                     Price = price,
                     Fee = fee,
-                    ServiceId= serviceId,
+                    ServiceId = serviceId,
                     TitleAr = userServiceDetails.TitleAr,
                     TitleEn = userServiceDetails.TitleEn,
                 };
                 orderServiceDetails.Add(obj);
-                _dbContext.SaveChanges();
             }
-
+            _dbContext.OrderServiceDetails.AddRange(orderServiceDetails);
+            _dbContext.SaveChanges();
 
             var referralRequestId = referralRequest.Id;
             string requestNumber = referralRequestId.ToString("#0000");
@@ -906,7 +909,7 @@ namespace Eihal.Controllers
         [HttpGet]
         [Route("ExportReport")]
         [AllowAnonymous]
-        public ActionResult ExportReport(int referralRequestId = 23)
+        public ActionResult ExportReport(int referralRequestId)
         {
             PdfReportGenerator reportGenerator = new PdfReportGenerator();
             // Get Logo Image
@@ -941,14 +944,15 @@ namespace Eihal.Controllers
 
             reportDto.MasterDetails = new MasterDetailsDto()
             {
-                OrderDate = referralReq.CreationDate.ToString("MM/dd/yyyy"),
+                OrderDate = referralReq.CompletionDate.Value.ToString("MM/dd/yyyy"),
                 DoctorName = referralReq.AssignedToUser.FullName,
-                ClinicName = clinicName ?? "Not Defined Yet.",
-                OrderNo = referralReq.Id.ToString("#0000"),
+                ClinicName = clinicName ?? "Not Defined Yet",
+                InvoiceNumber = referralReq.Id.ToString("#0000"),
                 PatientName = referralReq.Order.PatientName,
                 RequestFrom = referralReq.CreatedByUser.FullName
             };
 
+            var vatValue = Convert.ToDouble(_dbContext.GeneralSettings.Single().VatValue);
             List<DataTableDto> dataSource = new List<DataTableDto>();
             foreach (var order in orderDetails)
             {
@@ -976,16 +980,16 @@ namespace Eihal.Controllers
                     // Total totalVatPercentage
                     totalPrice = totalPrice + dataTableDto.Total;
 
-                    dataTableDto.VatPercentage = 25.0;
+                    dataTableDto.VatPercentage = vatValue;
                     // Total totalVatPercentage
                     totalVatPercentage = totalVatPercentage + dataTableDto.VatPercentage;
 
-                    dataTableDto.VatValue = (dataTableDto.Total * 25.0) / 100;
+                    dataTableDto.VatValue = (dataTableDto.Total * vatValue) / 100;
 
                     // Total totalVatPercentage
                     totalVatValue = totalVatValue + dataTableDto.VatValue;
 
-                    dataTableDto.NetWithVat = (dataTableDto.Total * 25.0) / 100;
+                    dataTableDto.NetWithVat = dataTableDto.Total - dataTableDto.VatValue;
 
                     // Total totalNetWithVat
                     totalNetWithVat = totalNetWithVat + dataTableDto.NetWithVat;

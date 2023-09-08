@@ -225,6 +225,7 @@
 
 
 <script>
+
     function addToSelectionList(id, titleEn, titleAr) {
         debugger;
         // Get the dynamic values from somewhere (e.g., user input or API response)
@@ -255,17 +256,32 @@
     }
 
 
-    function canNextToDoctor()
-    {
-        if ($("#selectedServicesIds").val().length == 0)
-        {
+
+    function deleteSelection(id) {
+        debugger;
+        var selectedSvcs = $("#selectedServicesIds").val();
+        var arrayOfSelected = selectedSvcs.split(",");
+        const index = arrayOfSelected.indexOf(id.toString());
+        if (index > -1) { // only splice array when item is found
+            var jquerySelector = "#" + id
+            arrayOfSelected.splice(index, 1); // 2nd parameter means remove one item only
+            $(jquerySelector).remove();
+            }
+
+        var newSelections = arrayOfSelected.toString();
+        $("#selectedServicesIds").val(newSelections);
+        checkResultCount()
+        canNextToDoctor()
+    }
+
+    function canNextToDoctor() {
+        if ($("#selectedServicesIds").val().length == 0) {
             $("#nextToSelectDoctor").prop('disabled', true)
             $("#nextToSelectDoctor").css("background", "gray");
             $("#nextToSelectDoctor").css("cursor", "not-allowed");
         }
-        else 
-        {
-       
+        else {
+
             $("#nextToSelectDoctor").prop('disabled', false)
             $("#nextToSelectDoctor").css("background", "");
             $("#nextToSelectDoctor").css("cursor", "");
@@ -276,30 +292,16 @@
 
         // Construct the HTML snippet with the dynamic values
         var htmlToAppend = `
-                                                                            <div onclick="deleteSelection(${dynamicId})" id="${dynamicId}" class="col-md-3 padding-top-25">
-                                                                                <div class="service-card">
-                                                                                    <div class="service-card-body">
-                                                                                                <h5 class="service-card-title-added">${dynamicTitle}</h5>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        `;
+                                     <div onclick="deleteSelection(${dynamicId})" id="${dynamicId}" class="col-md-3 padding-top-25">
+                                         <div class="service-card">
+                                             <div class="service-card-body">
+                                                         <h5 class="service-card-title-added">${dynamicTitle}</h5>
+                                                 </div></div></div>`;
 
         // Append the HTML snippet to the element with ID "selection-privileges"
         $("#selection-privileges").append(htmlToAppend);
     }
 
-    function deleteSelection(id) {
-        $("#" + id).remove();
-        if ($("#selectedServicesIds").val().length == 1)
-            $("#selectedServicesIds").val('');
-        else {
-            var selectedServicesIds = $("#selectedServicesIds").val().replace("," + id, "");
-            $("#selectedServicesIds").val(selectedServicesIds)
-        }
-        checkResultCount()
-        canNextToDoctor()
-    }
 
     function checkResultCount() {
         var numberOfSelections = $(".service-card-title-added").length;

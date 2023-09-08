@@ -96,7 +96,7 @@ namespace Eihal.Tools
             table.AddCell(dateCell);
 
             // Invoice Number Cell
-            PdfPCell invoiceNoCell = new PdfPCell(new Phrase(string.Format($"Invoice Number:{masterDetails.OrderNo} "), _font));
+            PdfPCell invoiceNoCell = new PdfPCell(new Phrase(string.Format($"Invoice Number:{masterDetails.InvoiceNumber} "), _font));
             invoiceNoCell.HorizontalAlignment = Element.ALIGN_LEFT;
             invoiceNoCell.Border = iTextSharp.text.Rectangle.NO_BORDER;
             table.AddCell(invoiceNoCell);

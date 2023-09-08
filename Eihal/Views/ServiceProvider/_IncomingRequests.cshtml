@@ -1,4 +1,27 @@
-﻿@model List<Eihal.Data.Entites.ReferralRequest>
+﻿<style>
+    .underReview {
+        background-color: rebeccapurple;
+        color: #ffffff;
+    }
+
+    .approved {
+        background-color: darkcyan;
+        color: #ffffff;
+    }
+
+    .completed {
+        background-color: dodgerblue;
+        color: #ffffff;
+    }
+
+    .rejected {
+        background-color: firebrick;
+        color: #ffffff;
+    }
+
+</style>
+
+@model List<Eihal.Data.Entites.ReferralRequest>
 
 @foreach (var referral in Model)
 {
@@ -17,17 +40,22 @@
                         <span class="ref-info-label">Status</span>
                         @if (referral.Status == Eihal.Enums.ReferralStatusEnum.UnderReview)
                         {
-                            <span class="status status-warning">Under Review</span>
+                            <span class="status underReview">Under Review</span>
                         }
-                        else if (referral.Status == Eihal.Enums.ReferralStatusEnum.Approved || referral.Status == Eihal.Enums.ReferralStatusEnum.Completed)
+                        else if (referral.Status == Eihal.Enums.ReferralStatusEnum.Approved)
                         {
-                            <span class="status status-success">@referral.Status</span>
+                            <span class="status approved">@referral.Status</span>
+                        }
+                        else if (referral.Status == Eihal.Enums.ReferralStatusEnum.Completed)
+                        {
+                            <span class="status completed">@referral.Status</span>
                         }
                         else if (referral.Status == Eihal.Enums.ReferralStatusEnum.Rejected)
                         {
-                            <span class="status status-error">@referral.Status</span>
+                            <span class="status rejected">@referral.Status</span>
+                            <span class="status rejected">@referral.Status</span>
                         }
-                        
+
                         <br>
                         <br>
                         @*<span class="ref-info-label"> Privilege Name</span><span style="color:gray"> @referral.Service.TitleEn </span>*@
@@ -43,9 +71,10 @@
                                 <div class="option" onclick="reject(@(referral.Id))">Reject</div>
                             </div>
                         </div>
-                    }else if (referral.Status == Eihal.Enums.ReferralStatusEnum.Approved)
+                    }
+                    else if (referral.Status == Eihal.Enums.ReferralStatusEnum.Approved)
                     {
-                                <div class="dots-container">
+                        <div class="dots-container">
                             <i onclick="toggleDropdown(@(referral.Id))">
                                 <i style="color:#eadfdf" class="fas fa-ellipsis-v"></i>
                             </i>
@@ -53,14 +82,15 @@
                                 <div class="option" onclick="complete(@(referral.Id))">Complete</div>
                             </div>
                         </div>
-                    }else if (referral.Status == Eihal.Enums.ReferralStatusEnum.Completed)
+                    }
+                    else if (referral.Status == Eihal.Enums.ReferralStatusEnum.Completed)
                     {
-                                <div class="dots-container">
+                        <div class="dots-container">
                             <i onclick="toggleDropdown(@(referral.Id))">
                                 <i style="color:#eadfdf" class="fas fa-ellipsis-v"></i>
                             </i>
                             <div class="dropdown-card" id="dropdownMenu@(referral.Id)">
-                                <div class="option" >@Html.ActionLink("Report", "ExportReport", "ServiceProvider",new {referralRequestId= referral.Id})</div>
+                                <div class="option">@Html.ActionLink("Report", "ExportReport", "ServiceProvider",new {referralRequestId= referral.Id},new { @style="color:black;" })</div>
                             </div>
                         </div>
                     }

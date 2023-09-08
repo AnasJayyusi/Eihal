@@ -1,4 +1,26 @@
-﻿@model List<Eihal.Data.Entites.ReferralRequest>
+﻿<style>
+    .underReview {
+        background-color: rebeccapurple;
+        color: #ffffff;
+    }
+
+    .approved {
+        background-color: darkcyan;
+        color: #ffffff;
+    }
+
+    .completed {
+        background-color: dodgerblue;
+        color: #ffffff;
+    }
+
+    .rejected {
+        background-color: firebrick;
+        color: #ffffff;
+    }
+
+</style>
+@model List<Eihal.Data.Entites.ReferralRequest>
 @foreach (var referral in Model)
 {
     <div class="col-md-4 padding-top-25">
@@ -9,17 +31,22 @@
                 <div class="referral-info-row">
                     <div class="referral-info-label" style="padding:10px"><span class="ref-info-label">ID</span> <span style="color:gray">  @referral.Id.ToString("D4")   </span> <span class="ref-info-label" style="padding-left: 25px;"> Date</span> <span style="color:gray">@referral.CreationDate.ToString("yyyy/MM/dd")</span></div>
                     <div class="referral-info-label" style="padding:10px">
-                        <span style="color:#00768c;">Status</span>   @if (referral.Status == Eihal.Enums.ReferralStatusEnum.UnderReview)
+                        <span style="color:#00768c;">Status</span>
+                        @if (referral.Status == Eihal.Enums.ReferralStatusEnum.UnderReview)
                         {
-                            <span class="status status-warning">Under Review</span>
+                            <span class="status underReview">Under Review</span>
                         }
-                        else if (referral.Status == Eihal.Enums.ReferralStatusEnum.Approved  || referral.Status == Eihal.Enums.ReferralStatusEnum.Completed)
+                        else if (referral.Status == Eihal.Enums.ReferralStatusEnum.Approved)
                         {
-                            <span class="status status-success">@referral.Status</span>
+                            <span class="status approved">@referral.Status</span>
+                        }
+                        else if (referral.Status == Eihal.Enums.ReferralStatusEnum.Completed)
+                        {
+                            <span class="status completed">@referral.Status</span>
                         }
                         else if (referral.Status == Eihal.Enums.ReferralStatusEnum.Rejected)
                         {
-                            <span class="status status-error">@referral.Status</span>
+                            <span class="status rejected">@referral.Status</span>
                         }
                         <br>
                         <br>
@@ -27,12 +54,12 @@
                     </div>
                     @if (referral.Status == Eihal.Enums.ReferralStatusEnum.Completed)
                     {
-                                <div class="dots-container">
+                        <div class="dots-container">
                             <i onclick="toggleDropdown(@(referral.Id))">
                                 <i style="color:#eadfdf" class="fas fa-ellipsis-v"></i>
                             </i>
                             <div class="dropdown-card" id="dropdownMenu@(referral.Id)">
-                                <div class="option" onclick="exportReport(@(referral.Id))">@Html.ActionLink("Report", "ExportReport", "ServiceProvider",new {referralRequestId= referral.Id})</div>
+                                <div class="option" onclick="exportReport(@(referral.Id))">@Html.ActionLink("Report", "ExportReport", "ServiceProvider",new {referralRequestId= referral.Id},new { @style="color:black;" })</div>
                             </div>
                         </div>
                     }

@@ -3,8 +3,6 @@ using Eihal.Data.Entites;
 using Eihal.Hubs;
 using Eihal.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using static Eihal.Data.SharedEnum;
@@ -1175,7 +1173,7 @@ namespace Eihal.Controllers
                 serviceReport.CreatedByUserName = referralRequest.CreatedByUser.FullName;
                 serviceReport.AssignedToUserName = referralRequest.AssignedToUser.FullName;
 
-                var orderServiceDetails = _dbContext.OrderServiceDetails.Where(w => w.OrderDetailId == referralRequest.OrderId);
+                var orderServiceDetails = _dbContext.OrderServiceDetails.Where(w => w.OrderDetailId == referralRequest.OrderId).ToList();
 
                 // Filling Prices From Order Service Deatils To Avoid Issue when change Price  
                 foreach (var osd in orderServiceDetails)
@@ -1470,7 +1468,7 @@ namespace Eihal.Controllers
             //// Set the value in TempData
             //TempData["isFromDeleteRequest"] = true;
 
-            PushNewNotification(SharedEnum.NotificationTypeEnum.ApprovedNewService, GetUserProfileId(), _adminUserProfileId, GetShortName());
+            PushNewNotification(SharedEnum.NotificationTypeEnum.ApprovedNewService, _adminUserProfileId, userServices.UserId); 
 
             return RedirectToAction("Dashboard");
         }
@@ -1490,7 +1488,7 @@ namespace Eihal.Controllers
             {
                 userServices.RejectionReason = string.Empty;
             }
-            PushNewNotification(SharedEnum.NotificationTypeEnum.RejectNewService, GetUserProfileId(), _adminUserProfileId, GetShortName());
+            PushNewNotification(SharedEnum.NotificationTypeEnum.RejectNewService, _adminUserProfileId, userServices.UserId);
             _dbContext.SaveChanges();
 
 
