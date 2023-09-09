@@ -1,8 +1,6 @@
 ﻿using Eihal.Data.Entites;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Eihal.Data
 {

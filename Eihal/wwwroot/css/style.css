@@ -2227,7 +2227,7 @@ html[dir=rtl] .navabr .bottom-nav .content .flex-contain .drop-list-shape .list 
 header {
     width: 100%;
     padding: 200px 0px;
-    background: url("../images/header.png") center/cover no-repeat;
+    background: url("../images/header.jpg") center/cover no-repeat;
 }
 
 
@@ -6715,7 +6715,7 @@ body {
     text-transform: none !important;
 }
 .loginLogo {
-    background: url("../images/header.png") center/cover no-repeat;
+    background: url("../images/header.jpg") center/cover no-repeat;
 }
 
 .register-confirmation-logo {

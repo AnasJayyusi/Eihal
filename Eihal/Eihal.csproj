@@ -11,15 +11,11 @@
 	 
 
 	<ItemGroup>
-		<None Remove="Areas\Identity\Pages\Account\header.png" />
+		<None Remove="Areas\Identity\Pages\Account\header.jpg" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<Content Include="Areas\Identity\Pages\Account\EmailTemplates\AccountConfirmation.html" />
-		<Content Include="Areas\Identity\Pages\Account\header.png">
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-		</Content>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -38,6 +34,9 @@
 		<None Include="wwwroot\**">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+	</ItemGroup>
+	<ItemGroup>
+	  <Content Remove="wwwroot\images\header.jpg" />
 	</ItemGroup>
 
 </Project>

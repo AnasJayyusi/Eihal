@@ -1,5 +1,3 @@
-using System;
-
 namespace Eihal.Models
 {
     public class ErrorViewModel

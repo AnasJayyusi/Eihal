@@ -1,7 +1,4 @@
-﻿using Eihal.Enums;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Eihal.Data.Entites
+﻿namespace Eihal.Data.Entites
 {
     public class GeneralSettings
     {

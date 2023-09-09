@@ -1,7 +1,4 @@
-﻿using NuGet.Protocol.Core.Types;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Eihal.Data.Entites
+﻿namespace Eihal.Data.Entites
 {
     public class AccountType
     {

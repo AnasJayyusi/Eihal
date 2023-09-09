@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System.Collections.Concurrent;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Eihal.Data.Entites

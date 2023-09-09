@@ -1,5 +1,4 @@
 ﻿using Eihal.Enums;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Eihal.Models
 {
