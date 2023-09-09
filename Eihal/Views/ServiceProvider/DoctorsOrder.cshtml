@@ -1,9 +1,9 @@
 ﻿<div class="col-md-12 col-12 mb-4">
     <div class="input-group">
         <div class="form-outline">
-            <input onkeyup="searchOnPrivileges()" id="search-input" type="search" class="form-control" />
+            <input onkeyup="filterDoctors()" id="doctorName-input" type="text" class="form-control" />
         </div>
-        <button onclick="searchOnPrivileges()" style="height:40px" id="search-button" type="button" class="btn btn-primary">
+        <button onclick="filterDoctors()" style="height:40px" id="search-button" type="button" class="btn btn-primary">
             <i class="fas fa-search"></i>
         </button>
         <br />
@@ -14,11 +14,11 @@
     </div>
     <div class="row">
         <div class="col-md-3 col-12 " style="padding-right:8px">
-            <select class="form-control" id="services-ddl" onchange="filterDoctors()">
+            <select class="form-control" id="services-ddl" onchange="filterDoctors()" disabled>
             </select>
         </div>
         <div class="col-md-3 col-12 padding-screen" style="padding-right:8px">
-            <select class="form-control" id="cities-ddl" onchange="filterDoctors()"></select>
+            <select class="form-control" id="cities-ddl" onchange="getDistrictsThenFilter()"></select>
         </div>
 
         <div class="col-lg-3 col-12 padding-screen" style="padding-right:8px">
@@ -390,7 +390,7 @@
         }
     }
 
-  
+
 </script>
 <style>
     .selectable {
@@ -414,3 +414,49 @@
         visibility: visible;
     }
 </style>
+
+
+<script>
+    function filterDoctors() {
+        var doctorsContainer = $('#doctorsContainer');
+        var servicesIds = $("#selectedServicesIds").val()
+        var disctrictId = $('#disctricts-ddl').val();
+        var cityId = $('#cities-ddl').val();
+        var sortBy = $('#sort-ddl').val();
+        var insuranceType = $('#insurance-ddl').val();
+        var name = $('#doctorName-input').val();
+        $.ajax({
+            url: '/ServiceProvider/GetAvailableDoctors?serviceIds=' + servicesIds + '&name=' + name + '&cityId=' + cityId + '&disctrictId=' + disctrictId + '&sortBy=' + sortBy + '&insuranceType=' + insuranceType, // Replace with the actual URL and action method to fetch the partial view
+            type: 'GET',
+            success: function (response) {
+                doctorsContainer.html(response);
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
+    }
+
+    function getDistrictsThenFilter() {
+        var cityId = $('#cities-ddl').val();
+
+        $.ajax({
+            url: '@Url.Action("GetDistrictsDDL", "Common")' + "?cityId=" + cityId,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                // Clear existing options
+                $('#disctricts-ddl').empty();
+                // Populate the dropdown list
+                var dropdown = $('#disctricts-ddl');
+                dropdown.append($('<option></option>').val(0).text('All Districts'));
+                $.each(data, function (index, item) {
+                    dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                });
+                filterDoctors();
+            }
+        });
+    }
+
+
+</script>

@@ -52,11 +52,13 @@
             error: function (xhr, status, error) {
                 // Handle any errors that occur during the AJAX call
                 toastr.error("Error sending Order!", 'Send !!');
+                resetForm();
             }
         });
 
         setTimeout(function () {
             $("#close-order").trigger("click")
+            resetForm();
         }, 2000);
 
 
@@ -203,6 +205,7 @@
             $("fieldset:first").show();
             $("#progressbar li").removeClass("active");
             $("#progressbar li:first").addClass("active");
+            resetForm();
             setProgressBar(1);
             current = 1;
         });

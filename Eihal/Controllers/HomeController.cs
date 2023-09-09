@@ -96,13 +96,13 @@ namespace Eihal.Controllers
                         && (serviceId == 0 || ids.Contains(a.Id))
                         && (cityId == 0 || a.TimeClinicLocation.CityId == cityId)
                         && (disctrictId == 0 || a.TimeClinicLocation.DistrictId == disctrictId)
-                       
+
 
             ).ToList();
-      
+
             return View(doctors);
         }
-        public ActionResult FillDoctorsList(string name,int serviceId,int cityId,int disctrictId,int sortBy,int insuranceType)
+        public ActionResult FillDoctorsList(string name, int serviceId, int cityId, int disctrictId, int sortBy, int insuranceType)
         {
             List<int> ids = new List<int>();
             if (serviceId > 0)
@@ -111,30 +111,40 @@ namespace Eihal.Controllers
 
             }
             name = string.IsNullOrEmpty(name) ? string.Empty : name;
-            var doctors = _dbContext.UserProfiles.Include(a=>a.TimeClinicLocation).ThenInclude(a=>a.City).Include(a=>a.InsuranceCompanies).Include(x=>x.Certifications).ThenInclude(a=>a.Degree).Include(a => a.PractitionerType).Include(x=>x.City).Where(a => a.ProfileStatus == ProfileStatus.Active && a.AccountTypeId == 1 
-           && (name == String.Empty || a.FullName.Contains(name))
-            && (serviceId == 0  || ids.Contains( a.Id))
-            && (cityId ==0 || a.TimeClinicLocation.CityId == cityId) 
-            && (disctrictId == 0 || a.TimeClinicLocation.DistrictId == disctrictId) 
-            && (insuranceType == 0 || (insuranceType !=0 && a.InsuranceCompanies.Any(x=>x.Id == insuranceType)))
-           
-            ).ToList();
-            if (sortBy != 0) {
-                if(sortBy == 1)
-                doctors = doctors.OrderBy(a => a.FullName).ToList();
-            else
+            var doctors = _dbContext.UserProfiles.Include(a => a.TimeClinicLocation)
+                                                 .ThenInclude(a => a.City)
+                                                 .Include(a => a.InsuranceCompanies)
+                                                 .Include(x => x.Certifications)
+                                                 .ThenInclude(a => a.Degree)
+                                                 .Include(a => a.PractitionerType)
+                                                 .Include(x => x.City)
+                                                 .Where(a => a.ProfileStatus == ProfileStatus.Active && a.AccountTypeId == 1
+                                                  && (name == String.Empty || a.FullName.Contains(name))
+                                                  && (serviceId == 0 || ids.Contains(a.Id))
+                                                  && (cityId == 0 || a.TimeClinicLocation.CityId == cityId)
+                                                  && (disctrictId == 0 || a.TimeClinicLocation.DistrictId == disctrictId)
+                                                  && (insuranceType == 0 || (insuranceType != 0 && a.InsuranceCompanies.Any(x => x.Id == insuranceType))))
+                                                 .ToList();
+            if (sortBy != 0)
+            {
+                if (sortBy == 1)
+                    doctors = doctors.OrderBy(a => a.FullName).ToList();
+                else
                 {
                     doctors = doctors.OrderBy(a => a.TimeClinicLocation?.City?.TitleEn).ToList();
                 }
             }
-            return PartialView("_DoctorsList",doctors);
+
+            return PartialView("_DoctorsList", doctors);
         }
 
         public ActionResult GetUserDetailsById(string userId)
         {
-            var userDetails = _dbContext.UserProfiles.Include(x => x.Certifications).ThenInclude(a => a.Degree).Include(a => a.PractitionerType).Include(x => x.City).Where(a => a.UserId == userId
-            ).FirstOrDefault();
-          
+            var userDetails = _dbContext.UserProfiles.Include(x => x.Certifications)
+                                                     .ThenInclude(a => a.Degree)
+                                                     .Include(a => a.PractitionerType)
+                                                     .Include(x => x.City).Where(a => a.UserId == userId).FirstOrDefault();
+
             return PartialView("_UserDetails", userDetails);
         }
 

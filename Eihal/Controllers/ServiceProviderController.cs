@@ -777,12 +777,20 @@ namespace Eihal.Controllers
         public ActionResult GetAvailablePrivileges()
         {
             // Assuming you have a list of items to pass to the view
-            var model = _dbContext.Services
+            var model = _dbContext.Services.Include(i => i.ClinicalSpeciality)
             .Join(_dbContext.UserServices,
                 s => s.Id,
                 us => us.ServiceId,
                 (s, us) => new SupportServiceModal
-                { ServiceId = s.Id, TitleEn = s.TitleEn, TitleAr = s.TitleAr, Status = us.Status })
+                {
+                    ServiceId = s.Id,
+                    TitleEn = s.TitleEn,
+                    TitleAr = s.TitleAr,
+                    Status = us.Status,
+                    Logo = s.ClinicalSpeciality.LogoImagePath,
+                    ClinicalSpecialityNameAr = s.ClinicalSpeciality.TitleAr,
+                    ClinicalSpecialityNameEn = s.ClinicalSpeciality.TitleEn
+                })
                 .Where(us => us.Status == ServicesStatusEnum.Approved
                 ) // Include columns you want from both tables
             .Distinct()
@@ -797,7 +805,7 @@ namespace Eihal.Controllers
 
 
         [Route("GetAvailableDoctors")]
-        public ActionResult GetAvailableDoctors(string serviceIds, string name, int cityId, int disctrictId)
+        public ActionResult GetAvailableDoctors(string serviceIds, string name, int cityId, int disctrictId, int sortBy, int insuranceType)
         {
 
             var servicesIds = serviceIds?.Split(',')?.Select(Int32.Parse)?.ToList();
@@ -824,8 +832,19 @@ namespace Eihal.Controllers
                                          && (name == String.Empty || a.FullName.Contains(name))
                                          && (ids.Contains(a.Id))
                                          && (cityId == 0 || a.TimeClinicLocation.CityId == cityId)
-                                         && (disctrictId == 0 || a.TimeClinicLocation.DistrictId == disctrictId)).ToList();
+                                         && (disctrictId == 0 || a.TimeClinicLocation.DistrictId == disctrictId)
+                                         && (insuranceType == 0 || (insuranceType != 0 && a.InsuranceCompanies.Any(x => x.Id == insuranceType))))
+                                        .ToList();
 
+            if (sortBy != 0)
+            {
+                if (sortBy == 1)
+                    doctors = doctors.OrderBy(a => a.FullName).ToList();
+                else
+                {
+                    doctors = doctors.OrderBy(a => a.TimeClinicLocation?.City?.TitleEn).ToList();
+                }
+            }
 
 
             return PartialView("AvailableDoctorsList", doctors); // Replace with the name of your partial view

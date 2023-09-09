@@ -2,6 +2,12 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 <style>
+    .status-clinical {
+        background-color: #efd8e3;
+        color: #212529;
+        font-size: 12px;
+        border-radius: 10%;
+    }
     .service-card {
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         position: relative;
@@ -29,6 +35,9 @@
 
 
     .service-card-body {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
         background-color: #f8f9fa;
         padding: 5%;
     }
@@ -197,18 +206,17 @@
 
         <div class="service-card">
             <div onclick="addToSelectionList(@item.ServiceId ,'@item.TitleEn','@item.TitleAr')" class="service-card-body">
+                <div>
+                    <img style="border-radius:30%" id="user-image-layout" src="@(item.Logo)" width="30" height="30" alt="user-image-profile" onerror="this.src='/users/images/Default-User-Profile.jpg'">
+                </div>
+                <div class="status status-clinical" style="display: inline-block;margin-top:5%;margin-bottom:5%">
+                    <span>@item.ClinicalSpecialityNameEn</span>
+                </div>
                 <h5 class="service-card-title">@item.TitleEn</h5>
                 <div class="row col-12">
-                    @* <div class="col-8">
-                <span class="service-sub-title" style="display: inline-block;">Price:</span>
-                <span style="display: inline-block; margin-left: 5px;">@item.Fee</span>
-                </div>*@
+                
                 </div>
-                @* <div class="dots-container">
-            <button class="dots-button" data-toggle="modal" onclick="fillAddServicePage('@item.ServiceId','@item.TitleAr','@item.TitleEn')" data-target="#AddServiceModal">
-            <i class="fas fa-plus" style="font-size: 18px;"></i>
-            </button>
-            </div>*@
+            
             </div>
 
         </div>
@@ -227,7 +235,7 @@
 <script>
 
     function addToSelectionList(id, titleEn, titleAr) {
-        debugger;
+        
         // Get the dynamic values from somewhere (e.g., user input or API response)
         var dynamicId = id;
         var dynamicTitle = titleEn;
@@ -258,7 +266,7 @@
 
 
     function deleteSelection(id) {
-        debugger;
+        
         var selectedSvcs = $("#selectedServicesIds").val();
         var arrayOfSelected = selectedSvcs.split(",");
         const index = arrayOfSelected.indexOf(id.toString());
