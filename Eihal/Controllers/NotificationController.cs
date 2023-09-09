@@ -20,10 +20,15 @@ namespace Eihal.Controllers
 
 
         [HttpGet]
+        [AllowAnonymous]
         [Route("GetUserNotificationsCount")]
         public ActionResult GetUserNotificationsCount()
         {
             var currentUserId = GetUserProfileId();
+
+            // Temp Solution To Avoid Console Error  => SignlR Should Enable Only After Login 
+            if (currentUserId < 0)
+                return Json(0);
             //var user =  _userManager.GetUserAsync(User);
             //if (user != null)
             //{

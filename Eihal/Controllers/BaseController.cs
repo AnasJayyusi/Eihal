@@ -26,7 +26,11 @@ namespace Eihal.Controllers
         {
             string currentUserProfileId = GetAspNetUserId();
             if (_userProfileId == null)
-                return _dbContext.UserProfiles.IgnoreQueryFilters().Where(w => w.UserId == currentUserProfileId).Select(x => x.Id).Single();
+            {
+                if (currentUserProfileId != null)
+                    return _dbContext.UserProfiles.IgnoreQueryFilters().Where(w => w.UserId == currentUserProfileId).Select(x => x.Id).Single();
+                return -1;
+            }
             else
                 return _userProfileId.Value;
         }
@@ -145,10 +149,10 @@ namespace Eihal.Controllers
         }
 
 
-        public string GetFileFullPath(IWebHostEnvironment _webHostEnvironment,string folderName ,string fileName)
+        public string GetFileFullPath(IWebHostEnvironment _webHostEnvironment, string folderName, string fileName)
         {
             //Build the File Path.  
-            return Path.Combine(_webHostEnvironment.WebRootPath, folderName, fileName) ;
+            return Path.Combine(_webHostEnvironment.WebRootPath, folderName, fileName);
         }
     }
 }
