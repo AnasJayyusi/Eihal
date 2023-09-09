@@ -1859,6 +1859,7 @@
   <ItemGroup>
     <Folder Include="Common\" />
     <Folder Include="wwwroot\images\InsuranceLogo\" />
+    <Folder Include="wwwroot\images\ClinicalSpecialtyLogo\" />
     <Folder Include="wwwroot\users\attachments\" />
   </ItemGroup>
 

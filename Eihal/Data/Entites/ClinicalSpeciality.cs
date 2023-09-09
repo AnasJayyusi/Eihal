@@ -12,7 +12,7 @@ namespace Eihal.Data.Entites
 
         [ForeignKey(nameof(PractitionerType))]
         public int? PractitionerTypeId { get; set; }
-        public string? LogoUrl { get; set; }
+        public string? LogoImagePath { get; set; }
         public PractitionerType PractitionerType { get; set; }
 
     }

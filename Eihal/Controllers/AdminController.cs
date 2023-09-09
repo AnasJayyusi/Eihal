@@ -666,28 +666,53 @@ namespace Eihal.Controllers
 
         [HttpPost]
         [Route("AddClinicalSpeciality")]
-        public IActionResult AddClinicalSpeciality([FromBody] ClinicalSpeciality clinicalSpeciality)
+        public IActionResult AddClinicalSpeciality()
         {
-            if (clinicalSpeciality == null || string.IsNullOrEmpty(clinicalSpeciality.TitleEn) || string.IsNullOrEmpty(clinicalSpeciality.TitleAr))
+            var clinicalSpeciality = new ClinicalSpeciality();
+
+            // Get the form data
+            var titleEn = Request.Form["titleEn"].ToString();
+            var titleAr = Request.Form["titleAr"].ToString();
+            var practitionerTypeId = Request.Form["practitionerTypeId"].ToString();
+            var image = Request.Form.Files["image"];
+
+            if (string.IsNullOrEmpty(titleEn) || string.IsNullOrEmpty(titleAr) || image == null || practitionerTypeId == null)
             {
                 return BadRequest("Please fill all fields.");
             }
 
             bool isDuplicate = _dbContext.ClinicalSpecialities
-                                         .Any(w => (w.TitleEn == clinicalSpeciality.TitleEn && w.TitleAr == clinicalSpeciality.TitleAr)
-                                         && w.PractitionerTypeId == clinicalSpeciality.PractitionerTypeId);
+                                       .Any(w => (w.TitleEn == clinicalSpeciality.TitleEn && w.TitleAr == clinicalSpeciality.TitleAr)
+                                       && w.PractitionerTypeId == clinicalSpeciality.PractitionerTypeId);
             if (isDuplicate)
             {
-                return BadRequest("The details for the Subspecialty have already been added.");
+                return BadRequest("The details for the Clinical Speciality have already been added.");
             }
 
             else
             {
-                if (!string.IsNullOrEmpty(clinicalSpeciality.TitleAr) || !string.IsNullOrEmpty(clinicalSpeciality.TitleEn))
+                clinicalSpeciality.TitleEn = titleEn;
+                clinicalSpeciality.TitleAr = titleAr;
+
+                // Generate a unique file name
+                var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
+
+                // Save the image file to the specified path
+                string webRootPath = _webHostEnvironment.WebRootPath;
+                string uploadDir = Path.Combine("images", "ClinicalSpecialtyLogo");
+                string imagePath = Path.Combine(webRootPath, uploadDir, uniqueFileName);
+                using (var fileStream = new FileStream(imagePath, FileMode.Create))
                 {
-                    _dbContext.ClinicalSpecialities.Add(clinicalSpeciality);
-                    _dbContext.SaveChanges();
+                    image.CopyTo(fileStream);
                 }
+
+                // Assign the image path to the LogoImagePath property
+                clinicalSpeciality.LogoImagePath = $"/images/ClinicalSpecialtyLogo/{uniqueFileName}";
+                clinicalSpeciality.IsActive = true;
+                clinicalSpeciality.PractitionerTypeId = Convert.ToInt32(practitionerTypeId);
+
+                _dbContext.ClinicalSpecialities.Add(clinicalSpeciality);
+                _dbContext.SaveChanges();
             }
 
             return Ok();
@@ -695,28 +720,57 @@ namespace Eihal.Controllers
 
         [HttpPost]
         [Route("UpdateClinicalSpeciality")]
-        public IActionResult UpdateClinicalSpeciality([FromBody] ClinicalSpeciality clinicalSpeciality)
+        public IActionResult UpdateClinicalSpeciality()
         {
-            if (clinicalSpeciality == null || string.IsNullOrEmpty(clinicalSpeciality.TitleEn) || string.IsNullOrEmpty(clinicalSpeciality.TitleAr))
+            // Get the form data
+            var titleEn = Request.Form["titleEn"].ToString();
+            var titleAr = Request.Form["titleAr"].ToString();
+            var id = Convert.ToInt32(Request.Form["titleId"].ToString());
+            var image = Request.Form.Files["image"];
+            var practitionerTypeId = Request.Form["practitionerTypeId"].ToString();
+
+            var clinicalSpecialty = _dbContext.ClinicalSpecialities.Where(w => w.Id == id).Single();
+
+            if (string.IsNullOrEmpty(titleEn) || string.IsNullOrEmpty(titleAr) || practitionerTypeId == null)
             {
                 return BadRequest("Please fill all fields.");
             }
 
+            int typeId = Convert.ToInt32(practitionerTypeId);
             bool isDuplicate = _dbContext.ClinicalSpecialities
-                                        .Any(w => (w.TitleEn == clinicalSpeciality.TitleEn && w.TitleAr == clinicalSpeciality.TitleAr)
-                                        && w.PractitionerTypeId == clinicalSpeciality.PractitionerTypeId);
+                              .Any(w => (w.TitleEn == titleEn && w.TitleAr == titleAr)
+                              && w.PractitionerTypeId == typeId);
             if (isDuplicate)
             {
-                return BadRequest("The details for the subspecialty have already been added.");
+                return BadRequest("The details for the Clinical Specialty have already been added.");
             }
 
             else
             {
-                if (!string.IsNullOrEmpty(clinicalSpeciality.TitleAr) || !string.IsNullOrEmpty(clinicalSpeciality.TitleEn))
+                clinicalSpecialty.TitleEn = titleEn;
+                clinicalSpecialty.TitleAr = titleAr;
+                clinicalSpecialty.PractitionerTypeId = typeId;
+
+                if (image != null)
                 {
-                    _dbContext.ClinicalSpecialities.Update(clinicalSpeciality);
-                    _dbContext.SaveChanges();
+                    // Generate a unique file name
+                    var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
+
+                    // Save the image file to the specified path
+                    string webRootPath = _webHostEnvironment.WebRootPath;
+                    string uploadDir = Path.Combine("images", "ClinicalSpecialtyLogo");
+                    string imagePath = Path.Combine(webRootPath, uploadDir, uniqueFileName);
+                    using (var fileStream = new FileStream(imagePath, FileMode.Create))
+                    {
+                        image.CopyTo(fileStream);
+                    }
+
+                    // Assign the image path to the LogoImagePath property
+                    clinicalSpecialty.LogoImagePath = $"/images/ClinicalSpecialtyLogo/{uniqueFileName}";
                 }
+
+                _dbContext.ClinicalSpecialities.Update(clinicalSpecialty);
+                _dbContext.SaveChanges();
             }
 
             return Ok();
@@ -1468,7 +1522,7 @@ namespace Eihal.Controllers
             //// Set the value in TempData
             //TempData["isFromDeleteRequest"] = true;
 
-            PushNewNotification(SharedEnum.NotificationTypeEnum.ApprovedNewService, _adminUserProfileId, userServices.UserId); 
+            PushNewNotification(SharedEnum.NotificationTypeEnum.ApprovedNewService, _adminUserProfileId, userServices.UserId);
 
             return RedirectToAction("Dashboard");
         }

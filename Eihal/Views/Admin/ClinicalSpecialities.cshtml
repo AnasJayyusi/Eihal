@@ -179,6 +179,10 @@
                         <input type="text" class="form-control" id="titleArInput" required>
                     </div>
                     <div class="form-group">
+                        <label style="font-weight:bold;color:#00768c" for="imageInput">Logo :</label>
+                        <input style="padding:1%" type="file" class="form-control" id="imageInput" name="image" accept="image/*" required>
+                    </div>
+                    <div class="form-group">
                         <label for="practitionerTypes-ddl" style="font-weight:bold;color:#00768c">Practitioner Type:</label>
                         <!-- Dropdown list HTML element -->
                         <select class="form-control" id="practitionerTypes-ddl"></select>
@@ -235,18 +239,29 @@
             });
 
             $('#add-ClinicalSpeciality').click(function () {
-                var clinicalSpeciality = {
+                var practitionerType = {
                     TitleAr: $('#titleArInput').val(),
                     TitleEn: $('#titleEnInput').val(),
-                    IsActive:true,
+                    IsActive: true,
                     PractitionerTypeId: $('#practitionerTypes-ddl').val()
                 };
 
+                var form = new FormData();
+                var imageInput = document.getElementById('imageInput');
+                var file = imageInput.files[0];
+                form.append('image', file);
+
+                // Add other form data
+                form.append('titleEn', $('#titleEnInput').val());
+                form.append('titleAr', $('#titleArInput').val());
+                form.append('practitionerTypeId', $('#practitionerTypes-ddl').val());
+
                 $.ajax({
-                    url: '/Admin/AddClinicalSpeciality', // Replace with your actual API endpoint URL
+                    url: '/Admin/AddClinicalSpeciality',
                     type: 'POST',
-                    data: JSON.stringify(clinicalSpeciality),
-                    contentType: 'application/json',
+                    data: form,
+                    processData: false,
+                    contentType: false,
                     success: function (response) {
                         // Show the success message
                         $('.alert-success').removeClass('hidden').hide().fadeIn();
@@ -264,7 +279,7 @@
                         // Show the error message
                         $('.alert-danger').removeClass('hidden');
                         var msg = xhr.responseText;
-                          
+
                         if (msg == "Please fill all fields.") {
                             $('#error-msg-not-fill').show();
                             $('#error-msg-duplicate').hide();
@@ -281,10 +296,10 @@
 
                     }
                 });
+
             });
+        
         });
-
-
     </script>
 }
 

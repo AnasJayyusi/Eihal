@@ -174,14 +174,14 @@
         <div class="service-card">
             <div class="service-card-body">
                 <div>
-                           <img style="border-radius:30%" id="user-image-layout" src="@(item.ClinicalSpeciality.LogoUrl)" width="30" height="30" alt="user-image-profile" onerror="this.src='/users/images/Default-User-Profile.jpg'">
-                           </div>
-                        <div class="status status-clinical" style="display: inline-block;margin-top:5%;margin-bottom:5%">
-    <span>@item.ClinicalSpeciality.TitleEn</span>
-</div>
+                    <img style="border-radius:30%" id="user-image-layout" src="@(item.ClinicalSpeciality.LogoImagePath)" width="30" height="30" alt="user-image-profile" onerror="this.src='/users/images/Default-User-Profile.jpg'">
+                </div>
+                <div class="status status-clinical" style="display: inline-block;margin-top:5%;margin-bottom:5%">
+                    <span>@item.ClinicalSpeciality.TitleEn</span>
+                </div>
 
-                <div class="row col-12" >
-                        <span style="display: inline-block; margin-left: 5px;">@item.TitleEn</span>
+                <div class="row col-12">
+                    <span style="display: inline-block; margin-left: 5px;">@item.TitleEn</span>
                 </div>
                 <div class="dots-container">
                     <button class="dots-button" data-toggle="modal" onclick="fillAddServicePage('@item.Id','@item.TitleAr','@item.TitleEn','@item.Fee')" data-target="#AddServiceModal">
@@ -198,7 +198,7 @@
     <div class="no-results" style="padding-top:50px">
         <img src="~/images/NoResult.png" style="width: 150px;
     height: 150px;" alt="No Results Found Icon">
-        <p>No Privilege Added Yet.</p>
+        <p>No ClinicalSpeciality Added Yet.</p>
     </div>
 
 }
