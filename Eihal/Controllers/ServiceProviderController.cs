@@ -40,6 +40,15 @@ namespace Eihal.Controllers
         }
 
 
+        [Route("Notifications")]
+        public IActionResult Notifications()
+        {
+            var currentUserId = GetUserProfileId();
+            var model = _dbContext.Notifications.Where(a => a.AssignedToUserId == currentUserId).OrderByDescending(a => a.CreationDate).ToList();
+            return View("Notifications", model);
+        }
+
+
         [Route("GetUserIncomingRequests")]
 
         public ActionResult GetUserIncomingRequests(string? name, int? statusId = 0, int? dateId = 0)
