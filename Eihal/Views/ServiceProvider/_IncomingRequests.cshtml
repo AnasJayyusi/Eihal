@@ -57,7 +57,24 @@
 
                         <br>
                         <br>
-                        @*<span class="ref-info-label"> Privilege Name</span><span style="color:gray"> @referral.Service.TitleEn </span>*@
+                        <span class="ref-info-label">Services</span>
+                        <span style="color:gray">
+
+                            @for (int i = 0; i < @referral.Order.Services.Count; i++)
+                            {
+                                if (i > 0)
+                                {
+                                    <span>
+                                        ,
+                                        @referral.Order.Services[i].TitleEn
+                                    </span>
+                                }
+                                else
+                                    @referral.Order.Services[i].TitleEn
+                            }
+                        </span>
+
+
                     </div>
                     @if (referral.Status == Eihal.Enums.ReferralStatusEnum.UnderReview)
                     {

@@ -57,15 +57,21 @@ namespace Eihal.Controllers
             var currentUserId = GetUserProfileId();
             if (string.IsNullOrEmpty(name))
                 name = string.Empty;
-            var model = _dbContext.ReferralRequests.Include(a => a.Order).Include(a => a.CreatedByUser).Include(a => a.AssignedToUser).Where(a =>
-            (a.CreatedByUser.FullName.Contains(name) || name == string.Empty)
-            && (statusId == 0 || (int)a.Status == statusId)
-            && (dateId == 0 ||
-            (dateId == 1 && a.CreationDate.Date == DateTime.Now.Date) ||
-            (dateId == 2 && a.CreationDate >= DateTime.Now.AddDays(-7).Date) ||
-            (dateId == 3 && a.CreationDate >= DateTime.Now.AddDays(-30).Date)
-            )
-            && a.AssignedToUserId == currentUserId).OrderByDescending(a => a.CreationDate).ToList();
+            var model = _dbContext.ReferralRequests
+                                  .Include(a => a.Order)
+                                  .Include(a => a.Order.Services)
+                                  .Include(a => a.CreatedByUser)
+                                  .Include(a => a.AssignedToUser)
+                                  .Where(a =>
+                                        (a.CreatedByUser.FullName.Contains(name) || name == string.Empty)
+                                        && (statusId == 0 || (int)a.Status == statusId)
+                                        && (dateId == 0 ||
+                                        (dateId == 1 && a.CreationDate.Date == DateTime.Now.Date) ||
+                                        (dateId == 2 && a.CreationDate >= DateTime.Now.AddDays(-7).Date) ||
+                                        (dateId == 3 && a.CreationDate >= DateTime.Now.AddDays(-30).Date)
+                                        )
+                                        && a.AssignedToUserId == currentUserId).OrderByDescending(a => a.CreationDate)
+                                        .ToList();
 
             return PartialView("_IncomingRequests", model);
         }
@@ -76,15 +82,21 @@ namespace Eihal.Controllers
             var currentUserId = GetUserProfileId();
             if (string.IsNullOrEmpty(name))
                 name = string.Empty;
-            var model = _dbContext.ReferralRequests.Include(a => a.Order).Include(a => a.CreatedByUser).Include(a => a.AssignedToUser).Where(a =>
-            (a.AssignedToUser.FullName.Contains(name) || name == string.Empty)
-            && (statusId == 0 || (int)a.Status == statusId)
-            && (dateId == 0 ||
-            (dateId == 1 && a.CreationDate.Date == DateTime.Now.Date) ||
-            (dateId == 2 && a.CreationDate >= DateTime.Now.AddDays(-7).Date) ||
-            (dateId == 3 && a.CreationDate >= DateTime.Now.AddDays(-30).Date)
-            )
-            && a.CreatedByUserId == currentUserId).OrderByDescending(a => a.CreationDate).ToList();
+            var model = _dbContext.ReferralRequests
+                                  .Include(a => a.Order)
+                                  .Include(a => a.Order.Services)
+                                  .Include(a => a.CreatedByUser)
+                                  .Include(a => a.AssignedToUser)
+                                  .Where(a =>
+                                  (a.AssignedToUser.FullName.Contains(name) || name == string.Empty)
+                                  && (statusId == 0 || (int)a.Status == statusId)
+                                  && (dateId == 0 ||
+                                  (dateId == 1 && a.CreationDate.Date == DateTime.Now.Date) ||
+                                  (dateId == 2 && a.CreationDate >= DateTime.Now.AddDays(-7).Date) ||
+                                  (dateId == 3 && a.CreationDate >= DateTime.Now.AddDays(-30).Date)
+                                  )
+                                  && a.CreatedByUserId == currentUserId).OrderByDescending(a => a.CreationDate)
+                                  .ToList();
 
             return PartialView("_OutgoingRequests", model);
         }
