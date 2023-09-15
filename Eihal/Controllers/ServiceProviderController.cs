@@ -979,9 +979,6 @@ namespace Eihal.Controllers
                                          .Where(w => w.Id == referralReq.OrderId)
                                          .ToList();
 
-
-
-
             var reportDto = new ReportDto();
 
             reportDto.MasterDetails = new MasterDetailsDto()
@@ -1008,7 +1005,7 @@ namespace Eihal.Controllers
                 {
                     var dataTableDto = new DataTableDto();
                     dataTableDto.ServiceCode = svc.Id.ToString();
-                    dataTableDto.ServiceDesc = svc.TitleAr;
+                    dataTableDto.ServiceDesc = svc.TitleEn;
                     dataTableDto.Qty = 1;
 
                     // Total Qty
