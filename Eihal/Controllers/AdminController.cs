@@ -2,12 +2,16 @@
 using Eihal.Data.Entites;
 using Eihal.Hubs;
 using Eihal.Models;
+using Eihal.Tools;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.Language.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+using NPOI.SS.UserModel;
+using System.IO;
 using static Eihal.Data.SharedEnum;
+
 
 namespace Eihal.Controllers
 {
@@ -1215,11 +1219,32 @@ namespace Eihal.Controllers
             }
             ViewBag.GeneralSettings = _dbContext.GeneralSettings.FirstOrDefault();
 
+            return View(GetReport());
+        }
+
+        [HttpGet]
+        [Route("ExportReport")]
+        public ActionResult ExportReport()
+        {
+            // Set Title
+            string reportName = string.Format("Invoice" + DateTime.Now.ToString("yyyyMMdd") + ".xlsx");
+            // Generate Report
+            ExcelReportGenerator reportGenerator = new ExcelReportGenerator();
+            var vatValue = Convert.ToDouble(_dbContext.GeneralSettings.Single().VatValue);
+            var sitePercentage = Convert.ToDouble(_dbContext.GeneralSettings.Single().SitePercentage);
+            var tempFilePath = reportGenerator.GenerateReport(GetReport(), vatValue, sitePercentage);
+
+            return File(System.IO.File.ReadAllBytes(tempFilePath), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", reportName);
+        }
+
+        private List<ServicesReport> GetReport()
+        {
+            // Getting Data
             var referralRequests = _dbContext.ReferralRequests.Where(a => a.Status == Enums.ReferralStatusEnum.Completed)
-                                                  .Include(a => a.AssignedToUser)
-                                                  .Include(a => a.CreatedByUser)
-                                                  .Include(a => a.Order)
-                                                  .ThenInclude(a => a.Services).ToList();
+                                                              .Include(a => a.AssignedToUser)
+                                                              .Include(a => a.CreatedByUser)
+                                                              .Include(a => a.Order)
+                                                              .ThenInclude(a => a.Services).ToList();
 
             List<ServicesReport> userServicesList = new List<ServicesReport>();
             foreach (var referralRequest in referralRequests)
@@ -1243,32 +1268,9 @@ namespace Eihal.Controllers
                     userServicesList.Add(serviceReport);
                 }
             }
-            return View(userServicesList);
-        }
 
+            return userServicesList;
 
-        [Route("GetServicesReport")]
-        public IActionResult GetServicesReport()
-        {
-            ViewBag.GeneralSettings = _dbContext.GeneralSettings.FirstOrDefault();
-
-            var data = _dbContext.ReferralRequests.Where(a => a.Status == Enums.ReferralStatusEnum.Completed).Include(a => a.AssignedToUser).Include(a => a.CreatedByUser).Include(a => a.Order).ThenInclude(a => a.Services).ToList();
-            List<ServicesReport> userServicesList = new List<ServicesReport>();
-            foreach (var item in data)
-            {
-                ServicesReport userService = new ServicesReport();
-                userService.CreatedByUserName = item.CreatedByUser.FullName;
-                userService.AssignedToUserName = item.AssignedToUser.FullName;
-                foreach (var serv in item.Order.Services)
-                {
-                    userService.ServiceNameAr = serv.TitleAr;
-                    userService.ServiceNameEn = serv.TitleEn;
-                    userService.Fee = serv.Fee;
-                    userService.Price = 100;
-                    userServicesList.Add(userService);
-                }
-            }
-            return PartialView("ServicesReportList", userServicesList);
         }
         #endregion
 
@@ -2702,7 +2704,7 @@ namespace Eihal.Controllers
                             Id = s.OrderId,
                             PatientName = s.Order.PatientName,
                             PhoneNumber = s.Order.PhoneNumber,
-                            Email = s.Order.Email,
+                            Email = s.Order.Email ?? "-",
                             Status = s.Status
                         });
             return View(referralsOrders.ToList());

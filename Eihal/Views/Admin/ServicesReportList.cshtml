@@ -9,7 +9,12 @@
     }
 
     var searchQuery = Context.Request.Query["search"].ToString().Trim();
-    var filteredItems = string.IsNullOrEmpty(searchQuery) ? Model : Model.Where(p => p.ServiceNameEn.ToLower().Contains(searchQuery.ToLower()) || p.ServiceNameAr.ToLower().Contains(searchQuery.ToLower())).ToList();
+    var filteredItems = string.IsNullOrEmpty(searchQuery) ? Model :
+     Model.Where(p => p.ServiceNameEn.ToLower().Contains(searchQuery.ToLower()) 
+    || p.ServiceNameAr.ToLower().Contains(searchQuery.ToLower()) 
+    || p.AssignedToUserName.ToLower().Contains(searchQuery.ToLower()) 
+    || p.CreatedByUserName.ToLower().Contains(searchQuery.ToLower())).ToList();
+
     var totalItems = filteredItems.Count;
 
     var pageSizeParam = Context.Request.Query["pageSize"].ToString();
@@ -22,8 +27,8 @@
     var endIndex = Math.Min(startIndex + pageSize - 1, totalItems - 1);
 
     var visibleItems = filteredItems.GetRange(startIndex, endIndex - startIndex + 1);
-    var vatValue = ViewBag.GeneralSettings==null? 0: (double.Parse( ViewBag.GeneralSettings.VatValue)/100) ;
-    var sitePercentage = ViewBag.GeneralSettings == null?0: (double.Parse(ViewBag.GeneralSettings.SitePercentage)/100); 
+    var vatValue = ViewBag.GeneralSettings == null ? 0 : (double.Parse(ViewBag.GeneralSettings.VatValue) / 100);
+    var sitePercentage = ViewBag.GeneralSettings == null ? 0 : (double.Parse(ViewBag.GeneralSettings.SitePercentage) / 100);
 }
 
 <div>
@@ -54,7 +59,23 @@
 </div>
 
 
+<div class="row justify-content-start">
+    <div class="col-md-6 d-flex justify-content-start">
+    </div>
+    <div class="col-md-6 d-flex justify-content-end">
+        <a style="font-size:17px" href="/Admin/ExportReport" id="generateButton" onclick="showSpinner()" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+    </div>
+</div>
+<br />
 
+
+
+<div id="loadingSpinner" class="loading-spinner" style="display:none">
+    <!-- Add your loading spinner HTML here -->
+    <!-- For example, you can use a GIF or a CSS-based spinner -->
+    <img src="~/icon/spinner-loading.gif" alt="Loading" />
+    <div class="loading-text">Please wait...</div>
+</div>
 
 
 <table class="table table-striped" id="dataTable-UserServices" width="100%" cellspacing="0">
@@ -62,14 +83,15 @@
         <tr>
             <th>#</th>
             <th>Created By</th>
-            <th>Assigned To 
-                </th>
+            <th>
+                Assigned To
+            </th>
             <th>Title (Arabic)</th>
             <th>Title (English)</th>
             <th>Price</th>
             <th>Fee</th>
-            <th>Fee +  (@(vatValue*100))% vat</th>
-            <th>Eihal Percentage (@(sitePercentage*100)%)</th>
+            <th>Fee +  (@(vatValue * 100))% vat</th>
+            <th>Eihal Percentage (@(sitePercentage * 100)%)</th>
         </tr>
     </thead>
     <tbody>
@@ -84,8 +106,8 @@
                 <td>@userServices.ServiceNameEn</td>
                 <td>@userServices.Price</td>
                 <td>@userServices.Fee</td>
-           <td>@(userServices.Fee + (userServices.Fee * vatValue))</td>
-           <td>@(((userServices.Fee + (userServices.Fee * vatValue))* sitePercentage))</td>
+                <td>@(userServices.Fee + (userServices.Fee * vatValue))</td>
+                <td>@(((userServices.Fee + (userServices.Fee * vatValue)) * sitePercentage))</td>
 
             </tr>
         }
@@ -128,15 +150,15 @@
             updateStatus(userServicesId, isChecked);
         });
     });
-    function rejectService(userServicesId){
+    function rejectService(userServicesId) {
         var reason = $('#rejectionReason').val();
-  $.ajax({
-            url: '/Admin/RejectDashboardUserServices?id='+userServicesId+'&rejectionReason='+reason,
+        $.ajax({
+            url: '/Admin/RejectDashboardUserServices?id=' + userServicesId + '&rejectionReason=' + reason,
             type: 'GET',
             data: null,
             success: function (response) {
 
-    location.reload();
+                location.reload();
 
 
             },
@@ -218,7 +240,7 @@
 
             },
             error: function (xhr, status, error) {
-                  
+
                 // Show the error message
                 $('.alert-danger').removeClass('hidden');
                 var msg = xhr.responseText;
@@ -233,3 +255,28 @@
     });
 
 </script>
+
+<script>
+    function showSpinner() {
+        // Get the spinner and button elements
+        var spinner = document.getElementById("loadingSpinner");
+        var generateButton = document.getElementById("generateButton");
+
+        // Show the spinner
+        spinner.style.display = "inline-block";
+
+        // Hide the button
+        generateButton.style.display = "none";
+
+        setTimeout(function () {
+            document.getElementById('loadingSpinner').style.display = 'none';
+        }, 3000);
+        // You can also perform any additional actions here, such as submitting a form or making an AJAX request to generate the report.
+    }
+</script>
+
+<style>
+    #spinner {
+        margin-left: 10px; /* Adjust the margin as needed */
+    }
+</style>

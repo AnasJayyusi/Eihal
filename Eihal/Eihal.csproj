@@ -19,6 +19,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="EPPlus" Version="6.2.9" />
 		<PackageReference Include="iTextSharp" Version="5.5.13.3" />
 		<PackageReference Include="Magnific.Popup" Version="1.1.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.16" />
@@ -31,6 +32,7 @@
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.13" />
+		<PackageReference Include="NPOI" Version="2.6.2" />
 		<PackageReference Include="SixLabors.ImageSharp" Version="3.0.1" />
 
 	</ItemGroup>

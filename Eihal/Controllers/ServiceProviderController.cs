@@ -950,7 +950,6 @@ namespace Eihal.Controllers
 
         [HttpGet]
         [Route("ExportReport")]
-        [AllowAnonymous]
         public ActionResult ExportReport(int referralRequestId)
         {
             PdfReportGenerator reportGenerator = new PdfReportGenerator();
