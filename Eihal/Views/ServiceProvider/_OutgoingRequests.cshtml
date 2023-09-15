@@ -31,7 +31,7 @@
                 <div class="referral-info-row">
                     <div class="referral-info-label" style="padding:10px"><span class="ref-info-label">ID</span> <span style="color:gray">  @referral.Id.ToString("D4")   </span> <span class="ref-info-label" style="padding-left: 25px;"> Date</span> <span style="color:gray">@referral.CreationDate.ToString("yyyy/MM/dd")</span></div>
                     <div class="referral-info-label" style="padding:10px">
-                        <span style="color:#00768c;">Status</span>
+                        <span class="ref-info-label">Status</span>
                         @if (referral.Status == Eihal.Enums.ReferralStatusEnum.UnderReview)
                         {
                             <span class="status underReview">Under Review</span>
