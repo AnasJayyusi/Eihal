@@ -790,6 +790,7 @@ namespace Eihal.Controllers
         public ActionResult GetAvailablePrivileges()
         {
             // Assuming you have a list of items to pass to the view
+            var currentUserProfileId = GetUserProfileId();
             var model = _dbContext.Services.Include(i => i.ClinicalSpeciality)
             .Join(_dbContext.UserServices,
                 s => s.Id,
@@ -802,12 +803,12 @@ namespace Eihal.Controllers
                     Status = us.Status,
                     Logo = s.ClinicalSpeciality.LogoImagePath,
                     ClinicalSpecialityNameAr = s.ClinicalSpeciality.TitleAr,
-                    ClinicalSpecialityNameEn = s.ClinicalSpeciality.TitleEn
+                    ClinicalSpecialityNameEn = s.ClinicalSpeciality.TitleEn,
+                    UserProfileId= us.UserId
                 })
-                .Where(us => us.Status == ServicesStatusEnum.Approved
-                ) // Include columns you want from both tables
-            .Distinct()
-            .ToList();
+                .Where(us => us.Status == ServicesStatusEnum.Approved && us.UserProfileId != currentUserProfileId) // Include columns you want from both tables
+                .Distinct()
+                .ToList();
 
 
             // Render the partial view and return it as HTML content
@@ -823,7 +824,7 @@ namespace Eihal.Controllers
 
             var servicesIds = serviceIds?.Split(',')?.Select(Int32.Parse)?.ToList();
             var servicesIdLength = servicesIds.Count();
-
+            var currentUserId = GetAspNetUserId();
             var ids = _dbContext.UserServices
                                     .Where(a => servicesIds.Contains(a.ServiceId))
                                     .GroupBy(us => us.UserId)
@@ -841,7 +842,7 @@ namespace Eihal.Controllers
                                     .ThenInclude(a => a.Degree)
                                     .Include(a => a.PractitionerType)
                                     .Include(x => x.City)
-                                    .Where(a => a.ProfileStatus == ProfileStatus.Active && a.AccountTypeId == 1
+                                    .Where(a => a.UserId != currentUserId && a.ProfileStatus == ProfileStatus.Active && a.AccountTypeId == 1
                                          && (name == String.Empty || a.FullName.Contains(name))
                                          && (ids.Contains(a.Id))
                                          && (cityId == 0 || a.TimeClinicLocation.CityId == cityId)
