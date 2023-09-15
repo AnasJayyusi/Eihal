@@ -1,0 +1,840 @@
+﻿@model List<Eihal.Models.ReferralOrderStatus>
+
+@{
+    var defaultPageSize = 5; // Default number of items per page
+    var currentPage = Context.Request.Query["page"].ToString();
+    if (string.IsNullOrEmpty(currentPage))
+    {
+        currentPage = "1";
+    }
+
+    var searchQuery = Context.Request.Query["search"].ToString().Trim();
+    var filteredItems = string.IsNullOrEmpty(searchQuery) ? Model : Model.Where(p => p.PatientName.ToLower().Contains(searchQuery.ToLower()) || p.PhoneNumber.ToLower().Contains(searchQuery.ToLower())).ToList();
+    var totalItems = filteredItems.Count;
+
+    var pageSizeParam = Context.Request.Query["pageSize"].ToString();
+    var pageSize = string.IsNullOrEmpty(pageSizeParam) ? defaultPageSize : int.Parse(pageSizeParam);
+    pageSize = Math.Max(1, Math.Min(pageSize, totalItems)); // Ensure the page size is within a valid range
+
+    var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+
+    var startIndex = (int.Parse(currentPage) - 1) * pageSize;
+    var endIndex = Math.Min(startIndex + pageSize - 1, totalItems - 1);
+
+    var visibleItems = filteredItems.GetRange(startIndex, endIndex - startIndex + 1);
+}
+
+<div>
+    <div class="row justify-content-start">
+        <div class="col-md-6 d-flex justify-content-start">
+            <form id="filterForm" method="get" class="d-flex flex-wrap align-items-center">
+                <div class="form-group mr-2">
+                    <input type="text" class="form-control" id="searchInput" name="search" placeholder="Search" value="@searchQuery">
+                </div>
+
+                <div class="form-group mr-2">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-6 d-flex justify-content-end">
+            <form id="filterForm" method="get" class="d-flex flex-wrap align-items-center">
+                <div class="form-group mr-2">
+                    <input type="number" class="form-control" id="pageSizeInput" name="pageSize" min="1" max="@totalItems" value="@pageSize">
+                </div>
+                <div class="form-group mr-2">
+                    <button type="submit" class="btn btn-primary">Apply</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<table class="table table-striped" id="dataTable-feedbacks" width="100%" cellspacing="0">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>PatientName</th>
+            <th>Email</th>
+            <th>Phome </th>
+            <th>Status</th>
+            <th>View More</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < visibleItems.Count; i++)
+        {
+            var orderDetail = visibleItems[i];
+            <tr>
+                <td>@(startIndex + i + 1)</td>
+                <td>@orderDetail.PatientName</td>
+                <td>@orderDetail.Email</td>
+                <td>@orderDetail.PhoneNumber</td>
+                <td>
+                    @if (orderDetail.Status == Eihal.Enums.ReferralStatusEnum.UnderReview)
+                    {
+                        <span class="status underReview">Under Review</span>
+                    }
+                    else if (orderDetail.Status == Eihal.Enums.ReferralStatusEnum.Approved)
+                    {
+                        <span class="status approved">@orderDetail.Status</span>
+                    }
+                    else if (orderDetail.Status == Eihal.Enums.ReferralStatusEnum.Completed)
+                    {
+                        <span class="status completed">@orderDetail.Status</span>
+                    }
+                    else if (orderDetail.Status == Eihal.Enums.ReferralStatusEnum.Rejected)
+                    {
+                        <span class="status rejected">@orderDetail.Status</span>
+                    }
+                </td>
+                <td>
+                    <div class="custom-control custom-switch">
+                        <button onclick="getReferralsOrderDetails(@orderDetail.Id)" href="#" class="btn btn-info btn-sm rounded-pill" type="button" data-toggle="modal" data-target="#ViewOrderDetailsModal" data-placement="top" title="Edit">
+                            <i class="fa fa-eye"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="modal fade" id="ViewOrderDetailsModal" tabindex="-1" role="dialog" aria-labelledby="ViewOrderDetailsModal" aria-hidden="true">
+    <div class="modal-dialog custom-modal-dialog" style="max-width:760px" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ViewOrderDetailsModal">Order Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Add your modal content here -->
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label style="font-weight:bold;color:#00768c" for="referralRequestNumber-readonly">
+                                    Order Number:
+                                    &nbsp;<span id="referralRequestNumber-readonly" style="color:gray;cursor: text;"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label style="font-weight:bold;color:#00768c;cursor: text;" for="status-readonly">
+                                    Order Status:
+                                    &nbsp;<span class="status" id="status-readonly"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <br />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label style="font-weight:bold;color:#00768c" for="createdby-readonly">
+                                    Created By:
+                                    &nbsp;<span id="createdBy-readonly" style="color:gray;cursor: text;"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label style="font-weight:bold;color:#00768c" for="assignedto-readonly">
+                                    Assigned To:
+                                    &nbsp;<span id="assignedto-readonly" style="color:gray;cursor: text;"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label style="font-weight:bold;color:#00768c;cursor: text;" for="date-readonly">
+                                    Request Created Date:
+                                    &nbsp;<span id="date-readonly" style="color:gray;cursor: text;"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                    <hr />
+                    <br />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label style="font-weight:bold;color:#00768c" for="fullname-edit-input">Patient Name:</label>
+                                <input style="cursor: text;" disabled type="text" class="form-control" id="patientName-readonly" placeholder="Not Registered" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label style="font-weight:bold;color:#00768c" for="phone-edit-input">Phone:</label>
+                                <input style="cursor: text;" disabled type="number" class="form-control" id="phoneNumber-readonly" placeholder="Not Registered" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label style="font-weight:bold;color:#00768c" for="email-readonly">Email:</label>
+                                <input style="cursor: text;" disabled type="text" class="form-control" id="email-readonly" placeholder="Not Registered" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label style="font-weight:bold;color:#00768c" for="countries-ddl-edit">Country:</label>
+                                <input style="cursor: text;" disabled type="text" class="form-control" id="country-readonly" placeholder="Not Registered" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label style="font-weight:bold;color:#00768c" for="states-ddl-edit">State:</label>
+                                <input style="cursor: text;" disabled type="text" class="form-control" id="state-readonly" placeholder="Not Registered" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label style="font-weight:bold;color:#00768c" for="cities-ddl-edit">City:</label>
+                                <input style="cursor: text;" disabled type="text" class="form-control" id="city-readonly" placeholder="Not Registered" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label style="font-weight:bold;color:#00768c">Gender:</label>
+
+                            <div class="form-group">
+                                <div>
+                                    <input disabled type="radio" name="gender" id="female-input-readonly" class="input-hidden" style="padding:5px" value="0" />
+                                    <label for="female" id="female-label-readonly">
+                                        <img src="~/images/female.png" class="selectOptionStyle" alt="Female" /> <span>&nbsp  &nbsp Female &nbsp  &nbsp  </span>
+                                    </label>
+
+                                    <input type="radio" name="gender" id="male-input-readonly" class="input-hidden" style="padding:5px" value="1" />
+                                    <label for="male" id="male-label-readonly">
+                                        <img src="~/images/male.png" class="selectOptionStyle" alt="Male" />&nbsp  &nbsp Male &nbsp  &nbsp
+                                    </label>
+
+                                    <label style="display:none" for="none" id="gender-label-readonly">
+                                        <span>Not registered</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div >
+                            <div>
+                                <label style="font-weight:bold;color:#00768c">Age:</label>
+                                <div class="form-group">
+                                    <input disabled type="radio" name="age" id="child-input-readonly" class="input-hidden" value="0" />
+                                    <label for="child" id="child-label-readonly">
+                                        <img src="~/images/child.png" class="selectOptionStyle" alt="child" /> 4 - 10 Years
+                                    </label>
+                                    <input type="radio" name="age" id="teenager-input-readonly" class="input-hidden" value="1" />
+                                    <label for="teenager" id="teenager-label-readonly">
+                                        <img src="~/images/teenager.png" class="selectOptionStyle" alt="teenager" /> 11 - 25 Years
+                                    </label>
+
+                                    <input type="radio" name="age" id="young-input-readonly" class="input-hidden" value="2" />
+                                    <label for="young" id="young-label-readonly">
+                                        <img src="~/images/young.png" class="selectOptionStyle" alt="young" />26 - 50 Years
+                                    </label>
+
+                                    <input type="radio" name="age" id="aged-input-readonly" class="input-hidden" value="3" />
+                                    <label for="aged" id="aged-label-readonly">
+                                        <img src="~/images/Aged.png" class="selectOptionStyle" alt="aged" /> > 50 Years
+                                    </label>
+
+
+                                    <label style="display:none" for="none" id="age-label-readonly">
+                                        <span>Not registered</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group ">
+                                <label style="font-weight:bold;color:#00768c">Chronic disease:</label> <span style="color:gray;font-style:italic"></span>
+                                <div class="form-check p-0">
+                                    <textarea disabled id="chronicDisease-readonly" spellcheck="true" data-ms-editor="true" style="cursor: text;">
+                                    </textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="form-group ">
+                                <label style="font-weight:bold;color:#00768c">Services Requests:</label> <span style="color:gray;font-style:italic"></span>
+                                <div class="form-check p-0">
+                                    <ul id="services-readOnly">
+                                    
+                                    </ul>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button id="close-view-OrderDetails" type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    @if (totalItems == 0)
+    {
+        <div style="text-align:center">
+            <label style="font-weight:bold">No Results Found</label>
+            <img src="~/icon/no-result-found-icon.png" width="25" height="25" /> <span style="color:black"></span>
+        </div>
+    }
+
+    <div style="text-align:center">
+        <ul class="pagination">
+            @for (int i = 1; i <= totalPages; i++)
+            {
+                <li class="page-item @(i == int.Parse(currentPage) ? "active" : "")">
+                    <a class="page-link" href="?page=@i&search=@searchQuery&pageSize=@pageSize">@i</a>
+                </li>
+            }
+        </ul>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        function getReferralsOrderDetails(id) {
+            $.ajax({
+                url: '/Admin/GetReferralsOrderDetails?orderId=' + id,
+                type: 'GET',
+                success: function (response) {
+                    var data = response[0];
+                    $("#referralRequestNumber-readonly").text(data.referralRequestNumber)
+                    if (data.status == 1) {
+                        $("#status-readonly").text("Under Review")
+                        $("#status-readonly").addClass("underReview")
+                    }
+                    if (data.status == 2) {
+                        $("#status-readonly").text("Approved")
+                        $("#status-readonly").addClass("approved")
+                    }
+                    if (data.status == 3) {
+                        $("#status-readonly").text("Rejected")
+                        $("#status-readonly").addClass("rejected")
+                    }
+                    if (data.status == 4) {
+                        $("#status-readonly").text("Approved")
+                        $("#status-readonly").addClass("completed")
+                    }
+
+                    $("#createdBy-readonly").text(data.createdBy)
+                    $("#assignedto-readonly").text(data.assignedTo)
+                    $("#date-readonly").text(data.date)
+                    $("#patientName-readonly").val(data.patientName)
+                    $("#phoneNumber-readonly").val(data.phoneNumber)
+                    $("#email-readonly").val(data.email)
+                    $("#country-readonly").val(data.countryTextEn)
+                    $("#state-readonly").val(data.stateTextEn)
+                    $("#city-readonly").val(data.cityTextEn)
+                    $("#chronicDisease-readonly").val(data.chronicDisease)
+
+                    if (data.gender == 0) {
+                        // Show Female
+                        $("#female-label-readonly").css("display", "");
+                        $("#female-input-readonly").css("display", "");
+
+                        // Hide Male
+                        $("#male-label-readonly").css("display", "none");
+                        $("#male-input-readonly").css("display", "none");
+                    }
+                    if (data.gender == 1) {
+                        // Show Male
+                        $("#male-label-readonly").css("display", "");
+                        $("#male-input-readonly").css("display", "");
+
+                        // Hide FeMale
+                        $("#female-label-readonly").css("display", "none");
+                        $("#female-input-readonly").css("display", "none");
+                    }
+                    else {
+                        // Hide All Of them
+                        $("#gender-label-readonly").show()
+
+                        // Hide FeMale
+                        $("#female-label-readonly").css("display", "none");
+                        // $("#female-input-readonly").css("display", "none");
+                        // Hide Male
+                        $("#male-label-readonly").css("display", "none");
+                        $("#male-input-readonly").css("display", "none");
+                    }
+
+
+
+                    if (data.age == 0) {
+
+
+                    }
+                    if (data.age == 1) {
+
+                    }
+                    else {
+                        // Hide All Of them
+                        $("#age-label-readonly").show()
+
+                        $("#child-label-readonly").css("display", "none");
+                        $("#child-input-readonly").css("display", "none");
+
+                        $("#teenager-label-readonly").css("display", "none");
+                        $("#teenager-input-readonly").css("display", "none");
+
+                        $("#young-label-readonly").css("display", "none");
+                        $("#young-input-readonly").css("display", "none");
+
+                        $("#aged-label-readonly").css("display", "none");
+                        $("#aged-input-readonly").css("display", "none");
+                    }
+                    debugger;
+
+
+                    var dropdown = $('#services-readOnly');
+                    dropdown.empty();
+                    $.each(data.servicesRequests, function (index, item) {
+                        dropdown.append("<li> ♦ " + item.titleEn + "</li>");
+                    });
+
+
+                },
+                error: function (error) {
+                    // Handle the error response here
+                    console.log(error); // Output the error to the console
+                }
+            });
+        }
+    </script>
+    <style>
+        .underReview {
+            background-color: rebeccapurple;
+            color: #ffffff;
+        }
+
+        .approved {
+            background-color: darkcyan;
+            color: #ffffff;
+        }
+
+        .completed {
+            background-color: dodgerblue;
+            color: #ffffff;
+        }
+
+        .rejected {
+            background-color: firebrick;
+            color: #ffffff;
+        }
+
+
+        .status {
+            text-align: center;
+            font-size: 12px;
+            padding: 4px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+    </style>
+    <style>
+
+        .radio-wrapper {
+            flex: 1; /* Take remaining space */
+            display: flex;
+            justify-content: flex-end; /* Align radio buttons to the right */
+        }
+
+        .image-wrapper {
+            margin-right: 10px; /* Add some spacing between radio buttons and image */
+        }
+
+        .input-wrapper {
+            display: flex;
+            flex-direction: column; /* Display radio buttons in a column */
+            margin-right: 10px; /* Add some spacing between radio buttons and image */
+        }
+
+        .input-hidden {
+            position: absolute;
+            left: -9999px;
+        }
+
+        input[type=radio]:checked + label > img {
+            border: 1px solid #fff;
+            box-shadow: 0 0 3px 3px #00768c;
+        }
+
+        /* Stuff after this is only to make things more pretty */
+        input[type=radio] + label > img {
+            /*border: 1px dashed #444;*/
+            width: 75px;
+            height: 75px;
+            transition: 500ms all;
+        }
+
+        input[type=radio]:checked + label > img {
+            /*transform: rotateZ(-10deg) rotateX(10deg);*/
+        }
+
+
+        .hide {
+            display: none;
+        }
+
+        .activeLink {
+            color: #00768c;
+            font-weight: bold;
+            pointer-events: none;
+            cursor: not-allowed;
+            background-color: whitesmoke
+        }
+
+        #menu .nav-item:hover {
+            /* Add your desired styles for hover state */
+            background-color: #e0e0e0;
+            color: #333;
+        }
+
+
+        .tab-header {
+            display: flex;
+            justify-content: space-between;
+            background-color: #f1f1f1;
+        }
+
+        .tab-button {
+            background-color: inherit;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 10px 20px;
+            transition: background-color 0.3s;
+            border-radius: 12px;
+            margin: 5px;
+        }
+
+            .tab-button:hover {
+                background-color: #ddd;
+            }
+
+            .tab-button.active {
+                background-color: #00768c;
+                color: white
+            }
+
+        .tab-content {
+            background-color: #fff;
+        }
+
+        .referral-card {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+            .referral-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            }
+
+        .referral-card-body {
+            background-color: white;
+            padding: 2%;
+            border-radius: 50%
+        }
+
+        .referral-card-title {
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #00768c
+        }
+
+        .referral-card-text {
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+
+        .dots-container {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dots-button {
+            background: none;
+            border: none;
+            color: red;
+            font-size: 18px;
+            padding: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+        }
+
+
+
+            .dots-button::before {
+                position: absolute;
+                color: #007bff;
+                font-size: 20px;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+
+            .dots-button::after {
+                content: "";
+                position: absolute;
+                background-color: #007bff;
+                width: 4px;
+                height: 4px;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+
+            .dots-button::before,
+            .dots-button::after {
+                border-radius: 50%;
+            }
+
+            .dots-button::after {
+                top: 54%;
+            }
+
+            .dots-button::before {
+                top: 46%;
+            }
+
+        .no-results {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin-top: 20px;
+            padding: 20px;
+            font-size: 18px;
+        }
+
+            .no-results img {
+                width: 15%;
+                height: 100%;
+                margin-bottom: 10px;
+            }
+
+            .no-results p {
+                margin: 0;
+            }
+
+
+        .status {
+            text-align: center;
+            font-size: 10px;
+            padding: 4px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .status-success {
+            background-color: #4CAF50;
+            color: #ffffff;
+        }
+
+        .status-warning {
+            background-color: #FFC107;
+            color: #ffffff;
+        }
+
+        .status-error {
+            background-color: #FF0000;
+            color: #ffffff;
+        }
+
+        .search-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 35%;
+        }
+
+            .search-container input {
+                padding-right: 30px; /* Add space for the search icon */
+            }
+
+            .search-container i {
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #888;
+            }
+
+
+        #heading {
+            text-transform: uppercase;
+            color: #00768c;
+            font-weight: normal
+        }
+
+        #msform {
+            text-align: center;
+            position: relative;
+            margin-top: 20px
+        }
+
+            #msform fieldset {
+                background: white;
+                border: 0 none;
+                border-radius: 0.5rem;
+                box-sizing: border-box;
+                width: 100%;
+                margin: 0;
+                padding-bottom: 20px;
+                position: relative
+            }
+
+        .form-card {
+            text-align: left
+        }
+
+        #msform fieldset:not(:first-of-type) {
+            display: none
+        }
+
+        #msform input,
+        #msform textarea {
+            padding: 8px 15px 8px 15px;
+            border: 1px solid #ccc;
+            border-radius: 0px;
+            margin-bottom: 25px;
+            margin-top: 2px;
+            width: 100%;
+            box-sizing: border-box;
+            font-family: montserrat;
+            color: #2C3E50;
+            background-color: #ECEFF1;
+            font-size: 16px;
+            letter-spacing: 1px
+        }
+
+            #msform input:focus,
+            #msform textarea:focus {
+                -moz-box-shadow: none !important;
+                -webkit-box-shadow: none !important;
+                box-shadow: none !important;
+                border: 1px solid #00768c;
+                outline-width: 0
+            }
+
+        #msform .action-button {
+            width: 100px;
+            background: #00768c;
+            font-weight: bold;
+            color: white;
+            border: 0 none;
+            border-radius: 0px;
+            cursor: pointer;
+            padding: 10px 5px;
+            margin: 10px 0px 10px 5px;
+            float: right
+        }
+
+            #msform .action-button:hover,
+            #msform .action-button:focus {
+                background-color: #00768c
+            }
+
+        #msform .action-button-previous {
+            width: 100px;
+            background: #616161;
+            font-weight: bold;
+            color: white;
+            border: 0 none;
+            border-radius: 0px;
+            cursor: pointer;
+            padding: 10px 5px;
+            margin: 10px 5px 10px 0px;
+            float: right
+        }
+
+            #msform .action-button-previous:hover,
+            #msform .action-button-previous:focus {
+                background-color: #000000
+            }
+
+        .fs-title {
+            font-size: 25px;
+            color: #00768c;
+            margin-bottom: 15px;
+            font-weight: normal;
+            text-align: left
+        }
+
+        .purple-text {
+            color: #00768c;
+            font-weight: normal
+        }
+
+        .steps {
+            font-size: 25px;
+            color: gray;
+            margin-bottom: 10px;
+            font-weight: normal;
+            text-align: right
+        }
+
+        .fieldlabels {
+            color: gray;
+            text-align: left
+        }
+
+
+        .fit-image {
+            width: 100%;
+            object-fit: cover
+        }
+    </style>

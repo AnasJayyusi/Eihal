@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using static Eihal.Data.SharedEnum;
 
 namespace Eihal.Data.Entites
 {
@@ -9,6 +10,7 @@ namespace Eihal.Data.Entites
         public string PhoneNumber { get; set; }
         public string? Email { get; set; }
         public Age Age { get; set; }
+        public Gender Gender { get; set; }
         public string ChronicDisease { get; set; }
         public List<Services> Services { get; set; }
         public int DoctorId { get; set; } // Releated with UserProfileId 
@@ -34,17 +36,3 @@ namespace Eihal.Data.Entites
     }
 }
 
-public enum Gender
-{
-    Female = 0,
-    Male = 1
-}
-
-public enum Age
-{
-    Undefined = -1,
-    Child = 0, // 4 - 10 
-    Teenager = 1, // 11 -25
-    Young = 2, // 26 - 50
-    Aged = 3 // > 50 
-}

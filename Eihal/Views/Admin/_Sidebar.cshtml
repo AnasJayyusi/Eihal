@@ -73,6 +73,21 @@
             </div>
         </div>
     </li>
+
+
+    <li class="nav-item @(currentPath.Contains("Referrals".ToString().ToLower()) == true ? "active" : "")">
+        <a class="nav-link  @(currentPath.Contains("Referrals".ToString().ToLower()) == true ? "" : "collapsed")" href="#" data-toggle="collapse" data-target="#collapseReferrals"
+           aria-expanded="true" aria-controls="collapseTwo">
+            <i class="fas fa-share-alt"></i>
+            <span>Referrals</span>
+        </a>
+        <div id="collapseReferrals" class="collapse @(currentPath.Contains("Referrals".ToString().ToLower()) == true ? "show" : "")" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item @(currentPath.Contains("ReferralsOrder".ToString().ToLower()) == true ? "active" : "")" asp-area="" asp-controller="Admin" asp-action="ReferralsOrder">Orders Statuses</a>
+
+            </div>
+        </div>
+    </li>
       
 
     <li class="nav-item @(currentPath.Contains("Reports".ToString().ToLower()) == true ? "active" : "")">

@@ -1,0 +1,173 @@
+﻿@model List<Eihal.Models.ReferralOrderStatus>
+<head>
+    <!-- Custom styles for this template-->
+    <link href="~/css/sb-admin-2.css" rel="stylesheet">
+
+
+    <style>
+        .hidden {
+            display: none;
+        }
+
+        .toast-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toast-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+
+
+<div id="page-top" style="margin-top:50px">
+
+    <div id="wrapper">
+
+
+        <!-- Sidebar -->
+        @Html.Partial("_Sidebar")
+
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid" style="margin-top:50px">
+
+
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h6 style="font-weight:bold;color:#00768c " class="h6 mb-0 ">  Referrals  &#8658; Orders Statuses</h6>
+
+
+                        <!--ToDo:Move To Partial View -->
+                        <div class="dropdown" style="margin-right: 5%;" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                            <a href="#">
+                                <label style="font-weight:bold;color:#00768c ">Administrator</label>
+                                <img src="~/users/images/Default-User-Profile.jpg" width="40" height="40" alt="user-profile">
+                            </a>
+
+                            <div class="dropdown-content">
+                                <a type="submit" style="text-transform: none;" class="my-profile-button" asp-area="Identity" asp-page="/Account/Logout">
+                                    Logout
+                                    <span>
+                                        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                                            <button style="text-transform: none;" class="my-profile-button" type="submit"></button>
+                                        </form>
+                                    </span>
+
+
+                                </a>
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Content Row -->
+                    <div class="row">
+                        <!-- Area Chart -->
+                        <div class="col-xl-12 col-lg-12">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Referrals Orders Statuses</h6>
+                             
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+
+                                    <br />
+
+                                    <div class="table-responsive" id="dataTableContainer">
+                                        @Html.Partial("ReferralsOrderList", Model)
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+
+
+
+</div>
+
+
+
+
+
+@section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Hide the success message after 2 seconds
+            setTimeout(function () {
+                $('.alert-success').fadeOut();
+            }, 3000);
+       
+            $('#add-UserServices').click(function () {
+                var userServices = {
+                    TitleAr: $('#titleArInput').val(),
+                    TitleEn: $('#titleEnInput').val(),
+                    IsActive: true,
+                };
+
+                $.ajax({
+                    url: '/Admin/AddUserServices', // Replace with your actual API endpoint URL
+                    type: 'POST',
+                    data: JSON.stringify(userServices),
+                    contentType: 'application/json',
+                    success: function (response) {
+                        // Show the success message
+                        $('.alert-success').removeClass('hidden').hide().fadeIn();
+                        // Close the modal after the success message fades out
+                        $("#close-add-UserServices").trigger("click");
+                        $('#dataTableContainer').load('/Admin/GetUserServices');
+
+                        // Hide the success message after 2 seconds
+                        setTimeout(function () {
+                            $('.alert-success').fadeOut();
+                        }, 3000);
+
+                    },
+                    error: function (xhr, status, error) {
+                        // Show the error message
+                        $('.alert-danger').removeClass('hidden');
+                        var msg = xhr.responseText;
+                        $('#error-msg-add').text(msg.toString());
+                        // Hide the error message after 2 seconds
+                        setTimeout(function () {
+                            $('.alert-danger').addClass('hidden');
+                        }, 5000);
+
+                    }
+                });
+            });
+        });
+    </script>
+}

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 using Eihal.Dto;
+using static Eihal.Data.SharedEnum;
 
 namespace Eihal.Controllers
 {

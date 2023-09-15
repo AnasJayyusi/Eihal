@@ -4,7 +4,9 @@ using Eihal.Hubs;
 using Eihal.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Razor.Language.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using static Eihal.Data.SharedEnum;
 
 namespace Eihal.Controllers
@@ -2687,6 +2689,64 @@ namespace Eihal.Controllers
             _dbContext.SaveChanges();
             return Json(ProfileStatus.UnderReview.ToString());
         }
+        #endregion
+
+        #region ReferralsOrder
+        [Route("Referrals/ReferralsOrder")]
+        public IActionResult ReferralsOrder()
+        {
+            var referralsOrders = _dbContext.ReferralRequests
+                        .Include(i => i.Order)
+                        .Select(s => new ReferralOrderStatus
+                        {
+                            Id = s.OrderId,
+                            PatientName = s.Order.PatientName,
+                            PhoneNumber = s.Order.PhoneNumber,
+                            Email = s.Order.Email,
+                            Status = s.Status
+                        });
+            return View(referralsOrders.ToList());
+        }
+
+        [HttpGet]
+        [Route("GetReferralsOrderDetails")]
+        public IActionResult GetReferralsOrderDetails(int orderId)
+        {
+            var referralsOrders = _dbContext.ReferralRequests
+                        .Include(i => i.Order)
+                        .Include(i => i.CreatedByUser)
+                        .Include(i => i.AssignedToUser)
+                        .Include(i => i.Order.OrderServicesDetails)
+                        .Include(i => i.Order.Services)
+                        .Select(s => new ReferralOrderDetailModal
+                        {
+                            OrderId = s.OrderId,
+                            ReferralRequestNumber = s.Id.ToString("#0000"),
+                            Status = s.Status,
+                            CreatedBy = s.CreatedByUser.FullName,
+                            AssignedTo = s.AssignedToUser.FullName,
+                            Date = s.CreationDate.ToString("MM/dd/yyyy"),
+                            PatientName = s.Order.PatientName,
+                            PhoneNumber = s.Order.PhoneNumber,
+                            Email = s.Order.PhoneNumber,
+                            CountryTextAr = s.Order.CountryId != null ? s.Order.Country.TitleAr : "-",
+                            CountryTextEn = s.Order.CountryId != null ? s.Order.Country.TitleEn : "-",
+                            StateTextAr = s.Order.StateId != null ? s.Order.State.TitleAr : "-",
+                            StateTextEn = s.Order.StateId != null ? s.Order.State.TitleEn : "-",
+                            CityTextAr = s.Order.CityId != null ? s.Order.City.TitleAr : "-",
+                            CityTextEn = s.Order.CityId != null ? s.Order.City.TitleEn : "-",
+                            Gender = s.Order.Gender,
+                            Age = s.Order.Age,
+                            ChronicDisease = s.Order.ChronicDisease,
+                            ServicesRequests = s.Order.Services,
+                        }).Where(w => w.OrderId == orderId);
+
+
+            return Json(referralsOrders);
+        }
+
+
+
         #endregion
     }
 }
