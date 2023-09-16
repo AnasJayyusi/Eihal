@@ -558,7 +558,9 @@
 
                     $("#speciality-edit-multiSelect").val(response.speciliaties);
 
+                    $('.speciality-edit-multiSelect').empty()
                     if (response.speciliaties != null) {
+                         
                         var speciliatiesIds = response.speciliaties.split(",");
                         var specialtiesTitlesEn = response.specialtiesTitlesEn.split(",");
                         $.each(speciliatiesIds, function (index, item) {

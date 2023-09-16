@@ -5356,15 +5356,16 @@ textarea.form-control-lg {
 }
 
 .toast {
-  width: 350px;
-  max-width: 100%;
-  font-size: 0.875rem;
-  pointer-events: auto;
-  background-color: rgba(255, 255, 255, 0.85);
-  background-clip: padding-box;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-  border-radius: 0.25rem;
+    margin-top: 50px !important;
+    width: 350px;
+    max-width: 100%;
+    font-size: 0.875rem;
+    pointer-events: auto;
+    background-color: rgba(255, 255, 255, 0.85);
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    border-radius: 0.25rem;
 }
 .toast.showing {
   opacity: 0;
@@ -5380,6 +5381,11 @@ textarea.form-control-lg {
   max-width: 100%;
   pointer-events: none;
 }
+
+.toast-success {
+    background-color: #00333f;
+}
+
 .toast-container > :not(:last-child) {
   margin-bottom: 0.75rem;
 }

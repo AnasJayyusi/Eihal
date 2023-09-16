@@ -8,6 +8,7 @@ namespace Eihal.Models
     {
         public int OrderId { get; set; }
         public string ReferralRequestNumber { get; set; }
+        public int ReferralRequestId { get; set; }
         public ReferralStatusEnum Status { get; set; }
         public string CreatedBy { get; set; }
         public string AssignedTo { get; set; }

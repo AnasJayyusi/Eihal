@@ -2,6 +2,7 @@
 using Eihal.Hubs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Manage.Internal;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 namespace Eihal.Controllers
@@ -13,7 +14,7 @@ namespace Eihal.Controllers
     {
         private readonly UserManager<IdentityUser> _userManager;
 
-        public NotificationController(UserManager<IdentityUser> userManager,ApplicationDbContext dbContext, INotificationService notificationService) : base(dbContext, notificationService)
+        public NotificationController(UserManager<IdentityUser> userManager, ApplicationDbContext dbContext, INotificationService notificationService) : base(dbContext, notificationService)
         {
             _userManager = userManager;
         }
@@ -38,7 +39,7 @@ namespace Eihal.Controllers
             //    // Now, you have the current user ID (userId)
             //    // You can use it as needed
             //}
-            var count = _dbContext.Notifications.Where(a => a.AssignedToUserId == currentUserId && a.IsRead == false).Count();
+            var count = _dbContext.Notifications.Count(a => a.AssignedToUserId == currentUserId && !a.IsRead);
 
             // Pass the data to the view
             return Json(count);
@@ -49,6 +50,9 @@ namespace Eihal.Controllers
         public ActionResult GetUserNotifications()
         {
             var currentUserId = GetUserProfileId();
+            var maxNumberOfNotifications = _dbContext.Notifications.Count(a => a.AssignedToUserId == currentUserId && !a.IsRead);
+            if (maxNumberOfNotifications < 10 || maxNumberOfNotifications > 15)
+                maxNumberOfNotifications = 15;
             //var user =  _userManager.GetUserAsync(User);
             //if (user != null)
             //{
@@ -58,7 +62,9 @@ namespace Eihal.Controllers
             //    // Now, you have the current user ID (userId)
             //    // You can use it as needed
             //}
-            var model = _dbContext.Notifications.Where(a => a.AssignedToUserId == currentUserId).OrderByDescending(a => a.CreationDate).ToList();
+            var model = _dbContext.Notifications.Where(a => a.AssignedToUserId == currentUserId)
+                                                .OrderByDescending(a => a.CreationDate)
+                                                .Take(maxNumberOfNotifications).ToList();
             // Pass the data to the view
             return PartialView("_NotificationsList", model);
 
@@ -69,7 +75,7 @@ namespace Eihal.Controllers
         public ActionResult MarkAllNotificationsReaded()
         {
             var currentUserId = GetUserProfileId();
- 
+
             var model = _dbContext.Notifications.Where(a => a.AssignedToUserId == currentUserId).OrderByDescending(a => a.CreationDate).ToList();
             foreach (var item in model)
             {

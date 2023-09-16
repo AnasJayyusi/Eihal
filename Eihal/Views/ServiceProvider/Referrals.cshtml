@@ -3,6 +3,8 @@
 @inject IViewLocalizer Localizer
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 
 <div id="page-top">
@@ -54,7 +56,7 @@
                                     </div>
                                 </div>
                                 <!-- Card Body -->
-                                <div class="card-body" style="min-height:500px">
+                                <div class="card-body" >
 
                                     <!-- InComing Tab -->
                                     <div id="tab1" class="tab-content" style="display: none;">
@@ -216,7 +218,7 @@
                                             </div>
                                             @Html.Partial("PatientInfo")
                                         </div>
-                                        <input  id="nextToSelectPrivilege" type="button" name="next" class="next action-button" value="Next" />
+                                        <input id="nextToSelectPrivilege" type="button" name="next" class="next action-button" value="Next" />
                                     </fieldset>
                                     <fieldset>
                                         <div class="form-card">
@@ -320,14 +322,244 @@
     </div>
 </div>
 
+<div class="modal fade" id="ViewOrderDetailsModal" tabindex="-1" role="dialog" aria-labelledby="ViewOrderDetailsModal" aria-hidden="true">
+    <div class="modal-dialog custom-modal-dialog" style="max-width:760px" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ViewOrderDetailsModal">Order Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Add your modal content here -->
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label style="font-weight:bold;color:#00768c" for="referralRequestNumber-readonly">
+                                    Order Number:
+                                    &nbsp;<span id="referralRequestNumber-readonly" style="color:gray;cursor: text;"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label style="font-weight:bold;color:#00768c;cursor: text;font" for="status-readonly">
+                                    Order Status:
+                                    &nbsp;<span style="font-size:12px" class="status" id="status-readonly"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-6" id="createdby-div">
+                            <div class="form-group">
+                                <label style="font-weight:bold;color:#00768c" for="createdby-readonly">
+                                    Created By:
+                                    &nbsp;<span id="createdBy-readonly" style="color:gray;cursor: text;"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group" id="assignedto-div">
+                                <label style="font-weight:bold;color:#00768c" for="assignedto-readonly">
+                                    Assigned To:
+                                    &nbsp;<span id="assignedto-readonly" style="color:gray;cursor: text;"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label style="font-weight:bold;color:#00768c;cursor: text;" for="date-readonly">
+                                    Request Date:
+                                    &nbsp;<span id="date-readonly" style="color:gray;cursor: text;"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-12" id="patientName-div">
+                            <div class="form-group">
+                                <label style="font-weight:bold;color:#00768c" for="fullname-edit-input">Patient Name:</label>
+                                <input style="cursor: text;" disabled type="text" class="form-control" id="patientName-readonly" placeholder="Not Registered" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group" id="phone-div">
+                                <label style="font-weight:bold;color:#00768c" for="phone-edit-input">Phone:</label>
+                                <input style="cursor: text;" disabled type="number" class="form-control" id="phoneNumber-readonly" placeholder="Not Registered" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group" id="email-div">
+                                <label style="font-weight:bold;color:#00768c" for="email-readonly">Email:</label>
+                                <input style="cursor: text;" disabled type="text" class="form-control" id="email-readonly" placeholder="Not Registered" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label style="font-weight:bold;color:#00768c" for="countries-ddl-edit">Country:</label>
+                                <input style="cursor: text;" disabled type="text" class="form-control" id="country-readonly" placeholder="Not Registered" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label style="font-weight:bold;color:#00768c" for="states-ddl-edit">State:</label>
+                                <input style="cursor: text;" disabled type="text" class="form-control" id="state-readonly" placeholder="Not Registered" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label style="font-weight:bold;color:#00768c" for="cities-ddl-edit">City:</label>
+                                <input style="cursor: text;" disabled type="text" class="form-control" id="city-readonly" placeholder="Not Registered" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label style="font-weight:bold;color:#00768c">Gender:</label>
+
+                            <div class="form-group">
+                                <div>
+                                    <input disabled type="radio" name="gender" id="female-input-readonly" class="input-hidden" style="padding:5px" value="0" />
+                                    <label for="female" id="female-label-readonly">
+                                        <img src="~/images/female.png" class="selectOptionStyle" alt="Female" /> <span>&nbsp  &nbsp Female &nbsp  &nbsp  </span>
+                                    </label>
+
+                                    <input type="radio" name="gender" id="male-input-readonly" class="input-hidden" style="padding:5px" value="1" />
+                                    <label for="male" id="male-label-readonly">
+                                        <img src="~/images/male.png" class="selectOptionStyle" alt="Male" />&nbsp  &nbsp Male &nbsp  &nbsp
+                                    </label>
+
+                                    <label style="display:none" for="none" id="gender-label-readonly">
+                                        <span>Not registered</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div>
+                                <label style="font-weight:bold;color:#00768c">Age:</label>
+                                <div class="form-group">
+                                    <input disabled type="radio" name="age" id="child-input-readonly" class="input-hidden" value="0" />
+                                    <label for="child" id="child-label-readonly">
+                                        <img src="~/images/child.png" class="selectOptionStyle" alt="child" /> 4 - 10 Years
+                                    </label>
+                                    <input type="radio" name="age" id="teenager-input-readonly" class="input-hidden" value="1" />
+                                    <label for="teenager" id="teenager-label-readonly">
+                                        <img src="~/images/teenager.png" class="selectOptionStyle" alt="teenager" /> 11 - 25 Years
+                                    </label>
+
+                                    <input type="radio" name="age" id="young-input-readonly" class="input-hidden" value="2" />&nbsp;
+                                    <label for="young" id="young-label-readonly">
+                                        <img src="~/images/young.png" class="selectOptionStyle" alt="young" />&nbsp;&nbsp;&nbsp; 26 - 50 Years
+                                    </label>
+
+                                    <input type="radio" name="age" id="aged-input-readonly" class="input-hidden" value="3" />
+                                    <label for="aged" id="aged-label-readonly">
+                                        <img src="~/images/Aged.png" class="selectOptionStyle" alt="aged" /> > 50 Years
+                                    </label>
+
+
+                                    <label style="display:none" for="none" id="age-label-readonly">
+                                        <span>Not registered</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group ">
+                                <label style="font-weight:bold;color:#00768c">Chronic disease:</label> <span style="color:gray;font-style:italic"></span>
+                                <div class="form-check p-0">
+                                    <textarea placeholder="-" disabled id="chronicDisease-readonly" spellcheck="true" data-ms-editor="true" style="cursor: text;">
+                                    </textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="form-group ">
+                                <label style="font-weight:bold;color:#00768c">Services Requests:</label> <span style="color:gray;font-style:italic"></span>
+                                <div class="form-check p-0">
+                                    <ul id="services-readOnly">
+                                    </ul>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input hidden type="text" class="form-control" id="refId-hidden-Input">
+                </div>
+                <div class="modal-footer">
+                    <button onclick="rejectFromPopup()" id="reject-view-OrderDetails-btn" type="button" class="btn btn-danger" data-dismiss="modal">Reject</button>
+                    <button onclick="approveFromPopup()" id="approve-view-OrderDetails-btn" type="button" class="btn btn-success" data-dismiss="modal">Approve</button>
+                    <button onclick="completeFromPopup()" id="complete-view-OrderDetails-btn" type="button" class="btn btn-primary" data-dismiss="modal">Complete</button>
+                    @* <button onclick="reportFromPopup()" id="report-view-OrderDetails-info" type="button" class="btn btn-primary" data-dismiss="modal">Report</button> *@
+                    <button id="close-view-OrderDetails" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> 
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 
 
 
 @section Scripts {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
+        function rejectFromPopup() {
+            var refId = $("#refId-hidden-Input").val()
+            reject(refId)
+        }
+
+        function reportFromPopup() {
+            var refId = $("#refId-hidden-Input").val()
+            exportReport(refId)
+        }
+
+        function approveFromPopup() {
+            var refId = $("#refId-hidden-Input").val()
+            approve(refId)
+        }
+
+        function completeFromPopup()
+        {
+            var refId = $("#refId-hidden-Input").val()
+            complete(refId)
+        }
+
+
+        function reportFromPopup() {
+            var refId = $("#refId-hidden-Input").val()
+            complete(refId)
+        }
 
         function changeImage() {
             const gender = document.querySelector('input[name="gender"]:checked').value;
@@ -449,10 +681,10 @@
 
         // JavaScript function to toggle the dropdown menu
         function toggleDropdown(id) {
-            
-            const dropdownMenu = document.getElementById('dropdownMenu'+id);
+
+            const dropdownMenu = document.getElementById('dropdownMenu' + id);
             if (dropdownMenu != null)
-            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+                dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
         }
 
         // JavaScript functions for approve and reject actions
@@ -462,20 +694,7 @@
                 url: '/ServiceProvider/ApproveReferal?refId=' + refId,
                 type: 'GET',
                 success: function (response) {
-                    toastr.success('Referrals approved successfully', 'Success !!');
-                    filterIncomingReferrals();
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error:', error);
-                }
-            });
-        }        function complete(refId) {
-
-            $.ajax({
-                url: '/ServiceProvider/CompleteReferal?refId=' + refId,
-                type: 'GET',
-                success: function (response) {
-                    toastr.success('Referrals completed successfully', 'Success !!');
+                    toastr.success('Order approved successfully', 'Success !!');
                     filterIncomingReferrals();
                 },
                 error: function (xhr, status, error) {
@@ -484,13 +703,28 @@
             });
         }
         
+        function complete(refId) {
+
+            $.ajax({
+                url: '/ServiceProvider/CompleteReferal?refId=' + refId,
+                type: 'GET',
+                success: function (response) {
+                    toastr.success('Order completed successfully', 'Success !!');
+                    filterIncomingReferrals();
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
+
         function reject(refId) {
 
             $.ajax({
                 url: '/ServiceProvider/RejectReferal?refId=' + refId,
                 type: 'GET',
                 success: function (response) {
-                    toastr.success('Referrals rejected successfully', 'Success !!');
+                    toastr.success('Order rejected successfully', 'Success !!');
                     filterIncomingReferrals();
                 },
                 error: function (xhr, status, error) {
@@ -501,19 +735,240 @@
 
 
 
-            //ToDo: Handle This Code Later On 
-             //Event listener to close dropdown when clicking outside the dots container
-            document.addEventListener('mouseout', function (event) {
-            
-                const dotsContainer = document.querySelector('.referral-card');
-                if (dotsContainer != null && dotsContainer != undefined && !dotsContainer.contains(event.target)) {
-                    const dropdownMenu = document.getElementById('dropdownMenu');
-                    if (dropdownMenu != null)
-                    dropdownMenu.style.display = 'none';
-                }
-                console.log("fire") 
-            });
 
+
+        function getReferralsOrderDetails(id, isFromIncoming) {
+
+            if (isFromIncoming){
+                $("#assignedto-div").hide()
+                 // Hide Feilds
+                $("#patientName-div").hide();
+                $("#phone-div").hide();
+                $("#email-div").hide();
+                }
+                else 
+                {
+                      // Show Feilds
+                $("#patientName-div").show();
+                $("#phone-div").show();
+                $("#email-div").show();
+                }
+
+                // Reset Status
+               $("#status-readonly").removeClass("underReview");
+               $("#status-readonly").removeClass("completed");
+               $("#status-readonly").removeClass("approved");
+               $("#status-readonly").removeClass("rejected");
+
+               // Reset Buttons
+               $("#approve-view-OrderDetails-btn").hide();
+               $("#reject-view-OrderDetails-btn").hide();
+               $("#complete-view-OrderDetails-btn").hide();
+               $("#close-view-OrderDetails").hide();
+             
+
+              
+                    
+
+            $.ajax({
+                url: '/ServiceProvider/GetReferralsOrderDetails?orderId=' + id,
+                type: 'GET',
+                success: function (response) {
+                    var data = response[0];
+                    $("#referralRequestNumber-readonly").text(data.referralRequestNumber)
+                    if (data.status == 1) {
+                        $("#status-readonly").text("Under Review")
+                        $("#status-readonly").addClass("underReview")
+
+                           $("#approve-view-OrderDetails-btn").show();
+               $("#reject-view-OrderDetails-btn").show();
+                    }
+                    if (data.status == 2) {
+                        $("#status-readonly").text("Approved")
+                        $("#status-readonly").addClass("approved")
+
+                       // Show Feilds
+                      $("#patientName-div").show();
+                      $("#phone-div").show();
+                      $("#email-div").show();
+
+                       $("#complete-view-OrderDetails-btn").show();
+                    
+
+
+                       
+                    }
+                    if (data.status == 3) {
+                        
+                        $("#status-readonly").text("Rejected")
+                        $("#status-readonly").addClass("rejected")
+                        $("#close-view-OrderDetails").show();
+
+                    }
+                    if (data.status == 4) {
+                        $("#status-readonly").text("Completed")
+                        $("#status-readonly").addClass("completed")
+                           // Show Feilds
+                      $("#patientName-div").show();
+                      $("#phone-div").show();
+                      $("#email-div").show();
+                         $("#close-view-OrderDetails").show();
+
+
+                    }
+
+                    $("#createdBy-readonly").text(data.createdBy)
+                    $("#assignedto-readonly").text(data.assignedTo)
+                    $("#date-readonly").text(data.date)
+                    $("#patientName-readonly").val(data.patientName)
+                    $("#phoneNumber-readonly").val(data.phoneNumber)
+                    $("#email-readonly").val(data.email)
+                    $("#country-readonly").val(data.countryTextEn)
+                    $("#state-readonly").val(data.stateTextEn)
+                    $("#city-readonly").val(data.cityTextEn)
+                    $("#chronicDisease-readonly").val(data.chronicDisease)
+                    $("#refId-hidden-Input").val(data.referralRequestId)
+                    if (data.gender == 0) {
+                        // Show Female
+                        $("#female-label-readonly").css("display", "");
+                        $("#female-input-readonly").css("display", "");
+
+                        // Hide Male
+                        $("#male-label-readonly").css("display", "none");
+                        $("#male-input-readonly").css("display", "none");
+                    }
+                    if (data.gender == 1) {
+                        // Show Male
+                        $("#male-label-readonly").css("display", "");
+                        $("#male-input-readonly").css("display", "");
+
+                        // Hide FeMale
+                        $("#female-label-readonly").css("display", "none");
+                        $("#female-input-readonly").css("display", "none");
+                    }
+                    else {
+                        // Hide All Of them
+                        $("#gender-label-readonly").show()
+
+                        // Hide FeMale
+                        $("#female-label-readonly").css("display", "none");
+                        // $("#female-input-readonly").css("display", "none");
+                        // Hide Male
+                        $("#male-label-readonly").css("display", "none");
+                        $("#male-input-readonly").css("display", "none");
+                    }
+
+
+
+                    if (data.age == 0) {
+                          $("#age-label-readonly").hide()
+
+                        $("#child-label-readonly").css("display", "");
+                        $("#child-input-readonly").css("display", "");
+
+                        $("#teenager-label-readonly").css("display", "none");
+                        $("#teenager-input-readonly").css("display", "none");
+
+                        $("#young-label-readonly").css("display", "none");
+                        $("#young-input-readonly").css("display", "none");
+
+                        $("#aged-label-readonly").css("display", "none");
+                        $("#aged-input-readonly").css("display", "none");
+
+                    }
+                    if (data.age == 1) {
+                          $("#age-label-readonly").hide()
+
+                        $("#child-label-readonly").css("display", "none");
+                        $("#child-input-readonly").css("display", "none");
+
+                        $("#teenager-label-readonly").css("display", "");
+                        $("#teenager-input-readonly").css("display", "");
+
+                        $("#young-label-readonly").css("display", "none");
+                        $("#young-input-readonly").css("display", "none");
+
+                        $("#aged-label-readonly").css("display", "none");
+                        $("#aged-input-readonly").css("display", "none");
+
+                    }
+                      if (data.age == 2) {
+                          $("#age-label-readonly").hide()
+
+                        $("#child-label-readonly").css("display", "none");
+                        $("#child-input-readonly").css("display", "none");
+
+                        $("#teenager-label-readonly").css("display", "none");
+                        $("#teenager-input-readonly").css("display", "none");
+
+                        $("#young-label-readonly").css("display", "");
+                        $("#young-input-readonly").css("display", "");
+
+                        $("#aged-label-readonly").css("display", "none");
+                        $("#aged-input-readonly").css("display", "none");
+
+                    }
+
+                        if (data.age == 3) {
+                          $("#age-label-readonly").hide()
+
+                        $("#child-label-readonly").css("display", "none");
+                        $("#child-input-readonly").css("display", "none");
+
+                        $("#teenager-label-readonly").css("display", "none");
+                        $("#teenager-input-readonly").css("display", "none");
+
+                        $("#young-label-readonly").css("display", "none");
+                        $("#young-input-readonly").css("display", "none");
+
+                        $("#aged-label-readonly").css("display", "");
+                        $("#aged-input-readonly").css("display", "");
+
+                    }
+                    else {
+                        // Hide All Of them
+                        $("#age-label-readonly").show()
+
+                        $("#child-label-readonly").css("display", "none");
+                        $("#child-input-readonly").css("display", "none");
+
+                        $("#teenager-label-readonly").css("display", "none");
+                        $("#teenager-input-readonly").css("display", "none");
+
+                        $("#young-label-readonly").css("display", "none");
+                        $("#young-input-readonly").css("display", "none");
+
+                        $("#aged-label-readonly").css("display", "none");
+                        $("#aged-input-readonly").css("display", "none");
+                    }
+                         if (!isFromIncoming){
+                      // Show Feilds
+                $("#patientName-div").show();
+                $("#phone-div").show();
+                $("#email-div").show();
+                  // Reset Buttons
+               $("#approve-view-OrderDetails-btn").hide();
+               $("#reject-view-OrderDetails-btn").hide();
+               $("#complete-view-OrderDetails-btn").hide();
+               $("#close-view-OrderDetails").show();
+
+                }
+
+
+                    var dropdown = $('#services-readOnly');
+                    dropdown.empty();
+                    $.each(data.servicesRequests, function (index, item) {
+                        dropdown.append("<li> ♦ " + item.titleEn + "</li>");
+                    });
+
+
+                },
+                error: function (error) {
+                    // Handle the error response here
+                    console.log(error); // Output the error to the console
+                }
+            });
+        }
     </script>
 }
 
@@ -521,3 +976,12 @@
 
 
 
+<style>
+        .toast {
+        margin-top: 50px !important;
+    }
+
+    .toast-success {
+        background-color: #00333f;
+    }
+    </style>

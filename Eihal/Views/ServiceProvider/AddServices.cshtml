@@ -79,6 +79,7 @@
         position: relative;
         cursor: pointer;
         transition: transform 0.3s ease;
+        background: #f8f9fa
     }
 
         .service-card:hover {
@@ -300,7 +301,7 @@
 
                                 </div>
                                 <!-- Card Body -->
-                                <div class="card-body">
+                                <div class="card-body" style="max-height: 768px; overflow-y: auto;">
                                     <div id="tab2" class="tab-content">
                                         <div class="container">
                                             <div class="row" id="serviceContainer">
@@ -333,7 +334,7 @@
                                         <i class="fas fa-search" style="margin-top: 28px; margin-right: 2.5%; color: #00768c;cursor:pointer" onclick="GetAllService()"></i>
                                     </div>
                                 </div>
-                                <div class="scroll-container" style="padding-top:3%; margin-right:2%; margin-left:2%">
+                                <div class="scroll-container" style="padding-top:5%; margin-right:2%; margin-left:2%">
                                     <div class="row privillages" style="padding-top: 40px; padding-left: 35px; white-space: nowrap;display:contents">
                                         <div>
                                             <button style=" padding-left: 30px; padding-right: 30px; border-color: transparent;" data-value="All" class="active">All</button>
@@ -348,7 +349,7 @@
                                 </div>
 
                                 <!-- Card Body -->
-                                <div class="card-body" style="min-height:500px">
+                                <div class="card-body" style="max-height: 768px; overflow-y: auto;">
                                     <div id="tab2" class="tab-content">
                                         <div class="container">
                                             <div class="row" id="allServiceContainer">

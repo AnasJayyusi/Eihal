@@ -2704,7 +2704,7 @@ namespace Eihal.Controllers
                             Id = s.OrderId,
                             PatientName = s.Order.PatientName,
                             PhoneNumber = s.Order.PhoneNumber,
-                            Email = s.Order.Email ?? "-",
+                            Email = string.IsNullOrEmpty(s.Order.Email) ? "-" : s.Order.Email,
                             Status = s.Status
                         });
             return View(referralsOrders.ToList());
@@ -2712,7 +2712,7 @@ namespace Eihal.Controllers
 
         [HttpGet]
         [Route("GetReferralsOrderDetails")]
-        public IActionResult GetReferralsOrderDetails(int orderId)
+        public ActionResult GetReferralsOrderDetails(int orderId)
         {
             var referralsOrders = _dbContext.ReferralRequests
                         .Include(i => i.Order)

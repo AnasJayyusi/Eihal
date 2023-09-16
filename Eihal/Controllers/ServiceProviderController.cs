@@ -45,7 +45,9 @@ namespace Eihal.Controllers
         public IActionResult Notifications()
         {
             var currentUserId = GetUserProfileId();
-            var model = _dbContext.Notifications.Where(a => a.AssignedToUserId == currentUserId).OrderByDescending(a => a.CreationDate).ToList();
+            var model = _dbContext.Notifications.Where(a => a.AssignedToUserId == currentUserId)
+                                                 .OrderByDescending(a => a.CreationDate)
+                                                 .ToList();
             return View("Notifications", model);
         }
 
@@ -129,6 +131,7 @@ namespace Eihal.Controllers
             referralRequest.Status = ReferralStatusEnum.Completed;
             referralRequest.CompletionDate = DateTime.Now;
             _dbContext.SaveChanges();
+            // Based On Needed
             //var referralRequestId = referralRequest.Id;
             //string requestNumber = referralRequestId.ToString("#0000");
             //PushNewNotification(SharedEnum.NotificationTypeEnum.ApprovedOrder, GetUserProfileId(), referralRequest.CreatedByUserId, requestNumber);
@@ -804,7 +807,7 @@ namespace Eihal.Controllers
                     Logo = s.ClinicalSpeciality.LogoImagePath,
                     ClinicalSpecialityNameAr = s.ClinicalSpeciality.TitleAr,
                     ClinicalSpecialityNameEn = s.ClinicalSpeciality.TitleEn,
-                    UserProfileId= us.UserId
+                    UserProfileId = us.UserId
                 })
                 .Where(us => us.Status == ServicesStatusEnum.Approved && us.UserProfileId != currentUserProfileId) // Include columns you want from both tables
                 .Distinct()
@@ -916,7 +919,7 @@ namespace Eihal.Controllers
             {
                 var userServiceDetails = _dbContext.UserServices
                                                    .Include(i => i.Service)
-                                                   .Where(w => w.UserId == orderDetail.DoctorId)
+                                                   .Where(w => w.UserId == orderDetail.DoctorId && w.ServiceId == serviceId)
                                                    .Single();
 
                 var price = userServiceDetails.Price;
@@ -957,7 +960,7 @@ namespace Eihal.Controllers
             string imagePath = GetFileFullPath(_webHostEnvironment, "images", "logo.png");
 
             // Set Title
-            string reportName = string.Format("Invoice" + DateTime.Now.ToString("yyyyMMdd") + "-" + ".pdf");
+            string reportName = string.Format("Invoice" + DateTime.Now.ToString("yyyyMMdd") + ".pdf");
 
             // Get Referral Requests 
             var referralReq = _dbContext.ReferralRequests.Include(i => i.Order)
@@ -1053,6 +1056,45 @@ namespace Eihal.Controllers
 
             // Return File
             return File(reportFile, "application/pdf", reportName);
+        }
+
+
+        [HttpGet]
+        [Route("GetReferralsOrderDetails")]
+        public ActionResult GetReferralsOrderDetails(int orderId)
+        {
+            var referralsOrders = _dbContext.ReferralRequests
+                        .Include(i => i.Order)
+                        .Include(i => i.CreatedByUser)
+                        .Include(i => i.AssignedToUser)
+                        .Include(i => i.Order.OrderServicesDetails)
+                        .Include(i => i.Order.Services)
+                        .Select(s => new ReferralOrderDetailModal
+                        {
+                            OrderId = s.OrderId,
+                            ReferralRequestId = s.Id,
+                            ReferralRequestNumber = s.Id.ToString("#0000"),
+                            Status = s.Status,
+                            CreatedBy = s.CreatedByUser.FullName,
+                            AssignedTo = s.AssignedToUser.FullName,
+                            Date = s.CreationDate.ToString("MM/dd/yyyy"),
+                            PatientName = s.Order.PatientName,
+                            PhoneNumber = s.Order.PhoneNumber,
+                            Email = s.Order.PhoneNumber,
+                            CountryTextAr = s.Order.CountryId != null ? s.Order.Country.TitleAr : "-",
+                            CountryTextEn = s.Order.CountryId != null ? s.Order.Country.TitleEn : "-",
+                            StateTextAr = s.Order.StateId != null ? s.Order.State.TitleAr : "-",
+                            StateTextEn = s.Order.StateId != null ? s.Order.State.TitleEn : "-",
+                            CityTextAr = s.Order.CityId != null ? s.Order.City.TitleAr : "-",
+                            CityTextEn = s.Order.CityId != null ? s.Order.City.TitleEn : "-",
+                            Gender = s.Order.Gender,
+                            Age = s.Order.Age,
+                            ChronicDisease = s.Order.ChronicDisease,
+                            ServicesRequests = s.Order.Services,
+                        }).Where(w => w.OrderId == orderId);
+
+
+            return Json(referralsOrders);
         }
     }
 }
