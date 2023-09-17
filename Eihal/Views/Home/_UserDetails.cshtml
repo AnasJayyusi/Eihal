@@ -114,21 +114,21 @@
             {
                 <img src="~/icon/Doctor/shield-icon.png" width="25" height="25" />
 
-                <label style="font-weight:bold">Insurance Accept</label>  <span id="insurance-label" style="color:black"></span>
+                <label style="font-weight:bold;color:#00768c">Insurance: </label>  <span id="insurance-label" style="color:black">Yes</span>
             }else{
                 @*<img src="~/icon/Doctor/shield-icon.png" width="25" height="25" style="border: 2px solid red; padding: 2px; border-radius: 50%;" />*@
                 <div style="position: relative; display: inline-block;">
   <img src="~/icon/Doctor/shield-icon.png" width="25" height="25" style="border: 2px solid red; padding: 2px; border-radius: 50%;" />
   <span style="position: absolute; top: 55%; left: 50%; transform: translate(-50%, -50%); width: 100%; height: 2px; background-color: red;"></span>
 </div>
-                <label style="font-weight:bold">Insurance Rejected</label>  <span id="insurance-label" style="color:black"></span>
+                <label style="font-weight:bold;color:#00768c">Insurance: </label>  <span id="insurance-label" style="color:black">No</span>
 
             }
         </td>
 
             <td>
                 <i class="fa fa-star" aria-hidden="true"></i>
-                <label style="font-weight:bold">Reviews</label> <img src="~/icon/Doctor/review-icon.png" width="25" height="25" />
+                <label style="font-weight:bold;color:#00768c">Reviews</label> <img src="~/icon/Doctor/review-icon.png" width="25" height="25" />
                 <span id="review-label" style="color:black"></span>
             </td>
 
@@ -139,23 +139,31 @@
     <div class="container">
         <div class="row mt-4">
             <div class="col-md-12">
-                <h5 class="font-weight-bold">Bio</h5>
+            <h5 style="color:#00768c" class="font-weight-bold">Bio</h5>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
-                <span id="bio-label" class="text-black">@Model.Bio</span>
+            @if (!string.IsNullOrEmpty(Model.Bio))
+            {
+                <span id="bio-label" class="text-black">@Model.Bio </span>
+
+            }
+            else
+            {
+                <span id="bio-label" class="text-black">- </span>
+            }
             </div>
         </div>
         <div class="row mt-4">
             <div class="col-md-12">
-                <h5 class="font-weight-bold">Speciality</h5>
+            <h5 style="color:#00768c" class="font-weight-bold">Speciality</h5>
                 <span id="speciality-label" class="text-black"> @Model.SpecialtiesTitlesEn</span>
             </div>
         </div>
         <div class="row mt-4">
             <div class="col-md-12">
-                <h5 class="font-weight-bold">Certifications</h5>
+                <h5 style="color:#00768c" class="font-weight-bold">Certifications</h5>
                 <span id="certifications-label" class="text-black"></span>
              
             </div>

@@ -2,7 +2,6 @@
 
 <style>
     .doctor-card {
-        min-height: 300px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         position: relative;
         cursor: pointer;
@@ -14,9 +13,7 @@
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
         }
 
-    .doctor-card-body {
-        background-color: white;
-    }
+
 
     .doctor-weight-700 {
         color: #00768c;
@@ -171,6 +168,10 @@
         position: relative;
         cursor: pointer;
         transition: transform 0.3s ease;
+        width: 255px;
+        margin-right: 20px;
+        margin-top: 20px;
+        border-radius: 10px;
     }
 
         .doctor-card:hover {
@@ -180,8 +181,10 @@
 
     .doctor-card-body {
         background-color: white;
-        padding: 20px;
+        padding: 10%;
+        border-radius: 10px;
     }
+
 
     .doctor-card-title {
         color: #333;
@@ -349,8 +352,8 @@
 
 <section class="contact-us general-section">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-12 mb-4">
+        <div>
+            <div>
                 <div class="heading-contact">
                     <p style="font-size:40px">
                         Doctors
@@ -359,58 +362,61 @@
                 </div>
                 <div id="error">
                 </div>
-                <form class="form-contain" method="POST"  id="validation">
+                <form class="form-contain" method="POST" id="validation">
 
                     <input type="hidden" name="_token" value="P9gMRWSZXiKVb1HY0oTRjpAhSnhUQU6JAmVkQpN8">
                     <div class="row">
-                        <div class="form-group mr-2 search-container">
+                        <div class="form-group search-container col-md-8 p-0">
                             <input type="text" class="form-control margin-15-position-obselete" id="filterInput" onkeypress="searchUsingEnterButton(event)" name="search" style=" background-color: #f2f2f2;" placeholder="Search" value="">
                             <i class="fas fa-search" style=" margin-right: 0.5%; color: #00768c;cursor:pointer" onclick="filterDoctors()"></i>
                         </div>
-
+                        <div class="col-md-4" style="padding-bottom:16px">
+                            <select class="form-control" id="sort-ddl" onchange="filterDoctors()">
+                                <option value="0">Sort By</option>
+                                <option value="1">Name</option>
+                                <option value="2">Location</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-4 col-12 padding-screen" style="padding-right:8px">
+                        <div class="col-md-3 col-12 p-0" >
                             <select class="form-control" id="services-ddl" onchange="filterDoctors()">
                                 <option value="">All Services</option>
                             </select>
                         </div>
-                        <div class="col-lg-4 col-12 padding-screen" style="padding-right:8px">
+                        <div class="col-md-3 col-12" >
                             <select class="form-control" id="cities-ddl" onchange="GetDistrictsThenFilter()">
                                 <option value="">All Cities</option>
                             </select>
-                        </div>            <div class="col-lg-4 col-12 padding-screen">
+                        </div>
+                        <div class="col-md-3 col-12 ">
                             <select class="form-control" id="disctricts-ddl" onchange="filterDoctors()">
                                 <option value="">All Districts</option>
                             </select>
                         </div>
+                        <div class="col-md-3 col-12 ">
+                            <select class="form-control" id="insurance-ddl" onchange="filterDoctors()">
+                                <option value="0">All Insurance Companies</option>
+                            </select>
+                        </div>
                     </div>
-                    <div id="doctorsListContainer" class="row">
+                    <div id="doctorsListContainer">
                         @Html.Partial("_DoctorsList",Model)
                     </div>
                 </form>
             </div>
 
-            <div class="col-lg-4 col-12 mb-4">
-                <div class="data-contain" style="margin-top: 84px;">
-                    <div style="padding-bottom:16px">
-                        <select class="form-control" id="sort-ddl" onchange="filterDoctors()">
-                            <option value="0">Sort By</option>
-                            <option value="1">Name</option>
-                            <option value="2">Location</option>
-                        </select>
-                    </div>
-                    <div style="padding-bottom:10px">
-                        <select class="form-control" id="insurance-ddl" onchange="filterDoctors()">
-                            <option value="0">All Insurance Companies</option>
-                            @*      <option value="1">Included </option>
-                            <option value="2">Excluded </option>*@
-                        </select>
-                    </div>
+            @*     <div class="col-lg-4 col-12 mb-4">
+            <div class="data-contain" style="margin-top: 84px;">
 
-                    </ul>
-                </div>
+            <div style="padding-bottom:10px">
+            <select class="form-control" id="insurance-ddl" onchange="filterDoctors()">
+            <option value="0">All Insurance Companies</option>
+            </select>
             </div>
+
+            </div>
+            </div> *@
         </div>
     </div>
 </section>
@@ -438,8 +444,8 @@
                 }
             });
 
-             
-      
+
+
             $.ajax({
                 url: '@Url.Action("GetInsuranceCompaniesDDL", "Common")',
                 type: 'GET',
@@ -484,11 +490,11 @@
                 ;
             }
         }
-        function GetDistrictsThenFilter(){
-                var cityId = $('#cities-ddl').val();
+        function GetDistrictsThenFilter() {
+            var cityId = $('#cities-ddl').val();
 
-                  $.ajax({
-                url: '@Url.Action("GetDistrictsDDL", "Common")'+"?cityId="+cityId,
+            $.ajax({
+                url: '@Url.Action("GetDistrictsDDL", "Common")' + "?cityId=" + cityId,
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
@@ -552,11 +558,11 @@
             }
             return params;
         }
-                     function GetDistricts(selectedDistrictId){
+        function GetDistricts(selectedDistrictId) {
             var cityId = $('#cities-ddl').val();
 
-                  $.ajax({
-                url: '@Url.Action("GetDistrictsDDL", "Common")'+"?cityId="+cityId,
+            $.ajax({
+                url: '@Url.Action("GetDistrictsDDL", "Common")' + "?cityId=" + cityId,
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
@@ -568,14 +574,14 @@
                     $.each(data, function (index, item) {
                         dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
                     });
-            const districtDropdown = document.getElementById('disctricts-ddl');
+                    const districtDropdown = document.getElementById('disctricts-ddl');
 
-            // Set selected option for District dropdown
-            if (selectedDistrictId) {
-                districtDropdown.value = selectedDistrictId;
-            } else {
-                districtDropdown.value = ''; // Default value if disctrictId is not present in the query string
-            }
+                    // Set selected option for District dropdown
+                    if (selectedDistrictId) {
+                        districtDropdown.value = selectedDistrictId;
+                    } else {
+                        districtDropdown.value = ''; // Default value if disctrictId is not present in the query string
+                    }
                 }
             });
         }
@@ -585,8 +591,8 @@
                 return;
             const serviceDropdown = document.getElementById('services-ddl');
             const cityDropdown = document.getElementById('cities-ddl');
-            
-        
+
+
             const nameField = document.getElementById('filterInput');
 
             //var name = $('#filterInput').val();
@@ -602,8 +608,8 @@
             if (queryParams.cityId) {
                 cityDropdown.value = queryParams.cityId;
                 GetDistricts(queryParams.disctrictId);
-         
-             
+
+
             } else {
                 cityDropdown.value = ''; // Default value if cityId is not present in the query string
             }

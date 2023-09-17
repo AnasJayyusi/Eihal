@@ -1,16 +1,14 @@
 ﻿@model List<Eihal.Data.Entites.UserProfile>
 
 <div class="row">
-
     @foreach (var doc in Model)
     {
-        <div class="col-md-@(Model.Count > 1?'4':'8') padding-top-25">
-            <div class="doctor-card" style="border: 1px solid #eadfdf; border-radius: 10px;">
-   
-                <div class="doctor-card-body">
-                    <div class="row" style="    padding-bottom: 25px;">
+        <div>
+            <div class="doctor-card" >
+                <div class="doctor-card-body" style="border: 1px solid #eadfdf; border-radius: 10px;">
+                    <div class="row" style="padding-left: 7%;">
                         <h5 class="doctor-card-title" style="color: black;">
-                                <img style="border-radius:50%" src="@(doc.ProfilePicturePath) width="70" height="70" alt="user-image-profile" onerror="this.src='/users/images/Default-User-Profile.jpg'">
+                            <img style="border-radius:50%" src="@(doc.ProfilePicturePath)" width="70" height="70" alt="user-image-profile" onerror="this.src='/users/images/Default-User-Profile.jpg'">
                         </h5>
                         <span style="font-size:10px;margin:auto">
                             <i class="fa fa-star" aria-hidden="true"></i>
@@ -19,111 +17,53 @@
                         </span>
                         @if (doc.InsuranceAccepted == true)
                         {
-                            <div class="service-info-value" style="margin-top: -25px;margin-left: 100px;">
-    
-                                <span class="status status-default">Insurance Accpeted</span>
-                            </div>
+                            <img src="/icon/Doctor/shield-icon.png" width="25" height="25">
+                            <label style="font-size:12px;color:#00768c">Insurance Accept:<span id="insurance-label" style="color:black;font-size:12px"> Yes</span></label>
+
                         }
                         else
                         {
-                            <div class="service-info-value" style="margin-top: -25px;margin-left: 100px;">
-    
-                                <span class="status status-warning">Insurance Rejected</span>
-                            </div>
-
-
+                            <label style="font-size:12px;color:#00768c">Insurance Accept:<span id="insurance-label" style="color:black;font-size:12px"> No</span></label>
                         }
                     </div>
                     <h5 class="doctor-card-title">@doc.FullName</h5>
                     <h5 class="doctor-card-title" style="font-size:11px">@doc.PractitionerType.TitleEn</h5>
-                    @foreach (var certificate in doc.Certifications.Take(2))
+                    @if (doc.Certifications.Any())
                     {
-                        <h5 class="doctor-card-title" style="font-size:11px;color:black">@certificate.Degree.TitleEn - @certificate.UniversityNameEn</h5>
-                    }
-                    @*<div class="d-flex align-items-center w-100 mt-auto">
-                @if (doc.City != null)
-                {
-                <span class="doctor-sub-title" style="display: inline-block; font-size: 12px; margin-right: 10px;">
-                <img width="15px" src="~/icon/location-icon-default.png" alt=""> @doc.City.TitleEn
-                </span>
-                }
+                        @foreach (var certificate in doc.Certifications.Take(1))
+                        {
+                            <h5 class="doctor-card-title" style="font-size:11px;color:black">@certificate.Degree.TitleEn - @certificate.UniversityNameEn</h5>
+                        }
 
-                </div>*@
+                    }
+                    else
+                    {
+                        <h5 class="doctor-card-title" style="font-size:11px;color:black">-</h5>
+                    }
                     <span class="d-flex align-items-center mt-auto">
+                        <img width="15px" src="~/icon/location-icon-default.png" alt="" style="margin-right: 5px;">
                         @if (doc.TimeClinicLocation != null && doc.TimeClinicLocation.City != null)
                         {
-                            <img width="15px" src="~/icon/location-icon-default.png" alt="" style="margin-right: 5px;">
-                            <strong style="font-size: 13px;">@doc.TimeClinicLocation?.City?.TitleEn</strong>
+
+                            <strong style="font-size: 13px;width:80px">@doc.TimeClinicLocation?.City?.TitleEn</strong>
                         }
-                        <strong style="font-size: 13px; padding-left: 30px;">Read More</strong>
-                        @*<a class="custom-btn" style="width: 20px; height: 20px; margin-left: 3px;" href="">
-                    <span>&gt;</span>
-                    </a>*@
+                        else
+                        {
+                            <strong style="font-size: 13px;width:80px">-</strong>
+                        }
+                        <strong style="font-size: 13px; ">Read More</strong>
+
                         <span class="custom-btn" style="width: 20px; height: 20px; margin-left: 3px;color:white" data-toggle="modal" onclick="fillDoctorDetails('@(doc.UserId)')" data-target="#UserProfileModal">&gt;</span>
 
                     </span>
-
-
-
-
                 </div>
-
             </div>
 
         </div>
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    @*
-    <div class="col-md-4 padding-top-25">
-    <div class="doctor-card">
-    <div class="doctor-card-body">
-    <h5 class="doctor-card-title" style="color: black;"><img style="border-radius:50%" id="user-image-layout" src="/users/images/6fa2bcc0-3fb1-4ed9-9ef4-7c3697f8b25a.jpg" width="70" height="70" alt="user-image-profile"><span style="padding:15px;font-size:16px">TitleEn</span></h5>
-    <h5 class="doctor-card-title" >Name Name</h5>
-    <h5 class="doctor-card-title" style="font-size:11px" >Name Name</h5>
-    <div class="row col-12" >
-    <div class="col-8">
-    <span class="doctor-sub-title" style="display: inline-block;">Fee:</span>
-    <span style="display: inline-block; margin-left: 5px;">           .Fee</span>
-    </div>
-    <div class="col-8">
-    <span class="doctor-sub-title" style="display: inline-block;">Fee:</span>
-    <span style="display: inline-block; margin-left: 5px;">.Fee</span>
-    </div>
-    <div class="row">
-    <span class="doctor-sub-title" style="display: inline-block;"><img width="20px"  src="~/icon/location-icon.png" alt=""> Riyadh</span>
-    <span style="display: inline-block; margin-left: 25px;">Read More <a class="custom-btn" style="width: 30px;
-    height: 30px;" href="">
-
-    <span>
-    >
-    </span>
-    </a> </span>
-    </div>
-
-    </div>
-    <div class="dots-container">
-
-    </div>
-    </div>
-
-    </div>
-
-    </div>*@
 </div>
+
+
 
 
 @if (Model.Count == 0)

@@ -129,7 +129,7 @@ namespace Eihal.Controllers
                 case NotificationTypeEnum.ApprovedNewService:
                     notification.TitleAr = "موافقه";
                     notification.TitleEn = "Approved";
-                    notification.MessageEn = $"Your new service was approved";
+                    notification.MessageEn = $"Your new service request was approved";
                     notification.MessageAr = $"تم الموفقه على خدمتك الجديده";
                     break;
                 case NotificationTypeEnum.RejectNewService:

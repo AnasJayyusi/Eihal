@@ -733,8 +733,7 @@ namespace Eihal.Controllers
             userCompany.UserProfileId = userProfileId;
             userCompany.InsuranceCompanyId = id;
 
-            var uc = _dbContext.UserCompanies
-                                     .FirstOrDefault(w => w.UserProfileId == userProfileId && w.InsuranceCompanyId == id);
+            var uc = _dbContext.UserCompanies.FirstOrDefault(w => w.UserProfileId == userProfileId && w.InsuranceCompanyId == id);
 
             var user = _dbContext.UserProfiles.Single(s => s.Id == userProfileId);
             user.InsuranceAccepted = true;
@@ -840,7 +839,6 @@ namespace Eihal.Controllers
             var doctors = _dbContext.UserProfiles
                                     .Include(a => a.TimeClinicLocation)
                                     .ThenInclude(a => a.City)
-                                    .Include(a => a.InsuranceCompanies)
                                     .Include(x => x.Certifications)
                                     .ThenInclude(a => a.Degree)
                                     .Include(a => a.PractitionerType)
@@ -849,9 +847,22 @@ namespace Eihal.Controllers
                                          && (name == String.Empty || a.FullName.Contains(name))
                                          && (ids.Contains(a.Id))
                                          && (cityId == 0 || a.TimeClinicLocation.CityId == cityId)
-                                         && (disctrictId == 0 || a.TimeClinicLocation.DistrictId == disctrictId)
-                                         && (insuranceType == 0 || (insuranceType != 0 && a.InsuranceCompanies.Any(x => x.Id == insuranceType))))
+                                         && (disctrictId == 0 || a.TimeClinicLocation.DistrictId == disctrictId))
                                         .ToList();
+
+
+            if (insuranceType != 0)
+            {
+                doctors = doctors.Join(
+                  _dbContext.UserCompanies,
+                  doctor => doctor.Id,
+                  userCompany => userCompany.UserProfileId,
+                  (doctor, userCompany) => new { Doctor = doctor, UserCompany = userCompany })
+                                        .Where(w => w.UserCompany.InsuranceCompanyId == insuranceType)
+                                        .Select(s => s.Doctor)
+                                        .ToList();
+            }
+
 
             if (sortBy != 0)
             {
