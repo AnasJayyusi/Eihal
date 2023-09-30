@@ -132,4 +132,13 @@
   <data name="Home" xml:space="preserve">
     <value> الصفحة الرئيسية</value>
   </data>
+  <data name="Logout" xml:space="preserve">
+    <value>تسجيل خروج</value>
+  </data>
+  <data name="MyOrders" xml:space="preserve">
+    <value>طلباتي</value>
+  </data>
+  <data name="MyProfile" xml:space="preserve">
+    <value>الملف الشخصي</value>
+  </data>
 </root>

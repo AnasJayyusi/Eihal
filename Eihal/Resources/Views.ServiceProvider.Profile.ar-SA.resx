@@ -117,13 +117,58 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CurrentLanguage" xml:space="preserve">
-    <value>English</value>
+  <data name="Active" xml:space="preserve">
+    <value>حالة الملف الشخصي: فعال</value>
   </data>
-  <data name="Notifications" xml:space="preserve">
-    <value>Notifications</value>
+  <data name="CompleteMessage" xml:space="preserve">
+    <value>يرجى إكمال ملف التعريف الخاص بك، وذلك بإضافة الشهادات ثم إرسالها للمراجعة</value>
   </data>
-  <data name="SignIn" xml:space="preserve">
-    <value>SIGN IN</value>
+  <data name="DefaultMessage" xml:space="preserve">
+    <value>تظهر هذه الرسالة لإكمال ملفك الشخصي عن طريق إضافة الشهادات باستخدام زر إرفاق أدناه لإضافة شهادة جديدة. ثم اضغط على إرسال للمراجعة</value>
+  </data>
+  <data name="DeleteServiceConfirmation" xml:space="preserve">
+    <value>هل أنت متأكد أنك تريد حذف هذه الخدمة؟</value>
+  </data>
+  <data name="Information" xml:space="preserve">
+    <value>معلومة</value>
+  </data>
+  <data name="MyProfile" xml:space="preserve">
+    <value>نبذة تعريفية</value>
+  </data>
+  <data name="MyServices" xml:space="preserve">
+    <value>خدماتي</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>موافق</value>
+  </data>
+  <data name="Overview" xml:space="preserve">
+    <value>نبذة عامة</value>
+  </data>
+  <data name="Rejected" xml:space="preserve">
+    <value>حالة الملف الشخصي: مرفوض</value>
+  </data>
+  <data name="RejectedMessage" xml:space="preserve">
+    <value>اضغط هنا لمعرفة سبب الرفض.</value>
+  </data>
+  <data name="Removed" xml:space="preserve">
+    <value>إزالة !!</value>
+  </data>
+  <data name="RemoveService" xml:space="preserve">
+    <value>تمت إزالة الخدمة بنجاح</value>
+  </data>
+  <data name="SendProfileSuccess" xml:space="preserve">
+    <value>تم إرسال ملفك الشخصي للمراجعة بنجاح</value>
+  </data>
+  <data name="Success" xml:space="preserve">
+    <value>نجاح !!</value>
+  </data>
+  <data name="TimeInsurance" xml:space="preserve">
+    <value>اوقات الدوام والتأمين</value>
+  </data>
+  <data name="UnCompleted" xml:space="preserve">
+    <value>حالة الملف الشخصي: غير مكتمل</value>
+  </data>
+  <data name="UnderReview" xml:space="preserve">
+    <value>حالة الملف الشخصي: قيد المراجعة</value>
   </data>
 </root>

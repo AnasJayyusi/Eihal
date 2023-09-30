@@ -3,6 +3,7 @@
 @{
     string cultureCode = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
     string direction = cultureCode.StartsWith("ar", StringComparison.OrdinalIgnoreCase) ? "rtl" : "ltr";
+    string textAlign = direction == "rtl" ? "right" : "left";
 }
 <!DOCTYPE html>
 
@@ -321,18 +322,18 @@
                                     </div>
 
 
-                                    <div class="dropdown">
+                                    <div class="dropdown" style="direction:@direction;text-align:@textAlign">
                                         <a href="#">
                                             <img style="border-radius:30%" id="user-image-layout" src="" width="40" height="40" alt="user-image-profile" onerror="this.src='/users/images/Default-User-Profile.jpg'">
                                         </a>
 
                                         <div class="dropdown-content">
-                                            <a class="nav-link text-dark  linkButton" asp-area="" asp-controller="Home" asp-action="MyProfile">My Profile </a>
-                                            <a class="nav-link text-dark linkButton" asp-area="" asp-controller="ServiceProvider" asp-action="Referrals">My Order </a>
+                                            <a class="nav-link text-dark  linkButton" asp-area="" asp-controller="Home" asp-action="MyProfile">@Localizer["MyProfile"] </a>
+                                            <a class="nav-link text-dark linkButton" asp-area="" asp-controller="ServiceProvider" asp-action="Referrals">@Localizer["MyOrders"]  </a>
 
 
                                             <a style="text-transform: none;" class="my-profile-button" asp-area="Identity" asp-page="/Account/Logout">
-                                                Logout
+                                                @Localizer["Logout"]
                                                 <span>
                                                     <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("MyProfile", "Home", new { area = "" })">
                                                         <button style="text-transform: none;" class="my-profile-button" type="submit"></button>

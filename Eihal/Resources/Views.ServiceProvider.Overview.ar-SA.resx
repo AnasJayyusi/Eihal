@@ -117,13 +117,166 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CurrentLanguage" xml:space="preserve">
-    <value>English</value>
+  <data name="AccountType" xml:space="preserve">
+    <value>نوع الحساب:</value>
   </data>
-  <data name="Notifications" xml:space="preserve">
-    <value>Notifications</value>
+  <data name="Actions" xml:space="preserve">
+    <value>أجراءات</value>
   </data>
-  <data name="SignIn" xml:space="preserve">
-    <value>SIGN IN</value>
+  <data name="Attach" xml:space="preserve">
+    <value>ارفق</value>
+  </data>
+  <data name="AttachCertifications" xml:space="preserve">
+    <value>إرفاق الشهادات</value>
+  </data>
+  <data name="Bio" xml:space="preserve">
+    <value>السيرة الذاتية</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>إلغاء</value>
+  </data>
+  <data name="CertificateDeleted" xml:space="preserve">
+    <value>تم حذف الشهادة بنجاح</value>
+  </data>
+  <data name="CertificatesAdded" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Certifications" xml:space="preserve">
+    <value>الشهادات</value>
+  </data>
+  <data name="CertificationsFile" xml:space="preserve">
+    <value>ملف الشهادة</value>
+  </data>
+  <data name="CertificationUploaded" xml:space="preserve">
+    <value>تم ارفاق الشهادة بنجاح</value>
+  </data>
+  <data name="City" xml:space="preserve">
+    <value>مدينة:</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>دولة:</value>
+  </data>
+  <data name="Degree" xml:space="preserve">
+    <value>المؤهل</value>
+  </data>
+  <data name="DropHere" xml:space="preserve">
+    <value>قم بوضع الملفات هنا</value>
+  </data>
+  <data name="EditProfile" xml:space="preserve">
+    <value>تعديل الملف الشخصي</value>
+  </data>
+  <data name="EditUserProfile" xml:space="preserve">
+    <value>تحرير ملف تعريف المستخدم</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>بريد إلكتروني:</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>حدث خطأ</value>
+  </data>
+  <data name="Failed" xml:space="preserve">
+    <value>فشل !!</value>
+  </data>
+  <data name="FailedDelete" xml:space="preserve">
+    <value>فشل في حذف الشهادة:</value>
+  </data>
+  <data name="FillAllFeilds" xml:space="preserve">
+    <value>يرجى ملء جميع الحقول المطلوبة.</value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>الاسم الكامل</value>
+  </data>
+  <data name="InsuranceAccept" xml:space="preserve">
+    <value>قبول التأمين</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>لا</value>
+  </data>
+  <data name="NoBio" xml:space="preserve">
+    <value>لم تتم إضافة السيرة الذاتية بعد.</value>
+  </data>
+  <data name="NoCertifications" xml:space="preserve">
+    <value>لم تتم إضافة أي شهادات حتى الآن.</value>
+  </data>
+  <data name="NoSpeciality" xml:space="preserve">
+    <value>لم تتم إضافة أي تخصص بعد.</value>
+  </data>
+  <data name="NumberPatients" xml:space="preserve">
+    <value>عدد المرضى</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>هاتف:</value>
+  </data>
+  <data name="PractitionerType" xml:space="preserve">
+    <value>نوع الممارس الصحي:</value>
+  </data>
+  <data name="ProfessionalRank" xml:space="preserve">
+    <value>التصنيف المهني</value>
+  </data>
+  <data name="ProfileUpdated" xml:space="preserve">
+    <value>تم التحديث بنجاح</value>
+  </data>
+  <data name="RejectionReasonIs" xml:space="preserve">
+    <value>سبب الرفض هو:</value>
+  </data>
+  <data name="Reviews" xml:space="preserve">
+    <value>المراجعات</value>
+  </data>
+  <data name="SelectCity" xml:space="preserve">
+    <value>اختر مدينة</value>
+  </data>
+  <data name="SelectCountry" xml:space="preserve">
+    <value>اختر دولة</value>
+  </data>
+  <data name="SelectDegree" xml:space="preserve">
+    <value>اختر المؤهل</value>
+  </data>
+  <data name="SelectFile" xml:space="preserve">
+    <value>اختر ملفا، رجاءا.</value>
+  </data>
+  <data name="SelectOption" xml:space="preserve">
+    <value>حدد اختيارا</value>
+  </data>
+  <data name="SelectProfessionalRank" xml:space="preserve">
+    <value>حدد التصنيف المهني</value>
+  </data>
+  <data name="SelectState" xml:space="preserve">
+    <value>اختر الولاية</value>
+  </data>
+  <data name="SendToReview" xml:space="preserve">
+    <value>إرسال للمراجعة</value>
+  </data>
+  <data name="Speciality" xml:space="preserve">
+    <value>التخصصات الأكاديمي</value>
+  </data>
+  <data name="State" xml:space="preserve">
+    <value>ولاية:</value>
+  </data>
+  <data name="Success" xml:space="preserve">
+    <value>نجاح !!</value>
+  </data>
+  <data name="UniversityArabic" xml:space="preserve">
+    <value>اسم الجامعة باللغة العربية</value>
+  </data>
+  <data name="UniversityEnglish" xml:space="preserve">
+    <value>اسم الجامعة باللغة الانجليزية</value>
+  </data>
+  <data name="UniversityName" xml:space="preserve">
+    <value>اسم الجامعة</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>تحديث</value>
+  </data>
+  <data name="Upload" xml:space="preserve">
+    <value>ارفاق</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>مرحباً!</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>نعم</value>
+  </data>
+  <data name="YouHave" xml:space="preserve">
+    <value>تم اضافة شهادات عدد :</value>
   </data>
 </root>

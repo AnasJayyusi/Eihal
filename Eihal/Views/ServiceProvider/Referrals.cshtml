@@ -5,6 +5,12 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+@{
+    string cultureCode = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
+    string direction = cultureCode.StartsWith("ar", StringComparison.OrdinalIgnoreCase) ? "rtl" : "ltr";
+    string textAlign = direction == "rtl" ? "right" : "left";
+    bool isEng = direction == "ltr" ? true : false;
+}
 
 
 <div id="page-top">
@@ -23,7 +29,7 @@
                 <!-- Topbar -->
                 <!-- End of Topbar -->
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
+                <div class="container-fluid" style="direction:@direction;text-align:@textAlign">
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4" style="margin-top:125px;">
                         @*  <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
@@ -45,7 +51,7 @@
                                 <div class="tab-container card-header py-2 d-flex flex-row align-items-center justify-content-between">
 
                                     <h6 style="color:#00768c" class="m-0 font-weight-bold text-primary">
-                                        <a style="color:#00768c" class="nav-link" href="index.html">
+                                        <a style="color:#00768c" class="nav-link" href="#">
                                             <i style="color:#00768c" class="fas fa-share-alt" aria-hidden="true"></i>
                                             <span style="color:#00768c">Referrals</span>
                                         </a>
@@ -191,7 +197,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="container-fluid">
+                <div class="container-fluid" style="direction:@direction;text-align:@textAlign">
                     <div id="main-class-modal" class="row justify-content-center">
                         <div>
                             <div>

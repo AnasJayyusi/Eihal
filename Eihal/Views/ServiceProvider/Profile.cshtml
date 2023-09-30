@@ -1,6 +1,12 @@
 ﻿@model Eihal.Data.Entites.InsuranceCompany
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
+@{
+    string cultureCode = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
+    string direction = cultureCode.StartsWith("ar", StringComparison.OrdinalIgnoreCase) ? "rtl" : "ltr";
+    string textAlign = direction == "rtl" ? "right" : "left";
+    bool isEng = direction == "ltr" ? true : false;
+}
 
 <style>
 
@@ -70,7 +76,7 @@
                 <!-- Topbar -->
                 <!-- End of Topbar -->
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
+                <div class="container-fluid" style="direction:@direction;text-align:@textAlign" >
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4" style="margin-top:125px;">
                         @*  <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
@@ -82,7 +88,7 @@
 
                     <div class="row">
                         @Html.Partial("_Sidebar")
-                        <div class="col-xl-8 col-lg-8 ">
+                        <div class="col-xl-8 col-md-8 col-lg-9 ">
 
                             <div data-toggle="modal" data-target="#helpModal" id="profile-status-container" style="color:white"></div>
 
@@ -92,15 +98,15 @@
                                 <div class="tab-container card-header py-3 d-flex flex-row align-items-center justify-content-between">
 
                                     <h6 style="color:#00768c" class="m-0 font-weight-bold text-primary">
-                                        <a style="color:#00768c" class="nav-link" href="index.html">
+                                        <a style="color:#00768c" class="nav-link" href="#">
                                             <i style="color:#00768c" class="fa fa-user" aria-hidden="true"></i>
-                                            <span style="color:#00768c">My Profile</span>
+                                            <span style="color:#00768c"> @Localizer["MyProfile"]</span>
                                         </a>
                                     </h6>
                                     <div>
-                                        <button class="tab-button active" onclick="openTab(event, 'tab1')">Overview</button>
-                                        <button class="tab-button" onclick="openTab(event, 'tab2')">My Services</button>
-                                        <button class="tab-button" onclick="openTab(event, 'tab3')">Time & Insurance</button>
+                                        <button class="tab-button active" onclick="openTab(event, 'tab1')">@Localizer["Overview"]</button>
+                                        <button class="tab-button" onclick="openTab(event, 'tab2')">@Localizer["MyServices"]</button>
+                                        <button class="tab-button" onclick="openTab(event, 'tab3')">@Localizer["TimeInsurance"]</button>
                                     </div>
                                 </div>
                                 <!-- Card Body -->
@@ -134,16 +140,16 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="helpModalLabel">Information</h5>
+                <h5 class="modal-title" id="helpModalLabel">@Localizer["Information"]</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p id="help-msg" style="text-transform:none">This message appear to complete your profile by adding Certifications by using attach button below to add new Certification.then click on send to review   </p>
+                <p id="help-msg" style="text-transform:none">@Localizer["DefaultMessage"]</p>
             </div>
             <div class="modal-footer">
-                <button onclick="scrollToSendReviewButton()" type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+                <button onclick="scrollToSendReviewButton()" type="button" class="btn btn-primary" data-dismiss="modal">@Localizer["Ok"]</button>
             </div>
         </div>
     </div>
@@ -163,7 +169,7 @@
         }
 
         function deleteService(event, id) {
-            var confirmation = confirm("Are you sure you want to delete this service?"); // Show confirmation dialog
+            var confirmation = confirm("@Localizer["DeleteServiceConfirmation"]"); // Show confirmation dialog
             if (!confirmation) {
                 return; // If user cancels, do nothing
             }
@@ -172,7 +178,7 @@
                 type: 'GET',
                 success: function (response) {
                     //serviceContainer.html(response);
-                    toastr.success('Service removed successfully', 'Removed !!');
+                    toastr.success('@Localizer["RemoveService"]', '@Localizer["Removed"]');
                     GetMyService();
                 },
                 error: function (xhr, status, error) {
@@ -218,11 +224,7 @@
                 // Perform an action when the URL contains "something"
                 $("#myProfile-li").addClass("activeLink");
                 $("#myProfile-text").addClass("activeLink");
-            } else {
-                // Perform a different action when the URL doesn't contain "something"
-                console.log("The URL does not contain 'MyProfile'.");
             }
-
         })
 
         function openTab(evt, tabName) {
@@ -255,7 +257,7 @@
                 success: function (response) {
 
                     setProfileStatus(response)
-                    toastr.success('Your profile send to review successfully', 'Success !!');
+                    toastr.success('@Localizer["SendProfileSuccess"]', '@Localizer["Success"]');
 
                 },
                 error: function (xhr, status, error) {
@@ -278,16 +280,16 @@
             var statusText = '';
             if (profileStatus === 'UnCompleted') {
                 profileStatusElement.css('background-color', 'rebeccapurple');
-                statusText = '<span style="font-weight: bold;">  Profile Status: UnCompleted </span> </br> Please complete your profile,by adding Certifactions then send it to review  <a id="reviewLink" href="#" style="color: white; text-decoration: underline; font-weight: bold;">';
+                statusText = '<span style="font-weight: bold;"> @Localizer["UnCompleted"] </span> </br>  @Localizer["CompleteMessage"]  <a id="reviewLink" href="#" style="color: white; text-decoration: underline; font-weight: bold;">';
             } else if (profileStatus === 'UnderReview') {
                 profileStatusElement.css('background-color', 'darkcyan');
-                statusText = '<span style="font-weight: bold;"> Profile Status: Under Review</span>';
+                statusText = '<span style="font-weight: bold;"> @Localizer["UnderReview"]</span>';
                 $("#active-profile-sign").hide()
                 $('#profile-status-container').click(false);
 
             } else if (profileStatus === 'Rejected') {
                 profileStatusElement.css('background-color', 'firebrick');
-                statusText = '<span style="font-weight: bold;"> Profile Status: Rejected</span> Press here to check the rejection reason.</a>';
+                statusText = '<span style="font-weight: bold;"> @Localizer["Rejected"]</span> @Localizer["RejectedMessage"] </a>';
 
             } else if (profileStatus === 'Active') {
 
@@ -300,7 +302,7 @@
 
 
                 profileStatusElement.css('background-color', 'dodgerblue');
-                statusText = '<span style="font-weight: bold;"> Profile Status: Active</span>';
+                statusText = '<span style="font-weight: bold;"> @Localizer["Active"]</span>';
             }
 
 

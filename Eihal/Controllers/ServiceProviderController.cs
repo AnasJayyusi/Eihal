@@ -11,6 +11,7 @@ using System.Data;
 using Eihal.Dto;
 using static Eihal.Data.SharedEnum;
 using System.Globalization;
+using Microsoft.AspNetCore.Identity;
 
 namespace Eihal.Controllers
 {
@@ -21,11 +22,20 @@ namespace Eihal.Controllers
     public class ServiceProviderController : BaseController
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
 
 
-        public ServiceProviderController(IWebHostEnvironment webHostEnvironment, ApplicationDbContext dbContext, INotificationService notificationService) : base(dbContext, notificationService)
+        public ServiceProviderController(
+            IWebHostEnvironment webHostEnvironment,
+            ApplicationDbContext dbContext,
+            INotificationService notificationService,
+            UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager) : base(dbContext, notificationService)
         {
             _webHostEnvironment = webHostEnvironment;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         [Route("Profile")]
@@ -40,6 +50,7 @@ namespace Eihal.Controllers
         {
             return View();
         }
+
 
 
         [Route("Notifications")]
@@ -57,11 +68,30 @@ namespace Eihal.Controllers
             {
                 // Assuming CreationDate is a DateTime property in your model
                 notification.CreationDate = notification.CreationDate.ToLocalTime(); // Convert to local time if necessary
-                notification.CreationDateFormatted = notification.CreationDate.ToString("   ", georgianCulture);
+                notification.CreationDateFormatted = notification.CreationDate.ToString("G", georgianCulture);
             }
 
 
             return View("Notifications", model);
+        }
+
+        [Route("CustomChangePassword")]
+        public ActionResult CustomChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Route("UpdatePassword")]
+        public ActionResult UpdatePassword(string oldPassword, string newPassword)
+        {
+            var user = _userManager.GetUserAsync(User).Result;
+            var changePasswordResult = _userManager.ChangePasswordAsync(user, oldPassword, newPassword).Result;
+            if (!changePasswordResult.Succeeded)
+            {
+                return BadRequest(new { error = "Failed to update password." });
+            }
+            return Ok(new { message = "Password updated successfully." });
         }
 
 
@@ -289,12 +319,23 @@ namespace Eihal.Controllers
                 if (specialityIds != null)
                 {
                     var specialities = _dbContext.Specialties
-                                   .Where(t => specialityIds.Contains(t.Id)).Select(a => new
-                                   {
-                                       a.TitleEn
-                                   }).ToList();
+                                                 .Where(t => specialityIds.Contains(t.Id)).Select(a => new
+                                                 {
+                                                     a.TitleAr,
+                                                     a.TitleEn
+                                                 }).ToList();
+
+                    string cultureCode = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
+                    string direction = cultureCode.StartsWith("ar", StringComparison.OrdinalIgnoreCase) ? "rtl" : "ltr";
+                    bool isEng = direction == "ltr" ? true : false;
+
                     if (specialities.Any())
-                        specialityNames = String.Join(",", specialities.Select(a => a.TitleEn));
+                    {
+                        if (isEng)
+                            specialityNames = string.Join(",", specialities.Select(a => a.TitleEn));
+                        else
+                            specialityNames = string.Join(",", specialities.Select(a => a.TitleAr));
+                    }
                 }
             }
 
@@ -314,7 +355,6 @@ namespace Eihal.Controllers
 
             return Json(data);
         }
-
 
         // If want use this in doctor page please move to other controller with anoynomus and other name
         #region
@@ -363,6 +403,11 @@ namespace Eihal.Controllers
         [Route("GetFullUserProfileInfo")]
         public ActionResult GetFullUserProfileInfo()
         {
+            string cultureCode = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
+            string direction = cultureCode.StartsWith("ar", StringComparison.OrdinalIgnoreCase) ? "rtl" : "ltr";
+            bool isEng = direction == "ltr" ? true : false;
+
+
             _loggedAspNetUserId = GetAspNetUserId();
             var userProfile = _dbContext.UserProfiles.Include(i => i.State).Include(i => i.City).FirstOrDefault(w => w.UserId == GetAspNetUserId());
 
@@ -378,10 +423,10 @@ namespace Eihal.Controllers
                 ProfessionalRankId = userProfile.ProfessionalRankId,
                 CountryId = userProfile.CountryId,
                 StateId = userProfile.StateId,
-                StateName = userProfile?.State?.TitleEn,
+                StateName = isEng ? userProfile?.State?.TitleEn : userProfile?.State?.TitleAr,
                 CityId = userProfile.CityId,
-                CityName = userProfile?.City?.TitleEn,
-                SpecialtiesTitlesEn = userProfile.SpecialtiesTitlesEn,
+                CityName = isEng ? userProfile?.City?.TitleEn : userProfile?.City?.TitleAr,
+                SpecialtiesTitlesEn = isEng ? userProfile.SpecialtiesTitlesEn : userProfile.SpecialtiesTitlesAr,
                 ProfilePicturePath = userProfile.ProfilePicturePath,
                 speciliaties = userProfile.SpecialtiesIds
 

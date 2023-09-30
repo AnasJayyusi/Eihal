@@ -221,16 +221,20 @@ namespace Eihal.Controllers
         [Route("GetUserSpecialtiesDDL")]
         public ActionResult GetUserSpecialtiesDDL(string term)
         {
+            string cultureCode = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
+            string direction = cultureCode.StartsWith("ar", StringComparison.OrdinalIgnoreCase) ? "rtl" : "ltr";
+            bool isEng = direction == "ltr" ? true : false;
+
             _loggedAspNetUserId = GetAspNetUserId();
             var practitionerTypeId = _dbContext.UserProfiles
                                                 .Where(u => u.UserId == GetAspNetUserId())
                                                 .Select(u => u.PractitionerTypeId);
 
             var results = _dbContext.Specialties
-                             .Where(w => w.IsActive && practitionerTypeId.Contains(w.PractitionerTypeId))
-                             .Select(s => new { id = s.Id, text = s.TitleEn, textAr = s.TitleAr })
-                             .Where(x => string.IsNullOrEmpty(term) || x.text.Contains(term) || x.textAr.Contains(term))
-                             .ToList();
+                                    .Where(w => w.IsActive && practitionerTypeId.Contains(w.PractitionerTypeId))
+                                    .Select(s => new { id = s.Id, text = isEng ? s.TitleEn : s.TitleAr })
+                                    .Where(x => string.IsNullOrEmpty(term) || x.text.Contains(term))
+                                    .ToList();
 
             return Ok(new { results });
         }

@@ -1,5 +1,13 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
+@{
+    string cultureCode = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
+    string direction = cultureCode.StartsWith("ar", StringComparison.OrdinalIgnoreCase) ? "rtl" : "ltr";
+    string textAlign = direction == "rtl" ? "right" : "left";
+    bool isEng = direction == "ltr" ? true : false;
+    string marginValue = isEng ? "margin-left" : "margin-right";
+}
+
 <style>
     .sidebar a {
         overflow: hidden;
@@ -74,14 +82,14 @@
     }
 </style>
 
-<div class="col-xl-2 col-lg-2 offset-xl-1 offset-lg-1 card shadow mb-4 first-div" style="height:5%;padding:1%;margin-top: 80px;">
+<div class="col-xl-2 card shadow mb-4 first-div" style="height:5%;padding:1%;margin-top: 80px;@marginValue:3%">
 
   
     <div class="nav-contain sidebar">
         <ul class="navbar-nav">
             <li id="myProfile-li" class="nav-item">
                 <a class="nav-link text-dark" asp-area="" asp-controller="ServiceProvider" asp-action="Profile">
-                    <i id="myProfile-icon" class="fas fa-user-alt"></i> <span id="myProfile-text">@Localizer["My Profile"]</span>
+                    <i id="myProfile-icon" class="fas fa-user-alt"></i> <span id="myProfile-text">@Localizer["MyProfile"]</span>
                 </a>
             </li>
 
@@ -104,17 +112,17 @@
             </li>
 
             <li id="changePassword-li" class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="ServiceProvider" asp-action="changePassword">
-                    <i id="changePassword-icon" class="fa fa-key"></i> <span id="notifications-text">@Localizer["ChangePassword"]</span>
+                <a class="nav-link text-dark" asp-area="" asp-controller="ServiceProvider" asp-action="CustomChangePassword">
+                    <i id="changePassword-icon" class="fa fa-key"></i> <span id="changePassword--text">@Localizer["ChangePassword"]</span>
                 </a>
             </li>
+
         </ul>
 
     </div>
   
 
 </div>
-
 
 <style>
     .sticky-note {

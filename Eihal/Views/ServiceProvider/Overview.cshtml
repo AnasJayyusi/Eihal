@@ -1,4 +1,17 @@
-﻿<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+    string cultureCode = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
+    string direction = cultureCode.StartsWith("ar", StringComparison.OrdinalIgnoreCase) ? "rtl" : "ltr";
+    string textAlign = direction == "rtl" ? "right" : "left";
+    bool isEng = direction == "ltr" ? true : false;
+    string marginValue = isEng ? "margin-left" : "margin-right";
+    string closeButtonValue = isEng ? "0" : "1%";
+    string sendReviewValue = isEng ? "0" : "80%";
+}
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
 
@@ -98,7 +111,7 @@
 <div id="tab1" class="tab-content" style="color:#00768c">
     <div style="text-align: end; cursor:pointer">
         <button onclick="getFullUserProfileInfo()" type="button" class="btn btn-primary  add-edit-btn" data-toggle="modal" data-target="#EditProfileModal">
-            <i style="font-size:22px" class="fas fa-edit"></i> Edit Profile
+            <i style="font-size:22px" class="fas fa-edit"></i>  @Localizer["EditProfile"]
         </button>
     </div>
     <table cellpadding="10">
@@ -107,7 +120,7 @@
                 <img id="user-image" style="border-radius:30%" src="~/users/images/Default-User-Profile.jpg" width="150" height="150" />
             </td>
             <td>
-                Welcome!
+                @Localizer["Welcome"]
                 <h4 id="fullname-label" style="font-weight:bold"></h4>
             </td>
 
@@ -116,17 +129,17 @@
         <tr>
             <td>
                 <i class="fa fa-hospital-o" aria-hidden="true"></i>
-                <label style="font-weight:bold">Number Of Patients</label>  <span id="number-patients-label" style="color:black"></span>
+                <label style="font-weight:bold">@Localizer["NumberPatients"]</label>   <span id="number-patients-label" style="color:black"></span>
             </td>
 
             <td>
                 <img src="~/icon/Doctor/shield-icon.png" width="25" height="25" />
-                <label style="font-weight:bold">Insurance Accept</label>  <span id="insurance-label" style="color:black"></span>
+                <label style="font-weight:bold">@Localizer["InsuranceAccept"] </label>  <span id="insurance-label" style="color:black"></span>
             </td>
 
             <td>
                 <i class="fa fa-star" aria-hidden="true"></i>
-                <label style="font-weight:bold">Reviews</label> <img src="~/icon/Doctor/review-icon.png" width="25" height="25" />
+                <label style="font-weight:bold">@Localizer["Reviews"] </label> <img src="~/icon/Doctor/review-icon.png" width="25" height="25" />
                 <span id="review-label" style="color:black"></span>
             </td>
 
@@ -137,7 +150,7 @@
     <div class="container">
         <div class="row mt-4">
             <div class="col-md-12">
-                <h5 class="font-weight-bold">Bio</h5>
+                <h5 class="font-weight-bold">@Localizer["Bio"]</h5>
             </div>
         </div>
         <div class="row">
@@ -147,17 +160,17 @@
         </div>
         <div class="row mt-4">
             <div class="col-md-12">
-                <h5 class="font-weight-bold">Speciality</h5>
+                <h5 class="font-weight-bold">@Localizer["Speciality"]</h5>
                 <span id="speciality-label" class="text-black"></span>
                 <ul id="listSpeciality"></ul>
             </div>
         </div>
         <div class="row mt-4">
             <div class="col-md-12">
-                <h5 class="font-weight-bold">Certifications</h5>
+                <h5 class="font-weight-bold">@Localizer["Certifications"]</h5>
                 <span id="certifications-label" class="text-black"></span>
                 <button onclick="getDegrees()" type="button" class="btn btn-primary wide-button  add-edit-btn" data-toggle="modal" data-target="#AttachCertificationsModal">
-                    <i onclick="getDegrees()" class="fa fa-upload" aria-hidden="true"></i> Attach
+                    <i onclick="getDegrees()" class="fa fa-upload" aria-hidden="true"></i> @Localizer["Attach"]
                 </button>
             </div>
 
@@ -168,10 +181,10 @@
                     <table id="certifications-table" class="table">
                         <thead>
                             <tr>
-                                <th>Degree</th>
-                                <th>University Name</th>
-                                <th>Certifications File</th>
-                                <th>Actions</th>
+                                <th>@Localizer["Degree"]</th>
+                                <th>@Localizer["UniversityName"]</th>
+                                <th>@Localizer["CertificationsFile"]</th>
+                                <th>@Localizer["Actions"]</th>
                             </tr>
                         </thead>
                         <tbody id="certifications-list"></tbody>
@@ -182,8 +195,8 @@
         </div>
     </div>
 
-    <div id="active-profile-sign" onclick=sendToReview() class="send-review-btn">
-        <i id="send-icon" style="color:white;margin-left:10px" class="fa fa-paper-plane" aria-hidden="true"></i>
+    <div id="active-profile-sign" style="margin-right:@sendReviewValue" onclick=sendToReview() class="send-review-btn">
+        <i id="send-icon" style="color:white;@marginValue:10px" class="fa fa-paper-plane" aria-hidden="true"></i>
         <div class="container">
             <div class="tick"></div>
         </div>
@@ -197,8 +210,8 @@
     <div class="modal-dialog custom-modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="EditUserProfileModal">Edit User Profile</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <h5 class="modal-title" id="EditUserProfileModal">@Localizer["EditProfile"]</h5>
+                <button type="button" style="margin-left:@closeButtonValue" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -216,13 +229,13 @@
                             </td>
                             <td>
                                 <div class="form-group">
-                                    <label style="font-weight:bold;color:#00768c" for="full-name-edit-input"> Full Name</label>
+                                    <label style="font-weight:bold;color:#00768c" for="full-name-edit-input">@Localizer["FullName"]</label>
                                     <input type="text" class="form-control" id="full-name-edit-input" required>
                                 </div>
 
                                 <div class="form-group">
-                                    <label style="font-weight:bold;color:#00768c" for="bio-edit-input">Bio</label>
-                                    <textarea placeholder="No Bio Added Yet." rows="4" cols="50" type="text" class="form-control" id="bio-edit-input" required></textarea>
+                                    <label style="font-weight:bold;color:#00768c" for="bio-edit-input">@Localizer["Bio"]</label>
+                                    <textarea placeholder="@Localizer["NoBio"]" rows="4" cols="50" type="text" class="form-control" id="bio-edit-input" required></textarea>
                                 </div>
                             </td>
                         </tr>
@@ -230,25 +243,25 @@
 
                             <td>
                                 <div class="form-group">
-                                    <label style="font-weight:bold;color:#00768c" for="accountTypes-ddl-edit">Account Type:</label>
+                                    <label style="font-weight:bold;color:#00768c" for="accountTypes-ddl-edit">@Localizer["AccountType"]</label>
                                     <select disabled class="form-control" id="accountTypes-ddl-edit"></select>
                                 </div>
                             <td>
                                 <div class="form-group">
-                                    <label style="font-weight:bold;color:#00768c" for="practitionerTypes-ddl-edit">Practitioner Type:</label>
+                                    <label style="font-weight:bold;color:#00768c" for="practitionerTypes-ddl-edit">@Localizer["PractitionerType"]</label>
                                     <select disabled class="form-control" id="practitionerTypes-ddl-edit"></select>
                                 </div>
                         </tr>
                         <tr>
                             <td>
                                 <div class="form-group">
-                                    <label style="font-weight:bold;color:#00768c" for="phone-edit-input">Phone:</label>
+                                    <label style="font-weight:bold;color:#00768c" for="phone-edit-input">@Localizer["Phone"]</label>
                                     <input disabled type="text" class="form-control" id="phone-edit-input" value="Test" required>
                                 </div>
                             </td>
                             <td>
                                 <div class="form-group">
-                                    <label style="font-weight:bold;color:#00768c" for="email-edit-input">Email:</label>
+                                    <label style="font-weight:bold;color:#00768c" for="email-edit-input">@Localizer["Email"]</label>
                                     <input disabled type="text" class="form-control" id="email-edit-input" value="Test" required>
                                 </div>
                             </td>
@@ -256,17 +269,17 @@
                         <tr>
                             <td>
                                 <div class="form-group">
-                                    <label style="font-weight:bold;color:#00768c" for="professionalRanks-ddl-edit">Professional Rank:</label>
+                                    <label style="font-weight:bold;color:#00768c" for="professionalRanks-ddl-edit">@Localizer["ProfessionalRank"]</label>
                                     <select class="form-control" id="professionalRanks-ddl-edit">
-                                        <option value="">Select a professional rank</option>
+                                        <option value="">@Localizer["SelectProfessionalRank"] </option>
                                     </select>
                                 </div>
                             </td>
                             <td>
                                 <div class="form-group">
-                                    <label style="font-weight:bold;color:#00768c" for="countries-ddl-edit">Country:</label>
+                                    <label style="font-weight:bold;color:#00768c" for="countries-ddl-edit">@Localizer["Country"]</label>
                                     <select class="form-control" id="countries-ddl-edit" onchange="getStatesUserProfile(this.value)">
-                                        <option value="">Select a Country</option>
+                                        <option value="">@Localizer["SelectCountry"]</option>
                                     </select>
                                 </div>
                             </td>
@@ -275,17 +288,17 @@
                         <tr>
                             <td>
                                 <div class="form-group">
-                                    <label style="font-weight:bold;color:#00768c" for="states-ddl-edit">State:</label>
+                                    <label style="font-weight:bold;color:#00768c" for="states-ddl-edit">@Localizer["State"]</label>
                                     <select class="form-control" id="states-ddl-edit" onchange="getCitesUserProfile(this.value)">
-                                        <option value="">Select a State</option>
+                                        <option value="">@Localizer["Select a State"]</option>
                                     </select>
                                 </div>
                             </td>
                             <td>
                                 <div class="form-group">
-                                    <label style="font-weight:bold;color:#00768c" for="cities-ddl-edit">City:</label>
+                                    <label style="font-weight:bold;color:#00768c" for="cities-ddl-edit">@Localizer["City"]</label>
                                     <select class="form-control" id="cities-ddl-edit">
-                                        <option value="">Select a City</option>
+                                        <option value="">@Localizer["SelectCity"]</option>
                                     </select>
                                 </div>
                             </td>
@@ -294,7 +307,7 @@
                         <tr>
                             <td colspan="2">
                                 <div class="form-group">
-                                    <label style="font-weight:bold;color:#00768c" for="speciality-edit-multiSelect">Speciality:</label>
+                                    <label style="font-weight:bold;color:#00768c" for="speciality-edit-multiSelect"> @Localizer["Speciality"]</label>
                                     <div>
                                         <div>
                                             @*  <select id="speciality-edit-multiSelect" multiple>
@@ -316,8 +329,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal" id="close-overview">Cancel</button>
-                <button onclick="updateProfile()" type="button" class="btn btn-success" style="background-color:#00768c">Update</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" style="margin:5px;" id="close-overview">@Localizer["Cancel"]</button>
+                <button onclick="updateProfile()" type="button" class="btn btn-success" style="background-color:#00768c">@Localizer["Update"]</button>
             </div>
         </div>
     </div>
@@ -333,7 +346,7 @@
     <div class="modal-dialog custom-modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="AttachCertificationsModal">Attach Certifications</h5>
+                <h5 class="modal-title" id="AttachCertificationsModal"> @Localizer["AttachCertifications"]</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -344,23 +357,23 @@
 
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label for="degrees-ddl" style="font-weight:bold;color:#00768c">Degree</label>
+                            <label for="degrees-ddl" style="font-weight:bold;color:#00768c">@Localizer["Degree"]</label>
                             <select id="degrees-ddl" name="degrees-ddl" class="form-control" required>
-                                <option value="">Select Degree</option>
+                                <option value="">@Localizer["SelectDegree"]</option>
                             </select>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="universityName-english" style="font-weight:bold;color:#00768c">University Name In English </label>
+                            <label for="universityName-english" style="font-weight:bold;color:#00768c">@Localizer["UniversityEnglish"]</label>
                             <input type="text" id="universityName-english" name="universityName-english" class="form-control" required>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="universityName-arabic" style="font-weight:bold;color:#00768c">University Name In Arabic</label>
+                            <label for="universityName-arabic" style="font-weight:bold;color:#00768c">@Localizer["UniversityArabic"]</label>
                             <input type="text" id="universityName-arabic" name="universityName-arabic" class="form-control" required>
                         </div>
                     </div>
 
                     <label for="attachments-uploader" class="drop-container">
-                        <span class="drop-title">Drop files here</span>
+                        <span class="drop-title">@Localizer["DropHere"]</span>
                         or
                         <input type="file" id="attachments-uploader" required>
                     </label>
@@ -368,8 +381,8 @@
             </div>
 
             <div class="modal-footer">
-                <button id="close-attachment-modal" type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                <button onclick="uploadCertification()" type="button" class="btn btn-success" style="background-color:#00768c">Upload</button>
+                <button id="close-attachment-modal" type="button" class="btn btn-danger" data-dismiss="modal">@Localizer["Cancel"] </button>
+                <button onclick="uploadCertification()" type="button" class="btn btn-success" style="background-color:#00768c">@Localizer["Upload"]</button>
             </div>
         </div>
     </div>
@@ -435,14 +448,14 @@
                 $("#fullname-label").text(response.fullname);
                 $("#number-patients-label").text(response.numberPatients);
                 $("#review-label").text("(" + response.review + ")");
-                $("#insurance-label").text(response.insuranceAccept == true ? "Yes" : "No");
+                $("#insurance-label").text(response.insuranceAccept == true ? "@Localizer["Yes"]" : "@Localizer["No"]");
                 $("#bio-label").text(response.bio);
                 if (response.speciality == "" || response.speciality == null) {
                     $("#speciality-label").show()
-                    $("#speciality-label").text("No Speciality Added Yet.");
+                    $("#speciality-label").text("@Localizer["NoSpeciality"]");
                 }
                 else {
-                    
+
                     $('#listSpeciality').empty()
                     $("#speciality-label").hide()
                     // Step 1: Split the string into an array using comma as the delimiter
@@ -456,7 +469,7 @@
 
                 $("#certifications-label").text(response.certifactions);
                 if (response.profileStatus == "Rejected")
-                    $("#help-msg").text("Rejection Reason Is :" + response.rejectionReason)
+                    $("#help-msg").text("@Localizer["RejectionReasonIs"]" + response.rejectionReason)
                 setProfileStatus(response.profileStatus);
                 if (response.profilePicturePath != null || response.profilePicturePath != undefined)
                     $('[id^="user-image"]').attr('src', response.profilePicturePath);
@@ -469,9 +482,9 @@
         getCertifications();
 
     }
+
     function getFullUserProfileInfo() {
-
-
+        var isEng = isEnglishCulture();
         $.ajax({
             url: '@Url.Action("GetPractitionerTypesDDL", "Common")',
             type: 'GET',
@@ -483,7 +496,7 @@
                 var dropdown = $('#practitionerTypes-ddl-edit');
                 // Add remaining options
                 $.each(data, function (index, item) {
-                    dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                    dropdown.append($('<option></option>').val(item.id).text(isEng ? item.titleEn : item.titleAr));
                 });
             }
         });
@@ -498,7 +511,7 @@
                 // Populate the dropdown list
                 var dropdown = $('#accountTypes-ddl-edit');
                 $.each(data, function (index, item) {
-                    dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                    dropdown.append($('<option></option>').val(item.id).text(isEng ? item.titleEn : item.titleAr));
                 });
             }
         });
@@ -515,10 +528,10 @@
                 var dropdown = $('#professionalRanks-ddl-edit');
 
                 // Add default option
-                dropdown.append($('<option></option>').val('').text('Select a professional Rank'));
+                dropdown.append($('<option></option>').val('').text('@Localizer["SelectProfessionalRank"]'));
 
                 $.each(data, function (index, item) {
-                    dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                    dropdown.append($('<option></option>').val(item.id).text(isEng ? item.titleEn : item.titleAr));
                 });
             }
         });
@@ -533,9 +546,9 @@
                 // Populate the dropdown list
                 var dropdown = $('#countries-ddl-edit');
                 // Add default option
-                dropdown.append($('<option></option>').val('').text('Select a country'));
+                dropdown.append($('<option></option>').val('').text('@Localizer["SelectCountry"]'));
                 $.each(data, function (index, item) {
-                    dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                    dropdown.append($('<option></option>').val(item.id).text(isEng ? item.titleEn : item.titleAr));
                 });
             }
         });
@@ -560,7 +573,7 @@
 
                     $('.speciality-edit-multiSelect').empty()
                     if (response.speciliaties != null) {
-                         
+
                         var speciliatiesIds = response.speciliaties.split(",");
                         var specialtiesTitlesEn = response.specialtiesTitlesEn.split(",");
                         $.each(speciliatiesIds, function (index, item) {
@@ -578,7 +591,7 @@
 
         $('.speciality-edit-multiSelect').select2({
             theme: "classic",
-            placeholder: 'Select an option',
+            placeholder: '@Localizer["SelectOption"]',
             width: '100%',
             ajax: {
                 url: '@Url.Action("GetUserSpecialtiesDDL", "Common")',
@@ -595,6 +608,7 @@
     }
 
     function getStatesUserProfile(countryId) {
+        var isEng = isEnglishCulture();
         $.ajax({
             url: '@Url.Action("GetStatesDDL", "ServiceProvider")' + '?countryId=' + countryId,
             type: 'GET',
@@ -605,15 +619,16 @@
                 // Populate the dropdown list
                 var dropdown = $('#states-ddl-edit');
                 // Add default option
-                dropdown.append($('<option></option>').val('').text('Select a state'));
+                dropdown.append($('<option></option>').val('').text('@Localizer["SelectState"]'));
                 $.each(data, function (index, item) {
-                    dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                    dropdown.append($('<option></option>').val(item.id).text(isEng ? item.titleEn : item.titleAr));
                 });
             }
         });
     }
 
     function getCitesUserProfile(stateId) {
+        var isEng = isEnglishCulture();
         $.ajax({
             url: '@Url.Action("GetCitiesDDL", "ServiceProvider")' + '?stateId=' + stateId,
             type: 'GET',
@@ -623,9 +638,9 @@
                 $('#cities-ddl-edit').empty();
                 // Populate the dropdown list
                 var dropdown = $('#cities-ddl-edit');
-                dropdown.append($('<option></option>').val('').text('Select a city'));
+                dropdown.append($('<option></option>').val('').text('@Localizer["SelectCity"]'));
                 $.each(data, function (index, item) {
-                    dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                    dropdown.append($('<option></option>').val(item.id).text(isEng ? item.titleEn : item.titleAr));
                 });
             }
         });
@@ -654,11 +669,11 @@
                 console.log(response);
                 $("#close-overview").trigger("click");
                 loadUserProfileOverview();
-                toastr.success('User profile updated successfully', 'Success !!');
+                toastr.success('@Localizer["ProfileUpdated"]', '@Localizer["Success"]');
                 // Handle success response
             },
             error: function (error) {
-                toastr.error('Error occurred', 'Failed !!');
+                toastr.error('@Localizer["Error"]', '@Localizer["Failed"]');
                 // Handle error response
             }
         });
@@ -671,7 +686,7 @@
 
         // Check if file is selected
         if (!file) {
-            toastr.error('Please select a file.', 'Error !!');
+            toastr.error('@Localizer["SelectFile"]', '@Localizer["Error"]');
             return;
         }
 
@@ -684,7 +699,7 @@
 
         // Check if any of the required fields is empty
         if (!degreeId || !universityNameArabic || !universityNameEnglish) {
-            toastr.error('Please fill in all the required fields.', 'Error !!');
+            toastr.error('@Localizer["FillAllFeilds"]', '@Localizer["Error"]');
             return;
         }
 
@@ -703,11 +718,11 @@
                 // Handle the success response
                 $("#close-attachment-modal").trigger("click");
                 getCertifications();
-                toastr.success('Certification uploaded successfully', 'Success !!');
+                toastr.success('@Localizer["CertificationUploaded"]', '@Localizer["Success"]');
             },
             error: function (xhr, status, error) {
                 // Handle the error response
-                toastr.error('Error occurred', 'Failed !!');
+                toastr.error('@Localizer["Error"]', '@Localizer["Failed"]');
             }
         });
     }
@@ -715,23 +730,24 @@
     function getCertifications() {
         var tableBody = $('#certifications-list');
         tableBody.empty();
+        var isEng = isEnglishCulture();
         $.ajax({
             url: '@Url.Action("GetCertifications", "ServiceProvider")',
             type: 'GET',
             dataType: 'json',
             success: function (data) {
                 if (data.length == 0) {
-                    $("#certifications-label").text("No Certifications added yet.");
+                    $("#certifications-label").text("@Localizer["NoCertifications"]");
                     $("#certifications-label").show();
                     $("#certifications-container").hide();
                 } else {
                     $("#certifications-container").show();
-                    $("#certifications-label").text("You have " + data.length + " certificates added ");
+                    $("#certifications-label").text("@Localizer["YouHave"] " + data.length + " @Localizer["CertificatesAdded"] ");
                     tableBody.empty(); // Clear the table body before appending new rows
                     data.forEach(function (item) {
                         var row = $('<tr>');
-                        var degreeCell = $('<td>').text(item.degree.titleEn);
-                        var universityCell = $('<td>').text(item.universityNameEn);
+                        var degreeCell = $('<td>').text(isEng ? item.degree.titleEn : item.degree.titleAr);
+                        var universityCell = $('<td>').text(isEng ? item.universityNameEn : item.universityNameAr);
 
                         var iconClass = '';
                         var iconColor = '';
@@ -810,14 +826,14 @@
             success: function (response) {
                 // Certificate deleted successfully, you can perform any additional actions here
                 getCertifications();
-                toastr.success('Certificate deleted successfully', 'Success !!');
+                toastr.success('@Localizer["CertificateDeleted"]', '@Localizer["Success"]');
                 // Refresh the certifications list or perform any other necessary updates
 
 
             },
             error: function (error) {
                 // Handle the AJAX error
-                toastr.error('Failed to delete certificate:', response.error);
+                toastr.error('@Localizer["FailedDelete"]', response.error);
                 console.error('AJAX error:', error);
             }
         });
@@ -835,9 +851,10 @@
             success: function (response) {
                 // On success, loop through the response data and populate the dropdown options
                 var dropdown = $('#degrees-ddl');
+                var isEng = isEnglishCulture();
                 dropdown.empty();
                 $.each(response, function (index, degree) {
-                    dropdown.append($('<option>').text(degree.titleEn).val(degree.id));
+                    dropdown.append($('<option>').text(isEng ? degree.titleEn : degree.titleAr).val(degree.id));
                 });
             },
             error: function () {
@@ -850,8 +867,25 @@
 </script>
 
 
+<script>
+    // JavaScript Code
+    let button = document.querySelector('.send-review-btn');
+    let buttonText = document.querySelector('.tick');
 
+    const tickMark = "<svg width=\"58\" height=\"45\" viewBox=\"0 0 58 45\" xmlns=\"http://www.w3.org/2000/svg\"><path fill=\"#fff\" fill-rule=\"nonzero\" d=\"M19.11 44.64L.27 25.81l5.66-5.66 13.18 13.18L52.07.38l5.65 5.65\"/></svg>";
 
+    buttonText.innerHTML = "@Localizer["SendToReview"]";
+
+    button.addEventListener('click', function () {
+        if (buttonText.innerHTML !== "@Localizer["SendToReview"]") {
+            buttonText.innerHTML = "@Localizer["SendToReview"]";
+        } else if (buttonText.innerHTML === "@Localizer["SendToReview"]") {
+            buttonText.innerHTML = tickMark;
+        }
+        $("#send-icon").hide()
+        this.classList.toggle('send-review-btn__circle');
+    });
+</script>
 <style>
     /* CSS Styles */
     .send-review-btn, .tick {
@@ -893,22 +927,3 @@
         transition: all .9s;
     }
 </style>
-<script>
-    // JavaScript Code
-    let button = document.querySelector('.send-review-btn');
-    let buttonText = document.querySelector('.tick');
-
-    const tickMark = "<svg width=\"58\" height=\"45\" viewBox=\"0 0 58 45\" xmlns=\"http://www.w3.org/2000/svg\"><path fill=\"#fff\" fill-rule=\"nonzero\" d=\"M19.11 44.64L.27 25.81l5.66-5.66 13.18 13.18L52.07.38l5.65 5.65\"/></svg>";
-
-    buttonText.innerHTML = "Send To Review";
-
-    button.addEventListener('click', function () {
-        if (buttonText.innerHTML !== "Send To Review") {
-            buttonText.innerHTML = "Send To Review";
-        } else if (buttonText.innerHTML === "Send To Review") {
-            buttonText.innerHTML = tickMark;
-        }
-        $("#send-icon").hide()
-        this.classList.toggle('send-review-btn__circle');
-    });
-</script>
