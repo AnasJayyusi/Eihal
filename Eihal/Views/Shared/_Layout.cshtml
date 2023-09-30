@@ -30,7 +30,10 @@
     <!-- Internal JavaScripts  Theme libraries-->
     <script src="~/vendor/bootstrap/js/bootstrap.bundle.js"></script>
 
+    <!-- Toaster-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
+     
     <style>
         .custom-notification {
             position: fixed;
@@ -205,8 +208,8 @@
                                     <!-- Modal -->
                                     @if (this.User.IsInRole("Administrator"))
                                     {
-                                        <a href="#" class="drop-name">
-                                            <img src="/images/logo.png" class="navbar-logo" alt="logo" style="height:30px">
+                                        <a href="/" class="drop-name">
+                                            <img  src="/images/logo.png" class="navbar-logo" alt="logo" style="height:30px">
                                         </a>
 
 
@@ -234,7 +237,7 @@
                                     <a href="#" class="drop-name">
                                         <img src="~/images/navbar/lang.svg" loading="lazy" alt="" />
                                         <span id="current-language">
-                                            English
+                                            @Localizer["CurrentLanguage"]
                                         </span>
                                     </a>
 
@@ -269,7 +272,7 @@
             {
 
                 <text>
-                    <div class="bottom-nav">
+                    <div class="bottom-nav" style="direction:@direction">
                         <div class="container">
                             <div class="content">
                                 <div class="hamburger">
@@ -360,28 +363,28 @@
         <main role="main">
             @RenderBody()
         </main>
-       <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="NotificationModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content" style="width: 400px">
-            <div class="modal-header">
-                <h5 class="modal-title" id="NotificationModalLabel">Notifications</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" style="max-height: 300px; overflow-y: auto;">
-                <!-- Add your content here -->
-                <div class="custom-notification-list" id="notificationContainer">
-                    <!-- Your notification content goes here -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="NotificationModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content" style="width: 400px">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="NotificationModalLabel">Notifications</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" style="max-height: 300px; overflow-y: auto;">
+                        <!-- Add your content here -->
+                        <div class="custom-notification-list" id="notificationContainer">
+                            <!-- Your notification content goes here -->
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+
+                    </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
-             
-            </div>
         </div>
-    </div>
-</div>
 
         @*  <div class="container">
         <div class="row p-1">
@@ -435,6 +438,7 @@
 
 <script>
 
+
     $(document).ready(function () {
         $.ajax({
             url: '/Notification/GetUserNotificationsCount',  // Replace 'your-api-url' with the actual API endpoint URL
@@ -460,7 +464,7 @@
             }
         });
 
-        })
+    })
     function showNotifications() {
         var notificationContainer = $('#notificationContainer');
 
@@ -522,7 +526,24 @@
             document.getElementById('loadingSpinner').style.display = 'none';
         }, 800);
     }
+
+    function isEnglishCulture() {
+        var isEn = true;
+        var name = "CultureInfo"
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) {
+            var cultureInfo = parts.pop().split(';').shift();
+            if (cultureInfo == "en-US")
+                isEn = true;
+            else
+                isEn = false;
+        }
+        return isEn;
+    }
 </script>
+
+
 
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/notification.js"></script>

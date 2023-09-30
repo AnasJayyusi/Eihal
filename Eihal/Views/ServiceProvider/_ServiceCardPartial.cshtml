@@ -1,7 +1,9 @@
 ﻿@model List<Eihal.Data.Entites.UserServices>
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
-
+@{
+    string currentPath = Context.Request.Path.ToString().ToLower();
+}
 <style>
     .close-icon {
         font-size: 14px;
@@ -17,7 +19,7 @@
     .service-info-label {
         width: 30%;
         font-size: 14px;
-        font-weight:600;
+        font-weight: 600;
         color: darkcyan
     }
 
@@ -25,12 +27,12 @@
         font-size: 14px;
         font-weight: 600;
         color: darkcyan;
-        margin-right:5%;
+        margin-right: 5%;
     }
 
     .service-info-value {
-        font-size:15px;
-        font-weight:500;
+        font-size: 15px;
+        font-weight: 500;
     }
 
     .service-card {
@@ -207,13 +209,13 @@
         padding: 4px 6px;
         border-radius: 4px;
         font-weight: bold;
-        border-radius:10%;
+        border-radius: 10%;
     }
 
     .status-success {
         background-color: #4CAF50;
         color: #ffffff;
-        font-size:12px;
+        font-size: 12px;
         border-radius: 10%;
     }
 
@@ -223,12 +225,14 @@
         font-size: 12px;
         border-radius: 10%;
     }
+
     .status-clinical {
-    background-color: #efd8e3;
-    color: #212529;
-    font-size: 12px;
-    border-radius: 10%;
-}
+        background-color: #efd8e3;
+        color: #212529;
+        font-size: 12px;
+        border-radius: 10%;
+    }
+
     .status-error {
         background-color: #FF0000;
         color: #ffffff;
@@ -240,18 +244,18 @@
         padding-bottom: 10px;
     }
 
-        .currency-amount span {
-            /* Style for the currency amount itself */
-            color: green; /* Custom color for the currency amount, change as desired */
-            font-size:xx-small
-        }
+    .currency-amount span {
+        /* Style for the currency amount itself */
+        color: green; /* Custom color for the currency amount, change as desired */
+        font-size: xx-small
+    }
 </style>
 
 @foreach (var item in Model)
 {
     if (item.Status != Eihal.Enums.ServicesStatusEnum.Rejected)
     {
-        <div class="col-md-3 padding-top-25" >
+        <div class="col-md-3 padding-top-25">
             <div class="service-card">
                 <div class="service-card-body">
                     <h5 class="service-card-title"><strong>@item.TitleEn</strong></h5>
@@ -291,7 +295,7 @@
     }
     else
     {
-           <div class="col-md-3 padding-top-25"  data-toggle="modal" onclick="fillRejectionReason('@item.RejectionReason')" data-target="#RejectionReasonModal">
+        <div class="col-md-3 padding-top-25" data-toggle="modal" onclick="fillRejectionReason('@item.RejectionReason')" data-target="#RejectionReasonModal">
             <div class="service-card">
                 <div class="service-card-body">
                     <h5 class="service-card-title"><strong>@item.TitleEn</strong></h5>
@@ -306,13 +310,13 @@
                     <div class="service-info-row">
                         <div class="service-info-label">Status:</div>
                         <div class="service-info-value">
-                          
-                                <span class="status status-error" >@item.Status</span>
-                          
+
+                            <span class="status status-error">@item.Status</span>
+
                         </div>
                     </div>
                     <div class="dots-container">
-                        <i  onclick="deleteService(event,'@item.Id')">
+                        <i onclick="deleteService(event,'@item.Id')">
                             <i style="color:red" class="fas fa-trash-alt"></i>
                         </i>
                     </div>
@@ -326,7 +330,21 @@
 {
     <div class="no-results">
         <img src="~/images/NoResult.png" alt="No Results Found Icon">
-        <p>No Privilege Added Yet.</p>
+        <p>No Service Added Yet.</p>
+        <br>
+
+
+    <div id="addPage-btn" style="display:none">
+            <a class="custom-btn" href="/ServiceProvider/AddServices" style="width:200px;height:75px">
+                <span>
+                    Navigate to adding page
+                </span>
+            </a>
+            <i class="fa-solid fa-arrow-pointer fa-beat-fade"></i>
+        </div>
+
+
+
     </div>
 }
 
@@ -341,16 +359,16 @@
                 </button>
             </div>
             <div class="modal-body">
-                    <!-- Add your modal content here -->
-                    <div style="padding: 10px; display: flex; justify-content: center;">
-                        <div style="max-width: 300px;">
-                            <div class="form-group">
-                                <label style="font-weight: bold; color: #00768c;" id="rejectionReason"></label>
-                              
-                            </div>
+                <!-- Add your modal content here -->
+                <div style="padding: 10px; display: flex; justify-content: center;">
+                    <div style="max-width: 300px;">
+                        <div class="form-group">
+                            <label style="font-weight: bold; color: #00768c;" id="rejectionReason"></label>
 
                         </div>
+
                     </div>
+                </div>
             </div>
 
             <div class="modal-footer" style="text-align:center">
@@ -359,5 +377,4 @@
         </div>
     </div>
 </div>
-
 

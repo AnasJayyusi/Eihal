@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CityDefaultSelection" xml:space="preserve">
+    <value>Choose City</value>
+  </data>
+  <data name="DistrictDefaultSelection" xml:space="preserve">
+    <value>Choose District</value>
+  </data>
   <data name="EasyAccessBenefit" xml:space="preserve">
     <value>Easy access to a large number of dentists, specialists and consultants, and easy identification of the academic qualifications and certificates of each doctor. Also, knowing the medical privileges and treatment services provided by each doctor and the
                             prices of the services provided.</value>
@@ -156,6 +162,12 @@
   </data>
   <data name="Search" xml:space="preserve">
     <value>SEARCH</value>
+  </data>
+  <data name="SearchByName" xml:space="preserve">
+    <value>Or search by name</value>
+  </data>
+  <data name="ServiceDefaultSelection" xml:space="preserve">
+    <value>Choose Service</value>
   </data>
   <data name="WhyEihal" xml:space="preserve">
     <value>Why Eihal?</value>

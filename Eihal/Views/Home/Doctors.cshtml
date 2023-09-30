@@ -1,4 +1,11 @@
 ﻿@model List<Eihal.Data.Entites.UserProfile>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+    string cultureCode = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
+    string direction = cultureCode.StartsWith("ar", StringComparison.OrdinalIgnoreCase) ? "rtl" : "ltr";
+    string textAlign = direction == "rtl" ? "right" : "left";
+}
 
 <style>
     .doctor-card {
@@ -326,23 +333,24 @@
         color: #ffffff;
     }
 </style>
-<section class="sub-header">
-    <div class="container">
+
+<section class="sub-header" style="text-align:@textAlign">
+    <div class="container" style="direction:@direction">
         <div class="content">
             <h1>
-                Doctors
+                @Localizer["Doctors"]
             </h1>
 
-            <ul class="bread-list">
+            <ul class="bread-list" style="text-align:@textAlign">
                 <li>
                     <a href="#">
-                        Home
+                        @Localizer["Home"]
                     </a>
                 </li>
 
                 <li>
                     <span>
-                        Doctors
+                        @Localizer["Doctors"]
                     </span>
                 </li>
             </ul>
@@ -350,13 +358,13 @@
     </div>
 </section>
 
-<section class="contact-us general-section">
+<section class="contact-us general-section" style="direction:@direction">
     <div class="container">
         <div>
             <div>
                 <div class="heading-contact">
-                    <p style="font-size:40px">
-                        Doctors
+                    <p style="font-size:40px;text-align:@textAlign" >
+                        @Localizer["Doctors"]
                     </p>
 
                 </div>
@@ -367,36 +375,37 @@
                     <input type="hidden" name="_token" value="P9gMRWSZXiKVb1HY0oTRjpAhSnhUQU6JAmVkQpN8">
                     <div class="row">
                         <div class="form-group search-container col-md-8 p-0">
-                            <input type="text" class="form-control margin-15-position-obselete" id="filterInput" onkeypress="searchUsingEnterButton(event)" name="search" style=" background-color: #f2f2f2;" placeholder="Search" value="">
+                            <input type="text" class="form-control margin-15-position-obselete" id="filterInput" onkeypress="searchUsingEnterButton(event)" name="search" style=" background-color: #f2f2f2;"
+                                   placeholder="@Localizer["Search"]" value="">
                             <i class="fas fa-search" style=" margin-right: 0.5%; color: #00768c;cursor:pointer" onclick="filterDoctors()"></i>
                         </div>
                         <div class="col-md-4" style="padding-bottom:16px">
                             <select class="form-control" id="sort-ddl" onchange="filterDoctors()">
-                                <option value="0">Sort By</option>
-                                <option value="1">Name</option>
-                                <option value="2">Location</option>
+                                <option value="0">@Localizer["SortBy"]</option>
+                                <option value="1">@Localizer["Name"]</option>
+                                <option value="2">@Localizer["Location"]</option>
                             </select>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3 col-12 p-0" >
+                        <div class="col-md-3 col-12 p-0">
                             <select class="form-control" id="services-ddl" onchange="filterDoctors()">
-                                <option value="">All Services</option>
+                                <option value="">@Localizer["AllServices"] </option>
                             </select>
                         </div>
-                        <div class="col-md-3 col-12" >
+                        <div class="col-md-3 col-12">
                             <select class="form-control" id="cities-ddl" onchange="GetDistrictsThenFilter()">
-                                <option value="">All Cities</option>
+                                <option value="">@Localizer["AllCities"] </option>
                             </select>
                         </div>
                         <div class="col-md-3 col-12 ">
                             <select class="form-control" id="disctricts-ddl" onchange="filterDoctors()">
-                                <option value="">All Districts</option>
+                                <option value="">@Localizer["AllDistricts"] </option>
                             </select>
                         </div>
                         <div class="col-md-3 col-12 ">
                             <select class="form-control" id="insurance-ddl" onchange="filterDoctors()">
-                                <option value="0">All Insurance Companies</option>
+                                <option value="0">@Localizer["AllInsuranceCompanies"]</option>
                             </select>
                         </div>
                     </div>
@@ -435,11 +444,14 @@
                     // Clear existing options
                     $('#cities-ddl').empty();
                     // Populate the dropdown list
+                    var defaultSelect = "@Localizer["AllCities"]"
+                    var isEng = isEnglishCulture();
+
                     var dropdown = $('#cities-ddl');
-                    dropdown.append($('<option></option>').val(0).text('All Cities'));
+                    dropdown.append($('<option></option>').val(0).text(defaultSelect));
 
                     $.each(data, function (index, item) {
-                        dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                        dropdown.append($('<option></option>').val(item.id).text(isEng ? item.titleEn : item.titleAr));
                     });
                 }
             });
@@ -454,11 +466,14 @@
                     // Clear existing options
                     $('#insurance-ddl').empty();
                     // Populate the dropdown list
+                    var defaultSelect = "@Localizer["AllInsuranceCompanies"]"
+                    var isEng = isEnglishCulture();
+
                     var dropdown = $('#insurance-ddl');
-                    dropdown.append($('<option></option>').val(0).text('All Insurance Companies'));
+                    dropdown.append($('<option></option>').val(0).text(defaultSelect));
 
                     $.each(data, function (index, item) {
-                        dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                        dropdown.append($('<option></option>').val(item.id).text(isEng ? item.titleEn : item.titleAr));
                     });
                 }
             });
@@ -469,12 +484,14 @@
                 success: function (data) {
                     // Clear existing options
                     $('#services-ddl').empty();
+                    var defaultSelect = "@Localizer["AllServices"]"
+                    var isEng = isEnglishCulture();
                     // Populate the dropdown list
                     var dropdown = $('#services-ddl');
-                    dropdown.append($('<option></option>').val(0).text('All Services'));
+                    dropdown.append($('<option></option>').val(0).text(defaultSelect));
 
                     $.each(data, function (index, item) {
-                        dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                        dropdown.append($('<option></option>').val(item.id).text(isEng ? item.titleEn : item.titleAr));
                     });
                 }
             });
@@ -500,11 +517,13 @@
                 success: function (data) {
                     // Clear existing options
                     $('#disctricts-ddl').empty();
+                    var defaultSelect = "@Localizer["AllDistricts"]"
+                    var isEng = isEnglishCulture();
                     // Populate the dropdown list
                     var dropdown = $('#disctricts-ddl');
-                    dropdown.append($('<option></option>').val(0).text('All Districts'));
+                    dropdown.append($('<option></option>').val(0).text(defaultSelect));
                     $.each(data, function (index, item) {
-                        dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                        dropdown.append($('<option></option>').val(item.id).text(isEng ? item.titleEn : item.titleAr));
                     });
                     filterDoctors();
                 }
@@ -568,11 +587,13 @@
                 success: function (data) {
                     // Clear existing options
                     $('#disctricts-ddl').empty();
+                    var defaultSelect = "@Localizer["AllDistricts"]"
+                    var isEng = isEnglishCulture();
                     // Populate the dropdown list
                     var dropdown = $('#disctricts-ddl');
-                    dropdown.append($('<option></option>').val(0).text('All Districts'));
+                    dropdown.append($('<option></option>').val(0).text(defaultSelect));
                     $.each(data, function (index, item) {
-                        dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                        dropdown.append($('<option></option>').val(item.id).text(isEng ? item.titleEn : item.titleAr));
                     });
                     const districtDropdown = document.getElementById('disctricts-ddl');
 
@@ -628,7 +649,7 @@
     <div class="modal-dialog custom-modal-dialog" style="max-width: 600px;" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="UserProfileModal">Doctor Details</h5>
+                <h5 class="modal-title" id="UserProfileModal">@Localizer["DoctorDetails"]</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -639,7 +660,7 @@
             </div>
 
             <div class="modal-footer" style="text-align:center">
-                <button type="button" class="btn btn-danger" data-dismiss="modal" id="close-add-service">Close</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="close-add-service">@Localizer["Close"]</button>
             </div>
         </div>
     </div>

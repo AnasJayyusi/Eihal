@@ -1,6 +1,15 @@
 ﻿@model List<Eihal.Data.Entites.UserProfile>
 
-<div class="row">
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+    string cultureCode = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
+    string direction = cultureCode.StartsWith("ar", StringComparison.OrdinalIgnoreCase) ? "ltr" : "rtl";
+    string textAlign = direction == "rtl" ? "right" : "left";
+    bool isEng = direction == "rtl" ? true : false;
+}
+
+<div class="row" style="direction:@direction">
     @foreach (var doc in Model)
     {
         <div>
@@ -8,33 +17,47 @@
                 <div class="doctor-card-body" style="border: 1px solid #eadfdf; border-radius: 10px;">
                     <div class="row" style="padding-left: 7%;">
                         <h5 class="doctor-card-title" style="color: black;">
-                            <img style="border-radius:50%" src="@(doc.ProfilePicturePath)" width="70" height="70" alt="user-image-profile" onerror="this.src='/users/images/Default-User-Profile.jpg'">
+                            <img style="border-radius:50%" src="@(doc.ProfilePicturePath ?? "/users/images/Default-User-Profile.jpg")" width="70" height="70" alt="user-image-profile" onerror="this.src='/users/images/Default-User-Profile.jpg'">
                         </h5>
                         <span style="font-size:10px;margin:auto">
                             <i class="fa fa-star" aria-hidden="true"></i>
-                            <label style="font-weight:bold">Reviews</label> <img src="~/icon/Doctor/review-icon.png" width="25" height="25" />
+                            <label style="font-weight:bold"> @Localizer["Reviews"]</label> <img src="~/icon/Doctor/review-icon.png" width="25" height="25" />
                             <span id="review-label" style="color:black"></span>
                         </span>
                         @if (doc.InsuranceAccepted == true)
                         {
                             <img src="/icon/Doctor/shield-icon.png" width="25" height="25">
-                            <label style="font-size:12px;color:#00768c">Insurance Accept:<span id="insurance-label" style="color:black;font-size:12px"> Yes</span></label>
+                            <label style="font-size:12px;color:#00768c">@Localizer["InsuranceAccept"]<span id="insurance-label" style="color:black;font-size:12px"> @Localizer["Yes"]</span></label>
 
                         }
                         else
                         {
-                            <label style="font-size:12px;color:#00768c">Insurance Accept:<span id="insurance-label" style="color:black;font-size:12px"> No</span></label>
+                            <label style="font-size:12px;color:#00768c">@Localizer["InsuranceAccept"]<span id="insurance-label" style="color:black;font-size:12px"> @Localizer["No"]</span></label>
                         }
                     </div>
                     <h5 class="doctor-card-title">@doc.FullName</h5>
-                    <h5 class="doctor-card-title" style="font-size:11px">@doc.PractitionerType.TitleEn</h5>
+                    @if (isEng)
+                    {
+                        <h5 class="doctor-card-title" style="font-size:11px">@doc.PractitionerType.TitleEn</h5>
+                    }
+                    else
+                    {
+                        <h5 class="doctor-card-title" style="font-size:11px">@doc.PractitionerType.TitleAr</h5>
+                    }
+            
                     @if (doc.Certifications.Any())
                     {
                         @foreach (var certificate in doc.Certifications.Take(1))
                         {
-                            <h5 class="doctor-card-title" style="font-size:11px;color:black">@certificate.Degree.TitleEn - @certificate.UniversityNameEn</h5>
+                            @if (isEng)
+                            {
+                                <h5 class="doctor-card-title" style="font-size:11px;color:black">@certificate.Degree.TitleEn - @certificate.UniversityNameEn</h5>
+                            }
+                            else
+                            {
+                                <h5 class="doctor-card-title" style="font-size:11px;color:black">@certificate.Degree.TitleAr - @certificate.UniversityNameAr</h5>
+                            }
                         }
-
                     }
                     else
                     {
@@ -45,13 +68,21 @@
                         @if (doc.TimeClinicLocation != null && doc.TimeClinicLocation.City != null)
                         {
 
-                            <strong style="font-size: 13px;width:80px">@doc.TimeClinicLocation?.City?.TitleEn</strong>
+                            @if (isEng)
+                            {
+                                <strong style="font-size: 13px;width:80px">@doc.TimeClinicLocation?.City?.TitleEn</strong>
+                            }
+                            else
+                            {
+                                <strong style="font-size: 13px;width:80px">@doc.TimeClinicLocation?.City?.TitleAr</strong>
+                            }
+                            
                         }
                         else
                         {
                             <strong style="font-size: 13px;width:80px">-</strong>
                         }
-                        <strong style="font-size: 13px; ">Read More</strong>
+                        <strong style="font-size: 13px; ">@Localizer["ReadMore"]</strong>
 
                         <span class="custom-btn" style="width: 20px; height: 20px; margin-left: 3px;color:white" data-toggle="modal" onclick="fillDoctorDetails('@(doc.UserId)')" data-target="#UserProfileModal">&gt;</span>
 
@@ -71,6 +102,6 @@
     <div class="no-results-section" style="padding-top:70px">
         <img src="~/images/NoResult.png" style="width: 150px;height: 150px;" width="150px" height="150px" alt="No Results Found Icon">
 
-        <p>No Doctors found.</p>
+        <p>@Localizer["NoDoctorsFound"]</p>
     </div>
 }

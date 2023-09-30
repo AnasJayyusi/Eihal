@@ -47,7 +47,6 @@ namespace Eihal.Controllers
             _dbContext.Feedbacks.Add(feedback);
             _dbContext.SaveChanges();
             return Ok("Added Successfully !!");
-
         }
 
 

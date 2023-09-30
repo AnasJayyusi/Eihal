@@ -3,7 +3,7 @@
 @inject IViewLocalizer Localizer
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 
@@ -56,7 +56,7 @@
                                     </div>
                                 </div>
                                 <!-- Card Body -->
-                                <div class="card-body" >
+                                <div class="card-body">
 
                                     <!-- InComing Tab -->
                                     <div id="tab1" class="tab-content" style="display: none;">
@@ -199,7 +199,7 @@
                                     <!-- progressbar -->
                                     <ul id="progressbar">
                                         <li class="active" id="account"><strong>Patient Info</strong></li>
-                                        <li id="personal"><strong>Privileges</strong></li>
+                                        <li id="personal"><strong>Services</strong></li>
                                         <li id="payment"><strong>Doctors</strong></li>
                                         <li id="confirm"><strong>Confrimation</strong></li>
                                     </ul>
@@ -224,7 +224,7 @@
                                         <div class="form-card">
                                             <div class="row">
                                                 <div class="col-7">
-                                                    <h2 class="fs-title">Privileges:</h2>
+                                                    <h2 class="fs-title">Services:</h2>
                                                 </div>
                                                 <div class="col-5">
                                                     <h2 class="steps">Step 2 - 4</h2>
@@ -516,7 +516,7 @@
                     <button onclick="approveFromPopup()" id="approve-view-OrderDetails-btn" type="button" class="btn btn-success" data-dismiss="modal">Approve</button>
                     <button onclick="completeFromPopup()" id="complete-view-OrderDetails-btn" type="button" class="btn btn-primary" data-dismiss="modal">Complete</button>
                     @* <button onclick="reportFromPopup()" id="report-view-OrderDetails-info" type="button" class="btn btn-primary" data-dismiss="modal">Report</button> *@
-                    <button id="close-view-OrderDetails" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> 
+                    <button id="close-view-OrderDetails" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
 
 
@@ -549,8 +549,7 @@
             approve(refId)
         }
 
-        function completeFromPopup()
-        {
+        function completeFromPopup() {
             var refId = $("#refId-hidden-Input").val()
             complete(refId)
         }
@@ -702,20 +701,34 @@
                 }
             });
         }
-        
-        function complete(refId) {
 
-            $.ajax({
-                url: '/ServiceProvider/CompleteReferal?refId=' + refId,
-                type: 'GET',
-                success: function (response) {
-                    toastr.success('Order completed successfully', 'Success !!');
-                    filterIncomingReferrals();
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error:', error);
-                }
-            });
+        function complete(refId) {
+            // Show a confirmation dialog
+            var confirmed = confirm('Are you sure that the service has been completed? The due invoice will be issued.');
+
+            // Check if the user confirmed the action
+            if (confirmed) {
+                $.ajax({
+                    url: '/ServiceProvider/CompleteReferal?refId=' + refId,
+                    type: 'GET',
+                    success: function (response) {
+                        toastr.success('Order completed successfully', 'Success !!');
+                        filterIncomingReferrals();
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            } else {
+                // The user canceled the action, you can add a message or perform any other action here
+                toastr.warning('Order completion canceled', 'Canceled');
+            }
+            var id = "#invoice-" + refId
+
+            setTimeout(() => {
+                document.getElementById('invoice-' + refId).click();
+            }, "500")
+      
         }
 
         function reject(refId) {
@@ -739,36 +752,35 @@
 
         function getReferralsOrderDetails(id, isFromIncoming) {
 
-            if (isFromIncoming){
+            if (isFromIncoming) {
                 $("#assignedto-div").hide()
-                 // Hide Feilds
+                // Hide Feilds
                 $("#patientName-div").hide();
                 $("#phone-div").hide();
                 $("#email-div").hide();
-                }
-                else 
-                {
-                      // Show Feilds
+            }
+            else {
+                // Show Feilds
                 $("#patientName-div").show();
                 $("#phone-div").show();
                 $("#email-div").show();
-                }
+            }
 
-                // Reset Status
-               $("#status-readonly").removeClass("underReview");
-               $("#status-readonly").removeClass("completed");
-               $("#status-readonly").removeClass("approved");
-               $("#status-readonly").removeClass("rejected");
+            // Reset Status
+            $("#status-readonly").removeClass("underReview");
+            $("#status-readonly").removeClass("completed");
+            $("#status-readonly").removeClass("approved");
+            $("#status-readonly").removeClass("rejected");
 
-               // Reset Buttons
-               $("#approve-view-OrderDetails-btn").hide();
-               $("#reject-view-OrderDetails-btn").hide();
-               $("#complete-view-OrderDetails-btn").hide();
-               $("#close-view-OrderDetails").hide();
-             
+            // Reset Buttons
+            $("#approve-view-OrderDetails-btn").hide();
+            $("#reject-view-OrderDetails-btn").hide();
+            $("#complete-view-OrderDetails-btn").hide();
+            $("#close-view-OrderDetails").hide();
 
-              
-                    
+
+
+
 
             $.ajax({
                 url: '/ServiceProvider/GetReferralsOrderDetails?orderId=' + id,
@@ -780,26 +792,26 @@
                         $("#status-readonly").text("Under Review")
                         $("#status-readonly").addClass("underReview")
 
-                           $("#approve-view-OrderDetails-btn").show();
-               $("#reject-view-OrderDetails-btn").show();
+                        $("#approve-view-OrderDetails-btn").show();
+                        $("#reject-view-OrderDetails-btn").show();
                     }
                     if (data.status == 2) {
                         $("#status-readonly").text("Approved")
                         $("#status-readonly").addClass("approved")
 
-                       // Show Feilds
-                      $("#patientName-div").show();
-                      $("#phone-div").show();
-                      $("#email-div").show();
+                        // Show Feilds
+                        $("#patientName-div").show();
+                        $("#phone-div").show();
+                        $("#email-div").show();
 
-                       $("#complete-view-OrderDetails-btn").show();
-                    
+                        $("#complete-view-OrderDetails-btn").show();
 
 
-                       
+
+
                     }
                     if (data.status == 3) {
-                        
+
                         $("#status-readonly").text("Rejected")
                         $("#status-readonly").addClass("rejected")
                         $("#close-view-OrderDetails").show();
@@ -808,11 +820,11 @@
                     if (data.status == 4) {
                         $("#status-readonly").text("Completed")
                         $("#status-readonly").addClass("completed")
-                           // Show Feilds
-                      $("#patientName-div").show();
-                      $("#phone-div").show();
-                      $("#email-div").show();
-                         $("#close-view-OrderDetails").show();
+                        // Show Feilds
+                        $("#patientName-div").show();
+                        $("#phone-div").show();
+                        $("#email-div").show();
+                        $("#close-view-OrderDetails").show();
 
 
                     }
@@ -861,7 +873,7 @@
 
 
                     if (data.age == 0) {
-                          $("#age-label-readonly").hide()
+                        $("#age-label-readonly").hide()
 
                         $("#child-label-readonly").css("display", "");
                         $("#child-input-readonly").css("display", "");
@@ -877,7 +889,7 @@
 
                     }
                     if (data.age == 1) {
-                          $("#age-label-readonly").hide()
+                        $("#age-label-readonly").hide()
 
                         $("#child-label-readonly").css("display", "none");
                         $("#child-input-readonly").css("display", "none");
@@ -892,8 +904,8 @@
                         $("#aged-input-readonly").css("display", "none");
 
                     }
-                      if (data.age == 2) {
-                          $("#age-label-readonly").hide()
+                    if (data.age == 2) {
+                        $("#age-label-readonly").hide()
 
                         $("#child-label-readonly").css("display", "none");
                         $("#child-input-readonly").css("display", "none");
@@ -909,8 +921,8 @@
 
                     }
 
-                        if (data.age == 3) {
-                          $("#age-label-readonly").hide()
+                    if (data.age == 3) {
+                        $("#age-label-readonly").hide()
 
                         $("#child-label-readonly").css("display", "none");
                         $("#child-input-readonly").css("display", "none");
@@ -941,18 +953,18 @@
                         $("#aged-label-readonly").css("display", "none");
                         $("#aged-input-readonly").css("display", "none");
                     }
-                         if (!isFromIncoming){
-                      // Show Feilds
-                $("#patientName-div").show();
-                $("#phone-div").show();
-                $("#email-div").show();
-                  // Reset Buttons
-               $("#approve-view-OrderDetails-btn").hide();
-               $("#reject-view-OrderDetails-btn").hide();
-               $("#complete-view-OrderDetails-btn").hide();
-               $("#close-view-OrderDetails").show();
+                    if (!isFromIncoming) {
+                        // Show Feilds
+                        $("#patientName-div").show();
+                        $("#phone-div").show();
+                        $("#email-div").show();
+                        // Reset Buttons
+                        $("#approve-view-OrderDetails-btn").hide();
+                        $("#reject-view-OrderDetails-btn").hide();
+                        $("#complete-view-OrderDetails-btn").hide();
+                        $("#close-view-OrderDetails").show();
 
-                }
+                    }
 
 
                     var dropdown = $('#services-readOnly');
@@ -977,11 +989,11 @@
 
 
 <style>
-        .toast {
+    .toast {
         margin-top: 50px !important;
     }
 
     .toast-success {
         background-color: #00333f;
     }
-    </style>
+</style>

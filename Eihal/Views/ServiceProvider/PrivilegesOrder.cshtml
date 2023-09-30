@@ -196,6 +196,7 @@
         .no-results p {
             margin: 0;
         }
+
 </style>
 
 
@@ -226,7 +227,7 @@
 {
     <div class="no-results">
         <img src="~/images/NoResult.png" alt="No Results Found Icon">
-        <p> No Privilege Added Yet.</p>
+        <p> No Services Added Yet.</p>
     </div>
 
 }
@@ -300,11 +301,16 @@
 
         // Construct the HTML snippet with the dynamic values
         var htmlToAppend = `
-                                     <div onclick="deleteSelection(${dynamicId})" id="${dynamicId}" class="col-md-3 padding-top-25">
-                                         <div class="service-card">
-                                             <div class="service-card-body">
-                                                         <h5 class="service-card-title-added">${dynamicTitle}</h5>
-                                                 </div></div></div>`;
+        <div onclick="deleteSelection(${dynamicId})" id="${dynamicId}" class="col-md-3 padding-top-25 service-card-container">
+            <div class="service-card">
+                <div style="color:red; text-align:center">
+                <i class="fa-solid fa-x"></i>
+            </div>
+                <div class="service-card-body">
+                    <h5 class="service-card-title-added">${dynamicTitle}</h5>
+                </div>
+            </div>
+        </div>`;
 
         // Append the HTML snippet to the element with ID "selection-privileges"
         $("#selection-privileges").append(htmlToAppend);

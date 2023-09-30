@@ -1,22 +1,25 @@
-﻿@{
-    ViewData["Title"] = "About";
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+    string cultureCode = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
+    string direction = cultureCode.StartsWith("ar", StringComparison.OrdinalIgnoreCase) ? "rtl" : "ltr";
+    string textAlign = direction == "rtl" ? "right" : "left";
 }
-<h1>@ViewData["Title"]</h1>
 
-<section class="sub-header">
-    <div class="container">
-        <div class="content">
+<section class="sub-header" style="direction:@direction">
+    <div class="container" style="direction:@direction">
+        <div class="content" style="text-align:@textAlign">
             <h1>
-                About Us
+                @Localizer["AboutUs"]
             </h1>
 
             <ul class="bread-list">
                 <li>
-                    <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    <a asp-area="" asp-controller="Home" asp-action="Index">    @Localizer["Home"]</a>
                 </li>
                 <li>
                     <span>
-                        About Us
+                        @Localizer["AboutUs"]
                     </span>
                 </li>
             </ul>
@@ -24,34 +27,35 @@
     </div>
 </section>
 <section class="about-us general-section">
-    <div class="container">
+    <div class="container" style="direction:@direction">
         <div class="row">
-            <div class="col-lg-6 col-12 mb-4">
+            <div class="col-lg-6 col-12 mb-4" style="text-align:@textAlign">
                 <div class="image-content">
                     <img src="~/images/about.png" alt="">
                 </div>
             </div>
 
-            <div class="col-lg-6 col-12">
+            <div class="col-lg-6 col-12" style="text-align:@textAlign">
                 <div class="content">
                     <p class="title">
-                        About Us
+                        @Localizer["AboutUs"]
                     </p>
 
                     <h1>
-                        Mission and Story About
+                        @Localizer["Mission"]
 
                         <span>
-                            ElHAL
+                            @Localizer["ElHAL"]
+                            
                         </span>
                     </h1>
 
                     <p class="desc">
-                        Eihal is an idea that came from long experiences in clinical and academic services in the field of dentistry, and studying the problems of anyone need dental services to find the right dentist. Also, taking the advantage of the outputs of distinguished dental schools and helping young dentists to integrate into the market in appropriate way.
+                        @Localizer["EihalParhPartOne"]
                     </p>
 
                     <p class="desc">
-                        With Eihal, we aim to raise the level of dental services to reach distinct professional levels, while benefiting the new graduated dentists to improve the level of dental services to a proper professional way and creating a professional environment that enables them to benefit from the experiences of their predecessors to develop their professional skills.
+                        @Localizer["EihalParhPartTwo"]
                     </p>
                   
                 </div>
@@ -60,7 +64,7 @@
     </div>
 </section>
 <section class="vision">
-    <div class="container">
+    <div class="container" style="direction:@direction">
         <div class="row">
             <div class="col-lg-4 col-12 px-0">
                 <div class="box primary-color">
@@ -70,11 +74,12 @@
 
                     <div class="contain">
                         <h1>
-                            OUR MISSION
+                            @Localizer["OurMission"]
+                           
                         </h1>
 
                         <p>
-                            Improving dental services and the profession, by involving technology to organize and improve the quality of treatment services and facilitate the integration of newly graduated dentists into the labor market.
+                            @Localizer["OurMissionDesc"]
                         </p>
                     </div>
                 </div>
@@ -88,11 +93,11 @@
 
                     <div class="contain">
                         <h1>
-                            OUR VISION
+                            @Localizer["OurVision"]
                         </h1>
 
                         <p>
-                            improving the level of dental services provided, by facilitating reaching the best dentists in various specialties and improving the dental profession.
+                            @Localizer["OurVisionDesc"]
                         </p>
                     </div>
                 </div>
@@ -106,11 +111,11 @@
 
                     <div class="contain">
                         <h1>
-                            PHILOSOPHY
+                            @Localizer["PHILOSOPHY"]
                         </h1>
 
                         <p>
-                            To provide outstanding dental care with a commitment of honesty, integrity &amp; quality...
+                            @Localizer["PHILOSOPHYDesc"]
                         </p>
                     </div>
                 </div>
@@ -120,10 +125,10 @@
 </section>
 
 <section class="advantages general-section">
-    <div class="container">
+    <div class="container" style="direction:@direction">
         <div class="heading">
             <h1>
-                Why Choose Eihal ?
+                @Localizer["WhyEihal"]
 
                 <!-- <span>
                     Advantages & Technologies
@@ -132,13 +137,13 @@
 
             <ul class="list">
                 <li>
-                    • Easy access to a large number of specialistsand consultantsdentists.
+                    • @Localizer["FirstPoint"]
                 </li>
                 <li>
-                    • Providing all dental services at an affordable and varied prices.
+                    • @Localizer["SecPoint"]
                 </li>
                 <li>
-                    • Opening a new and easy portal for newly graduated dentists to practice the profession in a professional manner and develop their professional skills by dealing with experienced specialists and consultants Dentists.
+                    • @Localizer["ThirdPoint"]
                 </li>
             </ul>
         </div>

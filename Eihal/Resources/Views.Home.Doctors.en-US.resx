@@ -117,66 +117,40 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CityDefaultSelection" xml:space="preserve">
-    <value>اختر المدينة</value>
+  <data name="AllCities" xml:space="preserve">
+    <value>All Cities</value>
   </data>
-  <data name="DistrictDefaultSelection" xml:space="preserve">
-    <value>اختر المنطقة</value>
+  <data name="AllDistricts" xml:space="preserve">
+    <value>All Districts</value>
   </data>
-  <data name="EasyAccessBenefit" xml:space="preserve">
-    <value>سهولة الوصول إلى عدد كبير من أطباء الأسنان والمتخصصين والاستشاريين ، وسهولة التعرف على المؤهلات الأكاديمية وشهادات كل طبيب. وكذلك التعرف على الامتيازات الطبية والخدمات العلاجية التي يقدمها كل طبيب و
-  أسعار الخدمات المقدمة.</value>
+  <data name="AllInsuranceCompanies" xml:space="preserve">
+    <value>All Insurance Companies</value>
   </data>
-  <data name="ElHAL" xml:space="preserve">
-    <value>
-إحال</value>
+  <data name="AllServices" xml:space="preserve">
+    <value>All Services</value>
   </data>
-  <data name="FewStepsToJoin" xml:space="preserve">
-    <value>بضع خطوات بسيطة للتسجيل في منصة  إحال، والانضمام إلى فريق وإحالة واستقبال الإحالات الطبية في جميع تخصصات طب الأسنان.</value>
+  <data name="Close" xml:space="preserve">
+    <value>إغلاق</value>
   </data>
-  <data name="HowJoinEihal" xml:space="preserve">
-    <value>كيفية التسجيل في  منصة إحال؟</value>
+  <data name="DoctorDetails" xml:space="preserve">
+    <value>Doctor Details</value>
   </data>
-  <data name="HowJoinEihalDesc" xml:space="preserve">
-    <value>هي تجربة مهنية ممتعة ومصدر إضافي للدخل من خلال إحالة المرضى واستقبالهم مع أطباء أسنان آخرين. كما أنه يساعد على الكشف وتبادل الخبرات مع أطباء الأسنان المحترفين الآخرين في جميع تخصصات طب الأسنان.</value>
+  <data name="Doctors" xml:space="preserve">
+    <value>Doctors</value>
   </data>
-  <data name="JoinNow" xml:space="preserve">
-    <value>انضم الان</value>
+  <data name="Home" xml:space="preserve">
+    <value>Home</value>
   </data>
-  <data name="JustFewInfo" xml:space="preserve">
-    <value>التسجيل  يحتاج القليل من المعلومات حول بياناتك الشخصية وأرقام الاتصال والمؤهلات الأكاديمية. ستحتاج أيضًا إلى إرفاق التصنيف المهني وبطاقة التسجيل الخاصة بلجنة التخصصات الصحية.</value>
+  <data name="Location" xml:space="preserve">
+    <value>Location</value>
   </data>
-  <data name="MultipleOptionsBenefit" xml:space="preserve">
-    <value>يوفر للمرضى خيارات متعددة ومناسبة من أطباء الأسنان المؤهلين والمعتمدين في جميع التخصصات وبأسعار علاجية متنوعة تناسب كل مريض.</value>
-  </data>
-  <data name="OurVision" xml:space="preserve">
-    <value> رؤيتنا</value>
-  </data>
-  <data name="OurVisionDesc" xml:space="preserve">
-    <value>الارتقاء بمستوى خدمات طب الأسنان ، من خلال توفير وتسهيل الوصول إلى أفضل الأطباء في مختلف تخصصات طب الأسنان ، بما في ذلك المتخصصين والاستشاريين. أيضًا ، استفد من طبيب الأسنان المتخرج الجديد لتحسين مهنة طب الأسنان.</value>
-  </data>
-  <data name="Readmore" xml:space="preserve">
-    <value>المزيد</value>
-  </data>
-  <data name="RegisterEihalNow" xml:space="preserve">
-    <value>انضم الى إحال الان </value>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>بحث</value>
+    <value>Search</value>
   </data>
-  <data name="SearchByName" xml:space="preserve">
-    <value>او ابحث بالأسم</value>
-  </data>
-  <data name="ServiceDefaultSelection" xml:space="preserve">
-    <value>اختر الخدمة</value>
-  </data>
-  <data name="WhyEihal" xml:space="preserve">
-    <value> لماذا إحال؟</value>
-  </data>
-  <data name="WhyEihalPlatform" xml:space="preserve">
-    <value>لماذا تستخدم منصة إحال؟</value>
-  </data>
-  <data name="WhyEihalPlatformDesc" xml:space="preserve">
-    <value> هي المنصة الوحيدة التي تربط جميع أطباء الأسنان في مختلف التخصصات ، وتسهل اتصالاتهم للقيام بإحالات للحالات الطبية بينهم ، وتسهيل الوصول إلى الطبيب المختص المناسب من خلال ما يلي:</value>
+  <data name="SortBy" xml:space="preserve">
+    <value>Sort By</value>
   </data>
 </root>

@@ -6,12 +6,17 @@
 @{
     ViewData["Title"] = "Log in";
 }
+@{
+    string cultureCode = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
+    string direction = cultureCode.StartsWith("ar", StringComparison.OrdinalIgnoreCase) ? "rtl" : "ltr";
+    string inputDirection = cultureCode.StartsWith("ar", StringComparison.OrdinalIgnoreCase) ? "right" : "left";
+}
 
 <h1>@ViewData["Title"]</h1>
 
 <div class="loginLogo">
     <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
+        <div class="modal-content" >
             <div class="modal-header">
                 <h1 class="modal-title" id="loginModalLabel">
                     @Localizer["LoginTitle"]
@@ -25,7 +30,7 @@
                 <form class="form-contain" id="account" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
-                        <label style="display:block" id="phone-input-label" for="">
+                        <label style="display:block;" id="phone-input-label" for="">
                             @Localizer["Phone"]
                         </label>
 
@@ -34,16 +39,18 @@
                             <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
                         </div>
 
-                        <label style="display:none" id="email-input-label" for="">
+
+                        <label style="display:none;" id="email-input-label" for="">
                             @Localizer["Email"]
                         </label>
-                        <div id="email-text" style="display:none" class="form-data">
+
+                        <div id="email-text" style="display:none;" class="form-data">
                             <input asp-for="Input.Email" class="form-control" autocomplete="email" aria-required="true" placeholder=" @Localizer["EmailExample"]" />
                             <span asp-validation-for="Input.Email" class="text-danger"></span>
                         </div>
 
                         <div style="text-align: end; cursor:pointer">
-                            <label id="switch-to-email" onclick="showEmailInput()" style="cursor:pointer;display:block">   @Localizer["UseEmail"] </label>
+                            <label id="switch-to-email" onclick="showEmailInput()" style="cursor:pointer;display:block">@Localizer["UseEmail"] </label>
                             <label id="switch-to-phone" onclick="showPhoneInput()" style="cursor:pointer;display:none">@Localizer["UsePhone"] </label>
                         </div>
 

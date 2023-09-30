@@ -123,6 +123,9 @@
   <data name="ContactUs" xml:space="preserve">
     <value>Contact Us</value>
   </data>
+  <data name="CurrentLanguage" xml:space="preserve">
+    <value>English</value>
+  </data>
   <data name="Doctors" xml:space="preserve">
     <value>Doctors</value>
   </data>

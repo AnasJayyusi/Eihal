@@ -105,7 +105,10 @@
                                 <i style="color:#eadfdf" class="fas fa-ellipsis-v"></i>
                             </i>
                             <div class="dropdown-card" id="dropdownMenu@(referral.Id)">
-                                <div class="option">@Html.ActionLink("Report", "ExportReport", "ServiceProvider",new {referralRequestId= referral.Id},new { @style="color:black;" })</div>
+                                <div class="option">
+                                    <a id="invoice-@(referral.Id)"  href="/ServiceProvider/ExportReport?referralRequestId=@(referral.Id)" style="color:black;">Invoice</a>
+
+                                </div>
                             </div>
                         </div>
                     }

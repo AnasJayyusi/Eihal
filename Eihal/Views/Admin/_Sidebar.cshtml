@@ -108,7 +108,7 @@
 
     <!-- Heading -->
     <div class="sidebar-heading">
-        Web Sit Settings
+        Web Site Settings
     </div>
         <li class="nav-item @(currentPath.Contains("Settings".ToString().ToLower()) == true ? "active" : "")">
         <a class="nav-link  @(currentPath.Contains("Settings".ToString().ToLower()) == true ? "" : "collapsed")" href="#" data-toggle="collapse" data-target="#collapseSettings"
@@ -120,6 +120,28 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item @(currentPath.Contains("GeneralSettings".ToString().ToLower()) == true ? "active" : "")" asp-area="" asp-controller="Admin" asp-action="GeneralSettings">General Settings</a>
                 <a class="collapse-item @(currentPath.Contains("Feedbacks".ToString().ToLower()) == true ? "active" : "")" asp-area="" asp-controller="Admin" asp-action="Feedbacks">Feedbacks</a>
+            </div>
+        </div>
+    </li>
+
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+      Admin Profile
+    </div>
+    <li class="nav-item @(currentPath.Contains("Notifications".ToString().ToLower()) == true ? "active" : "")">
+        <a class="nav-link  @(currentPath.Contains("Notifications".ToString().ToLower()) == true ? "" : "collapsed")" href="#" data-toggle="collapse" data-target="#collapseAdminProfile"
+           aria-expanded="true" aria-controls="collapseAdminProfile">
+            <i class="fa-solid fa-user"></i>
+            <span>My Profile</span>
+        </a>
+        <div id="collapseAdminProfile" class="collapse @(currentPath.Contains("Settings".ToString().ToLower()) == true ? "show" : "")" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item @(currentPath.Contains("Notifications".ToString().ToLower()) == true ? "active" : "")" asp-area="" asp-controller="Admin" asp-action="Notifications">Notifications</a>
+                <a class="collapse-item @(currentPath.Contains("ChangePassword".ToString().ToLower()) == true ? "active" : "")" asp-area="" asp-controller="Admin" asp-action="ChangePassword">Change Password</a>
             </div>
         </div>
     </li>

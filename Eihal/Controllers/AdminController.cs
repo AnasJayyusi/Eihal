@@ -1342,13 +1342,19 @@ namespace Eihal.Controllers
                 ViewBag.SuccessMessage = isSuccessDelete;
             }
 
-            return View(_dbContext.UserServices.Where(a => a.Status == Enums.ServicesStatusEnum.Pending).Include(a => a.UserProfile).ToList());
+            return View(_dbContext.UserServices.Where(a => a.Status == Enums.ServicesStatusEnum.Pending)
+                                               .Include(a => a.UserProfile)
+                                               .Take(100)
+                                               .ToList());
         }
 
         [Route("GetUserServices")]
         public IActionResult UserServicesList()
         {
-            var userServices = _dbContext.UserServices.Where(a => a.Status == Enums.ServicesStatusEnum.Pending).Include(a => a.UserProfile).ToList();
+            var userServices = _dbContext.UserServices.Where(a => a.Status == Enums.ServicesStatusEnum.Pending)
+                                                      .Include(a => a.UserProfile)
+                                                      .Take(100)
+                                                      .ToList();
             return PartialView("UserServicesList", userServices);
         }
 
@@ -2656,7 +2662,7 @@ namespace Eihal.Controllers
         [Route("GetProfileReviewsOrders")]
         public IActionResult GetProfileReviewsOrders()
         {
-            return Json(_dbContext.UserProfiles.Include(i => i.PractitionerType).ToList());
+            return Json(_dbContext.UserProfiles.Include(i => i.PractitionerType).OrderByDescending(o => o.Id).Take(100).ToList());
         }
 
         [HttpGet]

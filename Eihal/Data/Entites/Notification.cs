@@ -16,6 +16,8 @@ namespace Eihal.Data.Entites
         [ForeignKey(nameof(AssignedToUser))]
         public int AssignedToUserId { get; set; }
         public UserProfile CreatedByUser { get; set; } 
-        public UserProfile AssignedToUser { get; set; } 
+        public UserProfile AssignedToUser { get; set; }
+        [NotMapped]
+        public string CreationDateFormatted { get; set; }
     }
 }

@@ -3,6 +3,12 @@
 @{
     ViewData["Title"] = "Register";
 }
+@{
+    string cultureCode = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
+    string direction = cultureCode.StartsWith("ar", StringComparison.OrdinalIgnoreCase) ? "rtl" : "ltr";
+    string textAlign = cultureCode.StartsWith("ar", StringComparison.OrdinalIgnoreCase) ? "right" : "left";
+    bool isEng = direction == "ltr" ? true : false;
+}
 
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
@@ -16,9 +22,9 @@
 
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width:60%" role="document">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header" style="direction:@direction">
                 <h1 class="modal-title" id="singUpModalLabel">
-                    Create a new account
+                    @Localizer["CreateNewAccount"]
                 </h1>
             </div>
             <div class="modal-body">
@@ -28,13 +34,20 @@
                     <div style="width: 100%; display: table;">
                         <div style="display: table-row">
                             <div class="form-group">
-                                <label for="account_type">Account Type</label>
+                                <label for="account_type">  @Localizer["AccountType"]</label>
                                 <div id="account-type-div" class="form-data select-box" style="width:75%">
                                     <select asp-for="Input.AccountTypeId" class="form-control" name="account_type" id="account_type" required>
-                                        <option value="">Select Account Type</option>
+                                        <option value="">@Localizer["DefaultOptionAccountType"]</option>
                                         @foreach (var accountType in Model.AccountTypes)
                                         {
-                                            <option value="@accountType.Id">@accountType.TitleEn</option>
+                                            @if (@isEng)
+                                            {
+                                                <option value="@accountType.Id"> @accountType.TitleEn </option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@accountType.Id"> @accountType.TitleAr </option>
+                                            }
                                         }
                                     </select>
                                 </div>
@@ -42,15 +55,24 @@
                             <div id="providerDetails">
                                 <div class="form-group" id="doctor_type_dropdown">
                                     <label for="">
-                                        Health Practitioner Type
+                                        @Localizer["PractitionerType"]
+
                                     </label>
 
                                     <div id="doctor-type-div" class="form-data select-box practitioner_type_div" style="width:75%">
                                         <select asp-for="Input.PractitionerTypeId" disabled style="cursor:not-allowed" class="form-control" name="practitioner_type" id="doctor-type-ddl">
-                                            <option value="">Select Health Practitioner Type</option>
+                                            <option value="">       @Localizer["DefaultOptionPractitionerType"] </option>
                                             @foreach (var practitionerType in Model.PractitionerTypes)
                                             {
-                                                <option value="@practitionerType.Id">@practitionerType.TitleEn</option>
+                                                @if (@isEng)
+                                                {
+                                                    <option value="@practitionerType.Id">@practitionerType.TitleEn</option>                                                    
+                                                }
+                                                else 
+                                                {
+                                                    <option value="@practitionerType.Id">@practitionerType.TitleAr</option>
+                                                }
+                                                
                                             }
                                         </select>
                                     </div>
@@ -58,15 +80,24 @@
 
                                 <div class="form-group" id="category_id_dropdown">
                                     <label for="">
-                                        Professional Rank
+                                        @Localizer["ProfessionalRank"]
                                     </label>
 
                                     <div id="category-id-div" class="form-data select-box professionalRank_div" style="width:75%">
                                         <select asp-for="Input.ProfessionalRankId" disabled style="cursor:not-allowed" class="form-control" name="professional_Rank" id="category-rank-ddl">
-                                            <option value="">Select Professional Rank Type</option>
+                                            <option value="">@Localizer["DefaultOptionProfessionalRank"]</option>
                                             @foreach (var professionalRank in Model.ProfessionalRanks)
                                             {
-                                                <option value="@professionalRank.Id">@professionalRank.TitleEn</option>
+                                                @if (@isEng)
+                                                {
+                                                    <option value="@professionalRank.Id">@professionalRank.TitleEn</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@professionalRank.Id">@professionalRank.TitleAr</option>
+                                                }
+
+
                                             }
                                         </select>
                                     </div>
@@ -75,66 +106,75 @@
 
 
                             <div style="display: table-cell;">
-                                <div class="form-group">
+                                <div class="form-group" style="text-align:@textAlign">
                                     <label for="">
-                                        Full Name
+                                        @Localizer["FullName"]
                                     </label>
 
                                     <div id="fullname-div" class="form-data">
-                                        <input asp-for="Input.FullName" class="form-control" autocomplete="current-password" aria-required="true" placeholder="Enter Full Name" name="FullName" required />
+                                        <input asp-for="Input.FullName" class="form-control"
+                                               autocomplete="current-password" aria-required="true"
+                                               placeholder=" @Localizer["EnterFullName"]" name="FullName" required />
                                         <span asp-validation-for="Input.FullName" class="text-danger"></span>
 
                                     </div>
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group" style="text-align:@textAlign">
                                     <label for="">
-                                        Phone Number
+                                        @Localizer["PhoneNumber"]
                                     </label>
 
                                     <div id="phone-div" class="form-data">
-                                        <input asp-for="Input.PhoneNumber" name="PhoneNumber" onkeyup="checkPhoneNumber()" placeholder="Example: 05123456" class="form-control" maxlength="10" onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))" aria-required="true" placeholder="Phone Number" required />
+                                        <input asp-for="Input.PhoneNumber" name="PhoneNumber" onkeyup="checkPhoneNumber()"
+                                               placeholder=" @Localizer["PhoneNumber"]" class="form-control" maxlength="10" onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))" aria-required="true" placeholder="Phone Number" required />
                                         <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-                                        <p id="phoneError" style="display:none; color:#FF0000;font-size:12px;text-align:left;"> Phone Number Is Already Exists.</p>
+                                        <p id="phoneError" style="display:none; color:#FF0000;font-size:12px;text-align:left;">
+                                            @Localizer["PhoneAlreadyExists"]
+                                        </p>
                                     </div>
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group" style="text-align:@textAlign">
                                     <label for="">
-                                        Email Address
+                                        @Localizer["EmailAddress"]
                                     </label>
 
                                     <div id="email-div" class="form-data">
-                                        <input asp-for="Input.Email" onkeyup=checkEmail() class="form-control" autocomplete="current-password" aria-required="true" placeholder="Enter Email" name="Email" required type="email" />
+                                        <input asp-for="Input.Email" onkeyup=checkEmail() class="form-control"
+                                               autocomplete="current-password" aria-required="true" placeholder=" @Localizer["EnterEmail"]" name="Email" required type="email" />
                                         <span asp-validation-for="Input.Email" class="text-danger"></span>
                                     </div>
-                                    <p style="display:none; color:#FF0000;font-size:12px;text-align:left"> Email Is Already Exists.</p>
-                                    <span style="display:none" class="success-email">Valid Email!</span>
-                                    <span style="display:none" class="error-email">InValid Email!</span>
+                                    <p style="display:none; color:#FF0000;font-size:12px;text-align:left">  @Localizer["EmailAlreadyUsed"]</p>
+                                    <span style="display:none" class="success-email"> @Localizer["ValidEmail"]</span>
+                                    <span style="display:none" class="error-email"> @Localizer["InValidEmail"]</span>
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group" style="text-align:@textAlign">
                                     <label for="">
-                                        Password
+                                        @Localizer["Password"]
                                     </label>
 
                                     <div id="password-div" class="form-data">
-                                        <input asp-for="Input.Password" class="form-control" autocomplete="current-password" onkeyup="isPasswordAccept()" aria-required="true" placeholder="Password" name="Password" required />
+                                        <input asp-for="Input.Password" class="form-control" autocomplete="current-password"
+                                               onkeyup="isPasswordAccept()" aria-required="true" placeholder=" @Localizer["Password"]" name="Password" required />
                                         <span asp-validation-for="Input.Password" class="text-danger"></span>
                                     </div>
-                                    <p id="password-notAccept" style="display:none; color:#FF0000;font-size:12px;text-align:left">At least 6 characters.</p>
+                                    <p id="password-notAccept" style="display:none; color:#FF0000;font-size:12px;text-align:left">
+                                        @Localizer["AtLeast6Char"]
+                                    </p>
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group" style="text-align:@textAlign">
                                     <label for="">
-                                        Confirm Password
+                                        @Localizer["ConfirmPassword"]
                                     </label>
 
                                     <div id="confirmpassword-div" class="form-data">
-                                        <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="current-password" onkeyup="comparePassword()" aria-required="true" placeholder="Confirm Password" name="ConfirmPassword" required />
+                                        <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="current-password" onkeyup="comparePassword()" aria-required="true" placeholder="@Localizer["ConfirmPassword"]" name="ConfirmPassword" required />
                                         <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                                     </div>
-                                    <p id="password-notmatch" style="display:none; color:#FF0000;font-size:12px;text-align:left"> Password not match.</p>
+                                    <p id="password-notmatch" style="display:none; color:#FF0000;font-size:12px;text-align:left"> @Localizer["PasswordNotMatch"]</p>
                                 </div>
 
 
@@ -143,7 +183,7 @@
                                     <div class="wrapper">
                                         <input id="term-div" type="checkbox" name="terms" class="radio-check">
                                         <label class="radio-title">
-                                            <a href="#openModal">Terms and conditions</a>
+                                            <a href="#openModal">@Localizer["TermsConditions"]</a>
                                         </label>
                                     </div>
                                 </div>
@@ -151,10 +191,10 @@
                         </div>
                     </div>
 
-                    <label id="fields-error" class="error" for="terms" style="display: none;color:red;">Please Fill ALL Fields.</label>
+                    <label id="fields-error" class="error" for="terms" style="display: none;color:red;">>@Localizer["FillAllFields"]</label>
 
                     <button id="registerSubmit" type="submit" onclick="isFormValid()" class="custom-btn mb-3">
-                        <span>Sign Up</span>
+                        <span>@Localizer["SignUp"]</span>
                     </button>
                 </form>
             </div>
@@ -318,7 +358,7 @@
     });
 
     function checkPhoneNumber(phoneNumber) {
-        
+
         if ($("#Input_PhoneNumber").val().length == 0) {
             $('#phone-div').css("border", "solid 1px red");
             showErrorlabel = true;

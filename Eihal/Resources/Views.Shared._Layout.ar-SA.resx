@@ -123,6 +123,9 @@
   <data name="ContactUs" xml:space="preserve">
     <value>تواصل معنا</value>
   </data>
+  <data name="CurrentLanguage" xml:space="preserve">
+    <value>العربية</value>
+  </data>
   <data name="Doctors" xml:space="preserve">
     <value>  الإطباء</value>
   </data>

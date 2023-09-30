@@ -41,10 +41,19 @@
 
 }
 
-
-<a style="text-align:center" class="nav-link text-dark" href="/ServiceProvider/Notifications">
-    <i id="notifications-icon" class="fa fa-angle-double-down"></i> <span id="notifications-text">Show More</span>
+@if (this.User.IsInRole("Administrator"))
+{
+    <a style="text-align:center" class="nav-link text-dark" href="/Admin/Notifications">
+        <i id="notifications-icon" class="fa fa-angle-double-down"></i> <span id="notifications-text">Show More</span>
     </a>
+}
+
+else
+{
+    <a style="text-align:center" class="nav-link text-dark" href="/ServiceProvider/Notifications">
+        <i id="notifications-icon" class="fa fa-angle-double-down"></i> <span id="notifications-text">Show More</span>
+    </a>
+}
 
 
 

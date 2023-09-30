@@ -3,28 +3,224 @@
 @{
     string cultureCode = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
     string direction = cultureCode.StartsWith("ar", StringComparison.OrdinalIgnoreCase) ? "rtl" : "ltr";
-    string textAlign = direction == "rtl" ? "right" :"left";
+    string textAlign = direction == "rtl" ? "right" : "left";
 }
 
 <div style="text-align:@textAlign">
-<header lang="@cultureCode" dir="@direction">
-    <div class="container" style="text-align:@textAlign">
-        <div class="owl-carousel owl-theme owl-header">
-            <div class="item ">
-                <div class="contain">
-                    <h1>
-                        @Localizer["OurVision"]
-                    </h1>
+    <header lang="@cultureCode" @* dir="@direction" *@>
+        <div class="container" style="text-align:@textAlign">
+            <div class="owl-carousel owl-theme owl-header">
+                <div class="item ">
+                    <div class="contain">
+                        <h1>
+                            @Localizer["OurVision"]
+                        </h1>
 
 
-                    <p>
-                        @Localizer["OurVisionDesc"]
-                    </p>
+                        <p>
+                            @Localizer["OurVisionDesc"]
+                        </p>
 
-                    <div class="flex-data">
-                        <a style="width: 200px !important;" class="custom-btn" asp-area="" asp-controller="Home" asp-action="About">
+                        <div class="flex-data">
+                            <a style="width: 200px !important;" class="custom-btn" asp-area="" asp-controller="Home" asp-action="About">
+                                <span>
+                                    @Localizer["Readmore"]
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form class="form-contain" id="search-doctors" action="Home/Doctors" method="GET">
+                @*<input type="hidden" name="_token" value="wvWsm0XjwGINPWNPIYQ2Jqt1HSbQspywkcnKWPtL">*@
+                <div class="row">
+                    @*<input type="hidden" name="serviceId" value="1">*@
+                    <div class="col-lg-2 col-12 padding-screen">
+                        <div class="form-group round-left">
+                            <div class="form-data select-box">
+                                <select name="serviceId" id="services-ddl" class="form-control">
+                                    <option value="">
+                                        Choose service
+                                    </option>
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-2 col-12 padding-screen">
+                        <div class="form-group">
+                            <div class="form-data select-box">
+                                <select name="cityId" id="cities-ddl" class="form-control" onchange="GetDistricts()">
+                                    <option value="">
+                                        Choose city
+                                    </option>
+
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-2 col-12 padding-screen">
+                        <div class="form-group">
+                            <div class="form-data select-box">
+                                <select name="disctrictId" id="disctricts-ddl" class="form-control">
+                                    <option value="">
+                                        @Localizer["DistrictDefaultSelection"]
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-12 padding-screen">
+                        <div class="form-group round-right">
+                            <div class="form-data">
+                                <input type="text" name="name" id="filterName" class="form-control" placeholder="@Localizer["SearchByName"]" />
+
+                                <a href="#" class="btn-contain">
+                                    @*  <img src="~/images/user.svg
+                                    loading="lazy"
+                                    alt="">*@
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-2 col-12">
+                        <button type="submit" class="custom-btn" style="border: none;">
+                            <img src="~/images/search.svg" alt="" />
+
                             <span>
-                                @Localizer["Readmore"]
+                                @Localizer["Search"]
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </header>
+
+
+    <section class="choose general-section" style="direction:@direction">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-7 col-12 mb-4 order-mobile-0">
+                    <div class="content">
+                        <h1>
+                            @Localizer["WhyEihal"]
+                            <span>
+                                @Localizer["WhyEihalPlatform"]
+                            </span>
+                        </h1>
+
+                        <p class="desc">
+                            @Localizer["WhyEihalPlatformDesc"]
+                        </p>
+
+                        <ul class="list">
+                            <li>
+                                @Localizer["EasyAccessBenefit"]
+                                <div>
+                                    <!-- <h2>
+                                      Modern Equipment
+                                    </h2> -->
+
+                                    <p>
+
+                                    </p>
+                                </div>
+                            </li>
+
+                            <li>
+                                @Localizer["MultipleOptionsBenefit"]
+                                <div>
+                                    <!-- <h2>
+                                      High-Quality Materials
+                                    </h2> -->
+
+                                    <p>
+
+                                    </p>
+                                </div>
+                            </li>
+
+                        </ul>
+                        <a class="custom-btn" asp-area="Identity" asp-page="/Account/Register">
+                            <span>
+                                @Localizer["RegisterEihalNow"]
+                            </span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-lg-5 col-12 mb-3 order-mobile-1">
+                    <div class="image-content">
+                        <img src="~/images/about_elhlal.webp" alt="" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="circles">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </section>
+
+    <section class="join-us">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-12 order-mobile-1">
+                    <div class="image-content">
+                        <img src="~/images/about.png" alt="">
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-12 order-mobile-0">
+                    <div class="contain">
+                        <div class="graph-heading">
+                            <div class="text-data">
+                                <h1>
+                                    @Localizer["HowJoinEihal"]
+                                </h1>
+
+                                <p class="grahp-text">
+                                    ElHAL
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- <h2>
+                          Get Started
+                        </h2> -->
+
+                        <p class="desc">
+                            @Localizer["HowJoinEihalDesc"]
+                        </p>
+
+                        <!-- <h2>
+                          Get Contracted & Credentialed
+                        </h2> -->
+
+                        <p class="desc">
+                            @Localizer["FewStepsToJoin"]
+                        </p>
+                        <!--
+                        <h2>
+                          Get Welcomed
+                        </h2> -->
+
+                        <p class="desc">
+                            @Localizer["JustFewInfo"]
+                        </p>
+                        <a class="custom-btn" asp-area="Identity" asp-page="/Account/Register">
+                            <span>
+                                @Localizer["JoinNow"]
                             </span>
                         </a>
                     </div>
@@ -32,212 +228,16 @@
             </div>
         </div>
 
-        <form class="form-contain" id="search-doctors" action="Home/Doctors" method="GET">
-            @*<input type="hidden" name="_token" value="wvWsm0XjwGINPWNPIYQ2Jqt1HSbQspywkcnKWPtL">*@
-            <div class="row">
-                @*<input type="hidden" name="serviceId" value="1">*@
-                <div class="col-lg-2 col-12 padding-screen">
-                    <div class="form-group round-left">
-                        <div class="form-data select-box">
-                            <select name="serviceId"  id="services-ddl"  class="form-control">
-                                <option value="">
-                                    Choose service
-                                </option>
-
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-2 col-12 padding-screen">
-                    <div class="form-group">
-                        <div class="form-data select-box">
-                            <select name="cityId" id="cities-ddl" class="form-control" onchange="GetDistricts()">
-                                <option value="">
-                                    Choose city
-                                </option>
-
-                              
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-2 col-12 padding-screen">
-                    <div class="form-group">
-                        <div class="form-data select-box">
-                            <select name="disctrictId" id="disctricts-ddl" class="form-control">
-                                <option value="">
-                                    Choose District
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-12 padding-screen">
-                    <div class="form-group round-right">
-                        <div class="form-data">
-                            <input type="text" name="name" id="filterName" class="form-control" placeholder="Or search by name" />
-
-                            <a href="#" class="btn-contain">
-                                @*  <img src="~/images/user.svg
-                                loading="lazy"
-                                alt="">*@
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-2 col-12">
-                    <button type="submit" class="custom-btn" style="border: none;">
-                        <img src="~/images/search.svg" alt="" />
-
-                        <span>
-                            @Localizer["Search"]
-                        </span>
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
-</header>
-
-
-<section class="choose general-section">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-7 col-12 mb-4 order-mobile-0">
-                <div class="content">
-                    <h1>
-                        @Localizer["WhyEihal"]
-                        <span>
-                            @Localizer["WhyEihalPlatform"]
-                        </span>
-                    </h1>
-
-                    <p class="desc">
-                        @Localizer["WhyEihalPlatformDesc"]
-                    </p>
-
-                    <ul class="list">
-                        <li>
-                            @Localizer["EasyAccessBenefit"]
-                            <div>
-                                <!-- <h2>
-                                  Modern Equipment
-                                </h2> -->
-
-                                <p>
-
-                                </p>
-                            </div>
-                        </li>
-
-                        <li>
-                            @Localizer["MultipleOptionsBenefit"]
-                            <div>
-                                <!-- <h2>
-                                  High-Quality Materials
-                                </h2> -->
-
-                                <p>
-
-                                </p>
-                            </div>
-                        </li>
-
-                    </ul>
-                    <a class="custom-btn" asp-area="Identity" asp-page="/Account/Register">
-                        <span>
-                            @Localizer["RegisterEihalNow"]
-                        </span>
-                    </a>
-                </div>
-            </div>
-
-            <div class="col-lg-5 col-12 mb-3 order-mobile-1">
-                <div class="image-content">
-                    <img src="~/images/about_elhlal.webp" alt="" />
-                </div>
-            </div>
+        <div class="circles">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
-    </div>
-
-    <div class="circles">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-    </div>
-</section>
-
-<section class="join-us">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6 col-12 order-mobile-1">
-                <div class="image-content">
-                    <img src="~/images/about.png" alt="">
-                </div>
-            </div>
-
-            <div class="col-lg-6 col-12 order-mobile-0">
-                <div class="contain">
-                    <div class="graph-heading">
-                        <div class="text-data">
-                            <h1>
-                                @Localizer["HowJoinEihal"]
-                            </h1>
-
-                            <p class="grahp-text">
-                                ElHAL
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- <h2>
-                      Get Started
-                    </h2> -->
-
-                    <p class="desc">
-                        @Localizer["HowJoinEihalDesc"]
-                    </p>
-
-                    <!-- <h2>
-                      Get Contracted & Credentialed
-                    </h2> -->
-
-                    <p class="desc">
-                        @Localizer["FewStepsToJoin"]
-                    </p>
-                    <!--
-                    <h2>
-                      Get Welcomed
-                    </h2> -->
-
-                    <p class="desc">
-                        @Localizer["JustFewInfo"]
-                    </p>
-                    <a class="custom-btn" asp-area="Identity" asp-page="/Account/Register">
-                        <span>
-                            @Localizer["JoinNow"]
-                        </span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="circles">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-    </div>
 
 
 
-</section>
+    </section>
 </div>
 
 
@@ -245,11 +245,11 @@
     <script type="text/javascript">
 
 
-                function GetDistricts(){
+        function GetDistricts() {
             var cityId = $('#cities-ddl').val();
 
-                  $.ajax({
-                url: '@Url.Action("GetDistrictsDDL", "Common")'+"?cityId="+cityId,
+            $.ajax({
+                url: '@Url.Action("GetDistrictsDDL", "Common")' + "?cityId=" + cityId,
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
@@ -257,49 +257,36 @@
                     $('#disctricts-ddl').empty();
                     // Populate the dropdown list
                     var dropdown = $('#disctricts-ddl');
-                    dropdown.append($('<option></option>').val(0).text('Choose District'));
+                    var defaultSelect = "@Localizer["DistrictDefaultSelection"]"
+                    var isEng = isEnglishCulture();
+                    dropdown.append($('<option></option>').val(0).text(defaultSelect));
                     $.each(data, function (index, item) {
-                        dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                        dropdown.append($('<option></option>').val(item.id).text(isEng ? item.titleEn : item.titleAr));
                     });
                 }
             });
         }
 
+        $.ajax({
+            url: '@Url.Action("GetCitiesDDL", "Common")',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                // Clear existing options
+                $('#cities-ddl').empty();
+                // Populate the dropdown list
+                var dropdown = $('#cities-ddl');
+                var defaultSelect = "@Localizer["CityDefaultSelection"]"
+                dropdown.append($('<option></option>').val(0).text(defaultSelect));
+                var isEng = isEnglishCulture();
+                $.each(data, function (index, item) {
+                    dropdown.append($('<option></option>').val(item.id).text(isEng ? item.titleEn : item.titleAr));
+                });
+            }
+        });
 
-         $.ajax({
-                url: '@Url.Action("GetCitiesDDL", "Common")',
-                type: 'GET',
-                dataType: 'json',
-                success: function (data) {
-                    // Clear existing options
-                    $('#cities-ddl').empty();
-                    // Populate the dropdown list
-                    var dropdown = $('#cities-ddl');
-                    dropdown.append($('<option></option>').val(0).text('Choose Cities'));
-
-                    $.each(data, function (index, item) {
-                        dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
-                    });
-                }
-            });
-            //        $.ajax({
-            //    url: '@Url.Action("GetDistrictsDDL", "Common")',
-            //    type: 'GET',
-            //    dataType: 'json',
-            //    success: function (data) {
-            //        // Clear existing options
-            //        $('#disctricts-ddl').empty();
-            //        // Populate the dropdown list
-            //        var dropdown = $('#disctricts-ddl');
-            //        dropdown.append($('<option></option>').val(0).text('Choose District'));
-
-            //        $.each(data, function (index, item) {
-            //            dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
-            //        });
-            //    }
-            //});
         $(document).ready(function () {
-                  $.ajax({
+            $.ajax({
                 url: '@Url.Action("GetServicesDDL", "Common")',
                 type: 'GET',
                 dataType: 'json',
@@ -308,15 +295,15 @@
                     $('#services-ddl').empty();
                     // Populate the dropdown list
                     var dropdown = $('#services-ddl');
-                    dropdown.append($('<option></option>').val(0).text('Choose Services'));
+                    var defaultSelect = "@Localizer["ServiceDefaultSelection"]"
+                    dropdown.append($('<option></option>').val(0).text(defaultSelect));
 
+                    var isEng = isEnglishCulture();
                     $.each(data, function (index, item) {
-                        dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                        dropdown.append($('<option></option>').val(item.id).text(isEng ? item.titleEn : item.titleAr));
                     });
                 }
             });
-
-
 
 
         });
@@ -326,6 +313,7 @@
             console.log(selectedCulture);
             // ... perform additional logic or AJAX request
         });
+
     </script>
 }
 

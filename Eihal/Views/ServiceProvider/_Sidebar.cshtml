@@ -87,7 +87,7 @@
 
             <li id="myServices-li" class="nav-item">
                 <a class="nav-link text-dark" asp-area="" asp-controller="ServiceProvider" asp-action="AddServices">
-                    <i id="myServices-icon"  class="fas fa-medkit"></i> <span id="myServices-text">@Localizer["Privileges"]</span>
+                    <i id="myServices-icon" class="fas fa-medkit"></i> <span id="myServices-text">@Localizer["Services"]</span>
                 </a>
             </li>
             
@@ -100,6 +100,12 @@
             <li id="notifications-li" class="nav-item">
                 <a class="nav-link text-dark" asp-area="" asp-controller="ServiceProvider" asp-action="Notifications">
                     <i id="notifications-icon" class="fas fa-bell"></i> <span id="notifications-text">@Localizer["Notifications"]</span>
+                </a>
+            </li>
+
+            <li id="changePassword-li" class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="ServiceProvider" asp-action="changePassword">
+                    <i id="changePassword-icon" class="fa fa-key"></i> <span id="notifications-text">@Localizer["ChangePassword"]</span>
                 </a>
             </li>
         </ul>

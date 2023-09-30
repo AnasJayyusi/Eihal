@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Data;
 using Eihal.Dto;
 using static Eihal.Data.SharedEnum;
+using System.Globalization;
 
 namespace Eihal.Controllers
 {
@@ -46,8 +47,20 @@ namespace Eihal.Controllers
         {
             var currentUserId = GetUserProfileId();
             var model = _dbContext.Notifications.Where(a => a.AssignedToUserId == currentUserId)
-                                                 .OrderByDescending(a => a.CreationDate)
-                                                 .ToList();
+                                                .OrderByDescending(a => a.CreationDate)
+                                                .Take(100)
+                                                .ToList();
+
+            // Set the culture for date formatting
+            var georgianCulture = new CultureInfo("en-US");
+            foreach (var notification in model)
+            {
+                // Assuming CreationDate is a DateTime property in your model
+                notification.CreationDate = notification.CreationDate.ToLocalTime(); // Convert to local time if necessary
+                notification.CreationDateFormatted = notification.CreationDate.ToString("   ", georgianCulture);
+            }
+
+
             return View("Notifications", model);
         }
 
