@@ -141,4 +141,7 @@
   <data name="MyProfile" xml:space="preserve">
     <value>الملف الشخصي</value>
   </data>
+  <data name="PleaseWait" xml:space="preserve">
+    <value>الرجاء الإنتظار ..</value>
+  </data>
 </root>
