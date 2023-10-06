@@ -12,6 +12,6 @@ namespace Eihal.Models
         public string ClinicalSpecialityNameEn { get; set; }
         public string Logo { get; set; }
         public ServicesStatusEnum Status { get; set; }
-
+        public List<string> ClinicalSpecialties { get; set; }
     }
 }

@@ -293,7 +293,7 @@
         var privilegesContainer = $('#privilegesContainer');
 
         $.ajax({
-            url: '/ServiceProvider/GetAvailablePrivileges', // Replace with the actual URL and action method to fetch the partial view
+            url: '/ServiceProvider/GetAvailablePrivileges', 
             type: 'GET',
             success: function (response) {
                 privilegesContainer.html(response);
@@ -310,7 +310,7 @@
         var doctorsContainer = $('#doctorsContainer');
         var servicesIds = $("#selectedServicesIds").val()
         $.ajax({
-            url: '/ServiceProvider/GetAvailableDoctors?serviceIds=' + servicesIds, // Replace with the actual URL and action method to fetch the partial view
+            url: '/ServiceProvider/GetAvailableDoctors?serviceIds=' + servicesIds, 
             type: 'GET',
             success: function (response) {
                 doctorsContainer.html(response);
@@ -433,7 +433,7 @@
             var name = $('#filterInput').val();
 
             $.ajax({
-                url: '/Home/FillDoctorsList?name=' + name + '&serviceId=' + serviceId + '&cityId=' + cityId + '&disctrictId=' + disctrictId + '&sortBy=' + sortBy + '&insuranceType=' + insuranceType, // Replace with the actual URL and action method to fetch the partial view
+                url: '/Home/FillDoctorsList?name=' + name + '&serviceId=' + serviceId + '&cityId=' + cityId + '&disctrictId=' + disctrictId + '&sortBy=' + sortBy + '&insuranceType=' + insuranceType, 
                 type: 'GET',
                 success: function (response) {
                     doctorsContainer.html(response);

@@ -23,19 +23,16 @@ namespace Eihal.Controllers
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
 
 
         public ServiceProviderController(
             IWebHostEnvironment webHostEnvironment,
             ApplicationDbContext dbContext,
             INotificationService notificationService,
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager) : base(dbContext, notificationService)
+            UserManager<IdentityUser> userManager) : base(dbContext, notificationService)
         {
             _webHostEnvironment = webHostEnvironment;
             _userManager = userManager;
-            _signInManager = signInManager;
         }
 
         [Route("Profile")]
@@ -849,6 +846,7 @@ namespace Eihal.Controllers
 
         public ActionResult GetAvailablePrivileges()
         {
+
             // Assuming you have a list of items to pass to the view
             var currentUserProfileId = GetUserProfileId();
             var model = _dbContext.Services.Include(i => i.ClinicalSpeciality)
@@ -869,6 +867,10 @@ namespace Eihal.Controllers
                 .Where(us => us.Status == ServicesStatusEnum.Approved && us.UserProfileId != currentUserProfileId) // Include columns you want from both tables
                 .Distinct()
                 .ToList();
+
+
+            if (model != null)
+                model.First().ClinicalSpecialties = model.Select(s => s.ClinicalSpecialityNameEn).Distinct().ToList();
 
 
             // Render the partial view and return it as HTML content

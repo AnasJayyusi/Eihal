@@ -8,12 +8,15 @@
         font-size: 12px;
         border-radius: 10%;
     }
+
     .service-card {
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         position: relative;
         cursor: pointer;
         transition: transform 0.3s ease;
-        background: #f8f9fa
+        background: #f8f9fa;
+        height: 100%;
+        border-radius: 15%
     }
 
         .service-card:hover {
@@ -197,9 +200,41 @@
             margin: 0;
         }
 
+    button.active {
+        background-color: #00768c;
+        color: #fff;
+        /* Add any other styles you want for active buttons */
+    }
+
+    .activeLink {
+        color: #00768c;
+        font-weight: bold;
+        pointer-events: none;
+        cursor: not-allowed;
+        background-color: whitesmoke
+    }
+
 </style>
 
-
+<div class="row col-md-12">
+    <div class="scroll-container" style=" margin-right:2%; margin-left:2%">
+        <div class="row privillages" style="padding-top: 40px; padding-left: 35px; white-space: nowrap;display:contents">
+            <div>
+                <button id="All" onclick="filterOnClinics('All')" style=" padding-left: 30px; padding-right: 30px; border-color: transparent;" data-value="All" class="active">All</button>
+            </div>
+            @if (Model.FirstOrDefault() != null)
+            {
+                @foreach (var clinic in Model.First().ClinicalSpecialties)
+                {
+                    <div>
+                        <button id="@clinic" onclick="filterOnClinics('@clinic')" style=" border-color: transparent;" data-value="@clinic">@clinic</button>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+<br />
 @foreach (var item in Model)
 {
     <input id="selectedServicesIds" hidden>
@@ -211,13 +246,12 @@
                     <img style="border-radius:30%" id="user-image-layout" src="@(item.Logo)" width="30" height="30" alt="user-image-profile" onerror="this.src='/users/images/Default-User-Profile.jpg'">
                 </div>
                 <div class="status status-clinical" style="display: inline-block;margin-top:5%;margin-bottom:5%">
-                    <span>@item.ClinicalSpecialityNameEn</span>
+                    <span id="ClinicalSpecialityName">@item.ClinicalSpecialityNameEn</span>
                 </div>
                 <h5 class="service-card-title">@item.TitleEn</h5>
                 <div class="row col-12">
-                
                 </div>
-            
+
             </div>
 
         </div>
@@ -236,7 +270,7 @@
 <script>
 
     function addToSelectionList(id, titleEn, titleAr) {
-        
+
         // Get the dynamic values from somewhere (e.g., user input or API response)
         var dynamicId = id;
         var dynamicTitle = titleEn;
@@ -267,7 +301,7 @@
 
 
     function deleteSelection(id) {
-        
+
         var selectedSvcs = $("#selectedServicesIds").val();
         var arrayOfSelected = selectedSvcs.split(",");
         const index = arrayOfSelected.indexOf(id.toString());
@@ -275,7 +309,7 @@
             var jquerySelector = "#" + id
             arrayOfSelected.splice(index, 1); // 2nd parameter means remove one item only
             $(jquerySelector).remove();
-            }
+        }
 
         var newSelections = arrayOfSelected.toString();
         $("#selectedServicesIds").val(newSelections);
@@ -301,16 +335,16 @@
 
         // Construct the HTML snippet with the dynamic values
         var htmlToAppend = `
-        <div onclick="deleteSelection(${dynamicId})" id="${dynamicId}" class="col-md-3 padding-top-25 service-card-container">
-            <div class="service-card">
-                <div style="color:red; text-align:center">
-                <i class="fa-solid fa-x"></i>
-            </div>
-                <div class="service-card-body">
-                    <h5 class="service-card-title-added">${dynamicTitle}</h5>
-                </div>
-            </div>
-        </div>`;
+                                <div onclick="deleteSelection(${dynamicId})" id="${dynamicId}" class="col-md-3 padding-top-25 service-card-container">
+                                    <div class="service-card">
+                                        <div style="color:red; text-align:center">
+                                        <i class="fa-solid fa-x"></i>
+                                    </div>
+                                        <div class="service-card-body">
+                                            <h5 class="service-card-title-added">${dynamicTitle}</h5>
+                                        </div>
+                                    </div>
+                                </div>`;
 
         // Append the HTML snippet to the element with ID "selection-privileges"
         $("#selection-privileges").append(htmlToAppend);
@@ -324,4 +358,62 @@
         else
             $("#NoResult-div").hide()
     }
+</script>
+
+<style>
+    .scroll-container {
+        max-height: 100%;
+        overflow-y: auto;
+        display: flex;
+    }
+
+        /* Customize the scrollbar */
+        .scroll-container::-webkit-scrollbar {
+            width: 1px;
+            height: 5px;
+        }
+
+        .scroll-container::-webkit-scrollbar-track {
+            background-color: #f1f1f1;
+            border-radius: 5px;
+        }
+
+        .scroll-container::-webkit-scrollbar-thumb {
+            border-radius: 5px;
+        }
+
+
+    .privillages > div {
+        padding: 5px; /* Adjust the padding as needed */
+    }
+</style>
+
+<script>
+
+    // Function to filter elements
+    function filterOnClinics(filterValue) {
+        debugger;
+
+        // Get all buttons with the class "active"
+        var activeButtons = document.querySelectorAll('.active');
+
+        // Loop through each active button and remove the "active" class
+        activeButtons.forEach(function (button) {
+            button.classList.remove('active');
+        });
+    
+        $("#" + filterValue).addClass("active")
+
+        if (filterValue == "All" || filterValue == "الكل") {
+            $('.service-card').parent().show(); 
+        }
+        else { 
+        $('.service-card').parent().hide(); // Hide all elements
+        // Show elements where ClinicalSpecialityName matches the filter value
+        $('.service-card').filter(function () {
+            return $(this).find('#ClinicalSpecialityName').text().toLowerCase() === filterValue.toLowerCase();
+        }).parent().show();
+        }
+    }
+
 </script>

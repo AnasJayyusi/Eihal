@@ -466,7 +466,7 @@
                 return; // If user cancels, do nothing
             }
             $.ajax({
-                url: '/ServiceProvider/DeleteUserService?Id=' + id, // Replace with the actual URL and action method to fetch the partial view
+                url: '/ServiceProvider/DeleteUserService?Id=' + id, 
                 type: 'GET',
                 success: function (response) {
                     //serviceContainer.html(response);
@@ -485,7 +485,7 @@
             var serviceContainer = $('#serviceContainer');
 
             $.ajax({
-                url: '/ServiceProvider/MyServiceCardPartial', // Replace with the actual URL and action method to fetch the partial view
+                url: '/ServiceProvider/MyServiceCardPartial', 
                 type: 'GET',
                 success: function (response) {
                     serviceContainer.html(response);
@@ -554,7 +554,7 @@
             var listOfIDsString = getActiveButtons();
             var titleText = $("#filterInput").val();
             $.ajax({
-                url: '/ServiceProvider/AllServiceCardPartial?clinicalSpecialitiesIds=' + listOfIDsString + "&kw=" + titleText, // Replace with the actual URL and action method to fetch the partial view
+                url: '/ServiceProvider/AllServiceCardPartial?clinicalSpecialitiesIds=' + listOfIDsString + "&kw=" + titleText, 
                 type: 'GET',
                 data: { clinicalSpecialitiesIds: listOfIDsString }, // Send the list of IDs as a query parameter 'ids'
 

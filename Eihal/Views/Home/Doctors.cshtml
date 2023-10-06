@@ -541,7 +541,7 @@
             var name = $('#filterInput').val();
             //GetDistricts();
             $.ajax({
-                url: '/Home/FillDoctorsList?name=' + name + '&serviceId=' + serviceId + '&cityId=' + cityId + '&disctrictId=' + disctrictId + '&sortBy=' + sortBy + '&insuranceType=' + insuranceType, // Replace with the actual URL and action method to fetch the partial view
+                url: '/Home/FillDoctorsList?name=' + name + '&serviceId=' + serviceId + '&cityId=' + cityId + '&disctrictId=' + disctrictId + '&sortBy=' + sortBy + '&insuranceType=' + insuranceType, 
                 type: 'GET',
                 success: function (response) {
                     doctorsContainer.html(response);

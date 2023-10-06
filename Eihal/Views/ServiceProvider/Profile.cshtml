@@ -174,7 +174,7 @@
                 return; // If user cancels, do nothing
             }
             $.ajax({
-                url: '/ServiceProvider/DeleteUserService?Id=' + id, // Replace with the actual URL and action method to fetch the partial view
+                url: '/ServiceProvider/DeleteUserService?Id=' + id, 
                 type: 'GET',
                 success: function (response) {
                     //serviceContainer.html(response);
@@ -192,7 +192,7 @@
             var serviceContainer = $('#serviceContainer');
 
             $.ajax({
-                url: '/ServiceProvider/MyServiceCardPartial', // Replace with the actual URL and action method to fetch the partial view
+                url: '/ServiceProvider/MyServiceCardPartial', 
                 type: 'GET',
                 success: function (response) {
                     serviceContainer.html(response);

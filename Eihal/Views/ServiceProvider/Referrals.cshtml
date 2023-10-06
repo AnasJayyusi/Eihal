@@ -608,7 +608,7 @@
             var dateId = $('#date-incoming-ddl').val();
 
             $.ajax({
-                url: '/ServiceProvider/GetUserIncomingRequests?name=' + name + '&statusId=' + statusId + '&dateId=' + dateId, // Replace with the actual URL and action method to fetch the partial view
+                url: '/ServiceProvider/GetUserIncomingRequests?name=' + name + '&statusId=' + statusId + '&dateId=' + dateId, 
                 type: 'GET',
                 success: function (response) {
                     incomingContainer.html(response);
@@ -627,7 +627,7 @@
             var dateId = $('#date-outgoing-ddl').val();
 
             $.ajax({
-                url: '/ServiceProvider/GetUserOutgoingRequests?name=' + name + '&statusId=' + statusId + '&dateId=' + dateId, // Replace with the actual URL and action method to fetch the partial view
+                url: '/ServiceProvider/GetUserOutgoingRequests?name=' + name + '&statusId=' + statusId + '&dateId=' + dateId, 
                 type: 'GET',
                 success: function (response) {
                     outgoingContainer.html(response);

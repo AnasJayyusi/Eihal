@@ -1,13 +1,16 @@
-﻿using Eihal.Data;
+﻿using Eihal.Areas.Identity.Pages.Account.Manage;
+using Eihal.Data;
 using Eihal.Data.Entites;
 using Eihal.Hubs;
 using Eihal.Models;
 using Eihal.Tools;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.Language.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+using System.Globalization;
 using static Eihal.Data.SharedEnum;
 
 
@@ -19,9 +22,16 @@ namespace Eihal.Controllers
     public class AdminController : BaseController
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public AdminController(ApplicationDbContext dbContext, IWebHostEnvironment webHostEnvironment, INotificationService notificationService) : base(dbContext, notificationService)
+        private readonly UserManager<IdentityUser> _userManager;
+        public AdminController(
+            ApplicationDbContext dbContext,
+            IWebHostEnvironment webHostEnvironment,
+            INotificationService notificationService,
+            UserManager<IdentityUser> userManager
+            ) : base(dbContext, notificationService)
         {
             _webHostEnvironment = webHostEnvironment;
+            _userManager = userManager;
         }
 
         #region Dashboard
@@ -744,7 +754,7 @@ namespace Eihal.Controllers
             bool isDuplicate = _dbContext.ClinicalSpecialities
                               .Any(w => (w.TitleEn == titleEn && w.TitleAr == titleAr)
                               && w.PractitionerTypeId == typeId);
-            if (isDuplicate)
+            if (isDuplicate && image == null)
             {
                 return BadRequest("The details for the Clinical Specialty have already been added.");
             }
@@ -1192,8 +1202,6 @@ namespace Eihal.Controllers
             if (generalSettings.Id == 0)
                 _dbContext.GeneralSettings.Add(generalSettings);
             _dbContext.SaveChanges();
-            // Update the existing GeneralSettings record (e.g., in a database)
-            //YourRepository.UpdateGeneralSettings(updatedSetting); // Replace with your actual update logic
             return RedirectToAction("GeneralSettings");
         }
         #endregion
@@ -2753,6 +2761,56 @@ namespace Eihal.Controllers
 
 
 
+        #endregion
+
+        #region CustomChangePassword
+
+        [Route("CustomChangePassword")]
+        [Route("MyProfile/ChangePassword")]
+        public ActionResult CustomChangePassword()
+        {
+            return View();
+        }
+
+
+        [HttpPost]
+        [Route("UpdatePassword")]
+        public void UpdatePassword(string oldPassword, string newPassword)
+        {
+            bool? isSuccessDelete = TempData["isSuccessDelete"] as bool?;
+            var user = _userManager.GetUserAsync(User).Result;
+            var changePasswordResult = _userManager.ChangePasswordAsync(user, oldPassword, newPassword).Result;
+            if (!changePasswordResult.Succeeded)
+            {
+                ViewBag.SuccessMessage = isSuccessDelete;
+            }
+            ViewBag.SuccessMessage = isSuccessDelete;
+        }
+        #endregion
+
+
+        #region Notifications
+        [Route("MyProfile/Notifications")]
+        public IActionResult Notifications()
+        {
+            var currentUserId = GetUserProfileId();
+            var model = _dbContext.Notifications.Where(a => a.AssignedToUserId == currentUserId)
+                                                .OrderByDescending(a => a.CreationDate)
+                                                .Take(100)
+                                                .ToList();
+
+            // Set the culture for date formatting
+            var georgianCulture = new CultureInfo("en-US");
+            foreach (var notification in model)
+            {
+                // Assuming CreationDate is a DateTime property in your model
+                notification.CreationDate = notification.CreationDate.ToLocalTime(); // Convert to local time if necessary
+                notification.CreationDateFormatted = notification.CreationDate.ToString("G", georgianCulture);
+            }
+
+
+            return View("Notifications", model);
+        }
         #endregion
     }
 }

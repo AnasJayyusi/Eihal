@@ -426,7 +426,7 @@
         var insuranceType = $('#insurance-ddl').val();
         var name = $('#doctorName-input').val();
         $.ajax({
-            url: '/ServiceProvider/GetAvailableDoctors?serviceIds=' + servicesIds + '&name=' + name + '&cityId=' + cityId + '&disctrictId=' + disctrictId + '&sortBy=' + sortBy + '&insuranceType=' + insuranceType, // Replace with the actual URL and action method to fetch the partial view
+            url: '/ServiceProvider/GetAvailableDoctors?serviceIds=' + servicesIds + '&name=' + name + '&cityId=' + cityId + '&disctrictId=' + disctrictId + '&sortBy=' + sortBy + '&insuranceType=' + insuranceType, 
             type: 'GET',
             success: function (response) {
                 doctorsContainer.html(response);
