@@ -54,7 +54,7 @@ namespace Eihal.Areas.Identity.Pages.Account
                     protocol: Request.Scheme);
 
 
-                await ResetPasswordEmail(callbackUrl);
+                //await ResetPasswordEmail(callbackUrl);
                 //await _emailSender.SendEmailAsync(
                 //    Input.Email,
                 //    "Reset Password",
