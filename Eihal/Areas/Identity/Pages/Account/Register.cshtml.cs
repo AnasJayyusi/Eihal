@@ -120,7 +120,6 @@ namespace Eihal.Areas.Identity.Pages.Account
                         PhoneNumber = Input.PhoneNumber,
                         AccountTypeId = account_type,
                         FullName = Input.FullName,
-                        EmailConfirmed = true
                     };
                 }
                 else
@@ -134,7 +133,6 @@ namespace Eihal.Areas.Identity.Pages.Account
                         PractitionerTypeId = practitioner_type,
                         ProfessionalRankId = professional_Rank,
                         FullName = Input.FullName,
-                        EmailConfirmed = true
                     };
                 }
 

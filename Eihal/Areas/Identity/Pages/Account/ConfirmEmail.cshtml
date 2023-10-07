@@ -3,6 +3,15 @@
 @{
     ViewData["Title"] = "Confirm email";
 }
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+    string cultureCode = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
+    string direction = cultureCode.StartsWith("ar", StringComparison.OrdinalIgnoreCase) ? "rtl" : "ltr";
+    string textAlign = direction == "rtl" ? "right" : "left";
+    bool isEng = direction == "ltr" ? true : false;
+}
+
 
 <h1>@ViewData["Title"]</h1>
 
@@ -21,13 +30,14 @@
 <body class="loginLogo" style="background-color: #f4f4f4; font-family: Roboto, arial, sans-serif">
     <div class="modal-dialog modal-dialog-centered"  style=" height: 140px;">
     </div>
-    <div style="max-width: 550px; background-color: white; margin: -80px auto 0 auto; padding: 20px 60px 80px 60px;">
-        <div style="  font-size: 30px; font-weight: 300; margin-top: 20px; text-align: center;"> Email Confirmed!</div>
+    <div style="max-width: 550px; background-color: white; margin: -80px auto 0 auto; padding: 20px 60px 80px 60px;direction:@direction">
+        <div style="  font-size: 30px; font-weight: 300; margin-top: 20px; text-align: center;">@Localizer["EmailConfirm"]</div>
         <br />
         
         @if (Model.StatusMessage == "Thank you for confirming your email.")
         {
-            <p>Congratulations! Your email has been confirmed and your account is ready to use.</p>
+
+            <p>@Localizer["EmailHasBeenConfirm"]</p>
         }
         else
         {
@@ -37,7 +47,7 @@
             <br />
             <br />
             <div style="font-size: 18px; text-align: center">
-                Welcome to the Eihal!
+                @Localizer["Welcome"]
             </div>
 
         </div>

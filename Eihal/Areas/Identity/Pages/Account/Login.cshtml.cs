@@ -76,7 +76,9 @@ namespace Eihal.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
         {
-            returnUrl ??= Url.Content("~/");
+            string cultureCode = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
+            bool isEng = cultureCode.StartsWith("en", StringComparison.OrdinalIgnoreCase) ? true : false;
+
             string? username = string.Empty;
 
             if (Input == null || string.IsNullOrEmpty(Input.Password) || (string.IsNullOrEmpty(Input.PhoneNumber) && string.IsNullOrEmpty(Input.Email)))
@@ -110,12 +112,11 @@ namespace Eihal.Areas.Identity.Pages.Account
                 {
                     var user = await _userManager.FindByNameAsync(username);
                     var userRole = await _userManager.GetRolesAsync(user);
-                    _logger.LogInformation("User logged in.");
                     if (userRole.Contains(UserRolesEnum.Beneficiary.ToString()) || userRole.Contains(UserRolesEnum.ServiceProvider.ToString()))
                     {
                         return RedirectToAction("Profile", "ServiceProvider");
                     }
-                    
+
                     if (userRole.Contains(UserRolesEnum.Administrator.ToString()))
                     {
                         return RedirectToAction("Dashboard", "Admin");
@@ -126,7 +127,8 @@ namespace Eihal.Areas.Identity.Pages.Account
 
                 if (result.IsNotAllowed)
                 {
-                    ModelState.AddModelError(string.Empty, "This account is not active yet");
+                    var msg = isEng ? "This account is not active yet, please check your email inbox to activate your account " : "هذا الحساب غير مفعل بعد، يرجى التحقق من صندوق البريد الإلكتروني الخاص بك لتفعيل حسابك";
+                    ModelState.AddModelError(string.Empty, msg);
                     return Page();
                 }
                 #region RequiresTwoFactor,IsLockedOut Checks
@@ -144,6 +146,7 @@ namespace Eihal.Areas.Identity.Pages.Account
 
                 else
                 {
+                    var msg = isEng ? "Invalid login attempt" : "محاولة تسجيل الدخول غير صالحة";
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                     return Page();
                 }
