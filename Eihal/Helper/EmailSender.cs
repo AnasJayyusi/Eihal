@@ -7,9 +7,9 @@ namespace Eihal.Helper
     {
         public static async Task SendEmailAsync(string recipient, string subject, string message, bool IsBodyHtml = false)
         {
-            string hostAddress = "smtp-mail.outlook.com";
-            string address = "anas.jayyusi@outlook.com";
-            string password = "Newthink_Backup2020";
+            string hostAddress = "mail.eihal.com";
+            string address = "Info@eihal.com";
+            string password = "Geno@2001";
             int Port = 587;
             MailMessage mailMessage = new MailMessage();
             mailMessage.From = new MailAddress(address);

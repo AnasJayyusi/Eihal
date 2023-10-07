@@ -167,7 +167,7 @@ namespace Eihal.Areas.Identity.Pages.Account
 
                     debug = "callbackUrl";
                     CreateUserProfileData(user.Id);
-                    //await SendEmailConfirmation(callbackUrl);
+                    await SendEmailConfirmation(callbackUrl);
                     debug = "send";
 
                     //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
