@@ -5,6 +5,8 @@
     string cultureCode = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
     string direction = cultureCode.StartsWith("ar", StringComparison.OrdinalIgnoreCase) ? "rtl" : "ltr";
     string textAlign = direction == "rtl" ? "right" : "left";
+    bool isEng = cultureCode.StartsWith("en", StringComparison.OrdinalIgnoreCase) ? true : false;
+    string closeButtonValue = isEng ? "0" : "1%";
 }
 
 <style>
@@ -648,13 +650,13 @@
 <div class="modal fade" id="UserProfileModal" tabindex="-1" role="dialog" aria-labelledby="UserProfileModal" aria-hidden="true">
     <div class="modal-dialog custom-modal-dialog" style="max-width: 600px;" role="document">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header" style="text-align:@textAlign;direction:@direction">
                 <h5 class="modal-title" id="UserProfileModal">@Localizer["DoctorDetails"]</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" style="margin-left:@closeButtonValue" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body userDetailsContainer" id="userDetailsContainer">
+            <div class="modal-body userDetailsContainer" style="text-align:@textAlign;direction:@direction" id="userDetailsContainer">
                 <!-- Add your modal content here -->
 
             </div>

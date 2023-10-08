@@ -4,9 +4,9 @@
 @inject IViewLocalizer Localizer
 @{
     string cultureCode = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
-    string direction = cultureCode.StartsWith("ar", StringComparison.OrdinalIgnoreCase) ? "ltr" : "rtl";
+    string direction = cultureCode.StartsWith("ar", StringComparison.OrdinalIgnoreCase) ? "rtl" : "ltr";
     string textAlign = direction == "rtl" ? "right" : "left";
-    bool isEng = direction == "rtl" ? true : false;
+    bool isEng = cultureCode.StartsWith("en", StringComparison.OrdinalIgnoreCase) ? true : false;
 }
 
 <div class="row" style="direction:@direction">
@@ -63,24 +63,24 @@
                     {
                         <h5 class="doctor-card-title" style="font-size:11px;color:black">-</h5>
                     }
-                    <span class="d-flex align-items-center mt-auto">
+                    <span class="d-flex align-items-center mt-auto" style="direction:initial">
                         <img width="15px" src="~/icon/location-icon-default.png" alt="" style="margin-right: 5px;">
                         @if (doc.TimeClinicLocation != null && doc.TimeClinicLocation.City != null)
                         {
 
                             @if (isEng)
                             {
-                                <strong style="font-size: 13px;width:80px">@doc.TimeClinicLocation?.City?.TitleEn</strong>
+                                <strong style="font-size: 13px;width:90px">@doc.TimeClinicLocation?.City?.TitleEn</strong>
                             }
                             else
                             {
-                                <strong style="font-size: 13px;width:80px">@doc.TimeClinicLocation?.City?.TitleAr</strong>
+                                <strong style="font-size: 13px;width:90px">@doc.TimeClinicLocation?.City?.TitleAr</strong>
                             }
                             
                         }
                         else
                         {
-                            <strong style="font-size: 13px;width:80px">-</strong>
+                            <strong style="font-size: 13px;width:90px">-</strong>
                         }
                         <strong style="font-size: 13px; ">@Localizer["ReadMore"]</strong>
 

@@ -109,7 +109,7 @@
     <tr>
         <td>
             <img id="user-image" style="border-radius:30%" src="~/users/images/@(Model.UserId).jpg"
-            onerror="this.src='/users/images/Default-User-Profile.jpg'" width="150" height="150" />
+                 onerror="this.src='/users/images/Default-User-Profile.jpg'" width="150" height="150" />
         </td>
         <td>
             <h4 id="fullname-label" style="font-weight:bold">@Model.FullName</h4>
@@ -169,7 +169,16 @@
     <div class="row mt-4">
         <div class="col-md-12">
             <h5 style="color:#00768c" class="font-weight-bold">@Localizer["Speciality"]</h5>
-            <span id="speciality-label" class="text-black"> @Model.SpecialtiesTitlesEn</span>
+            <span id="speciality-label" class="text-black">
+                @if (isEng)
+                {
+                    @Model.SpecialtiesTitlesEn
+                }
+                else
+                {
+                    @Model.SpecialtiesTitlesAr
+                }
+            </span>
         </div>
     </div>
     <div class="row mt-4">
@@ -215,8 +224,8 @@
                                     {
                                         @cer.UniversityNameAr
                                     }
-                                    </td>
-                             
+                                </td>
+
                             </tr>
                         }
 

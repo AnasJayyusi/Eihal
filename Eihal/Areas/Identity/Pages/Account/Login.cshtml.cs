@@ -147,7 +147,7 @@ namespace Eihal.Areas.Identity.Pages.Account
                 else
                 {
                     var msg = isEng ? "Invalid login attempt" : "محاولة تسجيل الدخول غير صالحة";
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, msg);
                     return Page();
                 }
             }
