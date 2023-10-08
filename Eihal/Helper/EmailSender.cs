@@ -22,7 +22,7 @@ namespace Eihal.Helper
             smtp.Host = hostAddress;
 
             smtp.EnableSsl = false;
-            smtp.Credentials = new System.Net.NetworkCredential("Info@eihal.com", "Geno@2001");
+            smtp.Credentials = new System.Net.NetworkCredential("Eihal@eihal.com", "Geno@2001");
             smtp.Port = Convert.ToInt32(port);
             await smtp.SendMailAsync(mailMessage);
 
