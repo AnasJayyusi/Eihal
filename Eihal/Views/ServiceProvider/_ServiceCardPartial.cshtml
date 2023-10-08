@@ -3,6 +3,15 @@
 @inject IViewLocalizer Localizer
 @{
     string currentPath = Context.Request.Path.ToString().ToLower();
+    string cultureCode = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
+    string direction = cultureCode.StartsWith("ar", StringComparison.OrdinalIgnoreCase) ? "rtl" : "ltr";
+    string textAlign = direction == "rtl" ? "right" : "left";
+    bool isEng = direction == "ltr" ? true : false;
+    string marginLeftValue = isEng ? "0%" : "5%";
+    string marginRightValue = isEng ? "5%" : "0%";
+    string btnDelClass = isEng ? "right-button" : "left-button";
+
+
 }
 <style>
     .close-icon {
@@ -27,7 +36,8 @@
         font-size: 14px;
         font-weight: 600;
         color: darkcyan;
-        margin-right: 5%;
+        margin-right: @marginRightValue;
+        margin-left: @marginLeftValue;
     }
 
     .service-info-value {
@@ -69,7 +79,7 @@
 
     .dots-container {
         position: absolute;
-        top: 10px;
+        top: 0px;
         right: 10px;
         width: 30px;
         height: 30px;
@@ -249,6 +259,19 @@
         color: green; /* Custom color for the currency amount, change as desired */
         font-size: xx-small
     }
+
+
+    .right-button {
+        position: absolute;
+        right: 10px;
+        top: 15px;
+    }
+
+    .left-button {
+        position: absolute;
+        left: 10px;
+        top: 15px;
+    }
 </style>
 
 @foreach (var item in Model)
@@ -258,33 +281,50 @@
         <div class="col-md-3 padding-top-25">
             <div class="service-card">
                 <div class="service-card-body">
-                    <h5 class="service-card-title"><strong>@item.TitleEn</strong></h5>
-                    <div class="service-info-row">
-                        <div class="service-info-label">Price:</div>
-                        <div class="service-info-value currency-amount">@item.Price <span>SAR</span></div>
-                    </div>
-                    <div class="service-info-row">
-                        <div class="service-info-label">Fee:</div>
-                        <div class="service-info-value currency-amount">@item.Fee <span>SAR</span> </div>
-                    </div>
-                    <div class="service-info-row">
-                        <div class="service-info-label-status">Status:</div>
-                        <div class="service-info-value">
-                            @if (item.Status == Eihal.Enums.ServicesStatusEnum.Pending)
+                    <h5 class="service-card-title">
+                        <strong>
+                            @if (isEng)
                             {
-                                <span class="status status-warning">@item.Status</span>
-                            }
-                            else if (item.Status == Eihal.Enums.ServicesStatusEnum.Approved)
-                            {
-                                <span class="status status-success">@item.Status</span>
+                                @item.TitleEn
                             }
                             else
                             {
-                                <span>@item.Status</span>
+                                @item.TitleAr
                             }
+                        </strong>
+                    </h5>
+                    <div class="service-info-row">
+                        <div class="service-info-label">@Localizer["Price"]</div>
+                        <div class="service-info-value currency-amount">@item.Price <span> @Localizer["SAR"]</span></div>
+                    </div>
+                    <div class="service-info-row">
+                        <div class="service-info-label">@Localizer["Fee"] </div>
+                        <div class="service-info-value currency-amount">@item.Fee <span>@Localizer["SAR"]</span> </div>
+                    </div>
+                    <div class="service-info-row">
+                        <div class="service-info-label-status">@Localizer["Status"] </div>
+                        <div class="service-info-value">
+                            @if (item.Status == Eihal.Enums.ServicesStatusEnum.Pending)
+                            {
+                                <span class="status status-warning"> @Localizer["Pending"]</span>
+
+                            }
+                            else if (item.Status == Eihal.Enums.ServicesStatusEnum.Approved)
+                            {
+                                <span class="status status-success" > @Localizer["Approved"]</span>
+                            }
+                            else if (item.Status == Eihal.Enums.ServicesStatusEnum.Rejected)
+                            {
+                                <span class="status status-success"> @Localizer["Rejected"]</span>
+                            }
+                            else if (item.Status == Eihal.Enums.ServicesStatusEnum.Completed)
+                            {
+                                <span class="status status-success"> @Localizer["Completed"]</span>
+                            }
+                            
                         </div>
                     </div>
-                    <div class="dots-container">
+                    <div class="service-info-row @btnDelClass">
                         <i onclick="deleteService(event,'@item.Id')">
                             <i style="color:red" class="fas fa-trash-alt"></i>
                         </i>
@@ -298,20 +338,32 @@
         <div class="col-md-3 padding-top-25" data-toggle="modal" onclick="fillRejectionReason('@item.RejectionReason')" data-target="#RejectionReasonModal">
             <div class="service-card">
                 <div class="service-card-body">
-                    <h5 class="service-card-title"><strong>@item.TitleEn</strong></h5>
+                    <h5 class="service-card-title">
+                        <strong>
+                            @if (isEng)
+                            {
+                                @item.TitleEn
+                            }
+                            else
+                            {
+                                @item.TitleAr
+                            }
+                        </strong>
+
+                    </h5>
                     <div class="service-info-row">
-                        <div class="service-info-label">Price:</div>
-                        <div class="service-info-value currency-amount span">@item.Price <span>SAR</span></div>
+                        <div class="service-info-label">@Localizer["Price"]</div>
+                        <div class="service-info-value currency-amount span">@item.Price <span>@Localizer["SAR"]</span></div>
                     </div>
                     <div class="service-info-row">
-                        <div class="service-info-label">Fee:</div>
-                        <div class="service-info-value currency-amount span">@item.Fee <span>SAR</span></div>
+                        <div class="service-info-label">@Localizer["Fee"]</div>
+                        <div class="service-info-value currency-amount span">@item.Fee <span>@Localizer["SAR"]</span></div>
                     </div>
                     <div class="service-info-row">
-                        <div class="service-info-label">Status:</div>
+                        <div class="service-info-label">@Localizer["Status"] </div>
                         <div class="service-info-value">
 
-                            <span class="status status-error">@item.Status</span>
+                            <span class="status status-error"> @Localizer["Rejected"]</span>
 
                         </div>
                     </div>
@@ -330,14 +382,14 @@
 {
     <div class="no-results">
         <img src="~/images/NoResult.png" alt="No Results Found Icon">
-        <p>No Service Added Yet.</p>
+        <p>@Localizer["NoServiceAdded"]</p>
         <br>
 
 
-    <div id="addPage-btn" style="display:none">
+        <div id="addPage-btn" style="display:none">
             <a class="custom-btn" href="/ServiceProvider/AddServices" style="width:200px;height:75px">
                 <span>
-                    Navigate to adding page
+                    @Localizer["NavigateToAdd"]
                 </span>
             </a>
             <i class="fa-solid fa-arrow-pointer fa-beat-fade"></i>
@@ -353,7 +405,7 @@
     <div class="modal-dialog custom-modal-dialog" style="max-width: 400px;" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="RejectionReasonModal">Rejection Reason</h5>
+                <h5 class="modal-title" id="RejectionReasonModal">@Localizer["RejectionReason"] </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -364,7 +416,6 @@
                     <div style="max-width: 300px;">
                         <div class="form-group">
                             <label style="font-weight: bold; color: #00768c;" id="rejectionReason"></label>
-
                         </div>
 
                     </div>
@@ -372,7 +423,7 @@
             </div>
 
             <div class="modal-footer" style="text-align:center">
-                <button type="button" class="btn btn-danger" data-dismiss="modal" id="close-add-service">Close</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="close-add-service">@Localizer["Close"]</button>
             </div>
         </div>
     </div>

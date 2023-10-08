@@ -10,7 +10,7 @@ namespace Eihal.Helper
        
             int port = 587;
             string hostAddress = "mail.eihal.com";
-            string address = "Info@eihal.com";
+            string address = "Eihal@eihal.com";
             MailMessage mailMessage = new MailMessage();
             mailMessage.From = new MailAddress(address);
             mailMessage.Subject = subject;

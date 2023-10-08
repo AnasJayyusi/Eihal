@@ -1,7 +1,16 @@
-﻿<div id="tab2" class="tab-content" style="display: none;">
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+    string cultureCode = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
+    string direction = cultureCode.StartsWith("ar", StringComparison.OrdinalIgnoreCase) ? "rtl" : "ltr";
+    string textAlign = direction == "rtl" ? "right" : "left";
+    bool isEng = direction == "ltr" ? true : false;
+}
+
+
+<div id="tab2" class="tab-content" style="display: none;">
     <div class="container" style="min-height: 400px;">
-        <div class="row" id="serviceContainer"  >
-       
+        <div class="row" id="serviceContainer">
         </div>
     </div>
 </div>
@@ -13,13 +22,12 @@
         cursor: pointer;
         transition: transform 0.3s ease;
         background: #f8f9fa
-       
     }
 
-    .service-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-    }
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
 
     .service-card-body {
         background-color: #f8f9fa;
@@ -41,7 +49,7 @@
 
     .dots-container {
         position: absolute;
-        top: 10px;
+        top: 0px;
         right: 10px;
         width: 30px;
         height: 30px;
@@ -96,17 +104,18 @@
         .dots-button::before {
             top: 46%;
         }
-        .no-results {
-    width:100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  margin-top: 20px;
-  padding: 20px;
-  font-size: 18px;
-}
+
+    .no-results {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        margin-top: 20px;
+        padding: 20px;
+        font-size: 18px;
+    }
 
         .no-results img {
             width: 15%;
@@ -121,4 +130,3 @@
 </style>
 
 
-        

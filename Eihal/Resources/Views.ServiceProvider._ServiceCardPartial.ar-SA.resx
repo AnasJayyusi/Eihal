@@ -117,52 +117,40 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AlertMessage" xml:space="preserve">
-    <value>Thank you,Your Feedback sent successfully</value>
+  <data name="Approved" xml:space="preserve">
+    <value>موافق عليه</value>
   </data>
-  <data name="AnyQuestions" xml:space="preserve">
-    <value>Have a Question? Let’s Talk</value>
+  <data name="Close" xml:space="preserve">
+    <value>إغلاق</value>
   </data>
-  <data name="AnyQuestionsDesc" xml:space="preserve">
-    <value>Please feel welcome to contact our friendly staff with any enquiry.</value>
+  <data name="Completed" xml:space="preserve">
+    <value>مكتمل</value>
   </data>
-  <data name="Contacts" xml:space="preserve">
-    <value>Contact us</value>
+  <data name="Fee" xml:space="preserve">
+    <value>رسوم:</value>
   </data>
-  <data name="Email" xml:space="preserve">
-    <value>Email</value>
+  <data name="NavigateToAdd" xml:space="preserve">
+    <value>انتقل إلى صفحة الإضافة</value>
   </data>
-  <data name="EmailValidation" xml:space="preserve">
-    <value>Please enter a valid email address.</value>
+  <data name="NoServiceAdded" xml:space="preserve">
+    <value>لم تتم إضافة أي خدمة حتى الآن.</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>Home</value>
+  <data name="Pending" xml:space="preserve">
+    <value>قيد الانتظار</value>
   </data>
-  <data name="Location" xml:space="preserve">
-    <value>Location</value>
+  <data name="Price" xml:space="preserve">
+    <value>السعر:</value>
   </data>
-  <data name="Message" xml:space="preserve">
-    <value>Your Message</value>
+  <data name="Rejected" xml:space="preserve">
+    <value>مرفوض</value>
   </data>
-  <data name="MessageValidation" xml:space="preserve">
-    <value>Please enter your message.</value>
+  <data name="RejectionReason" xml:space="preserve">
+    <value>سبب الرفض</value>
   </data>
-  <data name="NameValidation" xml:space="preserve">
-    <value>Please enter your name.</value>
+  <data name="SAR" xml:space="preserve">
+    <value>ريال سعودي</value>
   </data>
-  <data name="Phone" xml:space="preserve">
-    <value>Phone</value>
-  </data>
-  <data name="PhoneNumberValidation" xml:space="preserve">
-    <value>Please enter a valid 10-digit phone number.</value>
-  </data>
-  <data name="Send" xml:space="preserve">
-    <value>Send</value>
-  </data>
-  <data name="SocialLinks" xml:space="preserve">
-    <value>Social Links</value>
-  </data>
-  <data name="YourName" xml:space="preserve">
-    <value>Your Name</value>
+  <data name="Status" xml:space="preserve">
+    <value>حالة:</value>
   </data>
 </root>

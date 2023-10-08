@@ -33,7 +33,7 @@
 {
     <div class="no-notification-container">
         <div class="notification-message">
-            <img src="~/images/no-notification.webp" width="300" height="200">
+            <img src="~/images/no-notification.ico" width="100" height="100">
             <br>
             <lable style="color:#00768c"> No Notifications Yet.</lable>
         </div>
@@ -43,16 +43,22 @@
 
 @if (this.User.IsInRole("Administrator"))
 {
-    <a style="text-align:center" class="nav-link text-dark" href="/Admin/MyProfile/Notifications">
-        <i id="notifications-icon" class="fa fa-angle-double-down"></i> <span id="notifications-text">Show More</span>
-    </a>
+    @if (Model.Count > 15)
+    {
+        <a style="text-align:center" class="nav-link text-dark" href="/Admin/MyProfile/Notifications">
+            <i id="notifications-icon" class="fa fa-angle-double-down"></i> <span id="notifications-text">Show More</span>
+        </a>
+    }
 }
 
 else
 {
-    <a style="text-align:center" class="nav-link text-dark" href="/ServiceProvider/Notifications">
-        <i id="notifications-icon" class="fa fa-angle-double-down"></i> <span id="notifications-text">Show More</span>
-    </a>
+    @if (Model.Count > 15)
+    {
+        <a style="text-align:center" class="nav-link text-dark" href="/ServiceProvider/Notifications">
+            <i id="notifications-icon" class="fa fa-angle-double-down"></i> <span id="notifications-text">Show More</span>
+        </a>
+    }
 }
 
 
