@@ -27,8 +27,16 @@
                 <div class="d-none alert alert-danger" id="login-error">
                 </div>
 
+          
                 <form class="form-contain" id="account" method="post">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div asp-validation-summary="ModelOnly" class="text-danger">
+                        <a class="custom-btn" asp-area="Identity" asp-page="/Account/ResendEmailConfirmation">
+                            <i class="fa-solid fa-envelope" style="color:white">&nbsp;</i>
+                            <span>
+                                @Localizer["Resend the Confirmation Email"]
+                            </span>
+                        </a>
+                    </div>
                     <div class="form-group">
                         <label style="display:block;" id="phone-input-label" for="">
                             @Localizer["Phone"]
