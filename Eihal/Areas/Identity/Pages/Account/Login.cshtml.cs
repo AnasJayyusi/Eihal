@@ -127,6 +127,7 @@ namespace Eihal.Areas.Identity.Pages.Account
 
                 if (result.IsNotAllowed)
                 {
+                    TempData["IsNeedConfirmation"] = true;
                     var msg = isEng ? "This account is not active yet, please check your email inbox to activate your account " : "هذا الحساب غير مفعل بعد، يرجى التحقق من صندوق البريد الإلكتروني الخاص بك لتفعيل حسابك";
                     ModelState.AddModelError(string.Empty, msg);
                     return Page();
@@ -146,6 +147,7 @@ namespace Eihal.Areas.Identity.Pages.Account
 
                 else
                 {
+                    TempData["IsNeedConfirmation"] = false;
                     var msg = isEng ? "Invalid login attempt" : "محاولة تسجيل الدخول غير صالحة";
                     ModelState.AddModelError(string.Empty, msg);
                     return Page();
