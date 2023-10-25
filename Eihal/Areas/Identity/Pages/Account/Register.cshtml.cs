@@ -79,7 +79,9 @@ namespace Eihal.Areas.Identity.Pages.Account
             public string? ConfirmPassword { get; set; }
 
             public int AccountTypeId { get; set; }
+            [BindProperty]
             public int PractitionerTypeId { get; set; } = 0;
+            [BindProperty]
             public int ProfessionalRankId { get; set; } = 0;
 
             [Required]
@@ -256,7 +258,7 @@ namespace Eihal.Areas.Identity.Pages.Account
                     AccountTypeId = applicationUser.AccountTypeId,
                     PhoneNumber = applicationUser.PhoneNumber,
                     Email = applicationUser.Email,
-                    ProfileStatus = ProfileStatus.UnCompleted
+                    ProfileStatus = ProfileStatus.Active // Based On Request From Client
                 };
             }
             else
@@ -269,7 +271,8 @@ namespace Eihal.Areas.Identity.Pages.Account
                     PractitionerTypeId = applicationUser.PractitionerTypeId,
                     PhoneNumber = applicationUser.PhoneNumber,
                     Email = applicationUser.Email,
-                    ProfileStatus = ProfileStatus.UnCompleted
+                    ProfileStatus = ProfileStatus.UnCompleted,
+                    ProfessionalRankId = applicationUser.ProfessionalRankId
                 };
             }
             _dbContext.UserProfiles.Add(userProfile);

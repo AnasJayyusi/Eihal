@@ -282,7 +282,7 @@
             var selectedSvcs = $("#selectedServicesIds").val();
             var arrayOfSelected = selectedSvcs.split(",");
             if (arrayOfSelected.includes(id.toString())) {
-                toastr.error('You are already add this Services', 'Warning !!');
+                toastr.warning('You are already added this Services', 'Warning !!');
             }
             else {
                 var selectedServicesIds = $("#selectedServicesIds").val() + "," + id;

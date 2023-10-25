@@ -21,6 +21,8 @@ namespace Eihal.Controllers
 
         public IActionResult Index()
         {
+            if (User.IsInRole("Administrator"))
+                return RedirectToAction("Dashboard", "Admin");
             return View();
         }
 
@@ -36,6 +38,7 @@ namespace Eihal.Controllers
             }
             else return View();
         }
+
         [HttpPost]
         public ActionResult AddNewFeedback(string name, string contact, string email, string message)
         {

@@ -130,7 +130,7 @@
     <value>رسوم:</value>
   </data>
   <data name="NavigateToAdd" xml:space="preserve">
-    <value>انتقل إلى صفحة الإضافة</value>
+    <value>اضغط لإختيار الإمتيازات السريرية (الخدمات) المناسبة</value>
   </data>
   <data name="NoServiceAdded" xml:space="preserve">
     <value>لم تتم إضافة أي خدمة حتى الآن.</value>

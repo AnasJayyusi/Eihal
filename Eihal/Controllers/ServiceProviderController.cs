@@ -348,6 +348,7 @@ namespace Eihal.Controllers
                 profileStatus = userProfile.ProfileStatus.ToString(),
                 rejectionReason = userProfile.RejectionReason,
                 insuranceAccept = userProfile.InsuranceAccepted,
+                accountType = userProfile.AccountTypeId
             };
 
             return Json(data);
@@ -403,7 +404,6 @@ namespace Eihal.Controllers
             string cultureCode = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
             string direction = cultureCode.StartsWith("ar", StringComparison.OrdinalIgnoreCase) ? "rtl" : "ltr";
             bool isEng = direction == "ltr" ? true : false;
-
 
             _loggedAspNetUserId = GetAspNetUserId();
             var userProfile = _dbContext.UserProfiles.Include(i => i.State).Include(i => i.City).FirstOrDefault(w => w.UserId == GetAspNetUserId());

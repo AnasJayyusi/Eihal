@@ -130,7 +130,7 @@
     <value>Fee:</value>
   </data>
   <data name="NavigateToAdd" xml:space="preserve">
-    <value>Navigate to adding page</value>
+    <value>Click to Add your Clinical Privileges/Services</value>
   </data>
   <data name="NoServiceAdded" xml:space="preserve">
     <value>No Service Added Yet.</value>

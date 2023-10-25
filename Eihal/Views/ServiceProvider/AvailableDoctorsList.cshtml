@@ -10,7 +10,7 @@
                 <div class="doctor-card-body">
                     <div class="row" style="    padding-bottom: 25px;">
                         <h5 class="doctor-card-title" style="color: black;">
-                            <img style="border-radius:50%;" src="@(doc.ProfilePicturePath)" width="70" height="70" alt="user-image-profile" onerror="this.src='/users/images/Default-User-Profile.jpg'">
+                            <img style="border-radius:50%;" src="@(doc.ProfilePicturePath ?? "/users/images/Default-User-Profile.jpg") width="70" height="70" alt="user-image-profile" onerror="this.src='/users/images/Default-User-Profile.jpg'">
                         </h5>
                         <span style="font-size:10px;margin:auto">
                             <i class="fa fa-star" aria-hidden="true"></i>

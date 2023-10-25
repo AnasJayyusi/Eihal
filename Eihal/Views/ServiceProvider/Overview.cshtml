@@ -165,7 +165,7 @@
                 <ul id="listSpeciality"></ul>
             </div>
         </div>
-        <div class="row mt-4">
+        <div class="row mt-4" id="certifications-div">
             <div class="col-md-12">
                 <h5 class="font-weight-bold">@Localizer["Certifications"]</h5>
                 <span id="certifications-label" class="text-black"></span>
@@ -173,7 +173,6 @@
                     <i onclick="getDegrees()" class="fa fa-upload" aria-hidden="true"></i> @Localizer["Attach"]
                 </button>
             </div>
-
         </div>
         <div class="row mt-3">
             <div class="col-md-12">
@@ -473,6 +472,11 @@
                 setProfileStatus(response.profileStatus);
                 if (response.profilePicturePath != null || response.profilePicturePath != undefined)
                     $('[id^="user-image"]').attr('src', response.profilePicturePath);
+
+                    if (response.accountType == 2)
+                    {
+                    $("#certifications-div").hide()
+                    }
             },
             error: function (error) {
                 console.log(error);
