@@ -165,10 +165,13 @@
     <value>بحث</value>
   </data>
   <data name="SearchByName" xml:space="preserve">
-    <value>او ابحث بالأسم</value>
+    <value>ابحث بالأسم</value>
   </data>
   <data name="ServiceDefaultSelection" xml:space="preserve">
     <value>اختر الخدمة</value>
+  </data>
+  <data name="SpecialityDefaultSelection" xml:space="preserve">
+    <value>اختر التخصص</value>
   </data>
   <data name="WhyEihal" xml:space="preserve">
     <value> لماذا إحال؟</value>

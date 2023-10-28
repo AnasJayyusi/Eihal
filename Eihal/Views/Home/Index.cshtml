@@ -33,17 +33,27 @@
             </div>
 
             <form class="form-contain" id="search-doctors" action="Home/Doctors" method="GET">
-                @*<input type="hidden" name="_token" value="wvWsm0XjwGINPWNPIYQ2Jqt1HSbQspywkcnKWPtL">*@
                 <div class="row">
-                    @*<input type="hidden" name="serviceId" value="1">*@
+
+                    <div class="col-lg-2 col-12 padding-screen">
+                        <div class="form-group round-left">
+                            <div class="form-data select-box">
+                                <select name="specialityId" id="specialities-ddl" class="form-control" onchange="getServices()">
+                                    <option value="">
+                                        @Localizer["SpecialityDefaultSelection"]
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="col-lg-2 col-12 padding-screen">
                         <div class="form-group round-left">
                             <div class="form-data select-box">
                                 <select name="serviceId" id="services-ddl" class="form-control">
                                     <option value="">
-                                        Choose service
+                                        @Localizer["ServiceDefaultSelection"]
                                     </option>
-
                                 </select>
                             </div>
                         </div>
@@ -52,9 +62,9 @@
                     <div class="col-lg-2 col-12 padding-screen">
                         <div class="form-group">
                             <div class="form-data select-box">
-                                <select name="cityId" id="cities-ddl" class="form-control" onchange="GetDistricts()">
+                                <select name="cityId" id="cities-ddl" class="form-control" onchange="getDistricts()">
                                     <option value="">
-                                        Choose city
+                                        @Localizer["CityDefaultSelection"]
                                     </option>
 
 
@@ -75,15 +85,13 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-12 padding-screen">
+                    <div class="col-lg-2 col-12 padding-screen">
                         <div class="form-group round-right">
                             <div class="form-data">
                                 <input type="text" name="name" id="filterName" class="form-control" placeholder="@Localizer["SearchByName"]" />
 
                                 <a href="#" class="btn-contain">
-                                    @*  <img src="~/images/user.svg
-                                    loading="lazy"
-                                    alt="">*@
+
                                 </a>
                             </div>
                         </div>
@@ -243,29 +251,24 @@
 
 @section Scripts {
     <script type="text/javascript">
+        $.ajax({
+            url: '@Url.Action("GetSpecialitiesDDL", "Common")',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                // Clear existing options
+                $('#specialities-ddl').empty();
+                // Populate the dropdown list
+                var dropdown = $('#specialities-ddl');
+                var defaultSelect = "@Localizer["SpecialityDefaultSelection"]"
+                dropdown.append($('<option></option>').val(0).text(defaultSelect));
 
-
-        function GetDistricts() {
-            var cityId = $('#cities-ddl').val();
-
-            $.ajax({
-                url: '@Url.Action("GetDistrictsDDL", "Common")' + "?cityId=" + cityId,
-                type: 'GET',
-                dataType: 'json',
-                success: function (data) {
-                    // Clear existing options
-                    $('#disctricts-ddl').empty();
-                    // Populate the dropdown list
-                    var dropdown = $('#disctricts-ddl');
-                    var defaultSelect = "@Localizer["DistrictDefaultSelection"]"
-                    var isEng = isEnglishCulture();
-                    dropdown.append($('<option></option>').val(0).text(defaultSelect));
-                    $.each(data, function (index, item) {
-                        dropdown.append($('<option></option>').val(item.id).text(isEng ? item.titleEn : item.titleAr));
-                    });
-                }
-            });
-        }
+                var isEng = isEnglishCulture();
+                $.each(data, function (index, item) {
+                    dropdown.append($('<option></option>').val(item.id).text(isEng ? item.titleEn : item.titleAr));
+                });
+            }
+        });
 
         $.ajax({
             url: '@Url.Action("GetCitiesDDL", "Common")',
@@ -285,9 +288,10 @@
             }
         });
 
-        $(document).ready(function () {
+        function getServices() {
+            var specialityId = $('#specialities-ddl').val();
             $.ajax({
-                url: '@Url.Action("GetServicesDDL", "Common")',
+                url: '@Url.Action("GetServicesDDLBySpecialityId", "Common")' + "?specialityid=" + specialityId,
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
@@ -304,9 +308,28 @@
                     });
                 }
             });
+        }
 
-
-        });
+        function getDistricts() {
+            var cityId = $('#cities-ddl').val();
+            $.ajax({
+                url: '@Url.Action("getDistrictsDDL", "Common")' + "?cityId=" + cityId,
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Clear existing options
+                    $('#disctricts-ddl').empty();
+                    // Populate the dropdown list
+                    var dropdown = $('#disctricts-ddl');
+                    var defaultSelect = "@Localizer["DistrictDefaultSelection"]"
+                    var isEng = isEnglishCulture();
+                    dropdown.append($('<option></option>').val(0).text(defaultSelect));
+                    $.each(data, function (index, item) {
+                        dropdown.append($('<option></option>').val(item.id).text(isEng ? item.titleEn : item.titleAr));
+                    });
+                }
+            });
+        }
 
         $('form').submit(function () {
             var selectedCulture = $('select[name="cultureCode"]').val();

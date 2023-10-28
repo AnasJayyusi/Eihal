@@ -1,4 +1,4 @@
-﻿@model List<Eihal.Data.Entites.Services>
+﻿@model List<Eihal.Data.Entites.ServiceLevel>
 <head>
     <!-- Custom styles for this template-->
     <link href="~/css/sb-admin-2.css" rel="stylesheet">
@@ -9,7 +9,6 @@
         .hidden {
             display: none;
         }
-
 
         .toast-container {
             position: fixed;
@@ -31,10 +30,11 @@
     </style>
 </head>
 
+
 <!-- Toaster -->
 <div id="toast-container" class="toast-container toast-center">
     <div class="alert alert-success hidden" role="alert">
-        The Service Added/Updated Successfully!
+        The Service Level Added/Updated Successfully!
     </div>
 
     @if (@ViewBag.SuccessMessage != null)
@@ -43,7 +43,7 @@
         {
             <text>
                 <div class="alert alert-success" role="alert">
-                    Service deleted successfully!
+                    Service Level  type deleted successfully!
                 </div>
             </text>
         }
@@ -78,7 +78,7 @@
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h6 style="font-weight:bold;color:#00768c " class="h6 mb-0 ">  Master List  &#8658; Services</h6>
+                        <h6 style="font-weight:bold;color:#00768c " class="h6 mb-0 ">  Master List  &#8658; Service Levels </h6>
 
 
                         <!--ToDo:Move To Partial View -->
@@ -89,7 +89,7 @@
                             </a>
 
                             <div class="dropdown-content">
-                                @*<a class="nav-link text-dark  linkButton" asp-area="" asp-controller="Home" asp-action="Index">My Profile </a>*@
+                                 @*<a class="nav-link text-dark  linkButton" asp-area="" asp-controller="Home" asp-action="Index">My Profile </a>*@
                                 @*<a class="nav-link text-dark linkButton" asp-area="" asp-controller="Doctor" asp-action="Index">My Order </a>*@
 
 
@@ -134,9 +134,9 @@
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
                                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Services</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Service Levels</h6>
                                     <div style="text-align: end; cursor:pointer">
-                                        <button id="openNewServiceModal" type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#AddNewService">  <i class="fa fa-plus text-white-50"></i>  </button>
+                                        <button id="openNewPractitionerModal" type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#AddNewServiceLevel">  <i class="fa fa-plus text-white-50"></i>  </button>
                                     </div>
                                 </div>
                                 <!-- Card Body -->
@@ -145,7 +145,7 @@
                                     <br />
 
                                     <div class="table-responsive" id="dataTableContainer">
-                                        @Html.Partial("ServicesList", Model)
+                                        @Html.Partial("ServiceLevelsList", Model)
 
                                     </div>
                                 </div>
@@ -171,11 +171,11 @@
 </div>
 
 
-<div class="modal fade" id="AddNewService" tabindex="-1" role="dialog" aria-labelledby="AddNewServiceModal" aria-hidden="true">
+<div class="modal fade" id="AddNewServiceLevel" tabindex="-1" role="dialog" aria-labelledby="AddNewServiceLevelModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="AddNewServiceModal">Add</h5>
+                <h5 class="modal-title" id="AddNewServiceLevelModal">Add</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -190,32 +190,15 @@
                     <div class="form-group">
                         <label style="font-weight:bold;color:#00768c" for="titleArInput">Title (Arabic):</label>
                         <input type="text" class="form-control" id="titleArInput" required>
-                    </div> 
-                    <div class="form-group">
-                        <label style="font-weight:bold;color:#00768c" for="feeInput">Fee:</label>
-                        <input type="number" class="form-control" id="feeInput" required>
                     </div>
-
-                    <div class="form-group">
-                        <label for="clinicalSpecialities-ddl" style="font-weight:bold;color:#00768c">Clinical Speciality:</label>
-                        <!-- Dropdown list HTML element -->
-                        <select class="form-control" id="clinicalSpecialities-ddl"></select>
-                    </div>
-                    <div class="form-group">
-                        <label for="serviceLevels-ddl-new" style="font-weight:bold;color:#00768c">Service Levels:</label>
-                        <!-- Dropdown list HTML element -->
-                        <select class="form-control" id="serviceLevels-ddl-new"></select>
-                    </div>
-
                 </form>
                 <div class="alert alert-danger hidden sm" role="alert">
-                    <span id="error-msg-not-fill" style="display:none">Please fill all fields.</span>
-                    <span id="error-msg-duplicate" style="display:none">The details for the Service have already been added.</span>
+                    <span id="error-msg-add"></span>
                 </div>
             </div>
             <div class="modal-footer">
-                <button id="close-add-Service" type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                <button id="add-Service" type="button" class="btn btn-success" style="background-color:#00768c">Save</button>
+                <button id="close-add-ServiceLevel" type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                <button id="add-ServiceLevel" type="button" class="btn btn-success" style="background-color:#00768c">Save</button>
             </div>
         </div>
     </div>
@@ -229,76 +212,34 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
         $(document).ready(function () {
-
             // Hide the success message after 2 seconds
             setTimeout(function () {
                 $('.alert-success').fadeOut();
             }, 3000);
-
-
-            $('#openNewServiceModal').click(function () {
+          
+            $('#openNewPractitionerModal').click(function () {
                 $('#titleArInput').val("");
                 $('#titleEnInput').val("");
-                $('#feeInput').val("");
-
-                if ($('#clinicalSpecialities-ddl').children().length == 0) {
-                    $.ajax({
-                        url: '@Url.Action("GetClinicalSpecialitiesDDL", "Common")',
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function (data) {
-                            // Clear existing options
-                            $('#clinicalSpecialities-ddl').empty();
-                            // Populate the dropdown list
-                            var dropdown = $('#clinicalSpecialities-ddl');
-                            $.each(data, function (index, item) {
-                                dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
-                            });
-                        }
-                    });
-                }
-
-
-                $.ajax({
-                    url: '@Url.Action("GetServiceLevelsDDL", "Common")',
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function (data) {
-                        
-                        // Clear existing options
-                        $('#serviceLevels-ddl-new').empty();
-                        // Populate the dropdown list
-                        var dropdown = $('#serviceLevels-ddl-new');
-                        $.each(data, function (index, item) {
-                            dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
-                        });
-                    }
-                });
-
             });
 
-            $('#add-Service').click(function () {
-                var service = {
+            $('#add-ServiceLevel').click(function () {
+                var ServiceLevel = {
                     TitleAr: $('#titleArInput').val(),
                     TitleEn: $('#titleEnInput').val(),
-                    Fee: $('#feeInput').val(),
                     IsActive: true,
-                    ClinicalSpecialityId: $('#clinicalSpecialities-ddl').val(),
-                    ServiceLevelId: $('#serviceLevels-ddl-new').val(),
-                    //SubPrivillageId: $('#subPrivillages-ddl').val()
                 };
 
                 $.ajax({
-                    url: '/Admin/AddService', // Replace with your actual API endpoint URL
+                    url: '/Admin/AddServiceLevel', // Replace with your actual API endpoint URL
                     type: 'POST',
-                    data: JSON.stringify(service),
+                    data: JSON.stringify(ServiceLevel),
                     contentType: 'application/json',
                     success: function (response) {
                         // Show the success message
                         $('.alert-success').removeClass('hidden').hide().fadeIn();
                         // Close the modal after the success message fades out
-                        $("#close-add-Service").trigger("click");
-                        $('#dataTableContainer').load('/Admin/GetServices');
+                        $("#close-add-ServiceLevel").trigger("click");
+                        $('#dataTableContainer').load('/Admin/GetServiceLevels');
 
                         // Hide the success message after 2 seconds
                         setTimeout(function () {
@@ -310,16 +251,7 @@
                         // Show the error message
                         $('.alert-danger').removeClass('hidden');
                         var msg = xhr.responseText;
-
-                        if (msg == "Please fill all fields.") {
-                            $('#error-msg-not-fill').show();
-                            $('#error-msg-duplicate').hide();
-                        }
-
-                        if (msg == "The details for the Service have already been added.") {
-                            $('#error-msg-not-fill').hide();
-                            $('#error-msg-duplicate').show();
-                        }
+                        $('#error-msg-add').text(msg.toString());
                         // Hide the error message after 2 seconds
                         setTimeout(function () {
                             $('.alert-danger').addClass('hidden');
@@ -331,5 +263,3 @@
         });
     </script>
 }
-
-<!-- Dropdown list HTML element -->

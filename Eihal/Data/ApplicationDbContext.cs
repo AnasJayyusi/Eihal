@@ -49,6 +49,6 @@ namespace Eihal.Data
         public DbSet<UserCompany> UserCompanies { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<OrderServiceDetail> OrderServiceDetails { get; set; }
-
+        public DbSet<ServiceLevel> ServiceLevels { get; set; }
     }
 }

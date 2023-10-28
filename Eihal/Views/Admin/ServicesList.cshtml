@@ -9,10 +9,10 @@
     }
 
     var searchQuery = Context.Request.Query["search"].ToString().Trim();
-    var filteredItems = string.IsNullOrEmpty(searchQuery) ? Model : Model.Where(p => p.TitleEn.ToLower().Contains(searchQuery.ToLower()) || p.TitleAr.ToLower().Contains(searchQuery.ToLower())).ToList();
+    var filteredItems = string.IsNullOrEmpty(searchQuery) ? Model : Model.Where(p => p.TitleEn.ToLower().Contains(searchQuery.ToLower()) || p.TitleAr.ToLower().Contains(searchQuery.ToLower()) || p.ClinicalSpeciality.TitleEn.ToLower().Contains(searchQuery.ToLower())).ToList();
     var totalItems = filteredItems.Count;
 
-    var pageSizeParam =  Context.Request.Query["pageSize"].ToString();
+    var pageSizeParam = Context.Request.Query["pageSize"].ToString();
     var pageSize = string.IsNullOrEmpty(pageSizeParam) ? defaultPageSize : int.Parse(pageSizeParam);
     pageSize = Math.Max(1, Math.Min(pageSize, totalItems)); // Ensure the page size is within a valid range
 
@@ -31,9 +31,9 @@
                 <div class="form-group mr-2">
                     <input type="text" class="form-control" id="searchInput" name="search" placeholder="Search" value="@searchQuery">
                 </div>
-              
+
                 <div class="form-group mr-2">
-                    <button type="submit" class="btn btn-primary">Search</button>
+                    <button id="searchbutton" type="submit" class="btn btn-primary">Search</button>
                 </div>
             </form>
         </div>
@@ -49,6 +49,18 @@
             </form>
         </div>
     </div>
+
+</div>
+
+<div class="col-md-3 form-group p-0">
+    <!-- Dropdown list HTML element -->
+    <select class="form-control" id="clinicalSpecialities-ddl-filter" onchange="setSpecialityOnSearch()">
+        <option value="">All Clinical Specialities</option>
+        @foreach (var item in Model.Select(s => s.ClinicalSpeciality).Distinct())
+        {
+            <option value="@item.Id">@item.TitleEn - @item.TitleAr</option>
+        }
+    </select>
 </div>
 
 
@@ -63,6 +75,7 @@
             @*<th>SubPrivillage   </th>*@
             <th>Title (English)</th>
             <th>Title (Arabic)</th>
+            <th>Service Level</th>
             <th>Fee</th>
             <th>Status</th>
             <th>Actions</th>
@@ -80,6 +93,15 @@
                 @*<td>@services.TitleEn</td>*@
                 <td>@services.TitleEn</td>
                 <td>@services.TitleAr</td>
+                @if (@services.ServiceLevel == null)
+                {
+                    <td> - </td>
+                }
+                else 
+                {
+                    <td>@services.ServiceLevel?.TitleEn</td>
+                }
+
                 <td>@services.Fee</td>
                 <td>
                     <div class="custom-control custom-switch">
@@ -147,32 +169,27 @@
                         <label style="font-weight:bold;color:#00768c" for="feeInputEdit">Fee:</label>
                         <input type="number" class="form-control" id="feeInputEdit" required>
                     </div>
-                       <div class="form-group">
+                    <div class="form-group">
                         <label for="clinicalSpecialities-ddl" style="font-weight:bold;color:#00768c">Clinical Speciality:</label>
                         <!-- Dropdown list HTML element -->
                         <select class="form-control" id="clinicalSpecialities-ddl-edit"></select>
-                    </div>    
-           @*         <div class="form-group">
-                        <label for="subPrivillages-ddl" style="font-weight:bold;color:#00768c">SubPrivillage:</label>
+                    </div>
+                    <div class="form-group">
+                        <label for="serviceLevels-ddl" style="font-weight:bold;color:#00768c">Service Levels:</label>
                         <!-- Dropdown list HTML element -->
-                        <select class="form-control" id="subPrivillages-ddl-edit"></select>
-                    </div>*@
-                 @*   <div class="form-group">
-                        <label for="practitionerTypes-ddl-edit" style="font-weight:bold;color:#00768c">Practitioner Type:</label>
-                        <!-- Dropdown list HTML element -->
-                        <select class="form-control" id="practitionerTypes-ddl-edit"></select>
-                    </div>*@
-                </form>
-                <div class="alert alert-danger hidden sm" role="alert">
-                    <span id="error-msg-add"></span>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button id="close-edit-Services" type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                <button id="edit-Services" type="button" class="btn btn-success" style="background-color:#00768c">Update</button>
+                        <select class="form-control" id="serviceLevels-ddl-edit"></select>
+                    </div>
+            </form>
+            <div class="alert alert-danger hidden sm" role="alert">
+                <span id="error-msg-add"></span>
             </div>
         </div>
+        <div class="modal-footer">
+            <button id="close-edit-Services" type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+            <button id="edit-Services" type="button" class="btn btn-success" style="background-color:#00768c">Update</button>
+        </div>
     </div>
+</div>
 </div>
 
 
@@ -198,7 +215,7 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <script>
+<script>
     $(document).ready(function () {
         $('.custom-control-input').on('change', function () {
 
@@ -234,51 +251,52 @@
         });
     }
 
-        function getServices(id) {
-                if ($('#clinicalSpecialities-ddl-edit').children().length == 0) 
-                {
-                    $.ajax({
-                        url: '@Url.Action("GetClinicalSpecialitiesDDL", "Common")',
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function (data) {
-                            // Clear existing options
-                            $('#clinicalSpecialities-ddl-edit').empty();
-                            // Populate the dropdown list
-                            var dropdown = $('#clinicalSpecialities-ddl-edit');
-                            $.each(data, function (index, item) {
-                                dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
-                            });
-                        }
+    function getServices(id) {
+        if ($('#serviceLevels-ddl-edit').children().length == 0) {
+            $.ajax({
+                url: '@Url.Action("GetServiceLevelsDDL", "Common")',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Clear existing options
+                    $('#serviceLevels-ddl-edit').empty();
+                    // Populate the dropdown list
+                    var dropdown = $('#serviceLevels-ddl-edit');
+                    $.each(data, function (index, item) {
+                        dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
                     });
                 }
+            });
+        }
 
-                //   if ($('#subprivillages-ddl-edit').children().length == 0) 
-                //{
-                //    $.ajax({
-                //        url: '@Url.Action("GetSubPrivillagesDDL", "Common")',
-                //        type: 'GET',
-                //        dataType: 'json',
-                //        success: function (data) {
-                //            // Clear existing options
-                //            $('#subPrivillages-ddl-edit').empty();
-                //            // Populate the dropdown list
-                //            var dropdown = $('#subPrivillages-ddl-edit');
-                //            $.each(data, function (index, item) {
-                //                dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
-                //            });
-                //        }
-                //    });
-                //}
+
+        if ($('#clinicalSpecialities-ddl-edit').children().length == 0) {
             $.ajax({
-                url: '/Admin/GetService/' + id,
+                url: '@Url.Action("GetClinicalSpecialitiesDDL", "Common")',
                 type: 'GET',
+                dataType: 'json',
                 success: function (data) {
-                    // Handle the success response here
-                    console.log(data); // Output the received data to the console
+                    // Clear existing options
+                    $('#clinicalSpecialities-ddl-edit').empty();
+                    // Populate the dropdown list
+                    var dropdown = $('#clinicalSpecialities-ddl-edit');
+                    $.each(data, function (index, item) {
+                        dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                    });
+                }
+            });
+        }
 
-                    // Perform further operations with the returned data as needed
-                    // For example, you can update HTML elements with the received values
+
+        $.ajax({
+            url: '/Admin/GetService/' + id,
+            type: 'GET',
+            success: function (data) {
+                // Handle the success response here
+                console.log(data); // Output the received data to the console
+
+                // Perform further operations with the returned data as needed
+                // For example, you can update HTML elements with the received values
                 $('#feeInputEdit').val(data.fee);
                 $('#titleArInputEdit').val(data.titleAr);
                 $('#titleEnInputEdit').val(data.titleEn);
@@ -288,25 +306,25 @@
                 //$('#subPrivillages-ddl-edit').val(data.subPrivillageId);
 
                 $('#titleId').val(data.id);
-                },
-                error: function (error) {
-                    // Handle the error response here
-                    console.log(error); // Output the error to the console
-                }
-            });
-        }
+            },
+            error: function (error) {
+                // Handle the error response here
+                console.log(error); // Output the error to the console
+            }
+        });
+    }
 
 
 
     $('#edit-Services').click(function () {
         var services = {
-            TitleAr: $('#titleArInputEdit').val(),
-            Fee: $('#feeInputEdit').val(),
-            TitleEn: $('#titleEnInputEdit').val(),
-            ClinicalSpecialityId: $('#clinicalSpecialities-ddl-edit').val(),
-            //SubPrivillageId: $('#subPrivillages-ddl-edit').val(),
-            IsActive:true,
             Id: $('#titleId').val(),
+            IsActive: true,
+            TitleAr: $('#titleArInputEdit').val(),
+            TitleEn: $('#titleEnInputEdit').val(),
+            Fee: $('#feeInputEdit').val(),
+            ClinicalSpecialityId: $('#clinicalSpecialities-ddl-edit').val(),
+            ServiceLevelId: $('#serviceLevels-ddl-edit').val()
         };
 
         $.ajax({
@@ -328,7 +346,7 @@
 
             },
             error: function (xhr, status, error) {
-                  
+
                 // Show the error message
                 $('.alert-danger').removeClass('hidden');
                 var msg = xhr.responseText;
@@ -342,5 +360,11 @@
         });
     });
 
-      
-    </script>
+
+    function setSpecialityOnSearch() {
+        
+        var searchValue = $('#clinicalSpecialities-ddl-filter').find(":selected").text().split("-")[0].trim()
+        $("#searchInput").val(searchValue);
+        $("#searchbutton").trigger("click");
+    }
+</script>

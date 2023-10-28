@@ -21,6 +21,7 @@ namespace Eihal.Data.Entites
 
         [ForeignKey(nameof(Order))]
         public int OrderId { get; set; }
+        public string? RejectionReason { get; set; }
 
 
     }

@@ -34,7 +34,7 @@
                     <h5 class="doctor-card-title">@doc.FullName</h5>
                     <h5 class="doctor-card-title" style="font-size:11px">@doc.PractitionerType.TitleEn</h5>
 
-                    @foreach (var certificate in doc.Certifications.Take(2))
+                    @foreach (var certificate in doc.Certifications.Take(1))
                     {
                         <h5 class="doctor-card-title" style="font-size:14px;color:black">@certificate.Degree.TitleEn - @certificate.UniversityNameEn</h5>
                     }

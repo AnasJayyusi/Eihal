@@ -9,7 +9,7 @@
 
 
     function sendOrderRequest() {
-        
+
         // Get all the input values
         var fullname = $("#fullname-edit-input").val();
         var phone = $("#phone-edit-input").val();
@@ -22,6 +22,7 @@
         var chronicDisease = $('#chronicDisease').val().trim();
         var selectedServicesIds = $("#selectedServicesIds").val();
         var doctorId = $(".selected").attr('id');
+        var quantities = $("#selectedQuantities").val();
 
         // Prepare the data to be sent as JSON
         var orderDetailsModal = {
@@ -35,7 +36,8 @@
             'Age': age,
             'ChronicDisease': chronicDisease,
             'SelectedServicesIds': selectedServicesIds,
-            'DoctorId': doctorId
+            'DoctorId': doctorId,
+            'Quantities': quantities
         };
 
         // Send the data using AJAX
@@ -58,6 +60,7 @@
 
         setTimeout(function () {
             $("#close-order").trigger("click")
+            $(".modal-backdrop").remove()
             resetForm();
         }, 2000);
 
@@ -107,7 +110,7 @@
         $("#submitRequest").css("background", "gray");
         $("#submitRequest").css("cursor", "not-allowed");
 
-        
+
 
 
         $(".next").click(function () {
@@ -118,7 +121,7 @@
 
             } else {
 
-          
+
                 $("#main-class-modal").removeClass("row justify-content-center");
             }
             current_fs = $(this).parent();
@@ -293,7 +296,7 @@
         var privilegesContainer = $('#privilegesContainer');
 
         $.ajax({
-            url: '/ServiceProvider/GetAvailablePrivileges', 
+            url: '/ServiceProvider/GetAvailablePrivileges',
             type: 'GET',
             success: function (response) {
                 privilegesContainer.html(response);
@@ -310,7 +313,7 @@
         var doctorsContainer = $('#doctorsContainer');
         var servicesIds = $("#selectedServicesIds").val()
         $.ajax({
-            url: '/ServiceProvider/GetAvailableDoctors?serviceIds=' + servicesIds, 
+            url: '/ServiceProvider/GetAvailableDoctors?serviceIds=' + servicesIds,
             type: 'GET',
             success: function (response) {
                 doctorsContainer.html(response);
@@ -433,7 +436,7 @@
             var name = $('#filterInput').val();
 
             $.ajax({
-                url: '/Home/FillDoctorsList?name=' + name + '&serviceId=' + serviceId + '&cityId=' + cityId + '&disctrictId=' + disctrictId + '&sortBy=' + sortBy + '&insuranceType=' + insuranceType, 
+                url: '/Home/FillDoctorsList?name=' + name + '&serviceId=' + serviceId + '&cityId=' + cityId + '&disctrictId=' + disctrictId + '&sortBy=' + sortBy + '&insuranceType=' + insuranceType,
                 type: 'GET',
                 success: function (response) {
                     doctorsContainer.html(response);

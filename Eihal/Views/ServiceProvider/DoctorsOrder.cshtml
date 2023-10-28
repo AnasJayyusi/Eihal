@@ -7,7 +7,7 @@
             <i class="fas fa-search"></i>
         </button>
         <br />
-        <span style="color:gray;font-style:italic">(Note: Only Doctors who have the selected Privileges will display)</span>
+        <span style="color:red;font-style:italic;font-weight:bold">Note: Only Doctors who have the selected Privileges will display</span>
         <br />
         <br />
 
@@ -419,7 +419,8 @@
 <script>
     function filterDoctors() {
         var doctorsContainer = $('#doctorsContainer');
-        var servicesIds = $("#selectedServicesIds").val()
+        var servicesIds = $("#selectedServicesIds").val();
+        var quantities = $("#selectedQuantities").val();
         var disctrictId = $('#disctricts-ddl').val();
         var cityId = $('#cities-ddl').val();
         var sortBy = $('#sort-ddl').val();

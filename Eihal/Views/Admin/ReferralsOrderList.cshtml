@@ -328,16 +328,16 @@
 
 <script>
     function getReferralsOrderDetails(id) {
-             $("#status-readonly").removeClass("underReview");
-               $("#status-readonly").removeClass("completed");
-               $("#status-readonly").removeClass("approved");
-               $("#status-readonly").removeClass("rejected");
+        $("#status-readonly").removeClass("underReview");
+        $("#status-readonly").removeClass("completed");
+        $("#status-readonly").removeClass("approved");
+        $("#status-readonly").removeClass("rejected");
 
         $.ajax({
             url: '/Admin/GetReferralsOrderDetails?orderId=' + id,
             type: 'GET',
             success: function (response) {
-           
+
                 var data = response[0];
                 $("#referralRequestNumber-readonly").text(data.referralRequestNumber)
                 if (data.status == 1) {
@@ -399,71 +399,71 @@
                 }
 
 
-                  if (data.age == 0) {
-                          $("#age-label-readonly").hide()
+                if (data.age == 0) {
+                    $("#age-label-readonly").hide()
 
-                        $("#child-label-readonly").css("display", "");
-                        $("#child-input-readonly").css("display", "");
+                    $("#child-label-readonly").css("display", "");
+                    $("#child-input-readonly").css("display", "");
 
-                        $("#teenager-label-readonly").css("display", "none");
-                        $("#teenager-input-readonly").css("display", "none");
+                    $("#teenager-label-readonly").css("display", "none");
+                    $("#teenager-input-readonly").css("display", "none");
 
-                        $("#young-label-readonly").css("display", "none");
-                        $("#young-input-readonly").css("display", "none");
+                    $("#young-label-readonly").css("display", "none");
+                    $("#young-input-readonly").css("display", "none");
 
-                        $("#aged-label-readonly").css("display", "none");
-                        $("#aged-input-readonly").css("display", "none");
+                    $("#aged-label-readonly").css("display", "none");
+                    $("#aged-input-readonly").css("display", "none");
 
-                    }
-                    if (data.age == 1) {
-                          $("#age-label-readonly").hide()
+                }
+                if (data.age == 1) {
+                    $("#age-label-readonly").hide()
 
-                        $("#child-label-readonly").css("display", "none");
-                        $("#child-input-readonly").css("display", "none");
+                    $("#child-label-readonly").css("display", "none");
+                    $("#child-input-readonly").css("display", "none");
 
-                        $("#teenager-label-readonly").css("display", "");
-                        $("#teenager-input-readonly").css("display", "");
+                    $("#teenager-label-readonly").css("display", "");
+                    $("#teenager-input-readonly").css("display", "");
 
-                        $("#young-label-readonly").css("display", "none");
-                        $("#young-input-readonly").css("display", "none");
+                    $("#young-label-readonly").css("display", "none");
+                    $("#young-input-readonly").css("display", "none");
 
-                        $("#aged-label-readonly").css("display", "none");
-                        $("#aged-input-readonly").css("display", "none");
+                    $("#aged-label-readonly").css("display", "none");
+                    $("#aged-input-readonly").css("display", "none");
 
-                    }
-                      if (data.age == 2) {
-                          $("#age-label-readonly").hide()
+                }
+                if (data.age == 2) {
+                    $("#age-label-readonly").hide()
 
-                        $("#child-label-readonly").css("display", "none");
-                        $("#child-input-readonly").css("display", "none");
+                    $("#child-label-readonly").css("display", "none");
+                    $("#child-input-readonly").css("display", "none");
 
-                        $("#teenager-label-readonly").css("display", "none");
-                        $("#teenager-input-readonly").css("display", "none");
+                    $("#teenager-label-readonly").css("display", "none");
+                    $("#teenager-input-readonly").css("display", "none");
 
-                        $("#young-label-readonly").css("display", "");
-                        $("#young-input-readonly").css("display", "");
+                    $("#young-label-readonly").css("display", "");
+                    $("#young-input-readonly").css("display", "");
 
-                        $("#aged-label-readonly").css("display", "none");
-                        $("#aged-input-readonly").css("display", "none");
+                    $("#aged-label-readonly").css("display", "none");
+                    $("#aged-input-readonly").css("display", "none");
 
-                    }
+                }
 
-                        if (data.age == 3) {
-                          $("#age-label-readonly").hide()
+                if (data.age == 3) {
+                    $("#age-label-readonly").hide()
 
-                        $("#child-label-readonly").css("display", "none");
-                        $("#child-input-readonly").css("display", "none");
+                    $("#child-label-readonly").css("display", "none");
+                    $("#child-input-readonly").css("display", "none");
 
-                        $("#teenager-label-readonly").css("display", "none");
-                        $("#teenager-input-readonly").css("display", "none");
+                    $("#teenager-label-readonly").css("display", "none");
+                    $("#teenager-input-readonly").css("display", "none");
 
-                        $("#young-label-readonly").css("display", "none");
-                        $("#young-input-readonly").css("display", "none");
+                    $("#young-label-readonly").css("display", "none");
+                    $("#young-input-readonly").css("display", "none");
 
-                        $("#aged-label-readonly").css("display", "");
-                        $("#aged-input-readonly").css("display", "");
+                    $("#aged-label-readonly").css("display", "");
+                    $("#aged-input-readonly").css("display", "");
 
-                    }
+                }
                 else {
                     // Hide All Of them
                     $("#age-label-readonly").show()
@@ -480,13 +480,16 @@
                     $("#aged-label-readonly").css("display", "none");
                     $("#aged-input-readonly").css("display", "none");
                 }
-                debugger;
+                
 
 
                 var dropdown = $('#services-readOnly');
                 dropdown.empty();
+                var count = 0;
                 $.each(data.servicesRequests, function (index, item) {
-                    dropdown.append("<li> ♦ " + item.titleEn + "</li>");
+                    
+                    dropdown.append("<li> ♦ " + item.titleEn + "X" + item.orderServicesDetails[count].qty + "</li>");
+                    count += 1;
                 });
 
 

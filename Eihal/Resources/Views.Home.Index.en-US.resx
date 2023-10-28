@@ -169,6 +169,9 @@
   <data name="ServiceDefaultSelection" xml:space="preserve">
     <value>Choose Service</value>
   </data>
+  <data name="SpecialityDefaultSelection" xml:space="preserve">
+    <value>Choose Speciality</value>
+  </data>
   <data name="WhyEihal" xml:space="preserve">
     <value>Why Eihal?</value>
   </data>

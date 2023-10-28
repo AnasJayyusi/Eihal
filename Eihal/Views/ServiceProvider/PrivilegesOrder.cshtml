@@ -238,10 +238,11 @@
 @foreach (var item in Model)
 {
     <input id="selectedServicesIds" hidden>
-    <div class="col-md-3 padding-top-25">
+    <input id="selectedQuantities" hidden>
+    <div class="col-md-3 padding-top-25" id="unselected_@item.ServiceId">
 
         <div class="service-card">
-            <div onclick="addToSelectionList(@item.ServiceId ,'@item.TitleEn','@item.TitleAr')" class="service-card-body">
+            <div data-toggle="modal" onclick="openInsertQtyPopup(@item.ServiceId ,'@item.TitleEn','@item.TitleAr','@item.ServiceLevelNameEn' ,'@item.ServiceLevelNameAr')" data-target="#AddServiceRequestCountModal" class="service-card-body">
                 <div>
                     <img style="border-radius:30%" id="user-image-layout" src="@(item.Logo)" width="30" height="30" alt="user-image-profile" onerror="this.src='/users/images/Default-User-Profile.jpg'">
                 </div>
@@ -267,38 +268,100 @@
 }
 
 
+
+<div class="modal fade" id="AddServiceRequestCountModal" tabindex="-1" role="dialog" aria-labelledby="AddServiceRequestCountModal" aria-hidden="true">
+    <div class="modal-dialog custom-modal-dialog" style="max-width:fit-content" role="document">
+        <div class="modal-content" style="margin-top:100%">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AddServiceRequestCountModal">Request Service Qty</h5>
+            </div>
+            <div class="modal-body">
+                <!-- Add your modal content here -->
+                <div class="form-group">
+                    <label style="font-weight: bold; color: #00768c;" for="service-name-readonly">Service Name:</label>
+                    <input disabled type="text" class="form-control" id="service-name-readonly" value="" required>
+                </div>
+
+                <div class="form-group">
+                    <label style="font-weight: bold; color: #00768c;" for="service-level-readonly">Service Level:</label>
+                    <input disabled type="text" class="form-control" id="service-level-readonly" value="" required>
+                    <input disabled type="hidden" id="service-id-input" value="0" required>
+                </div>
+
+                <div class="form-group">
+                    <label style="font-weight: bold; color: #00768c;" for="qty-input">Qty:</label>
+                    <input style="background-color:white" type="number" class="form-control" id="qty-input"  min="1" required onkeyup="if(this.value.length > 0) document.getElementById('send-for-review-btn').disabled = false; else document.getElementById('send-for-review-btn').disabled = true;">
+                </div>
+                <div class="modal-footer">
+                    <button onclick="closeAddServiceRequestCountModal()" id="close-RequestCountModal" type="button" class="btn btn-danger">Cancel</button>
+                    <button onclick="addToSelectionList()" type="button" class="btn btn-primary">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 <script>
+    function openInsertQtyPopup(id, titleEn, titleAr,serviceLevelEn,ServiceLevelAr) {
+        $("#qty-input").val(1);
+        $("#service-name-readonly").val(titleEn);
+        $("#service-id-input").val(id);
+        $("#service-level-readonly").val(serviceLevelEn);
+    }
 
-    function addToSelectionList(id, titleEn, titleAr) {
+    function addToSelectionList() {
+        var qty = $("#qty-input").val();
+        var dynamicId = $("#service-id-input").val();
+        var dynamicTitle = $("#service-name-readonly").val();
 
-        // Get the dynamic values from somewhere (e.g., user input or API response)
-        var dynamicId = id;
-        var dynamicTitle = titleEn;
         if ($("#selectedServicesIds").val().length == 0) {
-            $("#selectedServicesIds").val(id);
-            appendServiceCard(dynamicId, dynamicTitle)
+            $("#selectedServicesIds").val(dynamicId);
+        
+            appendServiceCard(dynamicId, dynamicTitle, qty)
         }
         else {
             var selectedSvcs = $("#selectedServicesIds").val();
             var arrayOfSelected = selectedSvcs.split(",");
-            if (arrayOfSelected.includes(id.toString())) {
+
+         
+            if (arrayOfSelected.includes(dynamicId.toString())) {
                 toastr.warning('You are already added this Services', 'Warning !!');
             }
             else {
-                var selectedServicesIds = $("#selectedServicesIds").val() + "," + id;
+                var selectedServicesIds = $("#selectedServicesIds").val() + "," + dynamicId;
                 $("#selectedServicesIds").val(selectedServicesIds)
 
+              
 
-                appendServiceCard(dynamicId, dynamicTitle)
+                appendServiceCard(dynamicId, dynamicTitle, qty)
             }
-
         }
 
+        $("#unselected_" + dynamicId).css("display", "none")
+        closeAddServiceRequestCountModal();
         canNextToDoctor();
         checkResultCount();
+        fillQty();
     }
 
+    function fillQty() {
+        // Get all elements with the "Quantity" class
+        var elements = document.getElementsByClassName("Quantity");
 
+        var arrayOfselectedQuantities = [];
+        for (var i = 0; i < elements.length; i++) {
+            arrayOfselectedQuantities.push(elements[i].textContent);
+        }
+
+        $("#selectedQuantities").val(arrayOfselectedQuantities);
+    }
+
+    function closeAddServiceRequestCountModal() {
+        $("#AddServiceRequestCountModal").css("display", "none");
+        $('#AddServiceRequestCountModal').on('hidden', function () { $(this).empty(); });
+    }
 
     function deleteSelection(id) {
 
@@ -310,6 +373,7 @@
             arrayOfSelected.splice(index, 1); // 2nd parameter means remove one item only
             $(jquerySelector).remove();
         }
+        $("#unselected_" + id).css("display", "block")
 
         var newSelections = arrayOfSelected.toString();
         $("#selectedServicesIds").val(newSelections);
@@ -331,25 +395,25 @@
         }
     }
 
-    function appendServiceCard(dynamicId, dynamicTitle) {
+    function appendServiceCard(dynamicId, dynamicTitle, qty) {
 
         // Construct the HTML snippet with the dynamic values
         var htmlToAppend = `
-                                <div onclick="deleteSelection(${dynamicId})" id="${dynamicId}" class="col-md-3 padding-top-25 service-card-container">
-                                    <div class="service-card">
-                                        <div style="color:red; text-align:center">
-                                        <i class="fa-solid fa-x"></i>
-                                    </div>
-                                        <div class="service-card-body">
-                                            <h5 class="service-card-title-added">${dynamicTitle}</h5>
-                                        </div>
-                                    </div>
-                                </div>`;
+                                                                    <div onclick="deleteSelection(${dynamicId})" id="${dynamicId}" class="col-md-3 padding-top-25 service-card-container">
+                                                                        <div class="service-card">
+                                                                            <div style="color:red; text-align:center">
+                                                                            <i class="fa-solid fa-x"></i>
+                                                                        </div>
+                                                                            <div class="service-card-body">
+                                                                                <h5 class="service-card-title-added">${dynamicTitle}</h5>
+                                                                                    <h6">Qty:  <span class="Quantity"> ${qty} </span></h5>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>`;
 
         // Append the HTML snippet to the element with ID "selection-privileges"
         $("#selection-privileges").append(htmlToAppend);
     }
-
 
     function checkResultCount() {
         var numberOfSelections = $(".service-card-title-added").length;
@@ -392,28 +456,31 @@
 
     // Function to filter elements
     function filterOnClinics(filterValue) {
-        debugger;
+        ;
 
-        // Get all buttons with the class "active"
-        var activeButtons = document.querySelectorAll('.active');
+        // Get all buttons with the class "active" within privilegesContainer
+        var $activeButtons = $('#privilegesContainer .active');
 
         // Loop through each active button and remove the "active" class
-        activeButtons.forEach(function (button) {
-            button.classList.remove('active');
-        });
-    
+        $activeButtons.removeClass('active');
+
         $("#" + filterValue).addClass("active")
 
+        // Select the "privilegesContainer" and find elements within it
+        var $container = $('#privilegesContainer');
+
         if (filterValue == "All" || filterValue == "الكل") {
-            $('.service-card').parent().show(); 
+            $container.find('.service-card').parent().show();
         }
-        else { 
-        $('.service-card').parent().hide(); // Hide all elements
-        // Show elements where ClinicalSpecialityName matches the filter value
-        $('.service-card').filter(function () {
-            return $(this).find('#ClinicalSpecialityName').text().toLowerCase() === filterValue.toLowerCase();
-        }).parent().show();
+        else {
+            $container.find('.service-card').parent().hide(); // Hide all elements within "privilegesContainer"
+            // Show elements where ClinicalSpecialityName matches the filter value
+            $container.find('.service-card').filter(function () {
+                return $(this).find('#ClinicalSpecialityName').text().toLowerCase() === filterValue.toLowerCase();
+            }).parent().show();
         }
+        return;
     }
+
 
 </script>

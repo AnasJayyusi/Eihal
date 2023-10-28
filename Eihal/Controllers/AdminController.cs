@@ -2168,7 +2168,9 @@ namespace Eihal.Controllers
                 // Use the value as needed
                 ViewBag.SuccessMessage = isSuccessDelete;
             }
-            var services = _dbContext.Services.Include(a => a.ClinicalSpeciality).ToList();
+            var services = _dbContext.Services.Include(a => a.ClinicalSpeciality)
+                                              .Include(i => i.ServiceLevel)
+                                              .ToList();
             return View(services);
         }
 
@@ -2176,7 +2178,10 @@ namespace Eihal.Controllers
         [Route("GetServices")]
         public IActionResult ServicesList()
         {
-            var services = _dbContext.Services.Include(a => a.ClinicalSpeciality).ToList();
+            var services = _dbContext.Services.Include(a => a.ClinicalSpeciality)
+                                              .Include(i=>i.ServiceLevel)
+                                              .ToList();
+
             return PartialView("ServicesList", services);
         }
 
@@ -2194,7 +2199,7 @@ namespace Eihal.Controllers
                                         );
             if (isDuplicate)
             {
-                return BadRequest("The details for the Professional Rank have already been added.");
+                return BadRequest("The details for the Service have already been added.");
             }
 
             else
@@ -2267,15 +2272,7 @@ namespace Eihal.Controllers
         public IActionResult DeleteService(int id)
         {
 
-            //bool isLinked = _dbContext.Services.Any(w => w.Id == id);
-            //if (isLinked)
-            //{
-            //    return BadRequest("You cannot delete this item as it is linked to users in the system.");
-            //}
-
-            //else
-            //{
-            // Retrieve the practitioner type from the database using the id
+         
             var service = _dbContext.Services.Find(id);
 
 
@@ -2302,8 +2299,154 @@ namespace Eihal.Controllers
         [Route("GetService/{id}")]
         public Services GetService(int id)
         {
-            var services = _dbContext.Services.Include(a => a.ClinicalSpeciality).Single(w => w.Id == id);
+            var services = _dbContext.Services.Include(a => a.ClinicalSpeciality)
+                                              .Include(i=>i.ServiceLevel)
+                                              .Single(w => w.Id == id);
             return services;
+        }
+        #endregion
+
+        #region ServicesLevel
+        [Route("MasterList/ServiceLevels")]
+        public IActionResult ServiceLevels()
+        {
+            // Retrieve the value from TempData
+            bool? isFromDeleteRequest = TempData["isFromDeleteRequest"] as bool?;
+            bool? isSuccessDelete = TempData["isSuccessDelete"] as bool?;
+
+            if (isFromDeleteRequest != null && isSuccessDelete != null)
+            {
+                // Clear the TempData value to avoid persisting it across subsequent requests
+                TempData.Remove("isFromDeleteRequest");
+                TempData.Remove("isSuccessDelete");
+
+                // Use the value as needed
+                ViewBag.SuccessMessage = isSuccessDelete;
+            }
+            var levels = _dbContext.ServiceLevels.ToList();
+            return View(levels);
+        }
+
+
+        [Route("GetServiceLevels")]
+        public IActionResult GetServiceLevels()
+        {
+            var services = _dbContext.ServiceLevels.ToList();
+            return PartialView("ServiceLevelsList", services);
+        }
+
+        [HttpPost]
+        [Route("AddServiceLevel")]
+        public IActionResult AddServiceLevel([FromBody] ServiceLevel serviceLevel)
+        {
+            if (serviceLevel == null || string.IsNullOrEmpty(serviceLevel.TitleEn) || string.IsNullOrEmpty(serviceLevel.TitleAr))
+            {
+                return BadRequest("Please fill all fields.");
+            }
+
+            bool isDuplicate = _dbContext.ServiceLevels
+                                         .Any(w => (w.TitleEn == serviceLevel.TitleEn && w.TitleAr == serviceLevel.TitleAr)
+                                        );
+            if (isDuplicate)
+            {
+                return BadRequest("The details for the Service Level have already been added.");
+            }
+
+            else
+            {
+                if (!string.IsNullOrEmpty(serviceLevel.TitleAr) || !string.IsNullOrEmpty(serviceLevel.TitleEn))
+                {
+                    _dbContext.ServiceLevels.Add(serviceLevel);
+                    _dbContext.SaveChanges();
+                }
+            }
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("UpdateServiceLevel")]
+        public IActionResult UpdateServiceLevel([FromBody] ServiceLevel serviceLevel)
+        {
+            if (serviceLevel == null || string.IsNullOrEmpty(serviceLevel.TitleEn) || string.IsNullOrEmpty(serviceLevel.TitleAr))
+            {
+                return BadRequest("Please fill all fields.");
+            }
+
+            bool isDuplicate = _dbContext.ServiceLevels
+                                        .Any(w => (w.TitleEn == serviceLevel.TitleEn && w.TitleAr == serviceLevel.TitleAr && w.Id != serviceLevel.Id)
+                                      );
+            if (isDuplicate)
+            {
+                return BadRequest("The details for the Service Level have already been added.");
+            }
+
+            else
+            {
+                if (!string.IsNullOrEmpty(serviceLevel.TitleAr) || !string.IsNullOrEmpty(serviceLevel.TitleEn))
+                {
+                    _dbContext.ServiceLevels.Update(serviceLevel);
+                    _dbContext.SaveChanges();
+                }
+            }
+
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("UpdateServiceLevelStatus/{id}/{isActive}")]
+        public IActionResult UpdateServiceLevelStatus(int id, bool isActive)
+        {
+            try
+            {
+                var service = _dbContext.ServiceLevels.SingleOrDefault(p => p.Id == id);
+                if (service == null)
+                {
+                    return NotFound();
+                }
+
+                service.IsActive = isActive;
+                _dbContext.SaveChanges();
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while updating the status.");
+            }
+        }
+
+        [HttpGet]
+        [Route("DeleteUpdateServiceLevel/{id}")]
+        public IActionResult DeleteUpdateServiceLevel(int id)
+        {
+            var servicelevel = _dbContext.ServiceLevels.Find(id);
+
+            if (servicelevel == null)
+            {
+                // Handle the case where the practitioner type doesn't exist
+                TempData["isSuccessDelete"] = false;
+            }
+
+            // Remove the practitioner type from the DbSet
+            _dbContext.ServiceLevels.Remove(servicelevel);
+
+            // Save the changes to the database
+            _dbContext.SaveChanges();
+            TempData["isSuccessDelete"] = true;
+            //}
+            // Set the value in TempData
+            TempData["isFromDeleteRequest"] = true;
+            return RedirectToAction("Services");
+        }
+
+
+        [HttpGet]
+        [Route("GetServiceLevel/{id}")]
+        public ServiceLevel GetServiceLevel(int id)
+        {
+            var serviceLevel = _dbContext.ServiceLevels.Single(w => w.Id == id);
+            return serviceLevel;
         }
         #endregion
 
@@ -2753,25 +2896,21 @@ namespace Eihal.Controllers
                             Age = s.Order.Age,
                             ChronicDisease = s.Order.ChronicDisease,
                             ServicesRequests = s.Order.Services,
+                            RejectionReason = s.RejectionReason
                         }).Where(w => w.OrderId == orderId);
 
 
             return Json(referralsOrders);
         }
-
-
-
         #endregion
 
         #region CustomChangePassword
-
         [Route("CustomChangePassword")]
         [Route("MyProfile/ChangePassword")]
         public ActionResult CustomChangePassword()
         {
             return View();
         }
-
 
         [HttpPost]
         [Route("UpdatePassword")]
@@ -2787,7 +2926,6 @@ namespace Eihal.Controllers
             ViewBag.SuccessMessage = isSuccessDelete;
         }
         #endregion
-
 
         #region Notifications
         [Route("MyProfile/Notifications")]

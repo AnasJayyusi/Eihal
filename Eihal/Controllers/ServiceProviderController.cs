@@ -181,13 +181,14 @@ namespace Eihal.Controllers
         }
         [Route("RejectReferal")]
 
-        public ActionResult RejectReferal(int refId)
+        public ActionResult RejectReferal(int refId, string rejectionReason)
         {
             var currentUserId = GetUserProfileId();
 
             var referralRequest = _dbContext.ReferralRequests.Where(a => a.Id == refId && a.AssignedToUserId == currentUserId && a.Status == ReferralStatusEnum.UnderReview).First();
 
             referralRequest.Status = ReferralStatusEnum.Rejected;
+            referralRequest.RejectionReason = rejectionReason;
             _dbContext.SaveChanges();
             var referralRequestId = referralRequest.Id;
             string requestNumber = referralRequestId.ToString("#0000");
@@ -843,13 +844,13 @@ namespace Eihal.Controllers
 
 
         [Route("GetAvailablePrivileges")]
-
         public ActionResult GetAvailablePrivileges()
         {
-
             // Assuming you have a list of items to pass to the view
             var currentUserProfileId = GetUserProfileId();
-            var model = _dbContext.Services.Include(i => i.ClinicalSpeciality)
+            var model = _dbContext.Services
+                .Include(i => i.ClinicalSpeciality)
+                .Include(i => i.ServiceLevel)
             .Join(_dbContext.UserServices,
                 s => s.Id,
                 us => us.ServiceId,
@@ -862,7 +863,9 @@ namespace Eihal.Controllers
                     Logo = s.ClinicalSpeciality.LogoImagePath,
                     ClinicalSpecialityNameAr = s.ClinicalSpeciality.TitleAr,
                     ClinicalSpecialityNameEn = s.ClinicalSpeciality.TitleEn,
-                    UserProfileId = us.UserId
+                    UserProfileId = us.UserId,
+                    ServiceLevelNameAr = s.ServiceLevel.TitleEn ?? "-",
+                    ServiceLevelNameEn = s.ServiceLevel.TitleEn ?? "-"
                 })
                 .Where(us => us.Status == ServicesStatusEnum.Approved && us.UserProfileId != currentUserProfileId) // Include columns you want from both tables
                 .Distinct()
@@ -949,6 +952,7 @@ namespace Eihal.Controllers
             }
 
             var servicesIds = orderDetailsModal.SelectedServicesIds?.Split(',')?.Select(Int32.Parse)?.ToList();
+            var qty = orderDetailsModal.Quantities?.Split(',')?.Select(Int32.Parse)?.ToList();
             var services = _dbContext.Services.Where(a => servicesIds.Contains(a.Id)).ToList();
 
             var orderDetail = new OrderDetail()
@@ -986,6 +990,7 @@ namespace Eihal.Controllers
 
 
             var orderServiceDetails = new List<OrderServiceDetail>();
+            int count = 0;
             foreach (var serviceId in servicesIds)
             {
                 var userServiceDetails = _dbContext.UserServices
@@ -1004,8 +1009,10 @@ namespace Eihal.Controllers
                     ServiceId = serviceId,
                     TitleAr = userServiceDetails.TitleAr,
                     TitleEn = userServiceDetails.TitleEn,
+                    Qty = qty[count],
                 };
                 orderServiceDetails.Add(obj);
+                count++;
             }
             _dbContext.OrderServiceDetails.AddRange(orderServiceDetails);
             _dbContext.SaveChanges();
@@ -1049,6 +1056,7 @@ namespace Eihal.Controllers
             // Get Order Details
             var orderDetails = _dbContext.OrderDetails
                                          .Include(i => i.Services)
+                                         .Include(i => i.OrderServicesDetails)
                                          .Where(w => w.Id == referralReq.OrderId)
                                          .ToList();
 
@@ -1079,7 +1087,7 @@ namespace Eihal.Controllers
                     var dataTableDto = new DataTableDto();
                     dataTableDto.ServiceCode = svc.Id.ToString();
                     dataTableDto.ServiceDesc = svc.TitleEn;
-                    dataTableDto.Qty = 1;
+                    dataTableDto.Qty = order.OrderServicesDetails.FirstOrDefault().Qty ?? 1;
 
                     // Total Qty
                     totalQty = totalQty + dataTableDto.Qty;
@@ -1138,8 +1146,8 @@ namespace Eihal.Controllers
                         .Include(i => i.Order)
                         .Include(i => i.CreatedByUser)
                         .Include(i => i.AssignedToUser)
-                        .Include(i => i.Order.OrderServicesDetails)
                         .Include(i => i.Order.Services)
+                        .Include(i => i.Order.OrderServicesDetails)
                         .Select(s => new ReferralOrderDetailModal
                         {
                             OrderId = s.OrderId,
@@ -1162,6 +1170,8 @@ namespace Eihal.Controllers
                             Age = s.Order.Age,
                             ChronicDisease = s.Order.ChronicDisease,
                             ServicesRequests = s.Order.Services,
+                            OrderServicesDetails = s.Order.OrderServicesDetails,
+                            RejectionReason = s.RejectionReason
                         }).Where(w => w.OrderId == orderId);
 
 

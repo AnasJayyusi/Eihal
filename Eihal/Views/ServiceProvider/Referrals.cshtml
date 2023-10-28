@@ -241,7 +241,7 @@
                                             <span style="color:red;font-style:italic;font-weight:bold">Note: the doctor will appers based on your selection, Please select at least one service</span>
                                             <br />
                                             <h6 style="color:#00768c">
-                                                Selected Services  
+                                                Selected Services
                                             </h6>
 
                                             @*selection*@
@@ -323,8 +323,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal" id="close-order">Cancel</button>
-                @*<button onclick="updateProfile()" type="button" class="btn btn-success" style="background-color:#00768c">Update</button>*@
+                <button type="button" class="btn btn-danger" onclick="closeOrderModal()" data-dismiss="modal" id="close-order">Cancel</button>
             </div>
         </div>
     </div>
@@ -517,10 +516,23 @@
                             </div>
                         </div>
                     </div>
+
+                    <div id="rejectionReasonDiv" style="display:none" class="row">
+                        <div class="col-md-12">
+                            <div class="form-group ">
+                                <label style="font-weight:bold;color:firebrick">Rejection Reason:</label> <span style="color:firebrick;font-style:italic"></span>
+                                <div class="form-check p-0">
+                                    <textarea rows="4" cols="50" id="rejectionReasonInput" spellcheck="true" data-ms-editor="true" style="cursor: text;color:gray">
+                                    </textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                     <input hidden type="text" class="form-control" id="refId-hidden-Input">
                 </div>
                 <div class="modal-footer">
-                    <button onclick="rejectFromPopup()" id="reject-view-OrderDetails-btn" type="button" class="btn btn-danger" data-dismiss="modal">Reject</button>
+                    <button onclick="rejectFromPopup()" id="reject-view-OrderDetails-btn" type="button" class="btn btn-danger">Reject</button>
                     <button onclick="approveFromPopup()" id="approve-view-OrderDetails-btn" type="button" class="btn btn-success" data-dismiss="modal">Approve</button>
                     <button onclick="completeFromPopup()" id="complete-view-OrderDetails-btn" type="button" class="btn btn-primary" data-dismiss="modal">Complete</button>
                     @* <button onclick="reportFromPopup()" id="report-view-OrderDetails-info" type="button" class="btn btn-primary" data-dismiss="modal">Report</button> *@
@@ -539,12 +551,71 @@
 
 
 
+
+
+<div class="modal fade" id="RejectionReasonModal" tabindex="-1" role="dialog" aria-labelledby="RejectionReasonModal" aria-hidden="true">
+    <div class="modal-dialog custom-modal-dialog" style="max-width:fit-content" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="RejectionReasonModal">Rejection Reason</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Add your modal content here -->
+                <div class="container">
+                    <div id="rejectionReasonDiv" style="display:block" class="row">
+                        <div class="col-md-12">
+                            <div class="form-group ">
+                                <div class="form-check p-0">
+                                    <textarea id="textAreaReason" rows="4" cols="50" spellcheck="true" data-ms-editor="true" style="cursor: text;color:gray">
+                                    </textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input hidden type="text" class="form-control" id="refId-hidden-Input">
+                </div>
+                <div class="modal-footer">
+                    <button onclick="rejectFromPopup()" id="reject-view-OrderDetails-btn" type="button" class="btn btn-danger">Reject</button>
+                    <button id="close-view-OrderDetails" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
 @section Scripts {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
+
+       function closeOrderModal()
+        {
+            $(".modal-backdrop").remove();
+        }
+
         function rejectFromPopup() {
-            var refId = $("#refId-hidden-Input").val()
-            reject(refId)
+            
+            var refId = $("#refId-hidden-Input").val();
+            $("#rejectionReasonDiv").show()
+
+            var rejectionReasonValue = $("#rejectionReasonInput").val().trim();
+            var rejectionReasonPopup = $("#textAreaReason").val().trim();
+
+            if (rejectionReasonValue.trim().length == 0 && rejectionReasonPopup.trim().length == 0) {
+                toastr.warning('Please Add Rejection Reason', 'Warning !!');
+                return;
+            }
+            else {
+                reject(refId, rejectionReasonValue);
+                $(".close").trigger("click");
+            }
         }
 
         function reportFromPopup() {
@@ -610,7 +681,7 @@
             var dateId = $('#date-incoming-ddl').val();
 
             $.ajax({
-                url: '/ServiceProvider/GetUserIncomingRequests?name=' + name + '&statusId=' + statusId + '&dateId=' + dateId, 
+                url: '/ServiceProvider/GetUserIncomingRequests?name=' + name + '&statusId=' + statusId + '&dateId=' + dateId,
                 type: 'GET',
                 success: function (response) {
                     incomingContainer.html(response);
@@ -629,7 +700,7 @@
             var dateId = $('#date-outgoing-ddl').val();
 
             $.ajax({
-                url: '/ServiceProvider/GetUserOutgoingRequests?name=' + name + '&statusId=' + statusId + '&dateId=' + dateId, 
+                url: '/ServiceProvider/GetUserOutgoingRequests?name=' + name + '&statusId=' + statusId + '&dateId=' + dateId,
                 type: 'GET',
                 success: function (response) {
                     outgoingContainer.html(response);
@@ -736,13 +807,13 @@
             setTimeout(() => {
                 document.getElementById('invoice-' + refId).click();
             }, "500")
-      
+
         }
 
-        function reject(refId) {
+        function reject(refId, rejectionReasonValue) {
 
             $.ajax({
-                url: '/ServiceProvider/RejectReferal?refId=' + refId,
+                url: '/ServiceProvider/RejectReferal?refId=' + refId + "&rejectionReason=" + rejectionReasonValue,
                 type: 'GET',
                 success: function (response) {
                     toastr.success('Order rejected successfully', 'Success !!');
@@ -753,13 +824,14 @@
                 }
             });
         }
-        
+
 
 
 
 
         function getReferralsOrderDetails(id, isFromIncoming) {
-
+            
+            $("#rejectionReasonDiv").hide()
             if (isFromIncoming) {
                 $("#assignedto-div").hide()
                 // Hide Feilds
@@ -823,6 +895,8 @@
                         $("#status-readonly").text("Rejected")
                         $("#status-readonly").addClass("rejected")
                         $("#close-view-OrderDetails").show();
+                        $("#rejectionReasonDiv").show();
+                        $("#rejectionReasonInput").attr('disabled', 'disabled');
 
                     }
                     if (data.status == 4) {
@@ -848,6 +922,7 @@
                     $("#city-readonly").val(data.cityTextEn)
                     $("#chronicDisease-readonly").val(data.chronicDisease)
                     $("#refId-hidden-Input").val(data.referralRequestId)
+                    $("#rejectionReasonInput").val(data.rejectionReason)
                     if (data.gender == 0) {
                         // Show Female
                         $("#female-label-readonly").css("display", "");
@@ -974,12 +1049,15 @@
 
                     }
 
-
                     var dropdown = $('#services-readOnly');
                     dropdown.empty();
-                    $.each(data.servicesRequests, function (index, item) {
-                        dropdown.append("<li> ♦ " + item.titleEn + "</li>");
-                    });
+
+                    for (var i = 0; i <= data.servicesRequests.length; i++) {
+                        var qty = 1;
+                        if (data.orderServicesDetails[i].qty != null)
+                            qty = data.orderServicesDetails[i].qty;
+                        dropdown.append("<li> ♦ " + data.servicesRequests[i].titleEn + "<span style='color: green;font-weight:bold'> X" + qty + "</span> </li>");
+                    }
 
 
                 },
@@ -1005,3 +1083,5 @@
         background-color: #00333f;
     }
 </style>
+
+

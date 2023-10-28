@@ -25,8 +25,9 @@ namespace Eihal.Models
         public Gender Gender { get; set; }
         public Age Age { get; set; }
         public string ChronicDisease { get; set; }
-        //public List<OrderServiceDetail> ServicesApproved { get; set; }
         public List<Services> ServicesRequests { get; set; }
+        public List<OrderServiceDetail> OrderServicesDetails { get; set; }
+        public string RejectionReason { get; set; }
 
     }
 }

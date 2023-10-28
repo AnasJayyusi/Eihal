@@ -48,6 +48,18 @@ namespace Eihal.Controllers
             // Pass the data to the view
             return Json(dropdownData);
         }
+
+        [HttpGet]
+        [Route("GetServiceLevelsDDL")]
+        public ActionResult GetServiceLevelsDDL()
+        {
+            // Retrieve the data for the dropdown list
+            var dropdownData = _dbContext.ServiceLevels.Where(w => w.IsActive).ToList();
+
+            // Pass the data to the view
+            return Json(dropdownData);
+        }
+
         [HttpGet]
         [Route("GetSubPrivillagesDDL")]
         public ActionResult GetSubPrivillagesDDL(int? privillageId)
@@ -89,12 +101,26 @@ namespace Eihal.Controllers
             // Pass the data to the view
             return Json(dropdownData);
         }
+
         [HttpGet]
         [Route("GetServicesDDL")]
         public ActionResult GetServicesDDL()
         {
             // Retrieve the data for the dropdown list
             var dropdownData = _dbContext.Services.ToList();
+
+            // Pass the data to the view
+            return Json(dropdownData);
+        }
+
+        [HttpGet]
+        [Route("GetServicesDDLBySpecialityId")]
+        public ActionResult GetServicesDDLById(int specialityid)
+        {
+            // Retrieve the data for the dropdown list
+            var dropdownData = _dbContext.Services
+                                         .Where(w => w.ClinicalSpecialityId == specialityid)
+                                         .ToList();
 
             // Pass the data to the view
             return Json(dropdownData);
@@ -127,7 +153,7 @@ namespace Eihal.Controllers
         public ActionResult GetDisctrictsDDL(int cityId)
         {
             // Retrieve the data for the dropdown list
-            var dropdownData = _dbContext.Districts.Where(a=>a.CityId == cityId).ToList();
+            var dropdownData = _dbContext.Districts.Where(a => a.CityId == cityId).ToList();
 
             // Pass the data to the view
             return Json(dropdownData);
@@ -137,13 +163,13 @@ namespace Eihal.Controllers
         public ActionResult GetInsuranceCompaniesDDL()
         {
             // Retrieve the data for the dropdown list
-            var dropdownData = _dbContext.InsuranceCompanies.Where(a=>a.IsActive).ToList();
+            var dropdownData = _dbContext.InsuranceCompanies.Where(a => a.IsActive).ToList();
 
             // Pass the data to the view
             return Json(dropdownData);
         }
 
-      
+
         #endregion
 
         #region Helper For Razor Page
@@ -207,9 +233,9 @@ namespace Eihal.Controllers
                         join userService in _dbContext.UserServices on services.Id equals userService.ServiceId
                         select new
                         {
-                           id= services.Id,
-                           text= services.TitleEn,
-                           textAr= services.TitleAr
+                            id = services.Id,
+                            text = services.TitleEn,
+                            textAr = services.TitleAr
                         };
 
             var result = query.Where(x => string.IsNullOrEmpty(term) || x.text.Contains(term) || x.textAr.Contains(term)).ToList();

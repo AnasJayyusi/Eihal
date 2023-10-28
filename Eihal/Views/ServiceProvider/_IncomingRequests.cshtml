@@ -83,7 +83,7 @@
                             </i>
                             <div class="dropdown-card" id="dropdownMenu@(referral.Id)">
                                 <div class="option" onclick="approve(@(referral.Id))">Approve</div>
-                                <div class="option" onclick="reject(@(referral.Id))">Reject</div>
+                                <div class="option" onclick="getReferralsOrderDetails(@referral.OrderId,true)" data-toggle="modal" data-target="#RejectionReasonModal" data-placement="top" title="Edit"  style="padding:10px">Reject</div>
                             </div>
                         </div>
                     }

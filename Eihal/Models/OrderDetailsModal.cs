@@ -14,5 +14,6 @@
         public string ChronicDisease { get; set; }
         public string SelectedServicesIds { get; set; }
         public string DoctorId { get; set; }
+        public string Quantities { get; set; }
     }
 }

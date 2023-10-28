@@ -4,6 +4,7 @@ using Eihal.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Eihal.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231028085832_AddRejectionReason")]
+    partial class AddRejectionReason
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -435,9 +437,6 @@ namespace Eihal.Data.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
-                    b.Property<int?>("Qty")
-                        .HasColumnType("int");
-
                     b.Property<int>("ServiceId")
                         .HasColumnType("int");
 
@@ -580,31 +579,6 @@ namespace Eihal.Data.Migrations
                     b.ToTable("ReferralRequests");
                 });
 
-            modelBuilder.Entity("Eihal.Data.Entites.ServiceLevel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("TitleAr")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TitleEn")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ServiceLevels");
-                });
-
             modelBuilder.Entity("Eihal.Data.Entites.Services", b =>
                 {
                     b.Property<int>("Id")
@@ -628,9 +602,6 @@ namespace Eihal.Data.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("ServiceLevelId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("SubPrivillageId")
                         .HasColumnType("int");
 
@@ -651,8 +622,6 @@ namespace Eihal.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ClinicalSpecialityId");
-
-                    b.HasIndex("ServiceLevelId");
 
                     b.HasIndex("SubPrivillageId");
 
@@ -1469,17 +1438,11 @@ namespace Eihal.Data.Migrations
                         .WithMany()
                         .HasForeignKey("ClinicalSpecialityId");
 
-                    b.HasOne("Eihal.Data.Entites.ServiceLevel", "ServiceLevel")
-                        .WithMany()
-                        .HasForeignKey("ServiceLevelId");
-
                     b.HasOne("Eihal.Data.Entites.SubPrivillage", "SubPrivillage")
                         .WithMany()
                         .HasForeignKey("SubPrivillageId");
 
                     b.Navigation("ClinicalSpeciality");
-
-                    b.Navigation("ServiceLevel");
 
                     b.Navigation("SubPrivillage");
                 });
