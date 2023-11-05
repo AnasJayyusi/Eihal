@@ -153,29 +153,23 @@ namespace Eihal.Controllers
                 }
             }
 
-            return PartialView("_DoctorsList", doctors);
+            return PartialView("DoctorsList", doctors);
         }
 
-        public ActionResult GetUserDetailsById(string userId)
+        public ActionResult GetDoctorDetails(string userId)
         {
             var userDetails = _dbContext.UserProfiles.Include(x => x.Certifications)
                                                      .ThenInclude(a => a.Degree)
                                                      .Include(a => a.PractitionerType)
                                                      .Include(x => x.City).Where(a => a.UserId == userId).FirstOrDefault();
 
-            return PartialView("_UserDetails", userDetails);
+            return PartialView("DoctorDetails", userDetails);
         }
 
         public IActionResult About()
         {
             return View();
         }
-
-        public IActionResult AdminOnly()
-        {
-            return View();
-        }
-
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

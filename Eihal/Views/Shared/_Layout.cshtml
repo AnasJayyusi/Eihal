@@ -442,7 +442,7 @@
 
     $(document).ready(function () {
         $.ajax({
-            url: '/Notification/GetUserNotificationsCount',  // Replace 'your-api-url' with the actual API endpoint URL
+            url: '/Notification/GetNotificationsCount',  // Replace 'your-api-url' with the actual API endpoint URL
             method: 'GET',
             success: function (response) {
                 // On success, loop through the response data and populate the dropdown options
@@ -470,7 +470,7 @@
         var notificationContainer = $('#notificationContainer');
 
         $.ajax({
-            url: '/Notification/GetUserNotifications',
+            url: '/Notification/GetNotifications',
             type: 'GET',
             success: function (response) {
                 notificationContainer.html(response);

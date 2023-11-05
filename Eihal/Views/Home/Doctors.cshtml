@@ -412,7 +412,7 @@
                         </div>
                     </div>
                     <div id="doctorsListContainer">
-                        @Html.Partial("_DoctorsList",Model)
+                        @Html.Partial("DoctorsList",Model)
                     </div>
                 </form>
             </div>
@@ -557,7 +557,7 @@
             var userDetailsContainer = $('#userDetailsContainer');
 
             $.ajax({
-                url: '/Home/GetUserDetailsById?userId=' + userId,
+                url: '/Home/GetDoctorDetails?userId=' + userId,
                 type: 'GET',
                 success: function (response) {
                     userDetailsContainer.html(response);

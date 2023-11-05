@@ -450,7 +450,7 @@
             var userDetailsContainer = $('#userDetailsContainer');
 
             $.ajax({
-                url: '/Home/GetUserDetailsById?userId=' + userId,
+                url: '/Home/GetDoctorDetails?userId=' + userId,
                 type: 'GET',
                 success: function (response) {
                     userDetailsContainer.html(response);

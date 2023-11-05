@@ -485,7 +485,7 @@
             var serviceContainer = $('#serviceContainer');
 
             $.ajax({
-                url: '/ServiceProvider/MyServiceCardPartial', 
+                url: '/ServiceProvider/GetMyOwnServices',
                 type: 'GET',
                 success: function (response) {
                     serviceContainer.html(response);

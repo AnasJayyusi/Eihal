@@ -92,9 +92,9 @@ namespace Eihal.Controllers
         }
 
 
-        [Route("GetUserIncomingRequests")]
+        [Route("GetIncomingRequests")]
 
-        public ActionResult GetUserIncomingRequests(string? name, int? statusId = 0, int? dateId = 0)
+        public ActionResult GetIncomingRequests(string? name, int? statusId = 0, int? dateId = 0)
         {
             var currentUserId = GetUserProfileId();
             if (string.IsNullOrEmpty(name))
@@ -115,11 +115,11 @@ namespace Eihal.Controllers
                                         && a.AssignedToUserId == currentUserId).OrderByDescending(a => a.CreationDate)
                                         .ToList();
 
-            return PartialView("_IncomingRequests", model);
+            return PartialView("IncomingRequests", model);
         }
-        [Route("GetUserOutgoingRequests")]
 
-        public ActionResult GetUserOutgoingRequests(string? name, int? statusId = 0, int? dateId = 0)
+        [Route("GetOutgoingRequests")]
+        public ActionResult GetOutgoingRequests(string? name, int? statusId = 0, int? dateId = 0)
         {
             var currentUserId = GetUserProfileId();
             if (string.IsNullOrEmpty(name))
@@ -140,7 +140,7 @@ namespace Eihal.Controllers
                                   && a.CreatedByUserId == currentUserId).OrderByDescending(a => a.CreationDate)
                                   .ToList();
 
-            return PartialView("_OutgoingRequests", model);
+            return PartialView("OutgoingRequests", model);
         }
 
         [Route("ApproveReferal")]
@@ -220,17 +220,12 @@ namespace Eihal.Controllers
             return View(clinicalSpecialities);
         }
 
-        [Route("MyServiceCardPartial")]
-
-        public ActionResult MyServiceCardPartial()
+        [Route("GetMyOwnServices")]
+        public ActionResult GetMyOwnServices()
         {
             var currentUserId = GetUserProfileId();
 
-            // Assuming you have a list of items to pass to the view
             List<UserServices> model = _dbContext.UserServices.Where(a => a.UserId == currentUserId && a.Status != Enums.ServicesStatusEnum.Deleted).ToList(); // Replace with your logic to fetch the items
-
-            // Render the partial view and return it as HTML content
-            //string htmlContent = RenderPartialToString("_CardPartial", model); // Replace with the name of your partial view
 
             return PartialView("_ServiceCardPartial", model); // Replace with the name of your partial view
         }
@@ -258,7 +253,7 @@ namespace Eihal.Controllers
                 services = services.Where(a => a.TitleEn.Contains(kw));
             }
 
-            return PartialView("_AllServiceCardPartial", services.Include(a => a.ClinicalSpeciality).ToList()); // Replace with the name of your partial view
+            return PartialView("ServiceCards", services.Include(a => a.ClinicalSpeciality).ToList()); // Replace with the name of your partial view
         }
         [Route("DeleteUserService")]
         public ActionResult DeleteUserService(int Id)

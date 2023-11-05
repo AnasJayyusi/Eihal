@@ -12,7 +12,7 @@ connection.on("ReceiveMessage", function (user, message) {
     // is not interpreted as markup. If you're assigning in any other way, you 
     // should be aware of possible script injection concerns.
     $.ajax({
-        url: '/Notification/GetUserNotificationsCount',  // Replace 'your-api-url' with the actual API endpoint URL
+        url: '/Notification/GetNotificationsCount',  // Replace 'your-api-url' with the actual API endpoint URL
         method: 'GET',
         success: function (response) {
             // On success, loop through the response data and populate the dropdown options
