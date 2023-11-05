@@ -1,4 +1,4 @@
-﻿@model Eihal.Data.Entites.UserProfile
+﻿@model Eihal.Models.DoctorDetailsModel
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
@@ -8,9 +8,6 @@
     bool isEng = direction == "ltr" ? true : false;
 }
 
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
 
 <style>
@@ -106,16 +103,16 @@
             }
 </style>
 <table cellpadding="10">
+
     <tr>
         <td>
+            <input hidden type="text" class="form-control" id="userProfileId" value="@Model.UserProfileId">
             <img id="user-image" style="border-radius:30%" src="~/users/images/@(Model.UserId).jpg"
                  onerror="this.src='/users/images/Default-User-Profile.jpg'" width="150" height="150" />
         </td>
         <td>
-            <h4 id="fullname-label" style="font-weight:bold">@Model.FullName</h4>
+            <h4 id="fullname-label" class="sys-color" style="font-weight:bold">@Model.FullName</h4>
         </td>
-
-
     </tr>
     <tr>
 
@@ -148,93 +145,209 @@
 </table>
 <hr>
 
-<div class="container">
-    <div class="row mt-4">
-        <div class="col-md-12">
-            <h5 style="color:#00768c" class="font-weight-bold">@Localizer["Bio"] </h5>
-        </div>
+<link rel="stylesheet" href="~/css/w3.css">
+
+<div class="w3-container">
+
+    <div class="w3-row">
+        <a href="javascript:void(0)" onclick="openTab(event, 'Overview');">
+            <div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding font-weight-bold w3-border-cyan w-auto ">@Localizer["Overview"]</div>
+        </a>
+        <a href="javascript:void(0)" onclick="openTab(event, 'Services');">
+            <div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding font-weight-bold text-center ">@Localizer["Services"] </div>
+        </a>
+        <a href="javascript:void(0)" onclick="openTab(event, 'TimeTable');">
+            <div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding font-weight-bold w-auto ">@Localizer["TimeInsuranceCompaines"]</div>
+        </a>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            @if (!string.IsNullOrEmpty(Model.Bio))
-            {
-                <span id="bio-label" class="text-black">@Model.Bio</span>
-            }
-            else
-            {
-                <span id="bio-label" class="text-black">- </span>
-            }
-        </div>
-    </div>
-    <div class="row mt-4">
-        <div class="col-md-12">
-            <h5 style="color:#00768c" class="font-weight-bold">@Localizer["Speciality"]</h5>
-            <span id="speciality-label" class="text-black">
-                @if (isEng)
+    <br />
+
+
+    <div id="Overview" class="w3-container tab" style="display:block">
+        <div class="row">
+            <div class="col-md-3"><span class="sys-color font-weight-bold">@Localizer["Bio"]</span> </div>
+            <div class="col-md-9">
+                @if (@Model.OverView.Bio == null || Model.OverView.Bio == "")
                 {
-                    @Model.SpecialtiesTitlesEn
+                    <text> - </text>
                 }
                 else
                 {
-                    @Model.SpecialtiesTitlesAr
+                    <span>   @Model.OverView.Bio </span>
                 }
-            </span>
+            </div>
         </div>
-    </div>
-    <div class="row mt-4">
-        <div class="col-md-12">
-            <h5 style="color:#00768c" class="font-weight-bold">@Localizer["Certifications"]</h5>
-            <span id="certifications-label" class="text-black"></span>
+        <br />
+        <div class="row">
+            <div class="col-md-3"><span class="sys-color font-weight-bold">@Localizer["Speciality"]</span> </div>
+            <div class="col-md-9">
+                @if (@Model.OverView.SpecialtiesTitlesAr == null || Model.OverView.SpecialtiesTitlesAr == "")
+                {
+                    <text> - </text>
+                }
+                else
+                {
+                    @if (isEng)
+                    {
+                        var specialties = @Model.OverView.SpecialtiesTitlesEn.Split(",").ToList();
+                        <ul>
+                            @foreach (var specialty in specialties)
+                            {
+                                <li>♦ @specialty</li>
+                            }
+                        </ul>
+                    }
 
+                    else
+                    {
+                        var specialties = @Model.OverView.SpecialtiesTitlesAr.Split(",").ToList();
+                        <ul>
+                            @foreach (var specialty in specialties)
+                            {
+                                <li>♦ @specialty</li>
+                            }
+                        </ul>
+                    }
+
+
+                }
+            </div>
         </div>
+        <br />
+        <div class="row">
+            <div class="col-md-3"><span class="sys-color font-weight-bold">@Localizer["Certifications"] </span> </div>
+            <div class="col-md-9">
+                @if (!@Model.OverView.Certifications.Any())
+                {
+                    <text> - </text>
+                }
+                else
+                {
+                    @if (isEng)
+                    {
+                        <ul>
+                            @foreach (var cer in @Model.OverView.Certifications)
+                            {
+                                <li> @cer.Degree.TitleEn<span class="sys-color"> From </span> @cer.UniversityNameEn</li>
+                            }
+                        </ul>
+                    }
 
-    </div>
-    <div class="row mt-3">
-        <div class="col-md-12">
-            <div id="certifications-container">
-                <table id="certifications-table" class="table">
-                    <thead>
-                        <tr>
-                            <th>@Localizer["Degree"]</th>
-                            <th>@Localizer["UniversityName"]</th>
-                            @*<th>Certifications File</th>*@
-                        </tr>
-                    </thead>
-                    <tbody id="certifications-list">
-                        @foreach (var cer in Model.Certifications)
-                        {
-                            <tr>
-                                <td>
-                                    @if (isEng)
-                                    {
-                                        @cer.Degree.TitleEn
-                                    }
-                                    else
-                                    {
-                                        @cer.Degree.TitleAr
-                                    }
+                    else
+                    {
+                        <ul>
+                            @foreach (var cer in @Model.OverView.Certifications)
+                            {
+                                <li>@cer.Degree.TitleAr <span class="sys-color"> من </span> @cer.UniversityNameAr</li>
+                            }
+                        </ul>
+                    }
 
-                                </td>
-                                <td>
-                                    @if (isEng)
-                                    {
-                                        @cer.UniversityNameEn
-                                    }
-                                    else
-                                    {
-                                        @cer.UniversityNameAr
-                                    }
-                                </td>
 
-                            </tr>
-                        }
-
-                    </tbody>
-                </table>
-                <p id="certifications-label"></p>
+                }
             </div>
         </div>
     </div>
+
+    <div id="Services" class="w3-container tab" style="display:none">
+        <div id="doctor-Services-container"></div>
+    </div>
+
+    <div id="TimeTable" class="w3-container tab" style="display:none">
+        <div id="doctor-TimeTable-container"></div>
+    </div>
 </div>
+
+
+<script>
+    function openTab(evt, tabeName) {
+        debugger;
+        var i, x, tablinks;
+        x = document.getElementsByClassName("tab");
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablink");
+        for (i = 0; i < x.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" w3-border-cyan", "");
+        }
+        document.getElementById(tabeName).style.display = "block";
+        evt.currentTarget.firstElementChild.className += " w3-border-cyan";
+
+        if (tabeName == 'Services')
+            getDoctorServices();
+
+        if (tabeName == 'TimeTable')
+            getDoctorTimeTable();
+
+    }
+
+    function getDoctorServices(userId) {
+        $.ajax({
+            url: '/Home/GetDoctorServices?userProfileId=' + $("#userProfileId").val(),
+            type: 'GET',
+            success: function (response) {
+                $('#doctor-Services-container').html(response);
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
+    }
+
+    function getDoctorTimeTable(userId) {
+        $.ajax({
+            url: '/Home/GetTimeClinicLocations?userProfileId=' + $("#userProfileId").val(),
+            type: 'GET',
+            success: function (response) {
+                $('#doctor-TimeTable-container').html(response);
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
+        setTimeout(getUserCompanies, 500);
+    }
+
+    function getUserCompanies() {
+        $.ajax({
+            url: '/Home/GetUserCompanies?userProfileId=' + $("#userProfileId").val(),
+            type: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                // Handle success response
+                if (response && response.length > 0) {
+
+                    $("#no-company-added").hide();
+                    var ul = $('<ul></ul>'); // Create <ul> element
+                    response.forEach(function (company) {
+                        var companyName = ""
+                        if (isEnglishCulture()) {
+                            companyName = company.titleEn
+                        }
+                        else {
+                            companyName = company.titleAr
+                        }
+                        var li = $('<li style="display: inline; padding-left:10px "></li>'); // Create <li> element
+                        var img = $('<img  style="height:50px" />').attr('src', company.logoImagePath); // Create <img> element
+                        var a = $('<a></a>').attr('href', '#').append(img).append(companyName); // Create <a> element
+                        li.append(a); // Append <a> to <li>
+                        ul.append(li); // Append <li> to <ul>
+                    });
+
+                    // Add the generated <ul> to the desired container element
+                    $('.iconList').empty().append(ul);
+                } else {
+                    $("#no-company-added").show();
+                }
+            },
+            error: function (error) {
+                toastr.error('Error occurred', 'Failed !!');
+                // Handle error response
+            }
+        });
+    }
+
+</script>
 
 

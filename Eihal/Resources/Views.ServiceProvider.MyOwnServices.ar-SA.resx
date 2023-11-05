@@ -117,40 +117,43 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AllCities" xml:space="preserve">
-    <value>جميع المدن</value>
-  </data>
-  <data name="AllDistricts" xml:space="preserve">
-    <value>جميع المناطق</value>
-  </data>
-  <data name="AllInsuranceCompanies" xml:space="preserve">
-    <value>جميع شركات التأمين</value>
-  </data>
-  <data name="AllServices" xml:space="preserve">
-    <value>جميع الخدمات</value>
+  <data name="Approved" xml:space="preserve">
+    <value>موافق عليه</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>إغلاق</value>
   </data>
-  <data name="DoctorDetails" xml:space="preserve">
-    <value>معلومات الطبيب</value>
+  <data name="Completed" xml:space="preserve">
+    <value>مكتمل</value>
   </data>
-  <data name="Doctors" xml:space="preserve">
-    <value>الأطباء</value>
+  <data name="Fee" xml:space="preserve">
+    <value>رسوم:</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>الصفحة الرئيسية</value>
+  <data name="NavigateToAdd" xml:space="preserve">
+    <value>اضغط لإختيار الإمتيازات السريرية (الخدمات) المناسبة</value>
   </data>
-  <data name="Location" xml:space="preserve">
-    <value>موقع</value>
+  <data name="NoServiceAdded" xml:space="preserve">
+    <value>لم تتم إضافة أي خدمة حتى الآن.</value>
   </data>
-  <data name="Name" xml:space="preserve">
-    <value>اسم</value>
+  <data name="Pending" xml:space="preserve">
+    <value>قيد الانتظار</value>
   </data>
-  <data name="Search" xml:space="preserve">
-    <value>بحث</value>
+  <data name="Price" xml:space="preserve">
+    <value>السعر:</value>
   </data>
-  <data name="SortBy" xml:space="preserve">
-    <value>ترتيب حسب</value>
+  <data name="Rejected" xml:space="preserve">
+    <value>مرفوض</value>
+  </data>
+  <data name="RejectionReason" xml:space="preserve">
+    <value>سبب الرفض</value>
+  </data>
+  <data name="SAR" xml:space="preserve">
+    <value>ريال سعودي</value>
+  </data>
+  <data name="Services" xml:space="preserve">
+    <value>الخدمات</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>حالة:</value>
   </data>
 </root>

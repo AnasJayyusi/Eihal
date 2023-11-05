@@ -171,10 +171,6 @@ namespace Eihal.Controllers
             referralRequest.Status = ReferralStatusEnum.Completed;
             referralRequest.CompletionDate = DateTime.Now;
             _dbContext.SaveChanges();
-            // Based On Needed
-            //var referralRequestId = referralRequest.Id;
-            //string requestNumber = referralRequestId.ToString("#0000");
-            //PushNewNotification(SharedEnum.NotificationTypeEnum.ApprovedOrder, GetUserProfileId(), referralRequest.CreatedByUserId, requestNumber);
 
 
             return Ok();
@@ -227,7 +223,7 @@ namespace Eihal.Controllers
 
             List<UserServices> model = _dbContext.UserServices.Where(a => a.UserId == currentUserId && a.Status != Enums.ServicesStatusEnum.Deleted).ToList(); // Replace with your logic to fetch the items
 
-            return PartialView("_ServiceCardPartial", model); // Replace with the name of your partial view
+            return PartialView("MyOwnServices", model); // Replace with the name of your partial view
         }
         [Route("AllServiceCardPartial")]
 

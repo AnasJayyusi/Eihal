@@ -117,31 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Bio" xml:space="preserve">
-    <value>Bio</value>
+  <data name="Price" xml:space="preserve">
+    <value>السعر</value>
   </data>
-  <data name="Certifications" xml:space="preserve">
-    <value>Certifications</value>
-  </data>
-  <data name="Degree" xml:space="preserve">
-    <value>Degree</value>
-  </data>
-  <data name="Insurance" xml:space="preserve">
-    <value>Insurance:</value>
-  </data>
-  <data name="No" xml:space="preserve">
-    <value>No</value>
-  </data>
-  <data name="Reviews" xml:space="preserve">
-    <value>Reviews</value>
-  </data>
-  <data name="Speciality" xml:space="preserve">
-    <value>Speciality</value>
-  </data>
-  <data name="UniversityName" xml:space="preserve">
-    <value>University Name</value>
-  </data>
-  <data name="Yes" xml:space="preserve">
-    <value>Yes</value>
+  <data name="SAR" xml:space="preserve">
+    <value>ريال سعودي</value>
   </data>
 </root>

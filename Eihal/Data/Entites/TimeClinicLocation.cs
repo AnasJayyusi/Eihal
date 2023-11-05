@@ -58,5 +58,8 @@ namespace Eihal.Data.Entites
         public District? Districts { get; set; }
         public UserProfile UserProfile { get; set; }
         #endregion
+
+        [NotMapped]
+        public string Location { get; set; }
     }
 }

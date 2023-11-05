@@ -1,0 +1,289 @@
+﻿@model Eihal.Data.Entites.TimeClinicLocation
+
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+    string cultureCode = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
+    string direction = cultureCode.StartsWith("ar", StringComparison.OrdinalIgnoreCase) ? "rtl" : "ltr";
+    string textAlign = direction == "rtl" ? "right" : "left";
+    bool isEng = direction == "ltr" ? true : false;
+}
+
+
+<div>
+    <h3 id="clinic-name-lable" style="color:#00768c">@Model.ClinicName</h3>
+    <i style="color:#00768c" class="fas fa-map-marker-alt" aria-hidden="true"></i>
+    <input hidden type="text" class="form-control" id="userProfileId" value="@Model.UserProfileId">
+    <label id="clinic-location-lable" class="label-WorkingHours">@Model.Location</label>
+    <br />
+    <br />
+    <table width="75%">
+        <h3 style="color:#00768c">@Localizer["OpeningHours"]</h3>
+        <tr>
+            <td>
+                @Localizer["Sunday"]
+            </td>
+            @if (Model.SundayIsClosed == false && Model.SundayIsClosed != null)
+            {
+                <td id="isSundayOpen">
+                    <span id="sunday-OpenAt">
+                        @if (Model.SundayOpenAt != null)
+                        {
+                            DateTime openTime = DateTime.Parse(Model.SundayOpenAt);
+                            string openTime12HourFormat = openTime.ToString("hh:mm tt");
+                            @openTime12HourFormat
+                        }
+                    </span>
+                    <span style="color:#00768c;font-weight:bold">@Localizer["To"]</span>
+                    <span id="sunday-ClosedAt">
+                        @if (Model.SundayClosedAt != null)
+                        {
+                            DateTime closedTime = DateTime.Parse(Model.SundayClosedAt);
+                            string closedTime12HourFormat = closedTime.ToString("hh:mm tt");
+                            @closedTime12HourFormat
+                        }
+                    </span>
+                </td>
+            }
+            @if (Model.SundayIsClosed == true)
+            {
+                <td>
+                    <span id="isSundayClosed"> @Localizer["Closed"]</span>
+                </td>
+            }
+        </tr>
+        <tr>
+            <td>
+                
+                @Localizer["Monday"]
+            </td>
+            @if (Model.MondayIsClosed == false && Model.MondayIsClosed != null)
+            {
+                <td id="isMondayOpen">
+                    <span id="monday-OpenAt">
+                        @if (Model.MondayOpenAt != null)
+                        {
+                            DateTime openTime = DateTime.Parse(Model.MondayOpenAt);
+                            string openTime12HourFormat = openTime.ToString("hh:mm tt");
+                            @openTime12HourFormat
+                        }
+                    </span>
+                    <span style="color:#00768c;font-weight:bold">@Localizer["To"]</span>
+                    <span id="monday-ClosedAt">
+                        @if (Model.MondayClosedAt != null)
+                        {
+                            DateTime closedTime = DateTime.Parse(Model.MondayClosedAt);
+                            string closedTime12HourFormat = closedTime.ToString("hh:mm tt");
+                            @closedTime12HourFormat
+                        }
+                    </span>
+                </td>
+            }
+            @if (Model.MondayIsClosed == true)
+            {
+                <td>
+                    <span id="isMondayClosed">@Localizer["Closed"]</span>
+                </td>
+            }
+        </tr>
+
+
+        <tr>
+            <td>
+                @Localizer["Tuesday"]
+            </td>
+            @if (Model.TuesdayIsClosed == false && Model.TuesdayIsClosed != null)
+            {
+                <td id="isTuesdayOpen">
+                    <span id="tuesday-OpenAt">
+                        @if (Model.TuesdayOpenAt != null)
+                        {
+                            DateTime openTime = DateTime.Parse(Model.TuesdayOpenAt);
+                            string openTime12HourFormat = openTime.ToString("hh:mm tt");
+                            @openTime12HourFormat
+                        }
+                    </span>
+                    <span style="color:#00768c;font-weight:bold">@Localizer["To"]</span>
+                    <span id="tuesday-ClosedAt">
+                        @if (Model.TuesdayClosedAt != null)
+                        {
+                            DateTime closedTime = DateTime.Parse(Model.TuesdayClosedAt);
+                            string closedTime12HourFormat = closedTime.ToString("hh:mm tt");
+                            @closedTime12HourFormat
+                        }
+                    </span>
+                </td>
+            }
+            @if (Model.TuesdayIsClosed == true)
+            {
+                <td>
+                    <span id="isTuesdayClosed">@Localizer["Closed"]</span>
+                </td>
+            }
+        </tr>
+
+
+        <tr>
+            <td>
+                 @Localizer["Wednesday"]
+            </td>
+            @if (Model.WednesdayIsClosed == false && Model.WednesdayIsClosed != null)
+            {
+                <td id="isWednesdayOpen">
+                    <span id="wednesday-OpenAt">
+                        @if (Model.WednesdayOpenAt != null)
+                        {
+                            DateTime openTime = DateTime.Parse(Model.WednesdayOpenAt);
+                            string openTime12HourFormat = openTime.ToString("hh:mm tt");
+                            @openTime12HourFormat
+                        }
+                    </span>
+                    <span style="color:#00768c;font-weight:bold">@Localizer["To"]</span>
+                    <span id="wednesday-ClosedAt">
+                        @if (Model.WednesdayClosedAt != null)
+                        {
+                            DateTime closedTime = DateTime.Parse(Model.WednesdayClosedAt);
+                            string closedTime12HourFormat = closedTime.ToString("hh:mm tt");
+                            @closedTime12HourFormat
+                        }
+                    </span>
+                </td>
+            }
+            @if (Model.WednesdayIsClosed == true)
+            {
+                <td>
+                    <span id="isWednesdayClosed">@Localizer["Closed"]</span>
+                </td>
+            }
+        </tr>
+
+
+        <tr>
+            <td>
+                
+                @Localizer["Thursday"]
+            </td>
+            @if (Model.ThursdayIsClosed == false && Model.ThursdayIsClosed != null)
+            {
+                <td id="isThursdayOpen">
+                    <span id="thursday-OpenAt">
+                        @if (Model.ThursdayOpenAt != null)
+                        {
+                            DateTime openTime = DateTime.Parse(Model.ThursdayOpenAt);
+                            string openTime12HourFormat = openTime.ToString("hh:mm tt");
+                            @openTime12HourFormat
+                        }
+                    </span>
+                    <span style="color:#00768c;font-weight:bold">@Localizer["To"]</span>
+                    <span id="thursday-ClosedAt">
+                        @if (Model.ThursdayClosedAt != null)
+                        {
+                            DateTime closedTime = DateTime.Parse(Model.ThursdayClosedAt);
+                            string closedTime12HourFormat = closedTime.ToString("hh:mm tt");
+                            @closedTime12HourFormat
+                        }
+                    </span>
+                </td>
+            }
+            @if (Model.ThursdayIsClosed == true)
+            {
+                <td>
+                    <span id="isThursdayClosed">@Localizer["Closed"]</span>
+                </td>
+            }
+        </tr>
+
+
+        <tr>
+            <td>
+                @Localizer["Friday"]
+            </td>
+            @if (Model.FridayIsClosed == false && Model.FridayIsClosed != null)
+            {
+                <td id="isFridayOpen">
+                    <span id="friday-OpenAt">
+                        @if (Model.FridayOpenAt != null)
+                        {
+                            DateTime openTime = DateTime.Parse(Model.FridayOpenAt);
+                            string openTime12HourFormat = openTime.ToString("hh:mm tt");
+                            @openTime12HourFormat
+                        }
+                    </span>
+                    <span style="color:#00768c;font-weight:bold">@Localizer["To"]</span>
+                    <span id="friday-ClosedAt">
+                        @if (Model.FridayClosedAt != null)
+                        {
+                            DateTime closedTime = DateTime.Parse(Model.FridayClosedAt);
+                            string closedTime12HourFormat = closedTime.ToString("hh:mm tt");
+                            @closedTime12HourFormat
+                        }
+                    </span>
+                </td>
+            }
+            @if (Model.FridayIsClosed == true)
+            {
+                <td>
+                    <span id="isFridayClosed">@Localizer["Closed"]</span>
+                </td>
+            }
+        </tr>
+
+        <tr>
+            <td>
+                @Localizer["Saturday"]
+            </td>
+            @if (Model.SaturdayIsClosed == false && Model.SaturdayIsClosed != null)
+            {
+                <td id="isSaturdayOpen">
+                    <span id="saturday-OpenAt">
+                        @if (Model.SaturdayOpenAt != null)
+                        {
+                            DateTime openTime = DateTime.Parse(Model.SaturdayOpenAt);
+                            string openTime12HourFormat = openTime.ToString("hh:mm tt");
+                            @openTime12HourFormat
+                        }
+                    </span>
+                    <span style="color:#00768c;font-weight:bold">@Localizer["To"]</span>
+                    <span id="saturday-ClosedAt">
+                        @if (Model.SaturdayClosedAt != null)
+                        {
+                            DateTime closedTime = DateTime.Parse(Model.SaturdayClosedAt);
+                            string closedTime12HourFormat = closedTime.ToString("hh:mm tt");
+                            @closedTime12HourFormat
+                        }
+                    </span>
+                </td>
+            }
+            @if (Model.SaturdayIsClosed == true)
+            {
+                <td>
+                    <span id="isSaturdayClosed">@Localizer["Closed"]</span>
+                </td>
+            }
+        </tr>
+
+
+
+    </table>
+
+    <br />
+    <br />
+
+
+
+    <h3 style="color:#00768c">@Localizer["InsuranceCompany"]</h3>
+
+    <div id="no-company-added" style="text-align:center">
+        <label class="label-WorkingHours" style="font-weight:bold">@Localizer["NoInsuranceCompanines"] No Insurance Companines</label>
+        <img src="~/icon/no-result-found-icon.png" width="25" height="25" />
+        <span style="color:black"></span>
+    </div>
+
+    <div class="row">
+    <div class="iconList">
+    </div>
+    </div>
+
+</div>
+
+

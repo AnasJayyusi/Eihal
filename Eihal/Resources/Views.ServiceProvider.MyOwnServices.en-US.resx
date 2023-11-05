@@ -117,40 +117,43 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AllCities" xml:space="preserve">
-    <value>جميع المدن</value>
-  </data>
-  <data name="AllDistricts" xml:space="preserve">
-    <value>جميع المناطق</value>
-  </data>
-  <data name="AllInsuranceCompanies" xml:space="preserve">
-    <value>جميع شركات التأمين</value>
-  </data>
-  <data name="AllServices" xml:space="preserve">
-    <value>جميع الخدمات</value>
+  <data name="Approved" xml:space="preserve">
+    <value>Approved</value>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>إغلاق</value>
+    <value>Close</value>
   </data>
-  <data name="DoctorDetails" xml:space="preserve">
-    <value>معلومات الطبيب</value>
+  <data name="Completed" xml:space="preserve">
+    <value>Completed</value>
   </data>
-  <data name="Doctors" xml:space="preserve">
-    <value>الأطباء</value>
+  <data name="Fee" xml:space="preserve">
+    <value>Fee:</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>الصفحة الرئيسية</value>
+  <data name="NavigateToAdd" xml:space="preserve">
+    <value>Click to Add your Clinical Privileges/Services</value>
   </data>
-  <data name="Location" xml:space="preserve">
-    <value>موقع</value>
+  <data name="NoServiceAdded" xml:space="preserve">
+    <value>No Service Added Yet.</value>
   </data>
-  <data name="Name" xml:space="preserve">
-    <value>اسم</value>
+  <data name="Pending" xml:space="preserve">
+    <value>Pending</value>
   </data>
-  <data name="Search" xml:space="preserve">
-    <value>بحث</value>
+  <data name="Price" xml:space="preserve">
+    <value>Price:</value>
   </data>
-  <data name="SortBy" xml:space="preserve">
-    <value>ترتيب حسب</value>
+  <data name="Rejected" xml:space="preserve">
+    <value>Rejected</value>
+  </data>
+  <data name="RejectionReason" xml:space="preserve">
+    <value>Rejection Reason</value>
+  </data>
+  <data name="SAR" xml:space="preserve">
+    <value>SAR</value>
+  </data>
+  <data name="Services" xml:space="preserve">
+    <value>Services</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status:</value>
   </data>
 </root>

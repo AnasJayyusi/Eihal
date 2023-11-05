@@ -5,9 +5,9 @@
     @foreach (var doc in Model)
     {
 
-        <div class="col-md-4 padding-top-25">
-            <div class="doctor-card selectable" id="@(doc.Id)" onclick="handleDoubleClick(this)" style="border: 1px solid #eadfdf;">
-                <div class="doctor-card-body">
+        <div class="col-md-5 padding-top-25">
+            <div class="doctor-card "  style="border: 1px solid #eadfdf;">
+                <div class="doctor-card-body selectable" id="@(doc.Id)" onclick="handleDoubleClick(this)">
                     <div class="row" style="    padding-bottom: 25px;">
                         <h5 class="doctor-card-title" style="color: black;">
                             <img style="border-radius:50%;" src="@(doc.ProfilePicturePath ?? "/users/images/Default-User-Profile.jpg") width="70" height="70" alt="user-image-profile" onerror="this.src='/users/images/Default-User-Profile.jpg'">
@@ -48,9 +48,12 @@
 
                         }
                     </span>
+                    <span class="check-icon">&#10004;</span>
                 </div>
-                <span class="check-icon">&#10004;</span>
+             
             </div>
         </div>
     }
 </div>
+
+

@@ -117,40 +117,46 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AllCities" xml:space="preserve">
-    <value>جميع المدن</value>
+  <data name="Bio" xml:space="preserve">
+    <value>Bio</value>
   </data>
-  <data name="AllDistricts" xml:space="preserve">
-    <value>جميع المناطق</value>
+  <data name="Certifications" xml:space="preserve">
+    <value>Certifications</value>
   </data>
-  <data name="AllInsuranceCompanies" xml:space="preserve">
-    <value>جميع شركات التأمين</value>
+  <data name="Degree" xml:space="preserve">
+    <value>Degree</value>
   </data>
-  <data name="AllServices" xml:space="preserve">
-    <value>جميع الخدمات</value>
+  <data name="Insurance" xml:space="preserve">
+    <value>Insurance Accepted:</value>
   </data>
-  <data name="Close" xml:space="preserve">
-    <value>إغلاق</value>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
   </data>
-  <data name="DoctorDetails" xml:space="preserve">
-    <value>معلومات الطبيب</value>
+  <data name="Overview" xml:space="preserve">
+    <value>Overview</value>
   </data>
-  <data name="Doctors" xml:space="preserve">
-    <value>الأطباء</value>
+  <data name="Price" xml:space="preserve">
+    <value>Price</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>الصفحة الرئيسية</value>
+  <data name="Reviews" xml:space="preserve">
+    <value>Reviews</value>
   </data>
-  <data name="Location" xml:space="preserve">
-    <value>موقع</value>
+  <data name="SAR" xml:space="preserve">
+    <value>SAR</value>
   </data>
-  <data name="Name" xml:space="preserve">
-    <value>اسم</value>
+  <data name="Services" xml:space="preserve">
+    <value>Services</value>
   </data>
-  <data name="Search" xml:space="preserve">
-    <value>بحث</value>
+  <data name="Speciality" xml:space="preserve">
+    <value>Speciality</value>
   </data>
-  <data name="SortBy" xml:space="preserve">
-    <value>ترتيب حسب</value>
+  <data name="TimeInsuranceCompaines" xml:space="preserve">
+    <value>Time Table &amp; Insurance Compaines</value>
+  </data>
+  <data name="UniversityName" xml:space="preserve">
+    <value>University Name</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
   </data>
 </root>

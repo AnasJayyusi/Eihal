@@ -117,40 +117,40 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Approved" xml:space="preserve">
-    <value>موافق عليه</value>
+  <data name="Closed" xml:space="preserve">
+    <value>Closed</value>
   </data>
-  <data name="Close" xml:space="preserve">
-    <value>إغلاق</value>
+  <data name="Friday" xml:space="preserve">
+    <value>Friday</value>
   </data>
-  <data name="Completed" xml:space="preserve">
-    <value>مكتمل</value>
+  <data name="InsuranceCompany" xml:space="preserve">
+    <value>Insurance Company</value>
   </data>
-  <data name="Fee" xml:space="preserve">
-    <value>رسوم:</value>
+  <data name="Monday" xml:space="preserve">
+    <value>Monday</value>
   </data>
-  <data name="NavigateToAdd" xml:space="preserve">
-    <value>اضغط لإختيار الإمتيازات السريرية (الخدمات) المناسبة</value>
+  <data name="NoInsuranceCompanines" xml:space="preserve">
+    <value>No Insurance Companines</value>
   </data>
-  <data name="NoServiceAdded" xml:space="preserve">
-    <value>لم تتم إضافة أي خدمة حتى الآن.</value>
+  <data name="OpeningHours" xml:space="preserve">
+    <value>Opening Hours</value>
   </data>
-  <data name="Pending" xml:space="preserve">
-    <value>قيد الانتظار</value>
+  <data name="Saturday" xml:space="preserve">
+    <value>Saturday</value>
   </data>
-  <data name="Price" xml:space="preserve">
-    <value>السعر:</value>
+  <data name="Sunday" xml:space="preserve">
+    <value>Sunday</value>
   </data>
-  <data name="Rejected" xml:space="preserve">
-    <value>مرفوض</value>
+  <data name="Thursday" xml:space="preserve">
+    <value>Thursday</value>
   </data>
-  <data name="RejectionReason" xml:space="preserve">
-    <value>سبب الرفض</value>
+  <data name="To" xml:space="preserve">
+    <value>To</value>
   </data>
-  <data name="SAR" xml:space="preserve">
-    <value>ريال سعودي</value>
+  <data name="Tuesday" xml:space="preserve">
+    <value>Tuesday</value>
   </data>
-  <data name="Status" xml:space="preserve">
-    <value>حالة:</value>
+  <data name="Wednesday" xml:space="preserve">
+    <value>Wednesday</value>
   </data>
 </root>

@@ -117,31 +117,40 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Bio" xml:space="preserve">
-    <value>السيرة الذاتية</value>
+  <data name="Closed" xml:space="preserve">
+    <value>مغلق</value>
   </data>
-  <data name="Certifications" xml:space="preserve">
-    <value>الشهادات</value>
+  <data name="Friday" xml:space="preserve">
+    <value>الجمعة</value>
   </data>
-  <data name="Degree" xml:space="preserve">
-    <value>درجة</value>
+  <data name="InsuranceCompany" xml:space="preserve">
+    <value>شركات التأمين</value>
   </data>
-  <data name="Insurance" xml:space="preserve">
-    <value>تأمين</value>
+  <data name="Monday" xml:space="preserve">
+    <value>الاثنين</value>
   </data>
-  <data name="No" xml:space="preserve">
-    <value>لا</value>
+  <data name="NoInsuranceCompanines" xml:space="preserve">
+    <value>لا يوجد شركات تأمين</value>
   </data>
-  <data name="Reviews" xml:space="preserve">
-    <value>المراجعات</value>
+  <data name="OpeningHours" xml:space="preserve">
+    <value>ساعات العمل</value>
   </data>
-  <data name="Speciality" xml:space="preserve">
-    <value>التخصصات</value>
+  <data name="Saturday" xml:space="preserve">
+    <value>السبت</value>
   </data>
-  <data name="UniversityName" xml:space="preserve">
-    <value>اسم الجامعة</value>
+  <data name="Sunday" xml:space="preserve">
+    <value>الاحد</value>
   </data>
-  <data name="Yes" xml:space="preserve">
-    <value>نعم</value>
+  <data name="Thursday" xml:space="preserve">
+    <value>الخميس</value>
+  </data>
+  <data name="To" xml:space="preserve">
+    <value>إلى</value>
+  </data>
+  <data name="Tuesday" xml:space="preserve">
+    <value>الثلاثاء</value>
+  </data>
+  <data name="Wednesday" xml:space="preserve">
+    <value>الاربعاء</value>
   </data>
 </root>

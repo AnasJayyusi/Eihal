@@ -117,40 +117,46 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Approved" xml:space="preserve">
-    <value>Approved</value>
+  <data name="Bio" xml:space="preserve">
+    <value>السيرة الذاتية</value>
   </data>
-  <data name="Close" xml:space="preserve">
-    <value>Close</value>
+  <data name="Certifications" xml:space="preserve">
+    <value>الشهادات</value>
   </data>
-  <data name="Completed" xml:space="preserve">
-    <value>Completed</value>
+  <data name="Degree" xml:space="preserve">
+    <value>درجة</value>
   </data>
-  <data name="Fee" xml:space="preserve">
-    <value>Fee:</value>
+  <data name="Insurance" xml:space="preserve">
+    <value>يقبل التأمين</value>
   </data>
-  <data name="NavigateToAdd" xml:space="preserve">
-    <value>Click to Add your Clinical Privileges/Services</value>
+  <data name="No" xml:space="preserve">
+    <value>لا</value>
   </data>
-  <data name="NoServiceAdded" xml:space="preserve">
-    <value>No Service Added Yet.</value>
-  </data>
-  <data name="Pending" xml:space="preserve">
-    <value>Pending</value>
+  <data name="Overview" xml:space="preserve">
+    <value>نبذة تعريفية</value>
   </data>
   <data name="Price" xml:space="preserve">
-    <value>Price:</value>
+    <value>السعر</value>
   </data>
-  <data name="Rejected" xml:space="preserve">
-    <value>Rejected</value>
-  </data>
-  <data name="RejectionReason" xml:space="preserve">
-    <value>Rejection Reason</value>
+  <data name="Reviews" xml:space="preserve">
+    <value>المراجعات</value>
   </data>
   <data name="SAR" xml:space="preserve">
-    <value>SAR</value>
+    <value>ريال سعودي</value>
   </data>
-  <data name="Status" xml:space="preserve">
-    <value>Status:</value>
+  <data name="Services" xml:space="preserve">
+    <value>الخدمات</value>
+  </data>
+  <data name="Speciality" xml:space="preserve">
+    <value>التخصصات الاكاديمية</value>
+  </data>
+  <data name="TimeInsuranceCompaines" xml:space="preserve">
+    <value>اوقات الدوام والتأمين</value>
+  </data>
+  <data name="UniversityName" xml:space="preserve">
+    <value>اسم الجامعة</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>نعم</value>
   </data>
 </root>
