@@ -98,13 +98,13 @@ namespace Eihal.Controllers
                     notification.TitleAr = "قبول طلب";
                     notification.TitleEn = "Approved Order";
                     notification.MessageEn = $"Order With ID {additionalData} Approved";
-                    notification.MessageAr = $"طلب رقم الطلب {additionalData} مقبول";
+                    notification.MessageAr = $"تم قبول طلب رقم {additionalData}";
                     break;
                 case NotificationTypeEnum.RejectOrder:
                     notification.TitleAr = "رفض طلب";
                     notification.TitleEn = "Reject Order";
                     notification.MessageEn = $"Order With ID {additionalData} Rejected";
-                    notification.MessageAr = $"طلب رقم الطلب {additionalData} مرفوض";
+                    notification.MessageAr = $"تم رفض طلب رقم {additionalData}"; 
                     break;
                 case NotificationTypeEnum.SendProfileToReview:
                     notification.TitleAr = "طلب مراجعة جديد";

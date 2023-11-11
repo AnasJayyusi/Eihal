@@ -34,7 +34,7 @@
                     <div style="width: 100%; display: table;">
                         <div style="display: table-row">
                             <div class="form-group">
-                                <label for="account_type">  @Localizer["AccountType"]</label>
+                                <label for="account_type" style="text-align:@textAlign">  @Localizer["AccountType"]</label>
                                 <div id="account-type-div" class="form-data select-box" style="width:75%">
                                     <select asp-for="Input.AccountTypeId" class="form-control" name="account_type" id="account_type" required>
                                         <option value="">@Localizer["DefaultOptionAccountType"]</option>
@@ -60,19 +60,19 @@
                                     </label>
 
                                     <div id="doctor-type-div" class="form-data select-box practitioner_type_div" style="width:75%">
-                                        <select onchange="onPractitionerTypeChanged()"  asp-for="Input.PractitionerTypeId" disabled style="cursor:not-allowed" class="form-control" name="practitioner_type" id="doctor-type-ddl">
+                                        <select onchange="onPractitionerTypeChanged()" asp-for="Input.PractitionerTypeId" disabled style="cursor:not-allowed" class="form-control" name="practitioner_type" id="doctor-type-ddl">
                                             <option value="">@Localizer["DefaultOptionPractitionerType"] </option>
                                             @foreach (var practitionerType in Model.PractitionerTypes)
                                             {
                                                 @if (@isEng)
                                                 {
-                                                    <option value="@practitionerType.Id">@practitionerType.TitleEn</option>                                                    
+                                                    <option value="@practitionerType.Id">@practitionerType.TitleEn</option>
                                                 }
-                                                else 
+                                                else
                                                 {
                                                     <option value="@practitionerType.Id">@practitionerType.TitleAr</option>
                                                 }
-                                                
+
                                             }
                                         </select>
                                     </div>
@@ -112,7 +112,7 @@
                                     </label>
 
                                     <div id="fullname-div" class="form-data">
-                                        <input asp-for="Input.FullName" class="form-control"
+                                        <input asp-for="Input.FullName" class="form-control" style="text-align:@textAlign"
                                                autocomplete="current-password" aria-required="true"
                                                placeholder=" @Localizer["EnterFullName"]" name="FullName" required />
                                         <span asp-validation-for="Input.FullName" class="text-danger"></span>
@@ -126,7 +126,7 @@
                                     </label>
 
                                     <div id="phone-div" class="form-data">
-                                        <input asp-for="Input.PhoneNumber" name="PhoneNumber" onkeyup="checkPhoneNumber()"
+                                        <input asp-for="Input.PhoneNumber" name="PhoneNumber" onkeyup="checkPhoneNumber()" style="text-align:@textAlign"
                                                placeholder=" @Localizer["PhoneNumber"]" class="form-control" maxlength="10" onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))" aria-required="true" placeholder="Phone Number" required />
                                         <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
                                         <p id="phoneError" style="display:none; color:#FF0000;font-size:12px;text-align:left;">
@@ -141,7 +141,7 @@
                                     </label>
 
                                     <div id="email-div" class="form-data">
-                                        <input asp-for="Input.Email" onkeyup=checkEmail() class="form-control"
+                                        <input asp-for="Input.Email" onkeyup=checkEmail() class="form-control" style="text-align:@textAlign"
                                                autocomplete="current-password" aria-required="true" placeholder=" @Localizer["EnterEmail"]" name="Email" required type="email" />
                                         <span asp-validation-for="Input.Email" class="text-danger"></span>
                                     </div>
@@ -156,7 +156,7 @@
                                     </label>
 
                                     <div id="password-div" class="form-data">
-                                        <input asp-for="Input.Password" class="form-control" autocomplete="current-password"
+                                        <input asp-for="Input.Password" class="form-control" autocomplete="current-password" style="text-align:@textAlign"
                                                onkeyup="isPasswordAccept()" aria-required="true" placeholder=" @Localizer["Password"]" name="Password" required />
                                         <span asp-validation-for="Input.Password" class="text-danger"></span>
                                     </div>
@@ -171,7 +171,8 @@
                                     </label>
 
                                     <div id="confirmpassword-div" class="form-data">
-                                        <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="current-password" onkeyup="comparePassword()" aria-required="true" placeholder="@Localizer["ConfirmPassword"]" name="ConfirmPassword" required />
+                                        <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="current-password" onkeyup="comparePassword()" style="text-align:@textAlign"
+                                               aria-required="true" placeholder="@Localizer["ConfirmPassword"]" name="ConfirmPassword" required />
                                         <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                                     </div>
                                     <p id="password-notmatch" style="display:none; color:#FF0000;font-size:12px;text-align:left"> @Localizer["PasswordNotMatch"]</p>
@@ -179,7 +180,7 @@
 
 
 
-                                <div class="flex-data mt-5">
+                                <div class="flex-data mt-5" style="direction:@direction">
                                     <div class="wrapper">
                                         <input id="term-div" type="checkbox" name="terms" class="radio-check">
                                         <label class="radio-title">
@@ -191,8 +192,7 @@
                         </div>
                     </div>
 
-                    <label id="fields-error" class="error" for="terms" style="display: none;color:red;">>@Localizer["FillAllFields"]</label>
-
+                        <label id="fields-error" class="error" for="terms" style="display: none;color:red;">@Localizer["FillAllFields"]</label>
                     <button id="registerSubmit" type="submit" onclick="isFormValid()" class="custom-btn mb-3">
                         <span>@Localizer["SignUp"]</span>
                     </button>
@@ -283,6 +283,14 @@
             $('#email-div').css("border", "solid 1px red")
             showErrorlabel = true;
         }
+
+
+        if ($("#Input_PhoneNumber").val().length == 0) {
+            $('#phone-div').css("border", "solid 1px red")
+            showErrorlabel = true;
+        }
+
+
 
         if ($("#Input_Password").val().length == 0) {
             $('#password-div').css("border", "solid 1px red");
@@ -398,21 +406,21 @@
     }
 
     function onPractitionerTypeChanged() {
-        
+
         var selectedPractitionerTypeId = $("#doctor-type-ddl").val();
 
-            // Get the selected option's data attribute (id) for each professional rank option
+        // Get the selected option's data attribute (id) for each professional rank option
         $('#category-rank-ddl option').each(function () {
             var practitionerTypeId = $(this).attr("id");;
-                // Hide/show professional rank options based on selected practitioner type
-                if (practitionerTypeId === selectedPractitionerTypeId || practitionerTypeId === "" || practitionerTypeId == "0") {
-                    $(this).show();
-                } else {
-                    $(this).hide();
-                }
+            // Hide/show professional rank options based on selected practitioner type
+            if (practitionerTypeId === selectedPractitionerTypeId || practitionerTypeId === "" || practitionerTypeId == "0") {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
 
-            });
-      
+        });
+
     }
 </script>
 <style>

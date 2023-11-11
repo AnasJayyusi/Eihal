@@ -196,9 +196,13 @@ namespace Eihal.Controllers
         [Route("GetInsuranceCompanies")]
         public ActionResult GetInsuranceCompanies(string term)
         {
+            string cultureCode = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
+            string direction = cultureCode.StartsWith("ar", StringComparison.OrdinalIgnoreCase) ? "rtl" : "ltr";
+            bool isEng = direction == "ltr" ? true : false;
+
             var results = _dbContext.InsuranceCompanies
                              .Where(w => w.IsActive)
-                             .Select(s => new { id = s.Id, text = s.TitleEn, textAr = s.TitleAr })
+                             .Select(s => new { id = s.Id, text = isEng ? s.TitleEn : s.TitleAr, textAr = s.TitleAr })
                              .Where(x => string.IsNullOrEmpty(term) || x.text.Contains(term) || x.textAr.Contains(term))
                              .ToList();
 

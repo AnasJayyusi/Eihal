@@ -629,7 +629,7 @@ namespace Eihal.Controllers
             if (!string.IsNullOrEmpty(form["DistrictId"]))
                 obj.DistrictId = Convert.ToInt32(form["DistrictId"]);
 
-            if (!string.IsNullOrEmpty(form["SundayOpenAt"]) && !string.IsNullOrEmpty(form["SundayClosedAt"]))
+            if (!string.IsNullOrEmpty(form["SundayOpenAt"]) && !string.IsNullOrEmpty(form["SundayClosedAt"]) && form["SundayIsClosed"] != "true")
             {
                 obj.SundayOpenAt = form["SundayOpenAt"];
                 obj.SundayClosedAt = form["SundayClosedAt"];
@@ -640,7 +640,7 @@ namespace Eihal.Controllers
                 obj.SundayIsClosed = form["SundayIsClosed"] == "true" ? true : false;
             }
 
-            if (!string.IsNullOrEmpty(form["MondayOpenAt"]) && !string.IsNullOrEmpty(form["MondayClosedAt"]))
+            if (!string.IsNullOrEmpty(form["MondayOpenAt"]) && !string.IsNullOrEmpty(form["MondayClosedAt"]) && form["MondayIsClosed"] != "true")
             {
                 obj.MondayOpenAt = form["MondayOpenAt"];
                 obj.MondayClosedAt = form["MondayClosedAt"];
@@ -651,7 +651,7 @@ namespace Eihal.Controllers
                 obj.MondayIsClosed = form["MondayIsClosed"] == "true" ? true : false;
             }
 
-            if (!string.IsNullOrEmpty(form["TuesdayOpenAt"]) && !string.IsNullOrEmpty(form["TuesdayClosedAt"]))
+            if (!string.IsNullOrEmpty(form["TuesdayOpenAt"]) && !string.IsNullOrEmpty(form["TuesdayClosedAt"]) && form["TuesdayIsClosed"] != "true")
             {
                 obj.TuesdayOpenAt = form["TuesdayOpenAt"];
                 obj.TuesdayClosedAt = form["TuesdayClosedAt"];
@@ -662,7 +662,7 @@ namespace Eihal.Controllers
                 obj.TuesdayIsClosed = form["TuesdayIsClosed"] == "true" ? true : false;
             }
 
-            if (!string.IsNullOrEmpty(form["WednesdayOpenAt"]) && !string.IsNullOrEmpty(form["WednesdayClosedAt"]))
+            if (!string.IsNullOrEmpty(form["WednesdayOpenAt"]) && !string.IsNullOrEmpty(form["WednesdayClosedAt"]) && form["WednesdayIsClosed"] != "true")
             {
                 obj.WednesdayOpenAt = form["WednesdayOpenAt"];
                 obj.WednesdayClosedAt = form["WednesdayClosedAt"];
@@ -673,7 +673,7 @@ namespace Eihal.Controllers
                 obj.WednesdayIsClosed = form["WednesdayIsClosed"] == "true" ? true : false;
             }
 
-            if (!string.IsNullOrEmpty(form["ThursdayOpenAt"]) && !string.IsNullOrEmpty(form["ThursdayClosedAt"]))
+            if (!string.IsNullOrEmpty(form["ThursdayOpenAt"]) && !string.IsNullOrEmpty(form["ThursdayClosedAt"]) && form["ThursdayIsClosed"] != "true")
             {
                 obj.ThursdayOpenAt = form["ThursdayOpenAt"];
                 obj.ThursdayClosedAt = form["ThursdayClosedAt"];
@@ -684,7 +684,7 @@ namespace Eihal.Controllers
                 obj.ThursdayIsClosed = form["ThursdayIsClosed"] == "true" ? true : false;
             }
 
-            if (!string.IsNullOrEmpty(form["FridayOpenAt"]) && !string.IsNullOrEmpty(form["FridayClosedAt"]))
+            if (!string.IsNullOrEmpty(form["FridayOpenAt"]) && !string.IsNullOrEmpty(form["FridayClosedAt"]) && form["FridayIsClosed"] != "true")
             {
                 obj.FridayOpenAt = form["FridayOpenAt"];
                 obj.FridayClosedAt = form["FridayClosedAt"];
@@ -695,7 +695,7 @@ namespace Eihal.Controllers
                 obj.FridayIsClosed = form["FridayIsClosed"] == "true" ? true : false;
             }
 
-            if (!string.IsNullOrEmpty(form["SaturdayOpenAt"]) && !string.IsNullOrEmpty(form["SaturdayClosedAt"]))
+            if (!string.IsNullOrEmpty(form["SaturdayOpenAt"]) && !string.IsNullOrEmpty(form["SaturdayClosedAt"]) && form["SaturdayIsClosed"] != "true")
             {
                 obj.SaturdayOpenAt = form["SaturdayOpenAt"];
                 obj.SaturdayClosedAt = form["SaturdayClosedAt"];
@@ -719,6 +719,10 @@ namespace Eihal.Controllers
         [Route("GetTimeClinicLocation")]
         public ActionResult GetTimeClinicLocation()
         {
+            string cultureCode = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
+            string direction = cultureCode.StartsWith("ar", StringComparison.OrdinalIgnoreCase) ? "rtl" : "ltr";
+            bool isEng = direction == "ltr" ? true : false;
+
             var userProfileId = GetUserProfileId();
             var timeClinicLocation = _dbContext.TimeClinicLocations.
                                                              Include(i => i.State)
@@ -757,10 +761,10 @@ namespace Eihal.Controllers
                     timeClinicLocation.StateId,
                     timeClinicLocation.CityId,
                     timeClinicLocation.DistrictId,
-                    CountryName = timeClinicLocation?.Country?.TitleEn,
-                    StateName = timeClinicLocation?.State?.TitleEn,
-                    CityName = timeClinicLocation?.City?.TitleEn,
-                    DistrictName = timeClinicLocation?.Districts?.TitleEn
+                    CountryName = isEng ? timeClinicLocation?.Country?.TitleEn : timeClinicLocation?.Country?.TitleAr,
+                    StateName = isEng ? timeClinicLocation?.State?.TitleEn : timeClinicLocation?.State?.TitleAr,
+                    CityName = isEng ?timeClinicLocation?.City?.TitleEn : timeClinicLocation?.City?.TitleAr,
+                    DistrictName = isEng ? timeClinicLocation?.Districts?.TitleEn : timeClinicLocation?.Districts?.TitleAr
                 };
                 return Json(data);
             }

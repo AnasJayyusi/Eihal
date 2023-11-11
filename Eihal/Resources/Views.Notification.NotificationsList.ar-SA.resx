@@ -117,37 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AboutUs" xml:space="preserve">
-    <value>About Us</value>
-  </data>
-  <data name="ContactUs" xml:space="preserve">
-    <value>Contact Us</value>
-  </data>
-  <data name="CurrentLanguage" xml:space="preserve">
-    <value>English</value>
-  </data>
-  <data name="Doctors" xml:space="preserve">
-    <value>Doctors</value>
-  </data>
-  <data name="Home" xml:space="preserve">
-    <value>Home</value>
-  </data>
-  <data name="Logout" xml:space="preserve">
-    <value>Logout</value>
-  </data>
-  <data name="MyOrders" xml:space="preserve">
-    <value>My Orders</value>
-  </data>
-  <data name="MyProfile" xml:space="preserve">
-    <value>My Profile</value>
+  <data name="NoNotifications" xml:space="preserve">
+    <value>لا يوجد لديك إشعارات</value>
   </data>
   <data name="Notifications" xml:space="preserve">
-    <value>Notifications</value>
+    <value>إشعارات</value>
   </data>
-  <data name="Ok" xml:space="preserve">
-    <value>Ok</value>
-  </data>
-  <data name="PleaseWait" xml:space="preserve">
-    <value>Please wait...</value>
+  <data name="ShowMore" xml:space="preserve">
+    <value>اظهر المزيد</value>
   </data>
 </root>

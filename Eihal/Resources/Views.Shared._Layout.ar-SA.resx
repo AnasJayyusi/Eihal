@@ -141,6 +141,12 @@
   <data name="MyProfile" xml:space="preserve">
     <value>الملف الشخصي</value>
   </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>إشعارات</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>موافق</value>
+  </data>
   <data name="PleaseWait" xml:space="preserve">
     <value>الرجاء الإنتظار ..</value>
   </data>

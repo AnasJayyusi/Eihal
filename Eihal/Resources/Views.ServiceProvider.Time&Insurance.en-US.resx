@@ -117,37 +117,118 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AboutUs" xml:space="preserve">
-    <value>About Us</value>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
   </data>
-  <data name="ContactUs" xml:space="preserve">
-    <value>Contact Us</value>
+  <data name="City" xml:space="preserve">
+    <value>City</value>
   </data>
-  <data name="CurrentLanguage" xml:space="preserve">
-    <value>English</value>
+  <data name="ClinicInformation" xml:space="preserve">
+    <value>Clinic Information</value>
   </data>
-  <data name="Doctors" xml:space="preserve">
-    <value>Doctors</value>
+  <data name="ClinicName" xml:space="preserve">
+    <value>ClinicName</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>Home</value>
+  <data name="Closed" xml:space="preserve">
+    <value>Closed</value>
   </data>
-  <data name="Logout" xml:space="preserve">
-    <value>Logout</value>
+  <data name="Country" xml:space="preserve">
+    <value>Country</value>
   </data>
-  <data name="MyOrders" xml:space="preserve">
-    <value>My Orders</value>
+  <data name="Day" xml:space="preserve">
+    <value>Day</value>
   </data>
-  <data name="MyProfile" xml:space="preserve">
-    <value>My Profile</value>
+  <data name="DefaultLocation" xml:space="preserve">
+    <value>Riyadh</value>
   </data>
-  <data name="Notifications" xml:space="preserve">
-    <value>Notifications</value>
+  <data name="DefaultName" xml:space="preserve">
+    <value>Eihal Clinic</value>
   </data>
-  <data name="Ok" xml:space="preserve">
-    <value>Ok</value>
+  <data name="District" xml:space="preserve">
+    <value>District</value>
   </data>
-  <data name="PleaseWait" xml:space="preserve">
-    <value>Please wait...</value>
+  <data name="EditClinicInfo" xml:space="preserve">
+    <value>Edit Clinic Info</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error occurred</value>
+  </data>
+  <data name="Failed" xml:space="preserve">
+    <value>Failed !!</value>
+  </data>
+  <data name="Friday" xml:space="preserve">
+    <value>Friday</value>
+  </data>
+  <data name="From" xml:space="preserve">
+    <value>From</value>
+  </data>
+  <data name="InsuranceComapnyAdded" xml:space="preserve">
+    <value>Insurance Company Added successfully</value>
+  </data>
+  <data name="InsuranceComapnyDeleted" xml:space="preserve">
+    <value>Insurance Company Deleted successfully</value>
+  </data>
+  <data name="InsuranceCompany" xml:space="preserve">
+    <value>Insurance Company</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Location</value>
+  </data>
+  <data name="Monday" xml:space="preserve">
+    <value>Monday</value>
+  </data>
+  <data name="NoInsuranceCompanines" xml:space="preserve">
+    <value>No Insurance Companines</value>
+  </data>
+  <data name="OpeningHours" xml:space="preserve">
+    <value>Opening Hours</value>
+  </data>
+  <data name="Saturday" xml:space="preserve">
+    <value>Saturday</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>  Search In Insurance Companies  </value>
+  </data>
+  <data name="SelectCity" xml:space="preserve">
+    <value>Select a City</value>
+  </data>
+  <data name="SelectCountry" xml:space="preserve">
+    <value>Select a Country</value>
+  </data>
+  <data name="SelectDistrict" xml:space="preserve">
+    <value>Select a District</value>
+  </data>
+  <data name="SelectState" xml:space="preserve">
+    <value>Select a State</value>
+  </data>
+  <data name="State" xml:space="preserve">
+    <value>State</value>
+  </data>
+  <data name="Success" xml:space="preserve">
+    <value>Success !!</value>
+  </data>
+  <data name="Sunday" xml:space="preserve">
+    <value>Sunday</value>
+  </data>
+  <data name="Thursday" xml:space="preserve">
+    <value>Thursday</value>
+  </data>
+  <data name="Time&amp;LocationUpdated" xml:space="preserve">
+    <value>Time &amp; Location updated successfully</value>
+  </data>
+  <data name="To" xml:space="preserve">
+    <value>To</value>
+  </data>
+  <data name="Tuesday" xml:space="preserve">
+    <value>Tuesday</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="Wednesday" xml:space="preserve">
+    <value>Wednesday</value>
+  </data>
+  <data name="WorkingHours" xml:space="preserve">
+    <value>Working Hours</value>
   </data>
 </root>
