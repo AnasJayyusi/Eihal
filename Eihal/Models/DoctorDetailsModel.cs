@@ -7,6 +7,7 @@ namespace Eihal.Models
         public int UserProfileId { get; set; }
         public string UserId { get; set; }
         public string FullName { get; set; }
+        public string ProfilePicturePath { get; set; }
         public bool? InsuranceAccepted { get; set; }
         public OverView OverView { get; set; }
     }

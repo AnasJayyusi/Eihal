@@ -1366,6 +1366,9 @@ namespace Eihal.Controllers
             return PartialView("UserServicesList", userServices);
         }
 
+
+
+
         [HttpPost]
         [Route("AddUserServices")]
         public IActionResult AddUserServices([FromBody] UserServices userServices)
@@ -1481,34 +1484,15 @@ namespace Eihal.Controllers
 
             return RedirectToAction("ServiceReviewRequests");
         }
+
         [HttpGet]
         [Route("ApproveUserServices/{id}")]
         public IActionResult ApproveUserServices(int id)
         {
-
-
             var userServices = _dbContext.UserServices.Find(id);
             if (userServices != null && userServices.Status == Enums.ServicesStatusEnum.Pending)
                 userServices.Status = Enums.ServicesStatusEnum.Approved;
             _dbContext.SaveChanges();
-            //    if (userServices == null)
-            //    {
-            //        // Handle the case where the practitioner type doesn't exist
-            //        TempData["isSuccessDelete"] = false;
-            //    }
-
-            //    // Remove the practitioner type from the DbSet
-            //    _dbContext.UserServices.Remove(userServices);
-
-            //    // Save the changes to the database
-            //    _dbContext.SaveChanges();
-            //    TempData["isSuccessDelete"] = true;
-            ////}
-            //// Set the value in TempData
-            //TempData["isFromDeleteRequest"] = true;
-
-
-
             return RedirectToAction("ServiceReviewRequests");
         }
 
@@ -1516,38 +1500,18 @@ namespace Eihal.Controllers
         [Route("ApproveDashboardUserServices/{id}")]
         public IActionResult ApproveDashboardUserServices(int id)
         {
-
-
             var userServices = _dbContext.UserServices.Find(id);
             if (userServices != null && userServices.Status == Enums.ServicesStatusEnum.Pending)
                 userServices.Status = Enums.ServicesStatusEnum.Approved;
             _dbContext.SaveChanges();
-            //    if (userServices == null)
-            //    {
-            //        // Handle the case where the practitioner type doesn't exist
-            //       TempData["isSuccessDelete"] = false;
-            //    }
-
-            //    // Remove the practitioner type from the DbSet
-            //    _dbContext.UserServices.Remove(userServices);
-
-            //    // Save the changes to the database
-            //    _dbContext.SaveChanges();
-            //    TempData["isSuccessDelete"] = true;
-            ////}
-            //// Set the value in TempData
-            //TempData["isFromDeleteRequest"] = true;
-
             PushNewNotification(SharedEnum.NotificationTypeEnum.ApprovedNewService, _adminUserProfileId, userServices.UserId);
-
             return RedirectToAction("Dashboard");
         }
+
         [HttpGet]
         [Route("RejectDashboardUserServices")]
         public IActionResult RejectDashboardUserServices(int id, string rejectionReason)
         {
-
-
             var userServices = _dbContext.UserServices.Find(id);
             if (userServices != null && userServices.Status == Enums.ServicesStatusEnum.Pending)
             {
@@ -1564,44 +1528,19 @@ namespace Eihal.Controllers
 
             return RedirectToAction("Dashboard");
         }
+
+
         [HttpGet]
         [Route("RejectUserServices/{id}")]
         public IActionResult RejectUserServices(int id)
         {
-
-            //bool isLinked = _dbContext.ApplicationUsers.Any(w => w.PractitionerTypeId == id);
-            //if (isLinked)
-            //{
-            //    return BadRequest("You cannot delete this item as it is linked to users in the system.");
-            //}
-
-            //else
-            //{
-            // Retrieve the practitioner type from the database using the id
             var userServices = _dbContext.UserServices.Find(id);
             if (userServices != null && userServices.Status == Enums.ServicesStatusEnum.Pending)
                 userServices.Status = Enums.ServicesStatusEnum.Rejected;
             _dbContext.SaveChanges();
-            //    if (userServices == null)
-            //    {
-            //        // Handle the case where the practitioner type doesn't exist
-            //        TempData["isSuccessDelete"] = false;
-            //    }
-
-            //    // Remove the practitioner type from the DbSet
-            //    _dbContext.UserServices.Remove(userServices);
-
-            //    // Save the changes to the database
-            //    _dbContext.SaveChanges();
-            //    TempData["isSuccessDelete"] = true;
-            ////}
-            //// Set the value in TempData
-            //TempData["isFromDeleteRequest"] = true;
-
-
-
             return RedirectToAction("ServiceReviewRequests");
         }
+
         [HttpGet]
         [Route("GetUserServices/{id}")]
         public UserServices GetUserServices(int id)
@@ -2179,7 +2118,7 @@ namespace Eihal.Controllers
         public IActionResult ServicesList()
         {
             var services = _dbContext.Services.Include(a => a.ClinicalSpeciality)
-                                              .Include(i=>i.ServiceLevel)
+                                              .Include(i => i.ServiceLevel)
                                               .ToList();
 
             return PartialView("ServicesList", services);
@@ -2272,7 +2211,7 @@ namespace Eihal.Controllers
         public IActionResult DeleteService(int id)
         {
 
-         
+
             var service = _dbContext.Services.Find(id);
 
 
@@ -2300,7 +2239,7 @@ namespace Eihal.Controllers
         public Services GetService(int id)
         {
             var services = _dbContext.Services.Include(a => a.ClinicalSpeciality)
-                                              .Include(i=>i.ServiceLevel)
+                                              .Include(i => i.ServiceLevel)
                                               .Single(w => w.Id == id);
             return services;
         }
@@ -2810,10 +2749,32 @@ namespace Eihal.Controllers
         #endregion
 
         #region Recent Profile Reviews Orders 
-        [Route("GetProfileReviewsOrders")]
-        public IActionResult GetProfileReviewsOrders()
+
+        [Route("Users/UsersProfilesReviews")]
+        public IActionResult UsersProfilesReviews()
         {
-            return Json(_dbContext.UserProfiles.Include(i => i.PractitionerType).OrderByDescending(o => o.Id).Take(100).ToList());
+            return View("UsersProfilesReviews");
+        }
+
+
+        [Route("GetProfileReviewsOrders")]
+        public IActionResult GetProfileReviewsOrders(bool IsDashboard = false)
+        {
+
+            if (IsDashboard)
+                return Json(_dbContext.UserProfiles.Include(i => i.PractitionerType)
+                                               .Where(w => w.ProfileStatus == ProfileStatus.UnderReview || w.ProfileStatus == ProfileStatus.UnCompleted)
+                                               .OrderByDescending(o => o.ProfileStatus == ProfileStatus.UnderReview)
+                                               .Take(15)
+                                               .ToList());
+            else
+            {
+                return Json(_dbContext.UserProfiles.Include(i => i.PractitionerType)
+                                                   .OrderByDescending(o => o.ProfileStatus == ProfileStatus.UnderReview)
+                                                   .ToList());
+            }
+
+
         }
 
         [HttpGet]

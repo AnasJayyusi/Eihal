@@ -53,5 +53,11 @@
 	  <Content Remove="wwwroot\images\InsuranceLogo\926f0420-9d84-4692-9eed-653e65fc73e6.jpg" />
 	  <Content Remove="wwwroot\images\InsuranceLogo\Default-insurance-Image.jpg" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Content Update="Views\Admin\UsersProfilesReviews.cshtml">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	</ItemGroup>
 
 </Project>

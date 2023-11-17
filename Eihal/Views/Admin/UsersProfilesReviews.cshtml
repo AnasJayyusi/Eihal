@@ -1,64 +1,208 @@
-﻿<style>
-    .uncompleted {
-        color: rebeccapurple
-    }
+﻿<head>
+    <!-- Custom styles for this template-->
+    <link href="~/css/sb-admin-2.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
-    .underreview {
-        color: darkcyan
-    }
 
-    .rejected {
-        color: firebrick
-    }
+    <style>
+        .hidden {
+            display: none;
+        }
 
-    .active {
-        color: dodgerblue
-    }
+        .toast-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-    .status-text {
-        font-weight: bold;
-    }
+        .toast-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
 
-</style>
 
-<div class="row">
-    <!-- Area Chart -->
-    <div class="col-xl-12 col-lg-12">
-        <div class="card shadow mb-4">
-            <!-- Card Header - Dropdown -->
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">Recent Profile Reviews Orders</h6>
-
-            </div>
-            <!-- Card Body -->
-
-            <div class="card-body" style="max-height: 768px; overflow-y: auto;">
-                <div class="table-responsive">
-                    <table class="table table-striped" id="dataTable-RecentOrder" width="100%" cellspacing="0">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Phone</th>
-                                <th>Practitioner Type</th>
-                                <th>Status</th>
-                                <th>View</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Table rows will be dynamically added here -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <a style="text-align:center" class="nav-link text-dark" href="/Admin/Users/UsersProfilesReviews">
-                <span style="color:#00768c;font-weight:bold" >Show All Users In System</span>  <i id="notifications-icon" class="fa fa-angle-double-right"></i>
-            </a>
-
-        </div>
+<!-- Toaster -->
+<div id="toast-container" class="toast-container toast-center">
+    <div class="alert alert-success hidden" role="alert">
+        The User Services Added/Updated Successfully!
     </div>
 
-    <!-- Pie Chart -->
+    @if (@ViewBag.SuccessMessage != null)
+    {
+        if (@ViewBag.SuccessMessage == true)
+        {
+            <text>
+                <div class="alert alert-success" role="alert">
+                    User services deleted successfully!
+                </div>
+            </text>
+        }
+        if (@ViewBag.SuccessMessage == false)
+        {
+            <text>
+                <div class="alert alert-danger" role="alert">
+                    You cannot delete this item as it is linked to users in the system.
+                </div>
+            </text>
+        }
+    }
+</div>
+
+
+<div id="page-top" style="margin-top:50px">
+    <div id="wrapper">
+
+
+        <!-- Sidebar -->
+        @Html.Partial("_Sidebar")
+
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid" style="margin-top:50px">
+
+
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h6 style="font-weight:bold;color:#00768c " class="h6 mb-0 ">  Users  &#8658; Users Profiles Reviews</h6>
+
+
+                        <!--ToDo:Move To Partial View -->
+                        <div class="dropdown" style="margin-right: 5%;" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                            <a href="#">
+                                <label style="font-weight:bold;color:#00768c ">Administrator</label>
+                                <img src="~/users/images/Default-User-Profile.jpg" width="40" height="40" alt="user-profile">
+                            </a>
+
+                            <div class="dropdown-content">
+
+
+                                <a type="submit" style="text-transform: none;" class="my-profile-button" asp-area="Identity" asp-page="/Account/Logout">
+                                    Logout
+                                    <span>
+                                        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                                            <button style="text-transform: none;" class="my-profile-button" type="submit"></button>
+                                        </form>
+                                    </span>
+
+
+                                </a>
+
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <!-- Content Row -->
+                    <div class="row">
+                        <!-- Area Chart -->
+                        <div class="col-xl-12 col-lg-12">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Users Profiles Reviews</h6>
+
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body" style="max-height: 768px; overflow-y: auto;">
+
+                                    <br />
+
+                                    <div class="table-responsive" id="dataTableContainer">
+
+
+
+                                        <style>
+                                            .uncompleted {
+                                                color: rebeccapurple
+                                            }
+
+                                            .underreview {
+                                                color: darkcyan
+                                            }
+
+                                            .rejected {
+                                                color: firebrick
+                                            }
+
+                                            .active {
+                                                color: dodgerblue
+                                            }
+
+                                            .status-text {
+                                                font-weight: bold;
+                                            }
+
+                                        </style>
+                                        <!-- Add an input field for filtering -->
+                                        <div class="form-group mr-2">
+                                            <input type="text" class="form-control" id="filterInput" name="search" placeholder="Search About Anything Related To User">
+                                        </div>
+
+                                        <div class="row">
+                                            <!-- Area Chart -->
+                                            <div class="col-xl-12 col-lg-12">
+                                          
+                                                    <!-- Card Header - Dropdown -->
+                                               
+                                                    <!-- Card Body -->
+
+                                                        <div class="table-responsive">
+                                                            <table class="table table-striped" id="dataTable-RecentOrder" width="100%" cellspacing="0">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Name</th>
+                                                                        <th>Email</th>
+                                                                        <th>Phone</th>
+                                                                        <th>Practitioner Type</th>
+                                                                        <th>Status</th>
+                                                                        <th>View</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <!-- Table rows will be dynamically added here -->
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                            </div>
+
+                                            <!-- Pie Chart -->
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+
+
 
 </div>
 <div class="modal fade" id="ViewProfile" tabindex="-1" role="dialog" aria-labelledby="ViewProfileModal" aria-hidden="true">
@@ -113,7 +257,7 @@
 
     function getProfileReviewsOrders() {
         $.ajax({
-            url: '/Admin/GetProfileReviewsOrders?IsDashboard=true', // Replace with your API endpoint
+            url: '/Admin/GetProfileReviewsOrders', // Replace with your API endpoint
             method: 'GET',
             dataType: 'json',
             success: function (response) {
@@ -318,3 +462,30 @@
 
 </script>
 
+<script>
+    // Wait for the document to be ready
+    $(document).ready(function () {
+        // Add an input field for filtering
+        $('#filterInput').on('input', function () {
+            var filterValue = $(this).val().toLowerCase();
+
+            // Iterate through each row in the table
+            $('#dataTable-RecentOrder tbody tr').each(function () {
+                // Access each cell in the row
+                var name = $(this).find('td:eq(0)').text().toLowerCase();
+                var email = $(this).find('td:eq(1)').text().toLowerCase();
+                var phone = $(this).find('td:eq(2)').text().toLowerCase();
+                var practitionerType = $(this).find('td:eq(3)').text().toLowerCase();
+                var status = $(this).find('td:eq(4)').text().toLowerCase();
+                var view = $(this).find('td:eq(5)').text().toLowerCase();
+
+                // Show or hide the row based on the filter criteria
+                if (name.includes(filterValue) || email.includes(filterValue) || phone.includes(filterValue) || practitionerType.includes(filterValue) || status.includes(filterValue) || view.includes(filterValue)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+    });
+</script>

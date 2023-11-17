@@ -153,6 +153,7 @@ namespace Eihal.Controllers
                                                                  UserProfileId = s.Id,
                                                                  UserId = s.UserId,
                                                                  FullName = s.FullName,
+                                                                 ProfilePicturePath = s.ProfilePicturePath,
                                                                  InsuranceAccepted = s.InsuranceAccepted ?? false,
                                                                  OverView = new OverView()
                                                                  {

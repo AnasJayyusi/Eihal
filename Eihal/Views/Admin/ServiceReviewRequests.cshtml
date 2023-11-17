@@ -89,17 +89,11 @@
                             </a>
 
                             <div class="dropdown-content">
-                                 @*<a class="nav-link text-dark  linkButton" asp-area="" asp-controller="Home" asp-action="Index">My Profile </a>*@
-                                @*<a class="nav-link text-dark linkButton" asp-area="" asp-controller="Doctor" asp-action="Index">My Order </a>*@
 
 
                                 <a type="submit" style="text-transform: none;" class="my-profile-button" asp-area="Identity" asp-page="/Account/Logout">
                                     Logout
                                     <span>
-                                        @*  <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                                        <button style="text-transform: none;" class="my-profile-button" type="submit"></button>
-                                        </form>
-                                        *@
                                         <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
                                             <button style="text-transform: none;" class="my-profile-button" type="submit"></button>
                                         </form>
@@ -111,19 +105,6 @@
 
                             </div>
                         </div>
-
-                        @*    <a asp-area="Identity" asp-page="/Account/Logout" class="drop-name">
-                        <span>
-
-                        <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                        <i style="color:white" class='fas fa-sign-out-alt'></i>
-                        <button type="submit" style="background-color:#0D6EFD" class="badge badge-primary">LOGOUT</button>
-                        </form>
-
-                        </span>
-
-                        </a>*@
-
 
 
                     </div>
