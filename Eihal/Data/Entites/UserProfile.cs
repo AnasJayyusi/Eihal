@@ -60,7 +60,6 @@ namespace Eihal.Data.Entites
         public string? SpecialtiesTitlesAr { get; set; }
         public string? SpecialtiesTitlesEn { get; set; }
         #endregion
-
       
         public List<InsuranceCompany> InsuranceCompanies{ get; set; }
 
@@ -77,5 +76,6 @@ public enum ProfileStatus
     UnCompleted = 0,
     UnderReview = 1,
     Rejected = 2,
-    Active = 3
+    Active = 3,
+    InActive = 4
 }

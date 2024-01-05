@@ -135,6 +135,12 @@
   <data name="Friday" xml:space="preserve">
     <value>Friday</value>
   </data>
+  <data name="InActive" xml:space="preserve">
+    <value>InActive</value>
+  </data>
+  <data name="InActiveMessage" xml:space="preserve">
+    <value>This message states that you cannot use your profile and it will not appear on the search page</value>
+  </data>
   <data name="Information" xml:space="preserve">
     <value>Information</value>
   </data>

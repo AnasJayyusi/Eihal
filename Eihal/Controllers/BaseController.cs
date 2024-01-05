@@ -138,6 +138,18 @@ namespace Eihal.Controllers
                     notification.MessageEn = $"Your new service was reject";
                     notification.MessageAr = $"تم رفض خدمتك الجديده";
                     break;
+                case NotificationTypeEnum.ActivateUserProfile:
+                    notification.TitleAr = "تفعيل";
+                    notification.TitleEn = "Activate";
+                    notification.MessageEn = $"Your Profile has been Activated";
+                    notification.MessageAr = $"لقد تم تفعيل ملفك الشخصي";
+                    break;
+                case NotificationTypeEnum.DeactivateUserProfile:
+                    notification.TitleAr = "إلغاء التنشيط";
+                    notification.TitleEn = "Deactivate";
+                    notification.MessageEn = $"Your Profile has been Deactivated";
+                    notification.MessageAr = $"لقد تم إلغاء تنشيط ملفك الشخصي";
+                    break;
 
             }
 

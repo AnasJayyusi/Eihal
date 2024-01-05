@@ -2773,8 +2773,25 @@ namespace Eihal.Controllers
                                                    .OrderByDescending(o => o.ProfileStatus == ProfileStatus.UnderReview)
                                                    .ToList());
             }
+        }
 
+        [Route("SetActivateDeactivateUser")]
+        public IActionResult SetActivateDeactivateUser(int userProfileId)
+        {
+            var user = _dbContext.UserProfiles.Single(s => s.Id == userProfileId);
 
+            if (user.ProfileStatus == ProfileStatus.Active)
+            {
+                user.ProfileStatus = ProfileStatus.InActive;
+                PushNewNotification(NotificationTypeEnum.DeactivateUserProfile, GetUserProfileId(), userProfileId);
+            }
+            else
+            {
+                user.ProfileStatus = ProfileStatus.Active;
+                PushNewNotification(NotificationTypeEnum.ActivateUserProfile, GetUserProfileId(), userProfileId);
+            }
+            _dbContext.SaveChanges();
+            return Json(user.ProfileStatus);
         }
 
         [HttpGet]

@@ -306,6 +306,24 @@
                 statusText = '<span style="font-weight: bold;"> @Localizer["Active"]</span>';
             }
 
+            else if (profileStatus === 'InActive') {
+
+                $("#active-profile-sign").addClass("send-review-btn__circle")
+                $("#active-profile-sign").css("pointer-events", "none");
+                let buttonText = document.querySelector('.tick');
+
+         
+
+                buttonText.innerHTML ='<i class="fa-solid fa-x" > </i>';
+                $("#send-icon").hide()
+
+                profileStatusElement.css('background-color', 'gray');
+                statusText = '<span style="font-weight: bold;"> @Localizer["InActive"] </span>';
+
+                $("#help-msg").text("@Localizer["InActiveMessage"]")
+            }
+
+
 
             var statusDiv = $('<div>').append($('<span>').html(statusText));
             profileStatusElement.append(statusDiv);

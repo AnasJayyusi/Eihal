@@ -135,6 +135,12 @@
   <data name="Friday" xml:space="preserve">
     <value>الجمعة</value>
   </data>
+  <data name="InActive" xml:space="preserve">
+    <value>غير مفعل</value>
+  </data>
+  <data name="InActiveMessage" xml:space="preserve">
+    <value>تفيد هذه الرساله انه لا يمكنك استخدام ملفك الشخص ولن يظهر في صفحة البحث </value>
+  </data>
   <data name="Information" xml:space="preserve">
     <value>معلومة</value>
   </data>

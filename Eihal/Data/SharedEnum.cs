@@ -19,6 +19,8 @@
             SendNewService = 6,
             ApprovedNewService = 7,
             RejectNewService = 8,
+            ActivateUserProfile= 9,
+            DeactivateUserProfile = 10,
 
         }
 
