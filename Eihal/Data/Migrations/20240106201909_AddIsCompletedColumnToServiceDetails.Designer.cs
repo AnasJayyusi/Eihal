@@ -4,6 +4,7 @@ using Eihal.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Eihal.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240106201909_AddIsCompletedColumnToServiceDetails")]
+    partial class AddIsCompletedColumnToServiceDetails
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -61,6 +63,9 @@ namespace Eihal.Data.Migrations
 
                     b.Property<string>("Path")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UniqueFileName")
+                        .HasColumnType("int");
 
                     b.Property<string>("UniversityNameAr")
                         .HasColumnType("nvarchar(max)");
@@ -578,38 +583,6 @@ namespace Eihal.Data.Migrations
                     b.HasIndex("OrderId");
 
                     b.ToTable("ReferralRequests");
-                });
-
-            modelBuilder.Entity("Eihal.Data.Entites.RequiredAttachment", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Extension")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Path")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RequiredFileType")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("UserProfileId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserProfileId");
-
-                    b.ToTable("RequiredAttachments");
                 });
 
             modelBuilder.Entity("Eihal.Data.Entites.ServiceLevel", b =>
@@ -1493,15 +1466,6 @@ namespace Eihal.Data.Migrations
                     b.Navigation("CreatedByUser");
 
                     b.Navigation("Order");
-                });
-
-            modelBuilder.Entity("Eihal.Data.Entites.RequiredAttachment", b =>
-                {
-                    b.HasOne("Eihal.Data.Entites.UserProfile", "UserProfile")
-                        .WithMany()
-                        .HasForeignKey("UserProfileId");
-
-                    b.Navigation("UserProfile");
                 });
 
             modelBuilder.Entity("Eihal.Data.Entites.Services", b =>

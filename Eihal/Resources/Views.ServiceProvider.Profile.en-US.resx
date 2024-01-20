@@ -127,7 +127,7 @@
     <value>Please complete your profile, by adding Certifications then send it to review</value>
   </data>
   <data name="DefaultMessage" xml:space="preserve">
-    <value>This message appear to complete your profile by adding Certifications by using attach button below to add new Certification. Then click on send to review</value>
+    <value>This message appear to complete your profile by adding Certifications and required files by using attach buttons below to add new Certification and required files. Then click on send to review</value>
   </data>
   <data name="DeleteServiceConfirmation" xml:space="preserve">
     <value>Are you sure you want to delete this service?</value>
@@ -139,7 +139,7 @@
     <value>InActive</value>
   </data>
   <data name="InActiveMessage" xml:space="preserve">
-    <value>This message states that you cannot use your profile and it will not appear on the search page</value>
+    <value>This message indicates that your personal account has been suspended and will not appear on the search page.</value>
   </data>
   <data name="Information" xml:space="preserve">
     <value>Information</value>

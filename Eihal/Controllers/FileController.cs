@@ -35,8 +35,8 @@ namespace Eihal.Controllers
         }
 
         [HttpPost]
-        [Route("UploadFile")]
-        public async Task<IActionResult> UploadFile(IFormFile file, int degreeId, string universityNameAr, string universityNameEn)
+        [Route("UploadCertification")]
+        public async Task<IActionResult> UploadCertification(IFormFile file, int degreeId, string universityNameAr, string universityNameEn)
         {
             if (file == null || file.Length == 0)
             {
@@ -87,6 +87,104 @@ namespace Eihal.Controllers
 
                 // File uploaded successfully
                 return Ok("File uploaded successfully.");
+            }
+            catch (IOException ex)
+            {
+                // Handle the error
+                return StatusCode(StatusCodes.Status500InternalServerError, $"File upload failed: {ex.Message}");
+            }
+        }
+
+
+        [HttpPost]
+        [Route("UploadRequiredFiles")]
+        public async Task<IActionResult> UploadRequiredFiles(IFormFile contractfile, IFormFile categoryfile)
+        {
+            if (contractfile == null || contractfile.Length == 0 || categoryfile == null || categoryfile.Length == 0)
+            {
+                return BadRequest("Contract File Or Category File is not Uploaded");
+            }
+
+            try
+            {
+                string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                // Specify the directory where you want to save the uploaded file
+                string webRootPath = _webHostEnvironment.WebRootPath;
+                string attachmentsPath = Path.Combine("users", "attachments");
+                string uploadPath = Path.Combine(webRootPath, attachmentsPath, currentUserId);
+                // Create the directory if it doesn't exist
+                Directory.CreateDirectory(uploadPath);
+
+                var oldDocs = _dbContext.RequiredAttachments.Where(w => w.UserId == currentUserId);
+                foreach (var attachment in oldDocs)
+                {
+                    _dbContext.RequiredAttachments.Remove(attachment);
+                }
+
+
+                #region SignedContract
+                // SignedContract File
+                // Generate a unique file name
+                string signedContractfileName = Path.GetFileNameWithoutExtension(contractfile.FileName);
+                string signedContractfileExtension = Path.GetExtension(contractfile.FileName);
+                string signedContractUniqueFileName = signedContractfileName + signedContractfileExtension;
+
+                // Combine the directory and unique file name
+                string signedContractfilePath = Path.Combine(uploadPath, signedContractUniqueFileName);
+
+                using (var stream = new FileStream(signedContractfilePath, FileMode.Create))
+                {
+                    // Copy the file to the specified path
+                    await contractfile.CopyToAsync(stream);
+                }
+
+
+                var contractAttachment = new RequiredAttachment()
+                {
+                    UserId = currentUserId,
+                    UserProfileId = GetUserId(),
+                    Name = signedContractfileName,
+                    Extension = signedContractfileExtension,
+                    RequiredFileType = RequiredFileType.SignedContract,
+                    Path = $"/users/attachments/{currentUserId}/{signedContractUniqueFileName}",
+                };
+                
+                _dbContext.RequiredAttachments.Add(contractAttachment);
+                #endregion
+
+                #region Category
+                // Generate a unique file name
+                string categoryfileName = Path.GetFileNameWithoutExtension(categoryfile.FileName);
+                string categoryfileExtension = Path.GetExtension(categoryfile.FileName);
+                string categoryUniqueFileName = categoryfileName + categoryfileExtension;
+
+                // Combine the directory and unique file name
+                string categoryfilePath = Path.Combine(uploadPath, categoryUniqueFileName);
+                // ProfessionalCategory File
+                // Generate a unique file name
+                using (var stream = new FileStream(categoryfilePath, FileMode.Create))
+                {
+                    // Copy the file to the specified path
+                    await categoryfile.CopyToAsync(stream);
+                }
+
+                var categoryAttachment = new RequiredAttachment()
+                {
+                    UserId = currentUserId,
+                    UserProfileId = GetUserId(),
+                    Name = categoryfileName,
+                    Extension = categoryfileExtension,
+                    RequiredFileType= RequiredFileType.ProfessionalCategory,
+                    Path = $"/users/attachments/{currentUserId}/{categoryUniqueFileName}",
+                };
+
+                _dbContext.RequiredAttachments.Add(categoryAttachment);
+                #endregion
+
+                _dbContext.SaveChanges();
+
+                // File uploaded successfully
+                return Ok("Files uploaded successfully.");
             }
             catch (IOException ex)
             {

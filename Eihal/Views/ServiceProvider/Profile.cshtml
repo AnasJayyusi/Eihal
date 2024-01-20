@@ -256,10 +256,8 @@
                 url: '/ServiceProvider/SendProfileToReview',
                 type: 'Get',
                 success: function (response) {
-
                     setProfileStatus(response)
                     toastr.success('@Localizer["SendProfileSuccess"]', '@Localizer["Success"]');
-
                 },
                 error: function (xhr, status, error) {
                     toastr.error('Error occurred.', 'Failed !!');
@@ -268,6 +266,26 @@
         }
 
 
+        function canSendProfile() {
+            $.ajax({
+                url: '/ServiceProvider/CanSendProfile',
+                type: 'Get',
+                success: function (response) {
+                    if (response == true)
+                    {
+                        $("#active-profile-sign").show();
+                    }
+                    if (response == false)
+                    {
+                        $("#active-profile-sign").hide();
+                    }
+
+                },
+                error: function (xhr, status, error) {
+                    toastr.error('Error occurred.', 'Failed !!');
+                }
+            });
+        }
 
 
         function setProfileStatus(profileStatus) {
@@ -287,13 +305,14 @@
                 statusText = '<span style="font-weight: bold;"> @Localizer["UnderReview"]</span>';
                 $("#active-profile-sign").hide()
                 $('#profile-status-container').click(false);
+                
 
             } else if (profileStatus === 'Rejected') {
                 profileStatusElement.css('background-color', 'firebrick');
                 statusText = '<span style="font-weight: bold;"> @Localizer["Rejected"]</span> @Localizer["RejectedMessage"] </a>';
 
             } else if (profileStatus === 'Active') {
-
+                $("#requiredAttachments-div").hide()
                 $("#active-profile-sign").addClass("send-review-btn__circle")
                 $("#active-profile-sign").css("pointer-events", "none");
                 let buttonText = document.querySelector('.tick');
@@ -307,7 +326,7 @@
             }
 
             else if (profileStatus === 'InActive') {
-
+                $("#requiredAttachments-div").hide()
                 $("#active-profile-sign").addClass("send-review-btn__circle")
                 $("#active-profile-sign").css("pointer-events", "none");
                 let buttonText = document.querySelector('.tick');

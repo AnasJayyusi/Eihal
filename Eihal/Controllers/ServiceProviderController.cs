@@ -12,6 +12,8 @@ using Eihal.Dto;
 using static Eihal.Data.SharedEnum;
 using System.Globalization;
 using Microsoft.AspNetCore.Identity;
+using System.Text.Json.Nodes;
+using static iTextSharp.text.pdf.AcroFields;
 
 namespace Eihal.Controllers
 {
@@ -47,7 +49,6 @@ namespace Eihal.Controllers
         {
             return View();
         }
-
 
 
         [Route("Notifications")]
@@ -91,9 +92,7 @@ namespace Eihal.Controllers
             return Ok(new { message = "Password updated successfully." });
         }
 
-
         [Route("GetIncomingRequests")]
-
         public ActionResult GetIncomingRequests(string? name, int? statusId = 0, int? dateId = 0)
         {
             var currentUserId = GetUserProfileId();
@@ -144,7 +143,6 @@ namespace Eihal.Controllers
         }
 
         [Route("ApproveReferal")]
-
         public ActionResult ApproveReferal(int refId)
         {
             var currentUserId = GetUserProfileId();
@@ -175,8 +173,8 @@ namespace Eihal.Controllers
 
             return Ok();
         }
-        [Route("RejectReferal")]
 
+        [Route("RejectReferal")]
         public ActionResult RejectReferal(int refId, string rejectionReason)
         {
             var currentUserId = GetUserProfileId();
@@ -193,7 +191,6 @@ namespace Eihal.Controllers
 
             return Ok();
         }
-
 
 
         #endregion
@@ -495,6 +492,20 @@ namespace Eihal.Controllers
             return Json(ProfileStatus.UnderReview.ToString());
         }
 
+        [HttpGet]
+        [Route("CanSendProfile")]
+        public ActionResult CanSendProfile()
+        {
+            var userId = GetAspNetUserId();
+
+            var isRequiredAttachmnetsUploaded = _dbContext.RequiredAttachments.Where(w => w.UserId == userId).Count() >= 2;
+            var isCertifactionsAttachmnetsUploaded = _dbContext.Certifications.Where(w => w.UserId == userId).Count() >= 1;
+
+            if (isRequiredAttachmnetsUploaded && isCertifactionsAttachmnetsUploaded)
+                return Json(true);
+            return Json(false);
+        }
+
         [HttpPost]
         [Route("UpdateUserProfile")]
         public IActionResult UpdateUserProfile(IFormCollection form)
@@ -763,7 +774,7 @@ namespace Eihal.Controllers
                     timeClinicLocation.DistrictId,
                     CountryName = isEng ? timeClinicLocation?.Country?.TitleEn : timeClinicLocation?.Country?.TitleAr,
                     StateName = isEng ? timeClinicLocation?.State?.TitleEn : timeClinicLocation?.State?.TitleAr,
-                    CityName = isEng ?timeClinicLocation?.City?.TitleEn : timeClinicLocation?.City?.TitleAr,
+                    CityName = isEng ? timeClinicLocation?.City?.TitleEn : timeClinicLocation?.City?.TitleAr,
                     DistrictName = isEng ? timeClinicLocation?.Districts?.TitleEn : timeClinicLocation?.Districts?.TitleAr
                 };
                 return Json(data);
@@ -1028,7 +1039,7 @@ namespace Eihal.Controllers
         [Route("ExportReport")]
         public ActionResult ExportReport(int referralRequestId)
         {
-            PdfReportGenerator reportGenerator = new PdfReportGenerator();
+
             // Get Logo Image
             string imagePath = GetFileFullPath(_webHostEnvironment, "images", "logo.png");
 
@@ -1055,8 +1066,39 @@ namespace Eihal.Controllers
                                          .Where(w => w.Id == referralReq.OrderId)
                                          .ToList();
 
-            var reportDto = new ReportDto();
 
+            bool isServiceProviderReport = referralReq.AssignedToUserId == GetUserProfileId();
+            bool isBeneficiaryReport = referralReq.AssignedToUserId != GetUserProfileId();
+
+            if (isServiceProviderReport)
+            {
+                var reportFile = GetServiceProviderReport(imagePath, referralReq, clinicName);
+                // Return File
+                return File(reportFile, "application/pdf", reportName);
+            }
+            if (isBeneficiaryReport)
+            {
+                var reportFile = GetBeneficiaryReport(imagePath, referralReq, clinicName, orderDetails);
+                // Return File
+                return File(reportFile, "application/pdf", reportName);
+            }
+
+            else
+            {
+                var reportFile = GenericReportTemplate(imagePath, reportName, referralReq, clinicName, orderDetails);
+                // Return File
+                return File(reportFile, "application/pdf", reportName);
+            }
+        }
+
+
+        public MemoryStream GetServiceProviderReport(string imagePath, ReferralRequest referralReq, string clinicName)
+        {
+
+            // Create Object
+            var reportDto = new ServiceProviderReportDto();
+
+            // Prepare Header 
             reportDto.MasterDetails = new MasterDetailsDto()
             {
                 OrderDate = referralReq.CompletionDate.Value.ToString("MM/dd/yyyy"),
@@ -1067,6 +1109,152 @@ namespace Eihal.Controllers
                 RequestFrom = referralReq.CreatedByUser.FullName
             };
 
+
+            var orderServiceDetails = _dbContext.OrderServiceDetails.Where(w => w.OrderDetailId == referralReq.OrderId).ToList(); // Original Data
+            var datasource = new List<ServiceProviderDataTableDto>(); // Mapping to this object
+
+            var totalServicesFee = 0.00;
+            var totalQty = 0;
+            var totalAmountToBeneficiary = 0.0;
+            foreach (var item in orderServiceDetails)
+            {
+                if (referralReq.Status == ReferralStatusEnum.Completed || (item.IsCompleted && referralReq.Status == ReferralStatusEnum.PartiallyCompleted))
+                {
+                    var obj = new ServiceProviderDataTableDto()
+                    {
+                        ServiceCode = item.ServiceId.ToString(),
+                        ServiceDesc = item.TitleEn,
+                        Qty = item.Qty.Value,
+                        ServiceFee = item.Fee,
+                        Total = item.Fee * item.Qty.Value
+                    };
+
+                    totalServicesFee = totalServicesFee + (item.Fee * item.Qty.Value);
+                    totalQty = totalQty + item.Qty.Value;
+                    datasource.Add(obj);
+                }
+            }
+
+            var total = new ServiceProviderDataTableDto()
+            {
+                ServiceCode = "#",
+                ServiceDesc = "Total Amount",
+                Qty = totalQty,
+                ServiceFee = totalServicesFee,
+                Total = totalServicesFee
+            };
+
+            datasource.Add(total);
+
+            reportDto.DataTable = datasource;
+
+            PdfReportGenerator reportGenerator = new PdfReportGenerator();
+            MemoryStream reportFile = reportGenerator.GenerateReport(imagePath, reportDto, ReportTypeEnum.ServiceProviderReportDto);
+            return reportFile;
+        }
+
+        public MemoryStream GetBeneficiaryReport(string imagePath, ReferralRequest referralReq, string clinicName, List<OrderDetail> orderDetails)
+        {
+            var vatValue = Convert.ToDouble(_dbContext.GeneralSettings.Single().VatValue) / 100;
+            var sitePercentage = Convert.ToDouble(_dbContext.GeneralSettings.Single().SitePercentage) / 100;
+
+            // Create Object
+            var reportDto = new BeneficiaryReportDto();
+
+            // Prepare Header 
+            reportDto.MasterDetails = new MasterDetailsDto()
+            {
+                OrderDate = referralReq.CompletionDate.Value.ToString("MM/dd/yyyy"),
+                DoctorName = referralReq.AssignedToUser.FullName,
+                ClinicName = clinicName ?? "Not Defined Yet",
+                InvoiceNumber = referralReq.Id.ToString("#0000"),
+                PatientName = referralReq.Order.PatientName,
+                RequestFrom = referralReq.CreatedByUser.FullName
+            };
+
+
+            var orderServiceDetails = _dbContext.OrderServiceDetails
+                                                .Where(w => w.OrderDetailId == referralReq.OrderId)
+                                                .ToList(); // Original Data
+
+
+            var datasource = new List<BeneficiaryDataTableDto>(); // Mapping to this object
+
+
+            int totalQty = 0;
+            var totalBeneficiaryPart = 0.0;
+            var totalofTotal = 0.0;
+            var totalPlatformFee = 0.0;
+            var totalVat=0.0;
+            var totalTPFFees = 0.0;
+            var totalNetDrPart = 0.0;
+
+            foreach (var item in orderServiceDetails)
+            {
+                if (referralReq.Status == ReferralStatusEnum.Completed || (item.IsCompleted && referralReq.Status == ReferralStatusEnum.PartiallyCompleted))
+                {
+                    var obj = new BeneficiaryDataTableDto()
+                    {
+                        ServiceCode = item.ServiceId.ToString(),
+                        ServiceDesc = item.TitleEn,
+                        Qty = item.Qty.Value,
+                        BeneficiaryPart = item.Fee,
+                        Total = item.Fee * item.Qty.Value,
+                    };
+                    obj.PlatformFee = sitePercentage * obj.Total;
+                    obj.VatPercentage = vatValue * obj.PlatformFee;
+                    obj.TotalPlatformFee = obj.PlatformFee + obj.VatPercentage;
+                    obj.NetDrPart = obj.Total - obj.TotalPlatformFee;
+
+                    datasource.Add(obj);
+
+
+                    totalQty = totalQty + obj.Qty;
+                    totalBeneficiaryPart = totalBeneficiaryPart + obj.BeneficiaryPart;
+                    totalofTotal = totalofTotal + obj.Total;
+                    totalPlatformFee = totalPlatformFee+ obj.TotalPlatformFee;
+                    totalVat = totalVat + obj.VatPercentage;
+                    totalTPFFees = totalTPFFees + obj.TotalPlatformFee;
+                    totalNetDrPart = totalNetDrPart + obj.NetDrPart;
+
+                }
+            }
+
+            var total = new BeneficiaryDataTableDto()
+            {
+                ServiceCode = "#",
+                ServiceDesc = "Total Amount",
+                Qty = totalQty,
+                BeneficiaryPart = totalBeneficiaryPart,
+                Total = totalofTotal,
+            };
+            total.PlatformFee = totalPlatformFee;
+            total.VatPercentage = totalVat;
+            total.TotalPlatformFee = totalTPFFees;
+            total.NetDrPart = totalNetDrPart;
+
+            datasource.Add(total);
+
+            reportDto.DataTable = datasource;
+
+            PdfReportGenerator reportGenerator = new PdfReportGenerator();
+            MemoryStream reportFile = reportGenerator.GenerateReport(imagePath, reportDto, ReportTypeEnum.BeneficiaryReportDto);
+            return reportFile;
+        }
+
+
+        public MemoryStream GenericReportTemplate(string imagePath, string reportName, ReferralRequest referralReq, string clinicName, List<OrderDetail> orderDetails)
+        {
+            var reportDto = new ReportDto();
+            reportDto.MasterDetails = new MasterDetailsDto()
+            {
+                OrderDate = referralReq.CompletionDate.Value.ToString("MM/dd/yyyy"),
+                DoctorName = referralReq.AssignedToUser.FullName,
+                ClinicName = clinicName ?? "Not Defined Yet",
+                InvoiceNumber = referralReq.Id.ToString("#0000"),
+                PatientName = referralReq.Order.PatientName,
+                RequestFrom = referralReq.CreatedByUser.FullName
+            };
             var vatValue = Convert.ToDouble(_dbContext.GeneralSettings.Single().VatValue);
             List<DataTableDto> dataSource = new List<DataTableDto>();
             foreach (var order in orderDetails)
@@ -1079,10 +1267,16 @@ namespace Eihal.Controllers
                 double totalNetWithVat = 0;
                 foreach (var svc in order.Services)
                 {
+                    var orderServicesDetails = order.OrderServicesDetails.FirstOrDefault();
+                    if (referralReq.Status == ReferralStatusEnum.PartiallyCompleted && !orderServicesDetails.IsCompleted)
+                        continue;
+
+
                     var dataTableDto = new DataTableDto();
                     dataTableDto.ServiceCode = svc.Id.ToString();
                     dataTableDto.ServiceDesc = svc.TitleEn;
-                    dataTableDto.Qty = order.OrderServicesDetails.FirstOrDefault().Qty ?? 1;
+                    dataTableDto.Qty = orderServicesDetails.Qty ?? 1;
+
 
                     // Total Qty
                     totalQty = totalQty + dataTableDto.Qty;
@@ -1110,6 +1304,7 @@ namespace Eihal.Controllers
                     totalNetWithVat = totalNetWithVat + dataTableDto.NetWithVat;
 
                     dataSource.Add(dataTableDto);
+
                 }
                 var total = new DataTableDto();
                 // For Total Rows
@@ -1124,12 +1319,11 @@ namespace Eihal.Controllers
                 dataSource.Add(total);
 
             }
-
             reportDto.DataTable = dataSource;
-            MemoryStream reportFile = reportGenerator.GenerateReport(imagePath, reportDto);
 
-            // Return File
-            return File(reportFile, "application/pdf", reportName);
+            PdfReportGenerator reportGenerator = new PdfReportGenerator();
+            MemoryStream reportFile = reportGenerator.GenerateReport(imagePath, reportDto, ReportTypeEnum.None);
+            return reportFile;
         }
 
 
@@ -1171,6 +1365,46 @@ namespace Eihal.Controllers
 
 
             return Json(referralsOrders);
+        }
+
+        [Route("GetRequestedServices")]
+        public ActionResult GetRequestedServices(int refId)
+        {
+            var requestedServices = _dbContext.ReferralRequests
+                        .Include(i => i.Order)
+                        .Include(i => i.Order.Services)
+                        .Include(i => i.Order.OrderServicesDetails)
+                        .Select(s => new ReferralOrderDetailModal
+                        {
+                            ReferralRequestId = s.Id,
+                            OrderServicesDetails = s.Order.OrderServicesDetails,
+                            ServicesRequests = s.Order.Services,
+                        }).Where(w => w.ReferralRequestId == refId);
+
+
+            return Json(requestedServices);
+        }
+
+        [HttpPost]
+        [Route("CompletePartiallyReferal")]
+        public ActionResult CompletePartiallyReferal(int refId, string inCompletedReason, [FromBody] int[] completeServicesIds)
+        {
+            foreach (var id in completeServicesIds)
+            {
+                var orderServiceDetail = _dbContext.OrderServiceDetails.Single(s => s.Id == id);
+                orderServiceDetail.IsCompleted = true;
+                _dbContext.SaveChanges();
+            }
+
+
+            var referralRequest = _dbContext.ReferralRequests.Single(w => w.Id == refId);
+            referralRequest.Status = ReferralStatusEnum.PartiallyCompleted;
+            referralRequest.CompletionDate = DateTime.Now;
+            referralRequest.RejectionReason = inCompletedReason;
+            _dbContext.SaveChanges();
+
+
+            return Ok();
         }
     }
 }

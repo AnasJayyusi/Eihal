@@ -92,6 +92,10 @@
                     {
                         <span class="status rejected">@orderDetail.Status</span>
                     }
+                    else if (orderDetail.Status == Eihal.Enums.ReferralStatusEnum.PartiallyCompleted)
+                    {
+                        <span class="status partiallyCompleted">@orderDetail.Status</span>
+                    }
                 </td>
                 <td>
                     <div class="custom-control custom-switch">
@@ -293,6 +297,7 @@
                         </div>
                     </div>
 
+
                 </div>
                 <div class="modal-footer">
                     <button id="close-view-OrderDetails" type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -332,6 +337,7 @@
         $("#status-readonly").removeClass("completed");
         $("#status-readonly").removeClass("approved");
         $("#status-readonly").removeClass("rejected");
+        $("#status-readonly").removeClass("partiallyCompleted");
 
         $.ajax({
             url: '/Admin/GetReferralsOrderDetails?orderId=' + id,
@@ -353,8 +359,12 @@
                     $("#status-readonly").addClass("rejected")
                 }
                 if (data.status == 4) {
-                    $("#status-readonly").text("completed")
+                    $("#status-readonly").text("Completed")
                     $("#status-readonly").addClass("completed")
+                }
+                if (data.status == 5) {
+                    $("#status-readonly").text("Partially Completed")
+                    $("#status-readonly").addClass("partiallyCompleted")
                 }
 
                 $("#createdBy-readonly").text(data.createdBy)
@@ -480,15 +490,20 @@
                     $("#aged-label-readonly").css("display", "none");
                     $("#aged-input-readonly").css("display", "none");
                 }
-                
+
 
 
                 var dropdown = $('#services-readOnly');
                 dropdown.empty();
                 var count = 0;
                 $.each(data.servicesRequests, function (index, item) {
-                    
-                    dropdown.append("<li> ♦ " + item.titleEn + "X" + item.orderServicesDetails[count].qty + "</li>");
+
+                    if (data.status == 5 && item.orderServicesDetails[count].isCompleted == false) {
+                        dropdown.append("<li style='text-decoration:line-through'> ♦ " + item.titleEn + "X" + item.orderServicesDetails[count].qty + "</li>");
+                    }
+                    else {
+                        dropdown.append("<li> ♦ " + item.titleEn + "X" + item.orderServicesDetails[count].qty + "</li>");
+                    }
                     count += 1;
                 });
 
@@ -516,6 +531,12 @@
         background-color: dodgerblue;
         color: #ffffff;
     }
+
+    .partiallyCompleted {
+        background-color: royalblue;
+        color: #ffffff;
+    }
+
 
     .rejected {
         background-color: firebrick;

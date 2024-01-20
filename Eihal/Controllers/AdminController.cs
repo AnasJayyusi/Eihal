@@ -2802,6 +2802,13 @@ namespace Eihal.Controllers
         }
 
         [HttpGet]
+        [Route("GetUserRequiredAttachments/{id}")]
+        public IActionResult GetUserRequiredAttachments(int id)
+        {
+            return Json(_dbContext.RequiredAttachments.Where(x => x.UserProfileId == id).ToList());
+        }
+
+        [HttpGet]
         [Route("RejectUserProfile/{id}/{rejectionReason}")]
         public ActionResult UpdateUserStatus(int id, string rejectionReason)
         {

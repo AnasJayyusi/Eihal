@@ -217,7 +217,7 @@
     <value>User profile updated successfully</value>
   </data>
   <data name="RejectionReasonIs" xml:space="preserve">
-    <value>Rejection Reason Is</value>
+    <value>Rejection Reason Is :</value>
   </data>
   <data name="Reviews" xml:space="preserve">
     <value>Reviews</value>

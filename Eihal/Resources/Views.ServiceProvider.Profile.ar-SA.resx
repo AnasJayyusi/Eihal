@@ -127,7 +127,7 @@
     <value>يرجى إكمال ملف التعريف الخاص بك، وذلك بإضافة الشهادات ثم إرسالها للمراجعة</value>
   </data>
   <data name="DefaultMessage" xml:space="preserve">
-    <value>تظهر هذه الرسالة لإكمال ملفك الشخصي عن طريق إضافة الشهادات باستخدام زر إرفاق أدناه لإضافة شهادة جديدة. ثم اضغط على إرسال للمراجعة</value>
+    <value>تظهر هذه الرسالة لإكمال ملفك الشخصي عن طريق إضافة الشهادات والملفات المطلوبه باستخدام ازرار إرفاق أدناه لإضافة شهادة جديدة والملفات المطلوبه. ثم اضغط على إرسال للمراجعة</value>
   </data>
   <data name="DeleteServiceConfirmation" xml:space="preserve">
     <value>هل أنت متأكد أنك تريد حذف هذه الخدمة؟</value>
@@ -139,7 +139,7 @@
     <value>غير مفعل</value>
   </data>
   <data name="InActiveMessage" xml:space="preserve">
-    <value>تفيد هذه الرساله انه لا يمكنك استخدام ملفك الشخص ولن يظهر في صفحة البحث </value>
+    <value>تفيد هذه الرسالة ان حسابك الشخصي موقوف ولن يظهر في صفحة البحث.</value>
   </data>
   <data name="Information" xml:space="preserve">
     <value>معلومة</value>

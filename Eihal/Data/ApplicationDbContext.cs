@@ -50,5 +50,6 @@ namespace Eihal.Data
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<OrderServiceDetail> OrderServiceDetails { get; set; }
         public DbSet<ServiceLevel> ServiceLevels { get; set; }
+        public DbSet<RequiredAttachment> RequiredAttachments { get; set; }
     }
 }

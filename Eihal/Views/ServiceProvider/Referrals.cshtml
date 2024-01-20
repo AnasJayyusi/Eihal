@@ -94,6 +94,7 @@
                                                         <option value="@((int)Eihal.Enums.ReferralStatusEnum.Approved)">Approved</option>
                                                         <option value="@((int)Eihal.Enums.ReferralStatusEnum.Rejected)">Rejected</option>
                                                         <option value="@((int)Eihal.Enums.ReferralStatusEnum.Completed)">Completed</option>
+                                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.PartiallyCompleted)">Partially Completed</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -146,6 +147,7 @@
                                                         <option value="@((int)Eihal.Enums.ReferralStatusEnum.Approved)">Approved</option>
                                                         <option value="@((int)Eihal.Enums.ReferralStatusEnum.Rejected)">Rejected</option>
                                                         <option value="@((int)Eihal.Enums.ReferralStatusEnum.Completed)">Completed</option>
+                                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.PartiallyCompleted)">Partially Completed</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -527,14 +529,37 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
+
+                    <div id="incompleteReasonDiv" style="display:none" class="row">
+                        <div class="col-md-12">
+                            <div class="form-group ">
+                                <label style="font-weight:bold;color:royalblue">Reason of Incomplete:</label> <span style="color:royalblue;font-style:italic"></span>
+                                <div class="form-check p-0">
+                                    <textarea disabled rows="4" cols="50" id="incompleteReasonInput" spellcheck="true" data-ms-editor="true" style="cursor: text;color:gray">
+                                    </textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <input hidden type="text" class="form-control" id="refId-hidden-Input">
                 </div>
                 <div class="modal-footer">
                     <button onclick="rejectFromPopup()" id="reject-view-OrderDetails-btn" type="button" class="btn btn-danger">Reject</button>
                     <button onclick="approveFromPopup()" id="approve-view-OrderDetails-btn" type="button" class="btn btn-success" data-dismiss="modal">Approve</button>
-                    <button onclick="completeFromPopup()" id="complete-view-OrderDetails-btn" type="button" class="btn btn-primary" data-dismiss="modal">Complete</button>
+                    @* <button onclick="completeFromPopup()" id="complete-view-OrderDetails-btn" type="button" class="btn btn-primary" data-dismiss="modal">Complete</button> *@
+
+                    <div id="complete-view-OrderDetails-btn" class="btn-group" role="group">
+                        <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Complete
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                            <a class="dropdown-item" href="#" data-dismiss="modal" onclick="completeFromPopup()">Complete All Requests</a>
+                            <a class="dropdown-item" href="#" data-dismiss="modal" onclick="getRequestedServices()" data-toggle="modal" data-target="#CompletePartiallyModal" data-placement="top" title="Edit">Complete Partially</a>
+                        </div>
+                    </div>
+
                     @* <button onclick="reportFromPopup()" id="report-view-OrderDetails-info" type="button" class="btn btn-primary" data-dismiss="modal">Report</button> *@
                     <button id="close-view-OrderDetails" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
@@ -545,6 +570,8 @@
         </div>
     </div>
 </div>
+
+
 
 
 
@@ -588,6 +615,48 @@
 
 
 
+<!-- Services Requests Popup-->
+<div class="modal fade" id="CompletePartiallyModal" tabindex="-1" role="dialog" aria-labelledby="CompletePartiallyModal" aria-hidden="true">
+    <div class="modal-dialog custom-modal-dialog" style="max-width:fit-content" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="CompletePartiallyModal">Services Requests</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Add your modal content here -->
+                <div class="container">
+                    <div id="CompletePartiallyDiv" style="display:block" class="row">
+                        <div class="form-group ">
+                            <label style="font-weight:bold;color:#00768c">Choose the services you want to complete it:</label> <span style="color:gray;font-style:italic"></span>
+                            <div class="form-check p-0">
+                                <ul id="services-CheckList">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <input hidden type="text" class="form-control" id="refId-hidden-Input">
+
+
+                    <div class="form-group ">
+                        <label style="font-weight:bold;color:#00768c">Reason for Incomplete all services:</label> <span style="color:gray;font-style:italic"></span>
+                        <textarea id="uncomplete-reason" rows="4" cols="50" class="form-control"></textarea>
+
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button onclick="completePartiallyFromPopup()" type="button" class="btn btn-success">Complete Partially</button>
+                    <button id="close-view-completePartiallyModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 
@@ -595,13 +664,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
 
-       function closeOrderModal()
-        {
+        function closeOrderModal() {
             $(".modal-backdrop").remove();
         }
 
         function rejectFromPopup() {
-            
+
             var refId = $("#refId-hidden-Input").val();
             $("#rejectionReasonDiv").show()
 
@@ -632,7 +700,6 @@
             var refId = $("#refId-hidden-Input").val()
             complete(refId)
         }
-
 
         function reportFromPopup() {
             var refId = $("#refId-hidden-Input").val()
@@ -671,7 +738,6 @@
                 ;
             }
         }
-
 
         function filterIncomingReferrals() {
             var name = $('#filterInput-incoming').val();
@@ -782,11 +848,13 @@
         }
 
         function complete(refId) {
+
             // Show a confirmation dialog
             var confirmed = confirm('Are you sure that the service has been completed? The due invoice will be issued.');
 
             // Check if the user confirmed the action
             if (confirmed) {
+                toastr.info('This Request will be full completed.', 'Info !!');
                 $.ajax({
                     url: '/ServiceProvider/CompleteReferal?refId=' + refId,
                     type: 'GET',
@@ -811,7 +879,6 @@
         }
 
         function reject(refId, rejectionReasonValue) {
-
             $.ajax({
                 url: '/ServiceProvider/RejectReferal?refId=' + refId + "&rejectionReason=" + rejectionReasonValue,
                 type: 'GET',
@@ -825,12 +892,8 @@
             });
         }
 
-
-
-
-
         function getReferralsOrderDetails(id, isFromIncoming) {
-            
+
             $("#rejectionReasonDiv").hide()
             if (isFromIncoming) {
                 $("#assignedto-div").hide()
@@ -851,15 +914,13 @@
             $("#status-readonly").removeClass("completed");
             $("#status-readonly").removeClass("approved");
             $("#status-readonly").removeClass("rejected");
+            $("#status-readonly").removeClass("partiallyCompleted");
 
             // Reset Buttons
             $("#approve-view-OrderDetails-btn").hide();
             $("#reject-view-OrderDetails-btn").hide();
             $("#complete-view-OrderDetails-btn").hide();
             $("#close-view-OrderDetails").hide();
-
-
-
 
 
             $.ajax({
@@ -885,10 +946,6 @@
                         $("#email-div").show();
 
                         $("#complete-view-OrderDetails-btn").show();
-
-
-
-
                     }
                     if (data.status == 3) {
 
@@ -907,8 +964,17 @@
                         $("#phone-div").show();
                         $("#email-div").show();
                         $("#close-view-OrderDetails").show();
+                    }
 
-
+                    if (data.status == 5) {
+                        $("#status-readonly").text("Partially Completed")
+                        $("#status-readonly").addClass("partiallyCompleted")
+                        // Show Feilds
+                        $("#patientName-div").show();
+                        $("#phone-div").show();
+                        $("#email-div").show();
+                        $("#close-view-OrderDetails").show();
+                        $("#incompleteReasonDiv").show();
                     }
 
                     $("#createdBy-readonly").text(data.createdBy)
@@ -923,6 +989,7 @@
                     $("#chronicDisease-readonly").val(data.chronicDisease)
                     $("#refId-hidden-Input").val(data.referralRequestId)
                     $("#rejectionReasonInput").val(data.rejectionReason)
+                    $("#incompleteReasonInput").val(data.rejectionReason)
                     if (data.gender == 0) {
                         // Show Female
                         $("#female-label-readonly").css("display", "");
@@ -1056,7 +1123,15 @@
                         var qty = 1;
                         if (data.orderServicesDetails[i].qty != null)
                             qty = data.orderServicesDetails[i].qty;
-                        dropdown.append("<li> ♦ " + data.servicesRequests[i].titleEn + "<span style='color: green;font-weight:bold'> X" + qty + "</span> </li>");
+
+                        if (data.status == 5 && data.orderServicesDetails[i].isCompleted != true) {
+                            dropdown.append("<li style='text-decoration:line-through'> ♦ " + data.servicesRequests[i].titleEn + "<span style='color: green;font-weight:bold'> X" + qty + "</span> </li>");
+                        }
+                        else {
+                            dropdown.append("<li> ♦ " + data.servicesRequests[i].titleEn + "<span style='color: green;font-weight:bold'> X" + qty + "</span> </li>");
+                        }
+
+
                     }
 
 
@@ -1066,6 +1141,107 @@
                     console.log(error); // Output the error to the console
                 }
             });
+        }
+
+        function getRequestedServices() {
+            var refId = $("#refId-hidden-Input").val();
+
+
+            $.ajax({
+                url: '/ServiceProvider/GetRequestedServices?refId=' + refId,
+                type: 'GET',
+                success: function (response) {
+
+                    var dropdown = $('#services-CheckList');
+                    dropdown.empty();
+
+                    for (var i = 0; i < response[0].orderServicesDetails.length; i++) {
+                        var qty = 1;
+                        if (response[0].orderServicesDetails[i].qty != null)
+                            qty = response[0].orderServicesDetails[i].qty;
+                        dropdown.append("<li>  <input name='service' value=" + response[0].orderServicesDetails[i].id + " type='checkbox'> " + response[0].orderServicesDetails[i].titleEn + "<span style='color: green;font-weight:bold'> X" + qty + "</span> </li>");
+                    }
+
+
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+
+
+        }
+
+
+
+        function completePartiallyFromPopup() {
+            var refId = $("#refId-hidden-Input").val();
+            var allservicesCount = $("input:checkbox[name=service]").length;
+            var completeService = [];
+
+            $("input:checkbox[name=service]:checked").each(function () {
+                completeService.push($(this).val());
+            });
+
+
+
+            if (completeService.length == 0) {
+                toastr.warning('Please Selected at least one service to complete', 'Warning !!');
+                return;
+            }
+
+
+            if (completeService.length == allservicesCount) {
+                complete(refId)
+                return;
+            }
+
+            var inCompletedReason = $("#uncomplete-reason").val().trim();
+            if (inCompletedReason.length == 0) {
+                toastr.warning('Please type the Incomplete All Services', 'Warning !!');
+                return;
+            }
+
+
+
+            var confirmed = confirm('Are you sure that the service has been completed? The due invoice will be issued.');
+
+            // Check if the user confirmed the action
+            if (confirmed) {
+
+                var completeServicesIds = JSON.stringify(completeService);
+
+
+                $.ajax({
+                    url: '/ServiceProvider/CompletePartiallyReferal?refId=' + refId + "&inCompletedReason=" + inCompletedReason,
+                    type: 'POST',
+                    data: completeServicesIds,
+                    contentType: 'application/json',
+                    success: function (response) {
+                        toastr.success('Order completed successfully', 'Success !!');
+                        filterIncomingReferrals();
+                        $("#CompletePartiallyModal .close").click()
+
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+
+                    }
+                });
+
+            } else {
+                // The user canceled the action, you can add a message or perform any other action here
+                toastr.warning('Order completion canceled', 'Canceled');
+            }
+            var id = "#invoice-" + refId
+
+            setTimeout(() => {
+                document.getElementById('invoice-' + refId).click();
+            }, "500")
+
+
+
+
         }
     </script>
 }

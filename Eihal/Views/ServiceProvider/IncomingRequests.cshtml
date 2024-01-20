@@ -14,6 +14,12 @@
         color: #ffffff;
     }
 
+    .partiallyCompleted {
+        background-color: royalblue;
+        color: #ffffff;
+    }
+
+
     .rejected {
         background-color: firebrick;
         color: #ffffff;
@@ -52,6 +58,10 @@
                         else if (referral.Status == Eihal.Enums.ReferralStatusEnum.Rejected)
                         {
                             <span class="status rejected">@referral.Status</span>
+                        }
+                        else if (referral.Status == Eihal.Enums.ReferralStatusEnum.PartiallyCompleted)
+                        {
+                            <span class="status partiallyCompleted">Partially Completed</span>
                         }
 
                         <br>
@@ -98,7 +108,7 @@
                             </div>
                         </div>
                     }
-                    else if (referral.Status == Eihal.Enums.ReferralStatusEnum.Completed)
+                    else if (referral.Status == Eihal.Enums.ReferralStatusEnum.Completed || referral.Status == Eihal.Enums.ReferralStatusEnum.PartiallyCompleted)
                     {
                         <div class="dots-container">
                             <i onclick="toggleDropdown(@(referral.Id))">

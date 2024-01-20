@@ -14,6 +14,13 @@
         color: #ffffff;
     }
 
+    .partiallyCompleted {
+        background-color: royalblue;
+        color: #ffffff;
+    }
+
+
+
     .rejected {
         background-color: firebrick;
         color: #ffffff;
@@ -48,6 +55,10 @@
                         {
                             <span class="status rejected">@referral.Status</span>
                         }
+                        else if (referral.Status == Eihal.Enums.ReferralStatusEnum.PartiallyCompleted)
+                        {
+                            <span class="status partiallyCompleted">Partially Completed</span>
+                        }
                         <br>
                         <br>
                         <span class="ref-info-label">Services</span>
@@ -67,17 +78,22 @@
                             }
                         </span>
                     </div>
-                    @if (referral.Status == Eihal.Enums.ReferralStatusEnum.Completed)
+                    @if (referral.Status == Eihal.Enums.ReferralStatusEnum.Completed || referral.Status == Eihal.Enums.ReferralStatusEnum.PartiallyCompleted)
                     {
                         <div class="dots-container">
                             <i onclick="toggleDropdown(@(referral.Id))">
                                 <i style="color:#eadfdf" class="fas fa-ellipsis-v"></i>
                             </i>
                             <div class="dropdown-card" id="dropdownMenu@(referral.Id)">
-                                <div class="option" onclick="exportReport(@(referral.Id))">@Html.ActionLink("Report", "ExportReport", "ServiceProvider",new {referralRequestId= referral.Id},new { @style="color:black;" })</div>
+                                <div class="option" onclick="exportReport(@(referral.Id))">@Html.ActionLink("Invoice", "ExportReport", "ServiceProvider",new {referralRequestId= referral.Id},new { @style="color:black;" })</div>
                             </div>
                         </div>
                     }
+
+
+                 
+
+
                 </div>
 
             </div>

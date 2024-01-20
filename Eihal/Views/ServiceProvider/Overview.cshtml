@@ -147,7 +147,7 @@
     </table>
     <hr>
 
-    <div class="container">
+    <div style="padding-left:5%;padding-right:5%">
         <div class="row mt-4">
             <div class="col-md-12">
                 <h5 class="font-weight-bold">@Localizer["Bio"]</h5>
@@ -165,15 +165,28 @@
                 <ul id="listSpeciality"></ul>
             </div>
         </div>
-        <div class="row mt-4" id="certifications-div">
-            <div class="col-md-12">
-                <h5 class="font-weight-bold">@Localizer["Certifications"]</h5>
-                <span id="certifications-label" class="text-black"></span>
-                <button onclick="getDegrees()" type="button" class="btn btn-primary wide-button  add-edit-btn" data-toggle="modal" data-target="#AttachCertificationsModal">
-                    <i onclick="getDegrees()" class="fa fa-upload" aria-hidden="true"></i> @Localizer["Attach"]
-                </button>
+        <div class="row">
+            <div class=" row mt-4 col-md-5" id="certifications-div">
+                <div>
+                    <h5 class="font-weight-bold">@Localizer["Certifications"]</h5>
+                    <span id="certifications-label" class="text-black"></span>
+                    <button onclick="getDegrees()" type="button" class="btn btn-primary wide-button  add-edit-btn" data-toggle="modal" data-target="#AttachCertificationsModal">
+                        <i onclick="getDegrees()" class="fa fa-upload" aria-hidden="true"></i> @Localizer["Attach"]
+                    </button>
+                </div>
+            </div>
+            <div class="row mt-4 col-md-7" id="requiredAttachments-div">
+                <div>
+                    <h5 class="font-weight-bold">@Localizer["Required Attachments"]</h5>
+                    <span id="requiredAttachments-label" class="text-black">You have to add all required attahments</span>
+                    <button id="requiredAttachBtn" type="button" class="btn btn-danger wide-button  add-edit-btn" data-toggle="modal" data-target="#RequiredAttachmentsModal">
+                        <i class="fa fa-upload" aria-hidden="true"></i> @Localizer["Attach"]
+                    </button>
+                </div>
             </div>
         </div>
+        <br />
+
         <div class="row mt-3">
             <div class="col-md-12">
                 <div id="certifications-container">
@@ -193,12 +206,12 @@
             </div>
         </div>
     </div>
+</div>
 
-    <div id="active-profile-sign" style="margin-right:@sendReviewValue" onclick=sendToReview() class="send-review-btn">
-        <i id="send-icon" style="color:white;@marginValue:10px" class="fa fa-paper-plane" aria-hidden="true"></i>
-        <div class="container">
-            <div class="tick"></div>
-        </div>
+<div id="active-profile-sign" style="margin-right:@sendReviewValue" onclick=sendToReview() class="send-review-btn">
+    <i id="send-icon" style="color:white;@marginValue:10px" class="fa fa-paper-plane" aria-hidden="true"></i>
+    <div class="container">
+        <div class="tick"></div>
     </div>
 </div>
 
@@ -339,7 +352,7 @@
 
 
 
-<!------------------------------ Attachment -------------------->
+<!------------------------------ Certifications Model -------------------->
 
 <div class="modal fade" id="AttachCertificationsModal" tabindex="-1" role="dialog" aria-labelledby="AttachCertificationsModal" aria-hidden="true">
     <div class="modal-dialog custom-modal-dialog" role="document">
@@ -382,6 +395,60 @@
             <div class="modal-footer">
                 <button id="close-attachment-modal" type="button" class="btn btn-danger" data-dismiss="modal">@Localizer["Cancel"] </button>
                 <button onclick="uploadCertification()" type="button" class="btn btn-success" style="background-color:#00768c">@Localizer["Upload"]</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!------------------------------ Required Attachment -------------------->
+
+<div class="modal fade" id="RequiredAttachmentsModal" tabindex="-1" role="dialog" aria-labelledby="RequiredAttachmentsModal" aria-hidden="true">
+    <div class="modal-dialog custom-modal-dialog" role="document" style="max-width:fit-content">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="RequiredAttachmentsModal"> @Localizer["Required Attachments"]</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="degrees-ddl" style="font-weight:bold;color:#00768c">@Localizer["Please Add The Required Attachments Below"]</label>
+                            <ul>
+                                <li style="color:red;font-weight:bold">
+                                    - Signed Contract   <a href="/uploadfiles/إتفاقية-إحال-مع-الطبيب-المستفيد.pdf" download style="text-decoration:underline !important;color: black; font-weight: 100; cursor: pointer;">
+                                        Click here to Download it
+                                    </a>
+                                    <br />
+                                    <label for="reqattachments-uploader-Contract">
+                                        <input type="file" id="reqattachments-uploader-Contract" data-show-upload="false" data-show-caption="true" required>
+                                    </label>
+                                </li>
+
+                                <li style="color:red;font-weight:bold">
+                                    - Professional Category
+                                    <br />
+                                    <label for="reqattachments-uploader-Category">
+                                        <input type="file" id="reqattachments-uploader-Category" data-show-upload="false" data-show-caption="true" required>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </form>
+
+                <div id="fileList"></div>
+            </div>
+
+            <div class="modal-footer">
+                <button id="close-reqattachment-modal" type="button" class="btn btn-danger" data-dismiss="modal">@Localizer["Cancel"] </button>
+                <button onclick="uploadRequiredAttachmnets()" type="button" class="btn btn-success" style="background-color:#00768c">@Localizer["Submit"]</button>
             </div>
         </div>
     </div>
@@ -473,17 +540,27 @@
                 if (response.profilePicturePath != null || response.profilePicturePath != undefined)
                     $('[id^="user-image"]').attr('src', response.profilePicturePath);
 
-                    if (response.accountType == 2)
-                    {
-                    $("#certifications-div").hide()
-                    }
+                if (response.accountType == 2) {
+                    $("#certifications-div").hide();
+                    $("#requiredAttachments-div").hide();
+                }
+
+
+
+                if (response.profileStatus == "UnCompleted" || response.profileStatus == "Rejected") {
+                    canSendProfile();
+                }
+                else {
+                    $("#requiredAttachments-div").hide();
+                }
+                getCertifications();
             },
             error: function (error) {
                 console.log(error);
             }
         });
 
-        getCertifications();
+
 
     }
 
@@ -713,7 +790,7 @@
         formData.append('UniversityNameEn', universityNameEnglish);
 
         $.ajax({
-            url: '/File/UploadFile', // Replace with your API endpoint URL
+            url: '/File/UploadCertification', // Replace with your API endpoint URL
             type: 'POST',
             data: formData,
             processData: false,
@@ -723,15 +800,18 @@
                 $("#close-attachment-modal").trigger("click");
                 getCertifications();
                 toastr.success('@Localizer["CertificationUploaded"]', '@Localizer["Success"]');
+
             },
             error: function (xhr, status, error) {
                 // Handle the error response
                 toastr.error('@Localizer["Error"]', '@Localizer["Failed"]');
             }
         });
+
     }
 
     function getCertifications() {
+
         var tableBody = $('#certifications-list');
         tableBody.empty();
         var isEng = isEnglishCulture();
@@ -831,8 +911,8 @@
                 // Certificate deleted successfully, you can perform any additional actions here
                 getCertifications();
                 toastr.success('@Localizer["CertificateDeleted"]', '@Localizer["Success"]');
+                canSendProfile();
                 // Refresh the certifications list or perform any other necessary updates
-
 
             },
             error: function (error) {
@@ -841,7 +921,30 @@
                 console.error('AJAX error:', error);
             }
         });
+
     }
+
+    function canSendProfile() {
+        $.ajax({
+            url: '/ServiceProvider/CanSendProfile',
+            type: 'Get',
+            success: function (response) {
+                if (response == true) {
+                    $("#active-profile-sign").show();
+                    $("#requiredAttachments-label").text("You have already added Signed Contract & Professional Category Files");
+                    $("#requiredAttachBtn").removeClass("btn-danger").addClass("btn-primary");
+                }
+                if (response == false) {
+                    $("#active-profile-sign").hide();
+                }
+
+            },
+            error: function (xhr, status, error) {
+                toastr.error('Error occurred.', 'Failed !!');
+            }
+        });
+    }
+
 
     function getDegrees() {
         // Reset the form fields
@@ -866,6 +969,55 @@
             }
         });
     }
+
+
+    function uploadRequiredAttachmnets() {
+        var fileInput = document.getElementById('reqattachments-uploader-Contract');
+        var contractfile = fileInput.files[0];
+
+
+        var fileInput = document.getElementById('reqattachments-uploader-Category');
+        var categoryfile = fileInput.files[0];
+
+        // Check if file is selected
+        if (!contractfile) {
+            toastr.error('@Localizer["Please upload Signed Contract file"]', '@Localizer["Warning"]');
+            return;
+        }
+
+        if (!categoryfile) {
+            toastr.error('@Localizer["Please upload Professional Category file"]', '@Localizer["Error"]');
+            return;
+        }
+
+        var formData = new FormData();
+        formData.append('contractfile', contractfile);
+        formData.append('categoryfile', categoryfile);
+
+
+        $.ajax({
+            url: '/File/UploadRequiredFiles', // Replace with your API endpoint URL
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                // Handle the success response
+                canSendProfile();
+              
+                $("#close-reqattachment-modal").trigger("click");
+                toastr.success('@Localizer["RequiredAttachmnets"]', '@Localizer["Success"]');
+            },
+            error: function (xhr, status, error) {
+                // Handle the error response
+                toastr.error('@Localizer["Error"]', '@Localizer["Failed"]');
+            }
+        });
+
+
+    }
+
+
 
 
 </script>
@@ -931,3 +1083,4 @@
         transition: all .9s;
     }
 </style>
+

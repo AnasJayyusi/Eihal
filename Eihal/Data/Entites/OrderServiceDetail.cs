@@ -14,5 +14,6 @@ namespace Eihal.Data.Entites
         [ForeignKey(nameof(OrderDetail))]
         public int? OrderDetailId { get; set; }
         public int? Qty { get; set; }
+        public bool IsCompleted { get; set; }
     }
 }

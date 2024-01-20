@@ -79,8 +79,7 @@
 </head>
 
 <!-- Toaster -->
-<div id="toast-container"  class="toast-container toast-center">
-   
+<div id="toast-container" class="toast-container toast-center">
 </div>
 
 
@@ -239,7 +238,7 @@
     <div class="modal-dialog modal-dialog-scrollable" style="max-width: 580px;" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="ViewProfileModal">View Certifications</h5>
+                <h5 class="modal-title" id="ViewProfileModal">View Certifications / Required Files</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -254,8 +253,20 @@
                             <th>Certification File</th>
                         </tr>
                     </thead>
+
                     <tbody></tbody>
                 </table>
+
+                <table id="requiredAttachments-table" class="table">
+                    <thead>
+                        <tr>
+                            <th>Required File Type </th>
+                            <th>Attachments File</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+
                 <div class="alert alert-danger hidden sm" role="alert">
                     <span id="error-msg-add"></span>
                 </div>
@@ -384,6 +395,11 @@
     function viewProfile(id, profileStatusId) {
         $("#approve").show();
         $("#rejectReasonContainer").hide();
+        getCertifcations(id, profileStatusId);
+        getRequiredFiles(id, profileStatusId);
+    }
+
+    function getCertifcations(id, profileStatusId) {
         $.ajax({
             url: '/Admin/GetUserCertifications/' + id, // Replace with your API endpoint
             method: 'GET',
@@ -409,6 +425,79 @@
                     newRow.append($('<td hidden id="userProfileId">').text(row.userProfileId));
                     newRow.append($('<td>').text(row.degree.titleEn));
                     newRow.append($('<td>').text(row.universityNameEn));
+
+                    var iconClass = '';
+                    var linkClass = '';
+                    switch (row.extension.replace(".", "")) {
+                        case 'pdf':
+                            iconClass = 'far fa-file-pdf';
+                            linkClass = 'pdf-link';
+                            break;
+                        case 'pptx':
+                        case 'ppt':
+                            iconClass = 'far fa-file-powerpoint';
+                            linkClass = 'pptx-link';
+                            break;
+                        case 'docx':
+                        case 'doc':
+                            iconClass = 'far fa-file-word';
+                            linkClass = 'docx-link';
+                            break;
+                        case 'xlsx':
+                        case 'xls':
+                            iconClass = 'far fa-file-excel';
+                            linkClass = 'xlsx-link';
+                            break;
+                        case 'jpg':
+                        case 'jpeg':
+                        case 'png':
+                        case 'gif':
+                            iconClass = 'far fa-file-image';
+                            linkClass = 'image-link';
+                            break;
+                        // Add more cases for other file extensions and their corresponding Font Awesome classes and link classes
+                        default:
+                            iconClass = 'far fa-file';
+                            linkClass = 'default-link';
+                            break;
+                    }
+
+                    var linkElement = $('<a>')
+                        .attr('href', row.path)
+                        .attr('target', '_blank')
+                        .addClass(linkClass)
+                        .html('&nbsp;&nbsp;' + row.name);
+                    var iconElement = $('<i>').addClass(iconClass);
+                    linkElement.prepend(iconElement);
+                    newRow.append($('<td>').append(linkElement));
+
+                    table.append(newRow);
+                });
+            },
+            error: function (xhr, status, error) {
+                console.log('AJAX Error: ' + status + ' - ' + error);
+            }
+        });
+    }
+
+    function getRequiredFiles(id, profileStatusId) {
+        $.ajax({
+            url: '/Admin/GetUserRequiredAttachments/' + id, // Replace with your API endpoint
+            method: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                var table = $('#requiredAttachments-table tbody');
+
+                table.empty();
+
+                // Loop through the response and append rows to the table
+                $.each(response, function (index, row) {
+                    var newRow = $('<tr>');
+                    newRow.append($('<td hidden id="userProfileId">').text(row.userProfileId));
+                    if (row.requiredFileType == 1)
+                        newRow.append($('<td>').text("Signed Contract"));
+                    else
+                        newRow.append($('<td>').text("Professional Category"));
 
                     var iconClass = '';
                     var linkClass = '';
@@ -525,15 +614,15 @@
             dataType: 'json',
             success: function (response) {
                 // Handle the success response here
-           
+
                 if (response == 4)
-                toastr.success("The User Deactivated Successfully", "Success !!");
+                    toastr.success("The User Deactivated Successfully", "Success !!");
 
                 if (response == 3)
                     toastr.success("The User Activated Successfully", "Success !!");
 
                 getProfileReviewsOrders();
-             
+
             },
             error: function (xhr, status, error) {
                 // Handle the error response here

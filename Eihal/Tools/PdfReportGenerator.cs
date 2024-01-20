@@ -8,13 +8,13 @@ namespace Eihal.Tools
     public class PdfReportGenerator
     {
         private Font _font;
-        public MemoryStream GenerateReport(string imagePath, ReportDto reportDto, bool includeMasterDetails = true)
+        public MemoryStream GenerateReport(string imagePath, dynamic reportDto, ReportTypeEnum reportType, bool includeMasterDetails = true)
         {
             // Prepare Stream
             MemoryStream workStream = new MemoryStream();
 
 
-            int columnCount = GetTableColumnsCount();
+            int columnCount = GetTableColumnsCount(reportType);
             // Prepare Document to write on it
             Document doc = new Document(PageSize.A4.Rotate());
             PdfPTable tableLayout = new PdfPTable(columnCount);
@@ -40,7 +40,15 @@ namespace Eihal.Tools
 
 
             // Filling Table 
-            doc.Add(BuildTable(tableLayout, reportDto.DataTable));
+            if (reportType == ReportTypeEnum.None)
+                doc.Add(BuildTable(tableLayout, reportDto.DataTable));
+
+            if (reportType == ReportTypeEnum.ServiceProviderReportDto)
+                doc.Add(BuildServiceProviderReportTable(tableLayout, reportDto.DataTable));
+
+            if (reportType == ReportTypeEnum.BeneficiaryReportDto)
+                doc.Add(BuildBeneficiaryReportTable(tableLayout, reportDto.DataTable));
+
             doc.Close();
 
             byte[] byteInfo = workStream.ToArray();
@@ -50,10 +58,24 @@ namespace Eihal.Tools
         }
 
 
-        private int GetTableColumnsCount()
+        private int GetTableColumnsCount(ReportTypeEnum reportType)
         {
-            Type type = typeof(DataTableDto);
-            return type.GetProperties().Length;
+            if (reportType == ReportTypeEnum.ServiceProviderReportDto)
+            {
+                Type type = typeof(ServiceProviderDataTableDto);
+                return type.GetProperties().Length;
+
+            }
+            if (reportType == ReportTypeEnum.BeneficiaryReportDto)
+            {
+                Type type = typeof(BeneficiaryDataTableDto);
+                return type.GetProperties().Length;
+            }
+            else
+            {
+                Type type = typeof(DataTableDto);
+                return type.GetProperties().Length;
+            }
         }
         private void EmbedFont()
         {
@@ -81,8 +103,6 @@ namespace Eihal.Tools
         }
         private void BuildMasterDetails(Document doc, MasterDetailsDto masterDetails)
         {
-
-
             // It working with arabic 
             PdfPTable table = new PdfPTable(1); // a table with 1 cell
             table.WidthPercentage = 100;
@@ -118,15 +138,6 @@ namespace Eihal.Tools
             clinicNameCell.Border = iTextSharp.text.Rectangle.NO_BORDER;
             table.AddCell(clinicNameCell);
 
-
-            // Should Be Disscuesd
-            //// Order Number Cell
-            //PdfPCell orderNoCell = new PdfPCell(new Phrase(string.Format($"Order Number:{masterDetails.OrderNo} "), _font));
-            //orderNoCell.HorizontalAlignment = Element.ALIGN_LEFT;
-            //orderNoCell.Border = iTextSharp.text.Rectangle.NO_BORDER;
-            //table.AddCell(orderNoCell);
-            //AddLine(table);
-
             // Request From 
             PdfPCell requestFromCell = new PdfPCell(new Phrase(string.Format($"Request From:{masterDetails.RequestFrom}"), _font));
             requestFromCell.HorizontalAlignment = Element.ALIGN_RIGHT;
@@ -139,7 +150,6 @@ namespace Eihal.Tools
             PatientNameCell.HorizontalAlignment = Element.ALIGN_RIGHT;
             PatientNameCell.Border = iTextSharp.text.Rectangle.NO_BORDER;
             table.AddCell(PatientNameCell);
-
 
             doc.Add(table);
 
@@ -182,6 +192,76 @@ namespace Eihal.Tools
             return tableLayout;
         }
 
+        protected PdfPTable BuildServiceProviderReportTable(PdfPTable tableLayout, List<ServiceProviderDataTableDto> dataSource)
+        {
+            float[] headers = { 11, 35, 7, 15, 31}; //Header Widths  
+            tableLayout.SetWidths(headers); //Set the pdf headers  
+            tableLayout.WidthPercentage = 100; //Set the PDF File witdh percentage  
+            tableLayout.HeaderRows = 1;
+            var count = 1;
+
+            //Add header  
+            AddCellToHeader(tableLayout, "Service Code");
+            AddCellToHeader(tableLayout, "Service Description");
+            AddCellToHeader(tableLayout, "Qty");
+            AddCellToHeader(tableLayout, "Service Fee");
+            AddCellToHeader(tableLayout, "Total amount to the Befeciary");
+
+            foreach (var data in dataSource)
+            {
+                if (count >= 1)
+                {
+                    //Add body  
+                    AddCellToBody(tableLayout, data.ServiceCode.ToString(), count);
+                    AddCellToBody(tableLayout, data.ServiceDesc.ToString(), count);
+                    AddCellToBody(tableLayout, data.Qty.ToString(), count);
+                    AddCellToBody(tableLayout, data.ServiceFee.ToString(), count);
+                    AddCellToBody(tableLayout, data.Total.ToString(), count);
+                    count++;
+                }
+            }
+            return tableLayout;
+        }
+
+
+        protected PdfPTable BuildBeneficiaryReportTable(PdfPTable tableLayout, List<BeneficiaryDataTableDto> dataSource)
+        {
+            float[] headers = { 8, 30, 6, 12, 8, 8, 10, 10,8 }; //Header Widths  
+            tableLayout.SetWidths(headers); //Set the pdf headers  
+            tableLayout.WidthPercentage = 100; //Set the PDF File witdh percentage  
+            tableLayout.HeaderRows = 1;
+            var count = 1;
+
+            //Add header  
+            AddCellToHeader(tableLayout, "Service Code");
+            AddCellToHeader(tableLayout, "Service Description");
+            AddCellToHeader(tableLayout, "Qty");
+            AddCellToHeader(tableLayout, "Beneficiary Part");
+            AddCellToHeader(tableLayout, "Total");
+            AddCellToHeader(tableLayout, "Platform Fee");
+            AddCellToHeader(tableLayout, "Vat %");
+            AddCellToHeader(tableLayout, "T.P.F Fee");
+            AddCellToHeader(tableLayout, "Net Dr.Part");
+
+            foreach (var data in dataSource)
+            {
+                if (count >= 1)
+                {
+                    //Add body  
+                    AddCellToBody(tableLayout, data.ServiceCode.ToString(), count);
+                    AddCellToBody(tableLayout, data.ServiceDesc.ToString(), count);
+                    AddCellToBody(tableLayout, data.Qty.ToString(), count);
+                    AddCellToBody(tableLayout, data.BeneficiaryPart.ToString("F2"), count);
+                    AddCellToBody(tableLayout, data.Total.ToString("F2"), count);
+                    AddCellToBody(tableLayout, data.PlatformFee.ToString("F2"), count);
+                    AddCellToBody(tableLayout, data.VatPercentage.ToString("F2"), count);
+                    AddCellToBody(tableLayout, data.TotalPlatformFee.ToString("F2"), count);
+                    AddCellToBody(tableLayout, data.NetDrPart.ToString("F2"), count);
+                    count++;
+                }
+            }
+            return tableLayout;
+        }
         private void AddCellToHeader(PdfPTable tableLayout, string cellText)
         {
             tableLayout.AddCell(new PdfPCell(new Phrase(cellText, _font))
@@ -253,7 +333,6 @@ namespace Eihal.Tools
                 document.Add(new Paragraph(" "));
             }
         }
-
 
         private void AddLine(PdfPTable table)
         {
