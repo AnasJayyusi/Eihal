@@ -2802,6 +2802,13 @@ namespace Eihal.Controllers
         }
 
         [HttpGet]
+        [Route("IsUserSigned/{id}")]
+        public IActionResult IsUserSigned(int id)
+        {
+            return Json(_dbContext.UserProfiles.Single(w => w.Id == id).IsAgree);
+        }
+
+        [HttpGet]
         [Route("GetUserRequiredAttachments/{id}")]
         public IActionResult GetUserRequiredAttachments(int id)
         {

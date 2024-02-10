@@ -123,6 +123,12 @@
   <data name="AtLeast6Char" xml:space="preserve">
     <value>At least 6 characters.</value>
   </data>
+  <data name="BeneficiaryDesc" xml:space="preserve">
+    <value>A health practitioner who is not classified or who does not wish to receive treatment cases (for example: a student, an internship doctor, a nurse, or a dental assistant)</value>
+  </data>
+  <data name="BeneficiaryName" xml:space="preserve">
+    <value>Beneficiary</value>
+  </data>
   <data name="Confirm Password" xml:space="preserve">
     <value>Confirm Password</value>
   </data>
@@ -179,6 +185,12 @@
   </data>
   <data name="ProfessionalRank" xml:space="preserve">
     <value>Professional Rank</value>
+  </data>
+  <data name="ServiceProviderDesc" xml:space="preserve">
+    <value>A classified health practitioner who wishes to receive treatment cases</value>
+  </data>
+  <data name="ServiceProviderName" xml:space="preserve">
+    <value>Therapeutic services provider (Service Provider)</value>
   </data>
   <data name="SignUp" xml:space="preserve">
     <value>Sign Up</value>

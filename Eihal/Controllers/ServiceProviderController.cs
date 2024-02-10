@@ -12,8 +12,6 @@ using Eihal.Dto;
 using static Eihal.Data.SharedEnum;
 using System.Globalization;
 using Microsoft.AspNetCore.Identity;
-using System.Text.Json.Nodes;
-using static iTextSharp.text.pdf.AcroFields;
 
 namespace Eihal.Controllers
 {
@@ -111,7 +109,7 @@ namespace Eihal.Controllers
                                         (dateId == 2 && a.CreationDate >= DateTime.Now.AddDays(-7).Date) ||
                                         (dateId == 3 && a.CreationDate >= DateTime.Now.AddDays(-30).Date)
                                         )
-                                        && a.AssignedToUserId == currentUserId).OrderByDescending(a => a.CreationDate)
+                                        && a.AssignedToUserId == currentUserId).OrderByDescending(a => a.CreationDate).AsSplitQuery()
                                         .ToList();
 
             return PartialView("IncomingRequests", model);
@@ -136,7 +134,7 @@ namespace Eihal.Controllers
                                   (dateId == 2 && a.CreationDate >= DateTime.Now.AddDays(-7).Date) ||
                                   (dateId == 3 && a.CreationDate >= DateTime.Now.AddDays(-30).Date)
                                   )
-                                  && a.CreatedByUserId == currentUserId).OrderByDescending(a => a.CreationDate)
+                                  && a.CreatedByUserId == currentUserId).OrderByDescending(a => a.CreationDate).AsSplitQuery()
                                   .ToList();
 
             return PartialView("OutgoingRequests", model);
@@ -159,6 +157,16 @@ namespace Eihal.Controllers
             return Ok();
         }
 
+        [Route("Agree")]
+        public ActionResult Agree()
+        {
+            var currentUserId = GetAspNetUserId();
+            var userProfile = _dbContext.UserProfiles.Single(s => s.UserId == currentUserId);
+            userProfile.IsAgree = true;
+            _dbContext.SaveChanges();
+            return Json(userProfile.IsAgree);
+        }
+
         [Route("CompleteReferal")]
         public ActionResult CompleteReferal(int refId)
         {
@@ -179,7 +187,7 @@ namespace Eihal.Controllers
         {
             var currentUserId = GetUserProfileId();
 
-            var referralRequest = _dbContext.ReferralRequests.Where(a => a.Id == refId && a.AssignedToUserId == currentUserId && a.Status == ReferralStatusEnum.UnderReview).First();
+            var referralRequest = _dbContext.ReferralRequests.Single(a => a.Id == refId && a.AssignedToUserId == currentUserId);
 
             referralRequest.Status = ReferralStatusEnum.Rejected;
             referralRequest.RejectionReason = rejectionReason;
@@ -337,7 +345,8 @@ namespace Eihal.Controllers
                 profileStatus = userProfile.ProfileStatus.ToString(),
                 rejectionReason = userProfile.RejectionReason,
                 insuranceAccept = userProfile.InsuranceAccepted,
-                accountType = userProfile.AccountTypeId
+                accountType = userProfile.AccountTypeId,
+                isagree = userProfile.IsAgree
             };
 
             return Json(data);
@@ -498,10 +507,12 @@ namespace Eihal.Controllers
         {
             var userId = GetAspNetUserId();
 
-            var isRequiredAttachmnetsUploaded = _dbContext.RequiredAttachments.Where(w => w.UserId == userId).Count() >= 2;
+            var isRequiredAttachmnetsUploaded = _dbContext.RequiredAttachments.Where(w => w.UserId == userId).Count() >= 1;
             var isCertifactionsAttachmnetsUploaded = _dbContext.Certifications.Where(w => w.UserId == userId).Count() >= 1;
+            var isAgree = _dbContext.UserProfiles.Single(w => w.UserId == userId).IsAgree;
 
-            if (isRequiredAttachmnetsUploaded && isCertifactionsAttachmnetsUploaded)
+
+            if (isRequiredAttachmnetsUploaded && isCertifactionsAttachmnetsUploaded && isAgree)
                 return Json(true);
             return Json(false);
         }
@@ -857,7 +868,7 @@ namespace Eihal.Controllers
             var model = _dbContext.Services
                 .Include(i => i.ClinicalSpeciality)
                 .Include(i => i.ServiceLevel)
-            .Join(_dbContext.UserServices,
+                .Join(_dbContext.UserServices,
                 s => s.Id,
                 us => us.ServiceId,
                 (s, us) => new SupportServiceModal
@@ -873,8 +884,9 @@ namespace Eihal.Controllers
                     ServiceLevelNameAr = s.ServiceLevel.TitleEn ?? "-",
                     ServiceLevelNameEn = s.ServiceLevel.TitleEn ?? "-"
                 })
-                .Where(us => us.Status == ServicesStatusEnum.Approved && us.UserProfileId != currentUserProfileId) // Include columns you want from both tables
+                .Where(us => us.Status == ServicesStatusEnum.Approved && us.UserProfileId != currentUserProfileId)
                 .Distinct()
+                .AsSplitQuery()// Include columns you want from both tables
                 .ToList();
 
 
@@ -1185,7 +1197,7 @@ namespace Eihal.Controllers
             var totalBeneficiaryPart = 0.0;
             var totalofTotal = 0.0;
             var totalPlatformFee = 0.0;
-            var totalVat=0.0;
+            var totalVat = 0.0;
             var totalTPFFees = 0.0;
             var totalNetDrPart = 0.0;
 
@@ -1212,7 +1224,7 @@ namespace Eihal.Controllers
                     totalQty = totalQty + obj.Qty;
                     totalBeneficiaryPart = totalBeneficiaryPart + obj.BeneficiaryPart;
                     totalofTotal = totalofTotal + obj.Total;
-                    totalPlatformFee = totalPlatformFee+ obj.TotalPlatformFee;
+                    totalPlatformFee = totalPlatformFee + obj.TotalPlatformFee;
                     totalVat = totalVat + obj.VatPercentage;
                     totalTPFFees = totalTPFFees + obj.TotalPlatformFee;
                     totalNetDrPart = totalNetDrPart + obj.NetDrPart;

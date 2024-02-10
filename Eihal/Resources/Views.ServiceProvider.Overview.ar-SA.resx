@@ -123,6 +123,9 @@
   <data name="Actions" xml:space="preserve">
     <value>أجراءات</value>
   </data>
+  <data name="Agreement" xml:space="preserve">
+    <value>أتفاقية المنصة </value>
+  </data>
   <data name="Attach" xml:space="preserve">
     <value>ارفق</value>
   </data>
@@ -152,6 +155,12 @@
   </data>
   <data name="City" xml:space="preserve">
     <value>مدينة:</value>
+  </data>
+  <data name="Confirmation" xml:space="preserve">
+    <value>تأكيد</value>
+  </data>
+  <data name="ConfirmationMessage" xml:space="preserve">
+    <value>هل أنت متأكد أنك تريد التوقيع على هذه الاتفاقية؟</value>
   </data>
   <data name="Country" xml:space="preserve">
     <value>دولة:</value>
@@ -186,6 +195,9 @@
   <data name="FullName" xml:space="preserve">
     <value>الاسم الكامل</value>
   </data>
+  <data name="IAgree" xml:space="preserve">
+    <value>موافق</value>
+  </data>
   <data name="InsuranceAccept" xml:space="preserve">
     <value>قبول التأمين</value>
   </data>
@@ -200,6 +212,9 @@
   </data>
   <data name="NoSpeciality" xml:space="preserve">
     <value>لم تتم إضافة أي تخصص بعد.</value>
+  </data>
+  <data name="NotNow" xml:space="preserve">
+    <value>ليس الأن</value>
   </data>
   <data name="NumberPatients" xml:space="preserve">
     <value>عدد المرضى</value>

@@ -123,6 +123,12 @@
   <data name="AtLeast6Char" xml:space="preserve">
     <value>على الأقل 6 خانات.</value>
   </data>
+  <data name="BeneficiaryDesc" xml:space="preserve">
+    <value>ممارس صحي غير مصنف او لا يرغب بإستقبال حالات علاجية ( مثال : طالب ، طبيب إمتياز ، ممرض او مساعد طبيب أسنان)</value>
+  </data>
+  <data name="BeneficiaryName" xml:space="preserve">
+    <value>مستفيد</value>
+  </data>
   <data name="ConfirmPassword" xml:space="preserve">
     <value>تأكيد كلمة المرور</value>
   </data>
@@ -179,6 +185,12 @@
   </data>
   <data name="ProfessionalRank" xml:space="preserve">
     <value>التصنيف المهني</value>
+  </data>
+  <data name="ServiceProviderDesc" xml:space="preserve">
+    <value>ممارس صحي مصنف يرغب بإستقبال حالات علاجية</value>
+  </data>
+  <data name="ServiceProviderName" xml:space="preserve">
+    <value>(مقدم خدمة  (مقدم خدمات علاجية</value>
   </data>
   <data name="SignUp" xml:space="preserve">
     <value>تسجيل</value>

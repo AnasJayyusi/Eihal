@@ -7,6 +7,7 @@
     bool isEng = direction == "ltr" ? true : false;
     string marginValue = isEng ? "margin-left" : "margin-right";
     string closeButtonValue = isEng ? "0" : "1%";
+    string footerButtonsValue = isEng ? "0px" : "5px";
     string sendReviewValue = isEng ? "0" : "88%";
 }
 
@@ -421,13 +422,12 @@
                             <label for="degrees-ddl" style="font-weight:bold;color:#00768c">@Localizer["Please Add The Required Attachments Below"]</label>
                             <ul>
                                 <li style="color:red;font-weight:bold">
-                                    - Signed Contract   <a href="/uploadfiles/إتفاقية-إحال-مع-الطبيب-المستفيد.pdf" download style="text-decoration:underline !important;color: black; font-weight: 100; cursor: pointer;">
-                                        Click here to Download it
-                                    </a>
+                                    - Signed Contract  
                                     <br />
-                                    <label for="reqattachments-uploader-Contract">
-                                        <input type="file" id="reqattachments-uploader-Contract" data-show-upload="false" data-show-caption="true" required>
-                                    </label>
+
+                                    <button  id="showagreementModalBtn" type="button" class="btn btn-primary add-edit-btn" data-toggle="modal" data-target="#agreementModal">
+                                        <i  class="fa-solid fa-signature" aria-hidden="true"></i> Sign Contract
+                                    </button>
                                 </li>
 
                                 <li style="color:red;font-weight:bold">
@@ -454,6 +454,55 @@
     </div>
 </div>
 
+
+
+<div class="modal fade" id="agreementModal" tabindex="-1" role="dialog" aria-labelledby="agreementModal" aria-hidden="true">
+    <div class="modal-dialog custom-modal-dialog" role="document" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="agreementModal"> @Localizer["Agreement"]
+            </div>
+
+            <div class="modal-body">
+                <iframe src="/uploadfiles/agreement.pdf#zoom=73" width="100%" height="600px" frameborder="0"></iframe>
+
+            </div>
+
+            <div class="modal-footer">
+                <button id="agreementConfirmationBtn" data-toggle="modal"  data-target="#agreementConfirmation" type="button" class="btn btn-success" style="background-color:#00768c">@Localizer["IAgree"]</button>
+                <button id="btn-not-now" type="button" class="btn btn-danger" data-dismiss="modal" style="margin:@footerButtonsValue"> @Localizer["NotNow"]</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<button hidden id="showagreementModalBtn" type="button" class="btn btn-danger wide-button  add-edit-btn" data-toggle="modal" data-target="#agreementModal">
+    <i class="fa fa-upload" aria-hidden="true"></i>Show Modal
+</button>
+
+
+
+
+<div class="modal" id="agreementConfirmation" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h5 class="modal-title"> @Localizer["Confirmation"] </h5>
+             
+            </div>
+            <div class="modal-body">
+                <p> @Localizer["ConfirmationMessage"] </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">  @Localizer["No"] </button>
+                <button style="margin:@footerButtonsValue" onclick="agree()" type="button" data-dismiss="modal" class="btn btn-success"> @Localizer["Yes"] </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <style>
     .custom-modal-dialog {
         max-width: 650px; /* Set the desired width */
@@ -471,7 +520,7 @@
 <script>
     $(document).ready(function () {
         loadUserProfileOverview();
-
+      
         const dropContainer = document.querySelector('.drop-container');
         const fileInput = document.querySelector('#images');
 
@@ -502,6 +551,20 @@
             }
         }
     });
+
+
+    function agree() {
+        $.ajax({
+            url: '@Url.Action("Agree", "ServiceProvider")',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                $('#btn-not-now').click()
+                toastr.success('', '@Localizer["Success"]');
+            }
+        });
+          
+        }
 
     function loadUserProfileOverview() {
         $.ajax({
@@ -554,6 +617,11 @@
                     $("#requiredAttachments-div").hide();
                 }
                 getCertifications();
+
+                if (!response.isagree) {
+                    $("#showagreementModalBtn").click();
+                }
+        
             },
             error: function (error) {
                 console.log(error);
@@ -972,18 +1040,18 @@
 
 
     function uploadRequiredAttachmnets() {
-        var fileInput = document.getElementById('reqattachments-uploader-Contract');
-        var contractfile = fileInput.files[0];
+        // var fileInput = document.getElementById('reqattachments-uploader-Contract');
+        // var contractfile = fileInput.files[0];
 
 
         var fileInput = document.getElementById('reqattachments-uploader-Category');
         var categoryfile = fileInput.files[0];
 
         // Check if file is selected
-        if (!contractfile) {
-            toastr.error('@Localizer["Please upload Signed Contract file"]', '@Localizer["Warning"]');
-            return;
-        }
+        // if (!contractfile) {
+        //     toastr.error('@Localizer["Please upload Signed Contract file"]', '@Localizer["Warning"]');
+        //     return;
+        // }
 
         if (!categoryfile) {
             toastr.error('@Localizer["Please upload Professional Category file"]', '@Localizer["Error"]');
@@ -991,7 +1059,7 @@
         }
 
         var formData = new FormData();
-        formData.append('contractfile', contractfile);
+        // formData.append('contractfile', contractfile);
         formData.append('categoryfile', categoryfile);
 
 
@@ -1004,7 +1072,7 @@
             success: function (response) {
                 // Handle the success response
                 canSendProfile();
-              
+
                 $("#close-reqattachment-modal").trigger("click");
                 toastr.success('@Localizer["RequiredAttachmnets"]', '@Localizer["Success"]');
             },
@@ -1082,5 +1150,7 @@
         /*font-size: 2em;*/
         transition: all .9s;
     }
+
+  
 </style>
 

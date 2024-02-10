@@ -98,9 +98,9 @@ namespace Eihal.Controllers
 
         [HttpPost]
         [Route("UploadRequiredFiles")]
-        public async Task<IActionResult> UploadRequiredFiles(IFormFile contractfile, IFormFile categoryfile)
+        public async Task<IActionResult> UploadRequiredFiles(/*IFormFile contractfile,*/ IFormFile categoryfile)
         {
-            if (contractfile == null || contractfile.Length == 0 || categoryfile == null || categoryfile.Length == 0)
+            if (/*contractfile == null || contractfile.Length == 0 || */categoryfile == null || categoryfile.Length == 0)
             {
                 return BadRequest("Contract File Or Category File is not Uploaded");
             }
@@ -122,35 +122,35 @@ namespace Eihal.Controllers
                 }
 
 
-                #region SignedContract
-                // SignedContract File
-                // Generate a unique file name
-                string signedContractfileName = Path.GetFileNameWithoutExtension(contractfile.FileName);
-                string signedContractfileExtension = Path.GetExtension(contractfile.FileName);
-                string signedContractUniqueFileName = signedContractfileName + signedContractfileExtension;
+                //#region SignedContract
+                //// SignedContract File
+                //// Generate a unique file name
+                //string signedContractfileName = Path.GetFileNameWithoutExtension(contractfile.FileName);
+                //string signedContractfileExtension = Path.GetExtension(contractfile.FileName);
+                //string signedContractUniqueFileName = signedContractfileName + signedContractfileExtension;
 
-                // Combine the directory and unique file name
-                string signedContractfilePath = Path.Combine(uploadPath, signedContractUniqueFileName);
+                //// Combine the directory and unique file name
+                //string signedContractfilePath = Path.Combine(uploadPath, signedContractUniqueFileName);
 
-                using (var stream = new FileStream(signedContractfilePath, FileMode.Create))
-                {
-                    // Copy the file to the specified path
-                    await contractfile.CopyToAsync(stream);
-                }
+                //using (var stream = new FileStream(signedContractfilePath, FileMode.Create))
+                //{
+                //    // Copy the file to the specified path
+                //    await contractfile.CopyToAsync(stream);
+                //}
 
 
-                var contractAttachment = new RequiredAttachment()
-                {
-                    UserId = currentUserId,
-                    UserProfileId = GetUserId(),
-                    Name = signedContractfileName,
-                    Extension = signedContractfileExtension,
-                    RequiredFileType = RequiredFileType.SignedContract,
-                    Path = $"/users/attachments/{currentUserId}/{signedContractUniqueFileName}",
-                };
+                //var contractAttachment = new RequiredAttachment()
+                //{
+                //    UserId = currentUserId,
+                //    UserProfileId = GetUserId(),
+                //    Name = signedContractfileName,
+                //    Extension = signedContractfileExtension,
+                //    RequiredFileType = RequiredFileType.SignedContract,
+                //    Path = $"/users/attachments/{currentUserId}/{signedContractUniqueFileName}",
+                //};
                 
-                _dbContext.RequiredAttachments.Add(contractAttachment);
-                #endregion
+                //_dbContext.RequiredAttachments.Add(contractAttachment);
+                //#endregion
 
                 #region Category
                 // Generate a unique file name

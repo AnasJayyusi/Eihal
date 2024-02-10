@@ -67,6 +67,8 @@ namespace Eihal.Data.Entites
         public ProfileStatus ProfileStatus { get; set; }
         public string? RejectionReason { get; set; }
 
+        public bool IsAgree { get; set; }
+
 
     }
 }

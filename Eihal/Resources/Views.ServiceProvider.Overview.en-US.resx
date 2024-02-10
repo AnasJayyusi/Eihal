@@ -123,6 +123,9 @@
   <data name="Actions" xml:space="preserve">
     <value>Actions</value>
   </data>
+  <data name="Agreement" xml:space="preserve">
+    <value>Platform Agreement</value>
+  </data>
   <data name="Attach" xml:space="preserve">
     <value>Attach</value>
   </data>
@@ -152,6 +155,12 @@
   </data>
   <data name="City" xml:space="preserve">
     <value>City:</value>
+  </data>
+  <data name="Confirmation" xml:space="preserve">
+    <value>Confirmation</value>
+  </data>
+  <data name="ConfirmationMessage" xml:space="preserve">
+    <value>Are you sure you want to signed on this agreement?</value>
   </data>
   <data name="Country" xml:space="preserve">
     <value>Country:</value>
@@ -186,6 +195,9 @@
   <data name="FullName" xml:space="preserve">
     <value>Full Name</value>
   </data>
+  <data name="IAgree" xml:space="preserve">
+    <value>I Agree</value>
+  </data>
   <data name="InsuranceAccept" xml:space="preserve">
     <value>Insurance Accept</value>
   </data>
@@ -200,6 +212,9 @@
   </data>
   <data name="NoSpeciality" xml:space="preserve">
     <value>No Specialty Added Yet.</value>
+  </data>
+  <data name="NotNow" xml:space="preserve">
+    <value>Not Now</value>
   </data>
   <data name="NumberPatients" xml:space="preserve">
     <value>Number Of Patients</value>

@@ -16,7 +16,7 @@
 
 
 <!--Sign Up -->
-<div class="loginLogo" id="singUpModal" style="padding: 10%;" tabindex="-1" role="dialog">
+<div class="loginLogo" id="singUpModal" style="padding: 6% 15% 3% 20%" tabindex="-1" role="dialog">
 
 
 
@@ -27,10 +27,31 @@
                     @Localizer["CreateNewAccount"]
                 </h1>
             </div>
+                <div class="explanation" style="text-align:@textAlign">
+
+                <div class="service-provider" style="background:aliceblue">
+                    <h6>@Localizer["ServiceProviderName"] <i style="color:#00768c" class="fa fa-info-circle" aria-hidden="true"></i></h6>
+                        <ul>
+                        <li>
+                            @Localizer["ServiceProviderDesc"]
+                              </li>
+                        </ul>
+                    </div>
+
+                <div class="beneficiary" style="background:aliceblue">
+                    <h6> @Localizer["BeneficiaryName"]   <i style="color:#00768c" class="fa fa-info-circle" aria-hidden="true"></i> </h6>
+                    <ul>
+                        
+                        <li>@Localizer["BeneficiaryDesc"]</li>
+                    </ul>
+                </div>
+                </div>
+
             <div class="modal-body">
+            
                 <form class="form-contain" id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
+                  
                     <div style="width: 100%; display: table;">
                         <div style="display: table-row">
                             <div class="form-group">
@@ -103,6 +124,7 @@
                                     </div>
                                 </div>
                             </div>
+                      
 
 
                             <div style="display: table-cell;">
@@ -490,5 +512,38 @@
         .close:hover {
             background: #00d9ff;
         }
+
+    .explanation {
+        display: flex;
+        /* justify-content: space-around; */
+    }
+
+    .service-provider, .beneficiary {
+        width: 50%;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin:1%;
+    }
+
+    
+
+        .service-provider h2, .beneficiary h2 {
+            color: #333;
+        }
+
+        .service-provider ul, .beneficiary ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+            .service-provider ul li, .beneficiary ul li {
+                margin-bottom: 10px;
+            }
+
+        .service-provider p, .beneficiary p {
+            margin-top: 10px;
+        }
 </style>
+
 

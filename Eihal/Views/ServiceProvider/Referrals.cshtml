@@ -10,6 +10,7 @@
     string direction = cultureCode.StartsWith("ar", StringComparison.OrdinalIgnoreCase) ? "rtl" : "ltr";
     string textAlign = direction == "rtl" ? "right" : "left";
     bool isEng = direction == "ltr" ? true : false;
+    string footerButtonsValue = isEng ? "0px" : "5px";
 }
 
 
@@ -649,7 +650,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button onclick="completePartiallyFromPopup()" type="button" class="btn btn-success">Complete Partially</button>
+                    <button id="agreementConfirmationBtn" data-toggle="modal" data-target="#completeConfirmation" type="button" class="btn btn-success"  style="background-color:#00768c">@Localizer["Complete Partially"]</button>
                     <button id="close-view-completePartiallyModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -657,6 +658,24 @@
     </div>
 </div>
 
+
+<div class="modal" id="completeConfirmation" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"> @Localizer["Confirmation"] </h5>
+
+            </div>
+            <div class="modal-body">
+                <p> @Localizer["ConfirmationMessage"] </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">  @Localizer["No"] </button>
+                <button onclick="completePartiallyFromPopup()" type="button" data-dismiss="modal" class="btn btn-success" style="margin:@footerButtonsValue"> @Localizer["Yes"] </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -850,10 +869,9 @@
         function complete(refId) {
 
             // Show a confirmation dialog
-            var confirmed = confirm('Are you sure that the service has been completed? The due invoice will be issued.');
 
             // Check if the user confirmed the action
-            if (confirmed) {
+          
                 toastr.info('This Request will be full completed.', 'Info !!');
                 $.ajax({
                     url: '/ServiceProvider/CompleteReferal?refId=' + refId,
@@ -861,15 +879,13 @@
                     success: function (response) {
                         toastr.success('Order completed successfully', 'Success !!');
                         filterIncomingReferrals();
+                        $("#close-view-completePartiallyModal").trigger("click")
                     },
                     error: function (xhr, status, error) {
                         console.error('Error:', error);
                     }
                 });
-            } else {
-                // The user canceled the action, you can add a message or perform any other action here
-                toastr.warning('Order completion canceled', 'Canceled');
-            }
+           
             var id = "#invoice-" + refId
 
             setTimeout(() => {
@@ -921,7 +937,14 @@
             $("#reject-view-OrderDetails-btn").hide();
             $("#complete-view-OrderDetails-btn").hide();
             $("#close-view-OrderDetails").hide();
-
+            $("#rejectionReasonInput").val("");
+            // enum ReferralStatusEnum 
+            //     Deleted = 0,
+            //     UnderReview = 1,
+            //     Approved = 2,
+            //     Rejected = 3,
+            //     Completed = 4,
+            //     PartiallyCompleted = 5
 
             $.ajax({
                 url: '/ServiceProvider/GetReferralsOrderDetails?orderId=' + id,
@@ -939,7 +962,7 @@
                     if (data.status == 2) {
                         $("#status-readonly").text("Approved")
                         $("#status-readonly").addClass("approved")
-
+                        $("#reject-view-OrderDetails-btn").show();
                         // Show Feilds
                         $("#patientName-div").show();
                         $("#phone-div").show();
@@ -1204,10 +1227,8 @@
 
 
 
-            var confirmed = confirm('Are you sure that the service has been completed? The due invoice will be issued.');
 
             // Check if the user confirmed the action
-            if (confirmed) {
 
                 var completeServicesIds = JSON.stringify(completeService);
 
@@ -1229,10 +1250,6 @@
                     }
                 });
 
-            } else {
-                // The user canceled the action, you can add a message or perform any other action here
-                toastr.warning('Order completion canceled', 'Canceled');
-            }
             var id = "#invoice-" + refId
 
             setTimeout(() => {
