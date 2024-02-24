@@ -117,52 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AboutUs" xml:space="preserve">
-    <value>معلومات عنا</value>
+  <data name="MyServices" xml:space="preserve">
+    <value>خدماتي</value>
   </data>
-  <data name="EihalParhPartOne" xml:space="preserve">
-    <value>إحال فكرة جاءت من تجارب طويلة في الخدمات السريرية والأكاديمية في مجال طب الأسنان، ودراسة مشاكل أي شخص يحتاج إلى خدمات طب الأسنان للعثور على طبيب الأسنان المناسب. وكذلك الاستفادة من مخرجات كليات طب الأسنان المتميزة ومساعدة أطباء الأسنان الشباب على الاندماج في السوق بالشكل المناسب.</value>
+  <data name="Search" xml:space="preserve">
+    <value>بحث</value>
   </data>
-  <data name="EihalParhPartTwo" xml:space="preserve">
-    <value>تهدف إحال إلى رفع مستوى خدمات طب الأسنان للوصول إلى مستويات مهنية متميزة، مع الاستفادة من أطباء الأسنان المتخرجين الجدد لتحسين مستوى خدمات طب الأسنان بطريقة احترافية سليمة وخلق بيئة مهنية تمكنهم من الاستفادة من خبرات أسلافهم لتطوير مهاراتهم المهنية.</value>
-  </data>
-  <data name="ElHAL" xml:space="preserve">
-    <value />
-  </data>
-  <data name="FirstPoint" xml:space="preserve">
-    <value>سهولة الوصول إلى عدد كبير من المتخصصين والاستشاريين أطباء الأسنان</value>
-  </data>
-  <data name="Home" xml:space="preserve">
-    <value>الصحفة الرئيسية</value>
-  </data>
-  <data name="Mission" xml:space="preserve">
-    <value>مهمتنا</value>
-  </data>
-  <data name="OurMission" xml:space="preserve">
-    <value>مهمتنا</value>
-  </data>
-  <data name="OurMissionDesc" xml:space="preserve">
-    <value>تحسين خدمات ومهنة طب الأسنان، من خلال استخدام التكنولوجيا لتنظيم وتحسين جودة الخدمات العلاجية وتسهيل دمج أطباء الأسنان حديثي التخرج في سوق العمل.</value>
-  </data>
-  <data name="OurVision" xml:space="preserve">
-    <value>رؤيتنا</value>
-  </data>
-  <data name="OurVisionDesc" xml:space="preserve">
-    <value>الارتقاء بمستوى خدمات طب الأسنان المقدمة، من خلال تسهيل الوصول إلى أفضل أطباء الأسنان في مختلف التخصصات والارتقاء بمهنة طب الأسنان.</value>
-  </data>
-  <data name="PHILOSOPHY" xml:space="preserve">
-    <value>فلسفتنا</value>
-  </data>
-  <data name="PHILOSOPHYDesc" xml:space="preserve">
-    <value>تقديم رعاية أسنان متميزة مع الالتزام بالصدق والنزاهة والأمانة. جودة...</value>
-  </data>
-  <data name="SecPoint" xml:space="preserve">
-    <value>تقديم كافة خدمات طب الأسنان بأسعار مناسبة ومتنوعة.</value>
-  </data>
-  <data name="ThirdPoint" xml:space="preserve">
-    <value>فتح بوابة جديدة وسهلة لأطباء الأسنان حديثي التخرج لممارسة المهنة بشكل احترافي وتطوير مهاراتهم المهنية من خلال التعامل مع المتخصصين والاستشاريين ذوي الخبرة في طب الأسنان.</value>
-  </data>
-  <data name="WhyEihal" xml:space="preserve">
-    <value>لماذا تختار إحال؟</value>
+  <data name="Services" xml:space="preserve">
+    <value>الخدمات </value>
   </data>
 </root>

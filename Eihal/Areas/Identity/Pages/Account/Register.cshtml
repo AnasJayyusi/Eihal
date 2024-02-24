@@ -16,18 +16,18 @@
 
 
 <!--Sign Up -->
-<div class="loginLogo" id="singUpModal" style="padding: 6% 15% 3% 20%" tabindex="-1" role="dialog">
+<div class="loginLogo" id="singUpModal"  tabindex="-1" role="dialog">
 
 
-
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width:60%" role="document">
+    <Br />
+    <div class="modal-dialog modal-dialog-centered"  style="max-width:576px" role="document">
         <div class="modal-content">
             <div class="modal-header" style="direction:@direction">
                 <h1 class="modal-title" id="singUpModalLabel">
                     @Localizer["CreateNewAccount"]
                 </h1>
             </div>
-                <div class="explanation" style="text-align:@textAlign">
+             @*    <div class="explanation" style="text-align:@textAlign">
 
                 <div class="service-provider" style="background:aliceblue">
                     <h6>@Localizer["ServiceProviderName"] <i style="color:#00768c" class="fa fa-info-circle" aria-hidden="true"></i></h6>
@@ -45,7 +45,7 @@
                         <li>@Localizer["BeneficiaryDesc"]</li>
                     </ul>
                 </div>
-                </div>
+                </div> *@
 
             <div class="modal-body">
             
@@ -56,7 +56,7 @@
                         <div style="display: table-row">
                             <div class="form-group">
                                 <label for="account_type" style="text-align:@textAlign">  @Localizer["AccountType"]</label>
-                                <div id="account-type-div" class="form-data select-box" style="width:75%">
+                                <div id="account-type-div" class="form-data select-box" style="width:95%">
                                     <select asp-for="Input.AccountTypeId" class="form-control" name="account_type" id="account_type" required>
                                         <option value="">@Localizer["DefaultOptionAccountType"]</option>
                                         @foreach (var accountType in Model.AccountTypes)
@@ -71,8 +71,18 @@
                                             }
                                         }
                                     </select>
+                                    <p id="about-provider" style="display:none;color:#00768c;font-size:12px;text-align:left;">
+                                        @Localizer["ServiceProviderDesc"]
+                                    </p>
+                                    <p id="about-beneficiary" style="display:none; color:#00768c;font-size:12px;text-align:left;">
+                                        @Localizer["BeneficiaryDesc"]
+                                    </p>
+                                    <br />
                                 </div>
+
                             </div>
+                            <br />
+                            <br />
                             <div id="providerDetails">
                                 <div class="form-group" id="doctor_type_dropdown">
                                     <label for="">
@@ -80,7 +90,7 @@
 
                                     </label>
 
-                                    <div id="doctor-type-div" class="form-data select-box practitioner_type_div" style="width:75%">
+                                    <div id="doctor-type-div" class="form-data select-box practitioner_type_div" style="width:95%">
                                         <select onchange="onPractitionerTypeChanged()" asp-for="Input.PractitionerTypeId" disabled style="cursor:not-allowed" class="form-control" name="practitioner_type" id="doctor-type-ddl">
                                             <option value="">@Localizer["DefaultOptionPractitionerType"] </option>
                                             @foreach (var practitionerType in Model.PractitionerTypes)
@@ -104,7 +114,7 @@
                                         @Localizer["ProfessionalRank"]
                                     </label>
 
-                                    <div id="category-id-div" class="form-data select-box professionalRank_div" style="width:75%">
+                                    <div id="category-id-div" class="form-data select-box professionalRank_div" style="width:95%">
                                         <select asp-for="Input.ProfessionalRankId" disabled style="cursor:not-allowed" class="form-control" name="professional_Rank" id="category-rank-ddl">
                                             <option value="0">@Localizer["DefaultOptionProfessionalRank"]</option>
                                             @foreach (var professionalRank in Model.ProfessionalRanks)
@@ -370,6 +380,8 @@
         if (id == 2)   // Which is Beneficiary
         {
             // Disable Options
+            $('#about-provider').hide()
+            $('#about-beneficiary').show()
             $('#doctor-type-ddl').prop("disabled", true);
             $('#category-rank-ddl').prop("disabled", true);
             $('#doctor-type-ddl').css("cursor", "not-allowed")
@@ -379,6 +391,8 @@
         else if (id == 1) {
             // Element(s) are now enabled.
             // Enable Options
+            $('#about-beneficiary').hide()
+            $('#about-provider').show()
             $('#doctor-type-ddl').prop("disabled", false);
             $('#category-rank-ddl').prop("disabled", false);
             $('#doctor-type-ddl').css("cursor", "")
@@ -544,6 +558,9 @@
         .service-provider p, .beneficiary p {
             margin-top: 10px;
         }
+
+
 </style>
+
 
 

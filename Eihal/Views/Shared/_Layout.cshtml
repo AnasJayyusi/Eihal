@@ -270,11 +270,31 @@
                     <div class="bottom-nav" style="direction:@direction">
                         <div class="container">
                             <div class="content">
-                                <div class="hamburger">
-                                    <span class="line"></span>
-                                    <span class="line"></span>
-                                    <span class="line"></span>
-                                </div>
+                               
+
+                                <div id="mobiledropDown" class="dropdown" style="direction:@direction;text-align:@textAlign">
+                                        <a href="#">
+                                            <img style="border-radius:30%" id="user-image-layout" src="" width="40" height="40" alt="user-image-profile" onerror="this.src='/users/images/Default-User-Profile.jpg'">
+                                        </a>
+
+                                        <div class="dropdown-content">
+                                            <a class="nav-link text-dark  linkButton" asp-area="" asp-controller="Home" asp-action="MyProfile">@Localizer["MyProfile"] </a>
+                                            <a class="nav-link text-dark linkButton" asp-area="" asp-controller="ServiceProvider" asp-action="Referrals">@Localizer["MyOrders"]  </a>
+
+
+                                            <a style="text-transform: none;" class="my-profile-button" asp-area="Identity" asp-page="/Account/Logout">
+                                                @Localizer["Logout"]
+                                                <span>
+                                                    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("MyProfile", "Home", new { area = "" })">
+                                                        <button style="text-transform: none;" class="my-profile-button" type="submit"></button>
+                                                    </form>
+                                                </span>
+
+                                            </a>
+
+                                        </div>
+                                    </div>
+
 
                                 <a class="brand-name" asp-area="" asp-controller="Home" asp-action="Index"></a>
                                 <img src="~/images/logo.png" class="navbar-logo" alt="logo" style="height:50px">
@@ -314,9 +334,7 @@
                                         <img src="~/icon/spinner-loading.gif" alt="Loading" />
                                         <div class="loading-text">@Localizer["PleaseWait"]</div>
                                     </div>
-
-
-                                    <div class="dropdown" style="direction:@direction;text-align:@textAlign">
+                                    <div id="deskTopdropDown" class="dropdown" style="direction:@direction;text-align:@textAlign">
                                         <a href="#">
                                             <img style="border-radius:30%" id="user-image-layout" src="" width="40" height="40" alt="user-image-profile" onerror="this.src='/users/images/Default-User-Profile.jpg'">
                                         </a>
@@ -338,8 +356,6 @@
 
                                         </div>
                                     </div>
-
-
                                 }
 
 
@@ -408,6 +424,17 @@
 
 
     $(document).ready(function () {
+        // JavaScript to detect screen size
+        if (window.innerWidth <= 768) { // Adjust threshold as needed
+            // Set flag indicating the device is mobile
+
+            $("#mobiledropDown").show()
+            $("#deskTopdropDown").hide()
+        }
+        else {
+            $("#mobiledropDown").hide()
+            $("#deskTopdropDown").show()
+        }
         $.ajax({
             url: '/Notification/GetNotificationsCount',  // Replace 'your-api-url' with the actual API endpoint URL
             method: 'GET',
