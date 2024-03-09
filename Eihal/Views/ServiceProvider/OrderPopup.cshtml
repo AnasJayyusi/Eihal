@@ -238,9 +238,9 @@
                 // Populate the dropdown list
                 var dropdown = $('#states-ddl-wk');
                 // Add default option
-                dropdown.append($('<option></option>').val('').text('Select a state'));
+                dropdown.append($('<option></option>').val('').text( isEnglishCulture() ? 'Select a state' : 'إختر الولاية'));
                 $.each(data, function (index, item) {
-                    dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                    dropdown.append($('<option></option>').val(item.id).text(isEnglishCulture() ? item.titleEn : item.titleAr ));
                 });
             }
         });
@@ -256,9 +256,9 @@
                 $('#cities-ddl-wk').empty();
                 // Populate the dropdown list
                 var dropdown = $('#cities-ddl-wk');
-                dropdown.append($('<option></option>').val('').text('Select a city'));
+                dropdown.append($('<option></option>').val('').text(isEnglishCulture() ? 'Select a city' : 'إختر المدينة'));
                 $.each(data, function (index, item) {
-                    dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                    dropdown.append($('<option></option>').val(item.id).text(isEnglishCulture()  ? item.titleEn : item.titleAr));
                 });
             }
         });
@@ -274,9 +274,9 @@
                 $('#districts-ddl-wk').empty();
                 // Populate the dropdown list
                 var dropdown = $('#districts-ddl-wk');
-                dropdown.append($('<option></option>').val('').text('Select a District'));
+                dropdown.append($('<option></option>').val('').text(isEnglishCulture() ? 'Select a District' : 'اختر المنطقة'));
                 $.each(data, function (index, item) {
-                    dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                    dropdown.append($('<option></option>').val(item.id).text(isEnglishCulture()  ? item.titleEn : item.titleAr));
                 });
             }
         });
@@ -295,9 +295,9 @@
                 // Populate the dropdown list
                 var dropdown = $('#countries-ddl-edit');
                 // Add default option
-                dropdown.append($('<option></option>').val('').text('Select a country'));
+                dropdown.append($('<option></option>').val('').text(isEnglishCulture() ? 'Select a country' : 'أختر الدولة'));
                 $.each(data, function (index, item) {
-                    dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                    dropdown.append($('<option></option>').val(item.id).text(isEnglishCulture() ? item.titleEn : item.titleAr));
                 });
             }
         });

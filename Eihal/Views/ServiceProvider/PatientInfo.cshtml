@@ -1,10 +1,21 @@
-﻿@*Address*@
-<div class="container" >
+﻿
+@model Eihal.Data.Entites.InsuranceCompany
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+    string cultureCode = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
+    string direction = cultureCode.StartsWith("ar", StringComparison.OrdinalIgnoreCase) ? "rtl" : "ltr";
+    string textAlign = direction == "rtl" ? "right" : "left";
+    bool isEng = direction == "ltr" ? true : false;
+}
+
+@*Address*@
+<div class="container" style="text-align: justify;" >
     <div class="row">
         <div class="col-md-12">
             <div class="form-group">
-                <label style="font-weight:bold;color:#00768c" for="fullname-edit-input">Full Name:<span style="color:red">*</span></label>
-                <input onkeyup="canNext()" type="text" class="form-control" id="fullname-edit-input" placeholder="Full Name" required>
+                <label style="font-weight:bold;color:#00768c" for="fullname-edit-input">@Localizer["FullName"]:<span style="color:red">*</span></label>
+                <input onkeyup="canNext()" type="text" class="form-control" id="fullname-edit-input" placeholder="@Localizer["FullName"]" required>
             </div>
         </div>
     </div>
@@ -12,14 +23,14 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <label style="font-weight:bold;color:#00768c" for="phone-edit-input">Phone:<span style="color:red">*</span></label>
-                <input onkeyup="canNext()" type="number" class="form-control" id="phone-edit-input" placeholder="Phone" required>
+                <label style="font-weight:bold;color:#00768c" for="phone-edit-input">@Localizer["Phone"]:<span style="color:red">*</span></label>
+                <input onkeyup="canNext()" type="number" class="form-control" id="phone-edit-input" placeholder="@Localizer["Phone"]" required>
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <label style="font-weight:bold;color:#00768c" for="email-edit-input">Email:</label>
-                <input type="text" class="form-control" id="email-edit-input" placeholder="Email" required>
+                <label style="font-weight:bold;color:#00768c" for="email-edit-input">@Localizer["Email"]:</label>
+                <input type="text" class="form-control" id="email-edit-input" placeholder="@Localizer["Email"]" required>
             </div>
         </div>
     </div>
@@ -27,25 +38,25 @@
     <div class="row">
         <div class="col-md-4">
             <div class="form-group">
-                <label style="font-weight:bold;color:#00768c" for="countries-ddl-edit">Country:</label>
+                <label style="font-weight:bold;color:#00768c" for="countries-ddl-edit">@Localizer["Country"] :</label>
                 <select class="form-control" id="countries-ddl-edit" onchange="getStatesById(this.value)">
-                    <option value="">Select a Country</option>
+                    <option value="">@Localizer["SelectCountry"] Select a Country</option>
                 </select>
             </div>
         </div>
         <div class="col-md-4">
             <div class="form-group">
-                <label style="font-weight:bold;color:#00768c" for="states-ddl-edit">State:</label>
+                <label style="font-weight:bold;color:#00768c" for="states-ddl-edit">@Localizer["State"] :</label>
                 <select class="form-control" id="states-ddl-edit" onchange="getCitesById(this.value)">
-                    <option value="">Select a State</option>
+                    <option value="">@Localizer["SelectState"] </option>
                 </select>
             </div>
         </div>
         <div class="col-md-4">
             <div class="form-group">
-                <label style="font-weight:bold;color:#00768c" for="cities-ddl-edit">City:</label>
+                <label style="font-weight:bold;color:#00768c" for="cities-ddl-edit">@Localizer["City"] :</label>
                 <select class="form-control" id="cities-ddl-edit">
-                    <option value="">Select a City</option>
+                    <option value="">@Localizer["SelectCity"]</option>
                 </select>
             </div>
         </div>
@@ -53,16 +64,16 @@
 
     <div class="row">
         <div class="col-md-8">
-            <label style="font-weight:bold;color:#00768c">Gender:</label>
+            <label style="font-weight:bold;color:#00768c">@Localizer["Gender"]:</label>
             <div class="form-group">
                 <input type="radio" name="gender" id="female" class="input-hidden" style="padding:5px" value="0" />
                 <label for="female">
-                    <img src="~/images/female.png" class="selectOptionStyle" alt="Female" /> <span>&nbsp  &nbsp Female &nbsp  &nbsp  </span>
+                    <img src="~/images/female.png" class="selectOptionStyle" alt="Female" /> <span>&nbsp  &nbsp @Localizer["Female"] &nbsp  &nbsp  </span>
                 </label>
 
                 <input type="radio" name="gender" id="male" class="input-hidden" style="padding:5px" value="1" />
                 <label for="male">
-                    <img src="~/images/male.png" class="selectOptionStyle" alt="Male" />&nbsp  &nbsp Male &nbsp  &nbsp
+                    <img src="~/images/male.png" class="selectOptionStyle" alt="Male" />&nbsp  &nbsp @Localizer["Male"] &nbsp  &nbsp
                 </label>
             </div>
         </div>
@@ -74,22 +85,22 @@
             <div class="form-group">
                 <input type="radio" name="age" id="child" class="input-hidden" value="0" />
                 <label for="child">
-                    <img src="~/images/child.png" class="selectOptionStyle" alt="child" /> 4 - 10 Years
+                    <img src="~/images/child.png" class="selectOptionStyle" alt="child" /> 4 - 10 @Localizer["Years"]
                 </label>
 
                 <input type="radio" name="age" id="teenager" class="input-hidden" value="1" />
                 <label for="teenager">
-                    <img src="~/images/teenager.png" class="selectOptionStyle" alt="Male" /> 11 - 25 Years
+                    <img src="~/images/teenager.png" class="selectOptionStyle" alt="Male" /> 11 - 25 @Localizer["Years"]
                 </label>
 
                 <input type="radio" name="age" id="young" class="input-hidden" value="2" />
                 <label for="young">
-                    <img src="~/images/young.png" class="selectOptionStyle" alt="Male" />26 - 50 Years
+                    <img src="~/images/young.png" class="selectOptionStyle" alt="Male" />26 - 50 @Localizer["Years"]
                 </label>
 
                 <input type="radio" name="age" id="Aged" class="input-hidden" value="3" />
                 <label for="Aged">
-                    <img src="~/images/Aged.png" class="selectOptionStyle" alt="Male" /> > 50 Years
+                    <img src="~/images/Aged.png" class="selectOptionStyle" alt="Male" /> > 50 @Localizer["Years"]
                 </label>
             </div>
         </div>
@@ -98,7 +109,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="form-group">
-                <label style="font-weight:bold;color:#00768c">Does the patient have a chronic disease?</label> <span style="color:gray;font-style:italic">(if not leave it empty)</span>
+                <label style="font-weight:bold;color:#00768c">@Localizer["HaveChronicDisease"]</label> <span style="color:gray;font-style:italic">(@Localizer["LeaveItEmpty"])</span>
                 <div class="form-check p-0">
                     <textarea id="chronicDisease" spellcheck="false" data-ms-editor="true" style="background-color: rgb(255, 255, 255); background-size: 100% 1.2em; background-image: linear-gradient(0deg, transparent 79px, rgb(171, 206, 212) 79px, rgb(171, 206, 212) 81px, transparent 81px), linear-gradient(rgb(238, 238, 238) 0.1em, transparent 0.1em); height: 196px;">
                                                             </textarea>
@@ -121,9 +132,9 @@
                 // Populate the dropdown list
                 var dropdown = $('#states-ddl-edit');
                 // Add default option
-                dropdown.append($('<option></option>').val('').text('Select a state'));
+                dropdown.append($('<option></option>').val('').text( isEnglishCulture() ? 'Select a state' : 'إختر الولاية'));
                 $.each(data, function (index, item) {
-                    dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                    dropdown.append($('<option></option>').val(item.id).text(isEnglishCulture() ? item.titleEn : item.titleAr ));
                 });
             }
         });
@@ -139,9 +150,9 @@
                 $('#cities-ddl-edit').empty();
                 // Populate the dropdown list
                 var dropdown = $('#cities-ddl-edit');
-                dropdown.append($('<option></option>').val('').text('Select a city'));
+                dropdown.append($('<option></option>').val('').text(isEnglishCulture() ? 'Select a city' : 'إختر المدينة'));
                 $.each(data, function (index, item) {
-                    dropdown.append($('<option></option>').val(item.id).text(item.titleEn));
+                    dropdown.append($('<option></option>').val(item.id).text(isEnglishCulture()  ? item.titleEn : item.titleAr));
                 });
             }
         });

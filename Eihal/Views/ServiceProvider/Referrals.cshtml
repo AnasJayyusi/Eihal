@@ -231,16 +231,18 @@
                                     <fieldset id="patient-info">
                                         <div class="form-card">
                                             <div class="row">
-                                                <div class="col-7">
-                                                    <h2 class="fs-title">@Localizer["PatientInformation"]</h2>
+                                                <div class="col-md-6" >
+                                                    <h2 style ="text-align: justify;" class="fs-title">@Localizer["PatientInformation"]</h2>
                                                 </div>
-                                                <div class="col-5">
-                                                    <h2 class="steps">@Localizer["Step1To4"]</h2>
+                                                <div  class="col-md-6" >
+                                                    <h2 style="text-align:end" class="steps">@Localizer["Step1To4"]</h2>
                                                 </div>
                                             </div>
                                             @Html.Partial("PatientInfo")
                                         </div>
-                                        <input id="nextToSelectPrivilege" type="button" name="next" class="next action-button" value="Next" />
+                                            
+                                        <input id="nextToSelectPrivilege" type="button" name="next"  style="margin-left:@closeButtonValue" class="next action-button" value="@Localizer["Next"]" />
+                                       
                                     </fieldset>
                                     <fieldset>
                                         <div class="form-card">
@@ -291,7 +293,7 @@
 
 
                                         </div>
-                                        <input style="text-align:center" id="nextToSelectDoctor" button" name="next" class="next action-button" value="Next" />
+                                        <input style="text-align:center" id="nextToSelectDoctor" button" name="next" class="next action-button" value="@Localizer["Next"]" />
                                         <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
                                     </fieldset>
                                     <fieldset>
@@ -338,8 +340,8 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" onclick="closeOrderModal()" data-dismiss="modal" id="close-order">@Localizer["Cancel"]</button>
+            <div class="modal-footer" style="direction:@direction">
+                <button type="button" class="btn btn-danger" onclick="closeOrderModal()" style="margin-left:@closeButtonValue" data-dismiss="modal" id="close-order">@Localizer["Cancel"]</button>
             </div>
         </div>
     </div>

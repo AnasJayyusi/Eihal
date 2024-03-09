@@ -156,6 +156,9 @@
   <data name="IncomingRequests" xml:space="preserve">
     <value>الطلبات الواردة</value>
   </data>
+  <data name="Next" xml:space="preserve">
+    <value>التالي</value>
+  </data>
   <data name="NoSelectedYet" xml:space="preserve">
     <value>لم يتم تحديد أي خدمات حتى الآن.</value>
   </data>

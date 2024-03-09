@@ -117,112 +117,49 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="30DaysAgo" xml:space="preserve">
-    <value>30 days ago</value>
+  <data name="City" xml:space="preserve">
+    <value>City</value>
   </data>
-  <data name="7DaysAgo" xml:space="preserve">
-    <value>7 days ago</value>
+  <data name="Country" xml:space="preserve">
+    <value>Country</value>
   </data>
-  <data name="AddOrder" xml:space="preserve">
-    <value>Add Order</value>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
   </data>
-  <data name="AllDates" xml:space="preserve">
-    <value>All Dates</value>
+  <data name="Female" xml:space="preserve">
+    <value>Female</value>
   </data>
-  <data name="AllStatuses" xml:space="preserve">
-    <value>All Statuses</value>
+  <data name="FullName" xml:space="preserve">
+    <value>Full Name</value>
   </data>
-  <data name="Approved" xml:space="preserve">
-    <value>Approved</value>
+  <data name="Gender" xml:space="preserve">
+    <value>Gender</value>
   </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+  <data name="HaveChronicDisease" xml:space="preserve">
+    <value>Does the patient have a chronic disease?</value>
   </data>
-  <data name="Completed" xml:space="preserve">
-    <value>Completed</value>
+  <data name="LeaveItEmpty" xml:space="preserve">
+    <value>if not leave it empty</value>
   </data>
-  <data name="Confirmation" xml:space="preserve">
-    <value>Confirmation</value>
+  <data name="Male" xml:space="preserve">
+    <value>Male</value>
   </data>
-  <data name="Date" xml:space="preserve">
-    <value>Date:</value>
+  <data name="Phone" xml:space="preserve">
+    <value>Phone</value>
   </data>
-  <data name="Doctors" xml:space="preserve">
-    <value>Doctors</value>
+  <data name="SelectCity" xml:space="preserve">
+    <value>Select a city</value>
   </data>
-  <data name="Finish" xml:space="preserve">
-    <value>Finish:</value>
+  <data name="SelectCountry" xml:space="preserve">
+    <value>Select a country</value>
   </data>
-  <data name="IncomingRequests" xml:space="preserve">
-    <value>Incoming Requests</value>
+  <data name="SelectState" xml:space="preserve">
+    <value>Select a state</value>
   </data>
-  <data name="Next" xml:space="preserve">
-    <value>Next</value>
+  <data name="State" xml:space="preserve">
+    <value>State</value>
   </data>
-  <data name="NoSelectedYet" xml:space="preserve">
-    <value>No Services Selected Yet.</value>
-  </data>
-  <data name="NoServicesFound" xml:space="preserve">
-    <value>No Services Found.</value>
-  </data>
-  <data name="NoteAboutDoctors" xml:space="preserve">
-    <value>Note: the doctors will appear based on your selection, please select at least one service</value>
-  </data>
-  <data name="OutgoingRequests" xml:space="preserve">
-    <value>Outgoing Requests</value>
-  </data>
-  <data name="PartiallyCompleted" xml:space="preserve">
-    <value>Partially Completed</value>
-  </data>
-  <data name="PatientInfo" xml:space="preserve">
-    <value>Patient Info</value>
-  </data>
-  <data name="PatientInformation" xml:space="preserve">
-    <value>Patient Information:</value>
-  </data>
-  <data name="Referrals" xml:space="preserve">
-    <value>الإحالات</value>
-  </data>
-  <data name="Rejected" xml:space="preserve">
-    <value>Rejected</value>
-  </data>
-  <data name="Search" xml:space="preserve">
-    <value>Search:</value>
-  </data>
-  <data name="SearchByName" xml:space="preserve">
-    <value>Search by name</value>
-  </data>
-  <data name="SelectedServices" xml:space="preserve">
-    <value>Selected Services</value>
-  </data>
-  <data name="SentSuccessfully" xml:space="preserve">
-    <value>You Have Successfully Send The Order</value>
-  </data>
-  <data name="Services" xml:space="preserve">
-    <value>Services</value>
-  </data>
-  <data name="Status" xml:space="preserve">
-    <value>Status:</value>
-  </data>
-  <data name="Step1To4" xml:space="preserve">
-    <value>Step 1 - 4</value>
-  </data>
-  <data name="Step2To4" xml:space="preserve">
-    <value>Step 2 - 4</value>
-  </data>
-  <data name="Step3To4" xml:space="preserve">
-    <value>Step 3 - 4</value>
-  </data>
-  <data name="Step4To4" xml:space="preserve">
-    <value>Step 4 - 4</value>
-  </data>
-  <data name="SUCCESS" xml:space="preserve">
-    <value>SUCCESS !</value>
-  </data>
-  <data name="Today" xml:space="preserve">
-    <value>Today</value>
-  </data>
-  <data name="UnderReview" xml:space="preserve">
-    <value>Under Review</value>
+  <data name="Years" xml:space="preserve">
+    <value>Years</value>
   </data>
 </root>
