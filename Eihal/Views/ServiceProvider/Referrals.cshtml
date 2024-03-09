@@ -11,6 +11,7 @@
     string textAlign = direction == "rtl" ? "right" : "left";
     bool isEng = direction == "ltr" ? true : false;
     string footerButtonsValue = isEng ? "0px" : "5px";
+    string closeButtonValue = isEng ? "0" : "1%";
 }
 
 
@@ -58,8 +59,8 @@
                                         </a>
                                     </h6>
                                     <div>
-                                        <button class="tab-button active" id="btnIncoming" onclick="openTab(event, 'tab1')">Incoming Requests</button>
-                                        <button id="outgoing-tab" class="tab-button" onclick="openTab(event, 'tab2')">@Localizer["Services"]Outgoing Requests</button>
+                                        <button class="tab-button active" id="btnIncoming" onclick="openTab(event, 'tab1')"> @Localizer["IncomingRequests"]</button>
+                                        <button id="outgoing-tab" class="tab-button" onclick="openTab(event, 'tab2')"> @Localizer["OutgoingRequests"] </button>
                                     </div>
                                 </div>
                                 <!-- Card Body -->
@@ -73,9 +74,9 @@
                                         <div class="row" style="padding-left: 4%;">
                                             <div class="col-md-5">
                                                 <div class="form-group">
-                                                    <label style="font-weight:bold;color:white" for="accountTypes-ddl-edit">Search:</label>
+                                                    <label style="font-weight:bold;color:white" for="accountTypes-ddl-edit">@Localizer["Search"]</label>
                                                     <div class="input-group">
-                                                        <input style="background:#f2f2f2" onkeyup="filterIncomingReferrals()" id="filterInput-incoming" onkeypress="searchUsingEnterButtonIncoming(event)" placeholder="Search for name" type="search" class="form-control" />
+                                                        <input style="background:#f2f2f2" onkeyup="filterIncomingReferrals()" id="filterInput-incoming" onkeypress="searchUsingEnterButtonIncoming(event)" placeholder="@Localizer["SearchByName"]" type="search" class="form-control" />
                                                         <div class="input-group-append">
                                                             <button onclick="filterIncomingReferrals()" id="search-button" type="button" class="btn btn-primary">
                                                                 <i class="fas fa-search"></i>
@@ -88,14 +89,14 @@
                                             <div class="col-md-3">
                                                 <!-- Label for Status dropdown -->
                                                 <div class="form-group" style="margin-left: 10px;margin-bottom: 5%;">
-                                                    <label style="font-weight:bold;color:#00768c" for="accountTypes-ddl-edit">Status:</label>
+                                                    <label style="font-weight:bold;color:#00768c" for="accountTypes-ddl-edit">@Localizer["Status"]</label>
                                                     <select class="form-control" id="status-incoming-ddl" onchange="filterIncomingReferrals()">
-                                                        <option value="0">All Statuses</option>
-                                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.UnderReview)">Under Review</option>
-                                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.Approved)">Approved</option>
-                                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.Rejected)">Rejected</option>
-                                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.Completed)">Completed</option>
-                                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.PartiallyCompleted)">Partially Completed</option>
+                                                        <option value="0">@Localizer["AllStatuses"]</option>
+                                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.UnderReview)">@Localizer["UnderReview"]</option>
+                                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.Approved)"> @Localizer["Approved"]</option>
+                                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.Rejected)"> @Localizer["Rejected"] </option>
+                                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.Completed)">@Localizer["Completed"] </option>
+                                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.PartiallyCompleted)">@Localizer["PartiallyCompleted"]</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -103,12 +104,12 @@
                                             <div class="col-md-3">
                                                 <!-- Label for Date dropdown -->
                                                 <div class="form-group" style="margin-left: 10px;margin-bottom: 5%;">
-                                                    <label style="font-weight:bold;color:#00768c" for="accountTypes-ddl-edit">Date:</label>
+                                                    <label style="font-weight:bold;color:#00768c" for="accountTypes-ddl-edit">@Localizer["Date"]</label>
                                                     <select class="form-control" id="date-incoming-ddl" onchange="filterIncomingReferrals()">
-                                                        <option value="0">All Dates</option>
-                                                        <option value="1">Today</option>
-                                                        <option value="2">7 days ago</option>
-                                                        <option value="3">30 days ago</option>
+                                                        <option value="0">@Localizer["AllDates"]</option>
+                                                        <option value="1">@Localizer["Today"] </option>
+                                                        <option value="2">@Localizer["7DaysAgo"]</option>
+                                                        <option value="3">@Localizer["30DaysAgo"]</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -126,9 +127,9 @@
                                         <div class="row" style="padding-left: 4%;">
                                             <div class="col-md-5">
                                                 <div class="form-group">
-                                                    <label style="font-weight:bold;color:white" for="accountTypes-ddl-edit">Search:</label>
+                                                    <label style="font-weight:bold;color:white" for="accountTypes-ddl-edit">@Localizer["Search"]</label>
                                                     <div class="input-group">
-                                                        <input style="background:#f2f2f2" onkeyup="filterOutgoingReferrals()" id="filterInput-outgoing" onkeypress="searchUsingEnterButtonOutgoing(event)" placeholder="Search for name" type="search" class="form-control" />
+                                                        <input style="background:#f2f2f2" onkeyup="filterOutgoingReferrals()" id="filterInput-outgoing" onkeypress="searchUsingEnterButtonOutgoing(event)" placeholder="@Localizer["SearchByName"]" type="search" class="form-control" />
                                                         <div class="input-group-append">
                                                             <button onclick="filterOutgoingReferrals()" id="search-button" type="button" class="btn btn-primary">
                                                                 <i class="fas fa-search"></i>
@@ -141,14 +142,14 @@
                                             <div class="col-md-3">
                                                 <!-- Label for Status dropdown -->
                                                 <div class="form-group" style="margin-left: 10px;margin-bottom: 5%;">
-                                                    <label style="font-weight:bold;color:#00768c" for="accountTypes-ddl-edit">Status:</label>
+                                                    <label style="font-weight:bold;color:#00768c" for="accountTypes-ddl-edit">@Localizer["Status"]</label>
                                                     <select class="form-control" id="status-outgoing-ddl" onchange="filterOutgoingReferrals()">
-                                                        <option value="0">All Statuses</option>
-                                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.UnderReview)">Under Review</option>
-                                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.Approved)">Approved</option>
-                                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.Rejected)">Rejected</option>
-                                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.Completed)">Completed</option>
-                                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.PartiallyCompleted)">Partially Completed</option>
+                                                        <option value="0">@Localizer["AllStatuses"]</option>
+                                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.UnderReview)">@Localizer["UnderReview"]</option>
+                                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.Approved)">@Localizer["Approved"] </option>
+                                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.Rejected)">@Localizer["Rejected"] </option>
+                                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.Completed)">@Localizer["Completed"] </option>
+                                                        <option value="@((int)Eihal.Enums.ReferralStatusEnum.PartiallyCompleted)">@Localizer["PartiallyCompleted"]</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -156,12 +157,12 @@
                                             <div class="col-md-3">
                                                 <!-- Label for Date dropdown -->
                                                 <div class="form-group" style="margin-left: 10px;margin-bottom: 5%;">
-                                                    <label style="font-weight:bold;color:#00768c" for="accountTypes-ddl-edit">Date:</label>
+                                                    <label style="font-weight:bold;color:#00768c" for="accountTypes-ddl-edit">@Localizer["Date"] </label>
                                                     <select class="form-control" id="date-outgoing-ddl" onchange="filterOutgoingReferrals()">
-                                                        <option value="0">All Dates</option>
-                                                        <option value="1">Today</option>
-                                                        <option value="2">7 days ago</option>
-                                                        <option value="3">30 days ago</option>
+                                                        <option value="0">@Localizer["AllDates"]</option>
+                                                        <option value="1">@Localizer["Today"]</option>
+                                                        <option value="2">@Localizer["7DaysAgo"]</option>
+                                                        <option value="3">@Localizer["30DaysAgo"]</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -193,9 +194,9 @@
 <div class="modal fade" id="AddOrderModal" tabindex="-1" role="dialog" aria-labelledby="EditUserProfileModal" aria-hidden="true">
     <div class="modal-dialog custom-modal-dialog" style="max-width:760px" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="AddOrderModal">Add Order </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <div class="modal-header" style="direction:@direction">
+                <h5 class="modal-title" id="AddOrderModal">@Localizer["AddOrder"]</h5>
+                <button type="button" style="margin-left:@closeButtonValue" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -206,12 +207,24 @@
                             <div>
                                 <form id="msform">
                                     <!-- progressbar -->
+                                    @if (isEng)
+                                    {
                                     <ul id="progressbar">
-                                        <li class="active" id="account"><strong>Patient Info</strong></li>
-                                        <li id="personal"><strong>Services</strong></li>
-                                        <li id="payment"><strong>Doctors</strong></li>
-                                        <li id="confirm"><strong>Confrimation</strong></li>
+                                        <li class="active" id="account"><strong>@Localizer["PatientInfo"]</strong></li>
+                                        <li id="personal"><strong>@Localizer["Services"]</strong></li>
+                                        <li id="payment"><strong>@Localizer["Doctors"]</strong></li>
+                                        <li id="confirm"><strong>@Localizer["Confirmation"]</strong></li>
                                     </ul>
+                                    }
+                                    else 
+                                    {
+                                        <ul id="progressbar">
+                                            <li id="confirm"><strong>@Localizer["Confirmation"]</strong></li>
+                                            <li id="payment"><strong>@Localizer["Doctors"]</strong></li>
+                                            <li id="personal"><strong>@Localizer["Services"]</strong></li>
+                                            <li class="active" id="account"><strong>@Localizer["PatientInfo"]</strong></li>
+                                        </ul>
+                                    }
                                     <div class="progress">
                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div> <br> <!-- fieldsets -->
@@ -219,10 +232,10 @@
                                         <div class="form-card">
                                             <div class="row">
                                                 <div class="col-7">
-                                                    <h2 class="fs-title">Patient Information:</h2>
+                                                    <h2 class="fs-title">@Localizer["PatientInformation"]</h2>
                                                 </div>
                                                 <div class="col-5">
-                                                    <h2 class="steps">Step 1 - 4</h2>
+                                                    <h2 class="steps">@Localizer["Step1To4"]</h2>
                                                 </div>
                                             </div>
                                             @Html.Partial("PatientInfo")
@@ -233,18 +246,18 @@
                                         <div class="form-card">
                                             <div class="row">
                                                 <div class="col-7">
-                                                    <h2 class="fs-title">Services:</h2>
+                                                    <h2 class="fs-title">@Localizer["Services"]:</h2>
                                                 </div>
                                                 <div class="col-5">
-                                                    <h2 class="steps">Step 2 - 4</h2>
+                                                    <h2 class="steps">@Localizer["Step1To4"]</h2>
                                                 </div>
                                             </div>
                                             <hr />
 
-                                            <span style="color:red;font-style:italic;font-weight:bold">Note: the doctor will appers based on your selection, Please select at least one service</span>
+                                            <span style="color:red;font-style:italic;font-weight:bold">@Localizer["NoteAboutDoctors"] </span>
                                             <br />
                                             <h6 style="color:#00768c">
-                                                Selected Services
+                                                @Localizer["SelectedServices"]
                                             </h6>
 
                                             @*selection*@
@@ -255,7 +268,7 @@
 
                                             <div id="NoResult-div" class="no-results-section" style="display:block">
                                                 <img src="~/images/NoResult.png" alt="No Results Found Icon">
-                                                <p>No Services Selected Yet.</p>
+                                                <p>  @Localizer["NoSelectedYet"]</p>
                                             </div>
 
                                             <hr />
@@ -273,7 +286,7 @@
                                             </div>
                                             <div class="no-results-section" style="display:none">
                                                 <img src="~/images/NoResult.png" alt="No Results Found Icon">
-                                                <p>No Services Found.</p>
+                                                <p>@Localizer["NoServicesFound"]</p>
                                             </div>
 
 
@@ -286,11 +299,11 @@
                                             <div class="row">
 
                                                 <div class="col-12">
-                                                    <h2 class="steps">Step 3 - 4</h2>
+                                                    <h2 class="steps">@Localizer["Step3To4"]</h2>
                                                 </div>
                                             </div>
                                             <h6 style="color:#00768c">
-                                                <h2 class="fs-title">Doctors</h2>
+                                                <h2 class="fs-title">@Localizer["Doctors"]</h2>
                                             </h6>
 
                                             @Html.Partial("DoctorsOrder")
@@ -302,19 +315,19 @@
                                         <div class="form-card">
                                             <div class="row">
                                                 <div class="col-7">
-                                                    <h2 class="fs-title">Finish:</h2>
+                                                    <h2 class="fs-title">@Localizer["Finish"]</h2>
                                                 </div>
                                                 <div class="col-5">
-                                                    <h2 class="steps">Step 4 - 4</h2>
+                                                    <h2 class="steps">@Localizer["Finish"]</h2>
                                                 </div>
                                             </div> <br><br>
-                                            <h2 class="purple-text text-center"><strong>SUCCESS !</strong></h2> <br>
+                                            <h2 class="purple-text text-center"><strong>@Localizer["SUCCESS"]</strong></h2> <br>
                                             <div class="row justify-content-center">
                                                 <div class="col-3"> <img src="https://i.imgur.com/GwStPmg.png" class="fit-image"> </div>
                                             </div> <br><br>
                                             <div class="row justify-content-center">
                                                 <div class="col-7 text-center">
-                                                    <h5 class="purple-text text-center">You Have Successfully Send The Order</h5>
+                                                    <h5 class="purple-text text-center">@Localizer["SentSuccessfully"]</h5>
                                                 </div>
                                             </div>
                                         </div>
@@ -326,7 +339,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" onclick="closeOrderModal()" data-dismiss="modal" id="close-order">Cancel</button>
+                <button type="button" class="btn btn-danger" onclick="closeOrderModal()" data-dismiss="modal" id="close-order">@Localizer["Cancel"]</button>
             </div>
         </div>
     </div>

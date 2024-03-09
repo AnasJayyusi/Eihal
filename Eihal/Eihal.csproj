@@ -52,6 +52,8 @@
 	  <Content Remove="wwwroot\images\InsuranceLogo\91aa9d22-fd46-44fd-9569-06cddd563a22.png" />
 	  <Content Remove="wwwroot\images\InsuranceLogo\926f0420-9d84-4692-9eed-653e65fc73e6.jpg" />
 	  <Content Remove="wwwroot\images\InsuranceLogo\Default-insurance-Image.jpg" />
+	  <Content Remove="wwwroot\images\navbar\bell.svg" />
+	  <Content Remove="wwwroot\images\warning.png" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Content Update="Views\Admin\UsersProfilesReviews.cshtml">

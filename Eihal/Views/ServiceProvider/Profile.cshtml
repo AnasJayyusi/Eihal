@@ -76,7 +76,7 @@
                 <!-- Topbar -->
                 <!-- End of Topbar -->
                 <!-- Begin Page Content -->
-                <div class="container-fluid" style="direction:@direction;text-align:@textAlign" >
+                <div class="container-fluid" style="direction:@direction;text-align:@textAlign">
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4" style="margin-top:125px;">
                         @*  <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
@@ -110,7 +110,7 @@
                                     </div>
                                 </div>
                                 <!-- Card Body -->
-                                <div class="card-body" >
+                                <div class="card-body">
                                     @Html.Partial("Overview")
                                     @Html.Partial("Services")
                                     @Html.Partial("Time&Insurance")
@@ -174,7 +174,7 @@
                 return; // If user cancels, do nothing
             }
             $.ajax({
-                url: '/ServiceProvider/DeleteUserService?Id=' + id, 
+                url: '/ServiceProvider/DeleteUserService?Id=' + id,
                 type: 'GET',
                 success: function (response) {
                     //serviceContainer.html(response);
@@ -246,8 +246,14 @@
 
             var x = document.getElementById('addPage-btn')
             if (x != null)
-            x.style.display = "block";
+                x.style.display = "block";
 
+            if (tabName == "tab2" || tabName == "tab3") {
+                $("#active-profile-sign").hide();
+            }
+            else {
+                $("#active-profile-sign").show();
+            }
 
         }
 
@@ -271,12 +277,10 @@
                 url: '/ServiceProvider/CanSendProfile',
                 type: 'Get',
                 success: function (response) {
-                    if (response == true)
-                    {
+                    if (response == true) {
                         $("#active-profile-sign").show();
                     }
-                    if (response == false)
-                    {
+                    if (response == false) {
                         $("#active-profile-sign").hide();
                     }
 
@@ -305,7 +309,7 @@
                 statusText = '<span style="font-weight: bold;"> @Localizer["UnderReview"]</span>';
                 $("#active-profile-sign").hide()
                 $('#profile-status-container').click(false);
-                
+
 
             } else if (profileStatus === 'Rejected') {
                 profileStatusElement.css('background-color', 'firebrick');
@@ -331,9 +335,9 @@
                 $("#active-profile-sign").css("pointer-events", "none");
                 let buttonText = document.querySelector('.tick');
 
-         
 
-                buttonText.innerHTML ='<i class="fa-solid fa-x" > </i>';
+
+                buttonText.innerHTML = '<i class="fa-solid fa-x" > </i>';
                 $("#send-icon").hide()
 
                 profileStatusElement.css('background-color', 'gray');
@@ -359,9 +363,9 @@
 
                 profileStatusElement.append(helpModalIcon);
             }
-                // Append the profile status element to the container
-                $('#profile-status-container').append(profileStatusElement);
-          
+            // Append the profile status element to the container
+            $('#profile-status-container').append(profileStatusElement);
+
         }
 
 

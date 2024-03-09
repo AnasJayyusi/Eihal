@@ -14,14 +14,20 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<div class="loginLogo">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+
+<div  id="largescreensize" class="loginLogo" style="display:block">
+
+    <div  id="loginDiv" class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content" >
-            <div class="modal-header">
+            
+    
+
+            <div  class="modal-header">
                 <h1 class="modal-title" id="loginModalLabel">
                     @Localizer["LoginTitle"]
                 </h1>
             </div>
+
             <div class="modal-body">
 
                 <div class="d-none alert alert-danger" id="login-error">
@@ -110,6 +116,21 @@
             </div>
         </div>
     </div>
+
+
+ 
+</div>
+
+<div id="smallscreensize" class="loginLogo" style="display:none">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <img src="~/images/warning.png" width="40%" height="40%" />
+        <Br />
+        <div class="row">
+            <h2 style="color:#2FBDEB">@Localizer["ScreenSizeTooSmall"]</h2>
+            <p style="color:#2FBDEB">@Localizer["PleaseTryLargerScreen"]</p>
+        </div>
+        
+    </div>
 </div>
 
 @section Scripts {
@@ -167,3 +188,33 @@
         $('#Password').attr('type', $(this).is(':checked') ? 'text' : 'password');
     });
 </script>
+
+<script>
+    window.onload = function () {
+        checkScreenSize();
+        // window.addEventListener('resize', checkScreenSize);
+    };
+
+    function checkScreenSize() {
+      
+        if (window.innerWidth <= 768) {
+            $("#smallscreensize").show();
+            $("#largescreensize").hide();
+        } else {
+            $("#smallscreensize").hide();
+            $("#largescreensize").show();
+        }
+    }
+</script>
+
+<style>
+    .alert {
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+</style>
+

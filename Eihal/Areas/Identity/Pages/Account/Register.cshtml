@@ -13,228 +13,141 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 
-
-
 <!--Sign Up -->
+<div id="largescreensize" style="display:block">
+
 <div class="loginLogo" id="singUpModal"  tabindex="-1" role="dialog">
 
+<div id="sizeofModel" class="modal-dialog modal-dialog-centered" style="max-width: 50%;padding-top:5%" role="document">
+    <div class="modal-content">
+        <div class="modal-header" style="direction: @direction;">
+            <h1 class="modal-title" id="singUpModalLabel">
+                @Localizer["CreateNewAccount"]
+            </h1>
+        </div>
+        <div class="modal-body">
+            <form class="form-contain" id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-    <Br />
-    <div class="modal-dialog modal-dialog-centered"  style="max-width:576px" role="document">
-        <div class="modal-content">
-            <div class="modal-header" style="direction:@direction">
-                <h1 class="modal-title" id="singUpModalLabel">
-                    @Localizer["CreateNewAccount"]
-                </h1>
-            </div>
-             @*    <div class="explanation" style="text-align:@textAlign">
-
-                <div class="service-provider" style="background:aliceblue">
-                    <h6>@Localizer["ServiceProviderName"] <i style="color:#00768c" class="fa fa-info-circle" aria-hidden="true"></i></h6>
-                        <ul>
-                        <li>
-                            @Localizer["ServiceProviderDesc"]
-                              </li>
-                        </ul>
-                    </div>
-
-                <div class="beneficiary" style="background:aliceblue">
-                    <h6> @Localizer["BeneficiaryName"]   <i style="color:#00768c" class="fa fa-info-circle" aria-hidden="true"></i> </h6>
-                    <ul>
-                        
-                        <li>@Localizer["BeneficiaryDesc"]</li>
-                    </ul>
-                </div>
-                </div> *@
-
-            <div class="modal-body">
-            
-                <form class="form-contain" id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                  
-                    <div style="width: 100%; display: table;">
-                        <div style="display: table-row">
-                            <div class="form-group">
-                                <label for="account_type" style="text-align:@textAlign">  @Localizer["AccountType"]</label>
-                                <div id="account-type-div" class="form-data select-box" style="width:95%">
-                                    <select asp-for="Input.AccountTypeId" class="form-control" name="account_type" id="account_type" required>
-                                        <option value="">@Localizer["DefaultOptionAccountType"]</option>
-                                        @foreach (var accountType in Model.AccountTypes)
-                                        {
-                                            @if (@isEng)
-                                            {
-                                                <option value="@accountType.Id"> @accountType.TitleEn </option>
-                                            }
-                                            else
-                                            {
-                                                <option value="@accountType.Id"> @accountType.TitleAr </option>
-                                            }
-                                        }
-                                    </select>
-                                    <p id="about-provider" style="display:none;color:#00768c;font-size:12px;text-align:left;">
-                                        @Localizer["ServiceProviderDesc"]
-                                    </p>
-                                    <p id="about-beneficiary" style="display:none; color:#00768c;font-size:12px;text-align:left;">
-                                        @Localizer["BeneficiaryDesc"]
-                                    </p>
-                                    <br />
-                                </div>
-
+                <div class="row">
+                    <!-- Left Side -->
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="account_type" class="text-right">@Localizer["AccountType"]</label>
+                            <div class="form-data select-box">
+                                <select asp-for="Input.AccountTypeId" class="form-control" name="account_type" id="account_type" required>
+                                    <option value="">@Localizer["DefaultOptionAccountType"]</option>
+                                    @foreach (var accountType in Model.AccountTypes)
+                                    {
+                                        <option value="@accountType.Id">@(isEng ? accountType.TitleEn : accountType.TitleAr)</option>
+                                    }
+                                </select>
                             </div>
-                            <br />
-                            <br />
-                            <div id="providerDetails">
-                                <div class="form-group" id="doctor_type_dropdown">
-                                    <label for="">
-                                        @Localizer["PractitionerType"]
-
-                                    </label>
-
-                                    <div id="doctor-type-div" class="form-data select-box practitioner_type_div" style="width:95%">
-                                        <select onchange="onPractitionerTypeChanged()" asp-for="Input.PractitionerTypeId" disabled style="cursor:not-allowed" class="form-control" name="practitioner_type" id="doctor-type-ddl">
-                                            <option value="">@Localizer["DefaultOptionPractitionerType"] </option>
-                                            @foreach (var practitionerType in Model.PractitionerTypes)
-                                            {
-                                                @if (@isEng)
-                                                {
-                                                    <option value="@practitionerType.Id">@practitionerType.TitleEn</option>
-                                                }
-                                                else
-                                                {
-                                                    <option value="@practitionerType.Id">@practitionerType.TitleAr</option>
-                                                }
-
-                                            }
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="form-group" id="category_id_dropdown">
-                                    <label for="">
-                                        @Localizer["ProfessionalRank"]
-                                    </label>
-
-                                    <div id="category-id-div" class="form-data select-box professionalRank_div" style="width:95%">
-                                        <select asp-for="Input.ProfessionalRankId" disabled style="cursor:not-allowed" class="form-control" name="professional_Rank" id="category-rank-ddl">
-                                            <option value="0">@Localizer["DefaultOptionProfessionalRank"]</option>
-                                            @foreach (var professionalRank in Model.ProfessionalRanks)
-                                            {
-                                                @if (@isEng)
-                                                {
-                                                    <option id="@professionalRank.PractitionerTypeId" value="@professionalRank.Id">@professionalRank.TitleEn</option>
-                                                }
-                                                else
-                                                {
-                                                    <option id="@professionalRank.PractitionerTypeId" value="@professionalRank.Id">@professionalRank.TitleAr</option>
-                                                }
-
-
-                                            }
-                                        </select>
-                                    </div>
-                                </div>
+                        </div  class="col-lg-6">
+                        <div>
+                              <h6 id="about-provider" style="display:none;color:#00768c;font-size:12px;text-align:left">
+           @Localizer["ServiceProviderDesc"]
+       </h6>
+       <h6 id="about-beneficiary" style="display:none; color:#00768c;font-size:12px;text-align:left;">
+           @Localizer["BeneficiaryDesc"]
+       </h6>
                             </div>
-                      
 
+                        <div class="form-group">
+                            <label for="practitioner_type" class="text-right">@Localizer["PractitionerType"]</label>
+                            <div class="form-data select-box">
+                                <select onchange="onPractitionerTypeChanged()" asp-for="Input.PractitionerTypeId" disabled style="cursor:not-allowed" class="form-control" name="practitioner_type" id="doctor-type-ddl">
+                                    <option value="">@Localizer["DefaultOptionPractitionerType"]</option>
+                                    @foreach (var practitionerType in Model.PractitionerTypes)
+                                    {
+                                        <option value="@practitionerType.Id">@(isEng ? practitionerType.TitleEn : practitionerType.TitleAr)</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
 
-                            <div style="display: table-cell;">
-                                <div class="form-group" style="text-align:@textAlign">
-                                    <label for="">
-                                        @Localizer["FullName"]
-                                    </label>
-
-                                    <div id="fullname-div" class="form-data">
-                                        <input asp-for="Input.FullName" class="form-control" style="text-align:@textAlign"
-                                               autocomplete="current-password" aria-required="true"
-                                               placeholder=" @Localizer["EnterFullName"]" name="FullName" required />
-                                        <span asp-validation-for="Input.FullName" class="text-danger"></span>
-
-                                    </div>
-                                </div>
-
-                                <div class="form-group" style="text-align:@textAlign">
-                                    <label for="">
-                                        @Localizer["PhoneNumber"]
-                                    </label>
-
-                                    <div id="phone-div" class="form-data">
-                                        <input asp-for="Input.PhoneNumber" name="PhoneNumber" onkeyup="checkPhoneNumber()" style="text-align:@textAlign"
-                                               placeholder=" @Localizer["PhoneNumber"]" class="form-control" maxlength="10" onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))" aria-required="true" placeholder="Phone Number" required />
-                                        <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-                                        <p id="phoneError" style="display:none; color:#FF0000;font-size:12px;text-align:left;">
-                                            @Localizer["PhoneAlreadyExists"]
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div class="form-group" style="text-align:@textAlign">
-                                    <label for="">
-                                        @Localizer["EmailAddress"]
-                                    </label>
-
-                                    <div id="email-div" class="form-data">
-                                        <input asp-for="Input.Email" onkeyup=checkEmail() class="form-control" style="text-align:@textAlign"
-                                               autocomplete="current-password" aria-required="true" placeholder=" @Localizer["EnterEmail"]" name="Email" required type="email" />
-                                        <span asp-validation-for="Input.Email" class="text-danger"></span>
-                                    </div>
-                                    <p style="display:none; color:#FF0000;font-size:12px;text-align:left">  @Localizer["EmailAlreadyUsed"]</p>
-                                    <span style="display:none" class="success-email"> @Localizer["ValidEmail"]</span>
-                                    <span style="display:none" class="error-email"> @Localizer["InValidEmail"]</span>
-                                </div>
-
-                                <div class="form-group" style="text-align:@textAlign">
-                                    <label for="">
-                                        @Localizer["Password"]
-                                    </label>
-
-                                    <div id="password-div" class="form-data">
-                                        <input asp-for="Input.Password" class="form-control" autocomplete="current-password" style="text-align:@textAlign"
-                                               onkeyup="isPasswordAccept()" aria-required="true" placeholder=" @Localizer["Password"]" name="Password" required />
-                                        <span asp-validation-for="Input.Password" class="text-danger"></span>
-                                    </div>
-                                    <p id="password-notAccept" style="display:none; color:#FF0000;font-size:12px;text-align:left">
-                                        @Localizer["AtLeast6Char"]
-                                    </p>
-                                </div>
-
-                                <div class="form-group" style="text-align:@textAlign">
-                                    <label for="">
-                                        @Localizer["ConfirmPassword"]
-                                    </label>
-
-                                    <div id="confirmpassword-div" class="form-data">
-                                        <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="current-password" onkeyup="comparePassword()" style="text-align:@textAlign"
-                                               aria-required="true" placeholder="@Localizer["ConfirmPassword"]" name="ConfirmPassword" required />
-                                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-                                    </div>
-                                    <p id="password-notmatch" style="display:none; color:#FF0000;font-size:12px;text-align:left"> @Localizer["PasswordNotMatch"]</p>
-                                </div>
-
-
-
-                                <div class="flex-data mt-5" style="direction:@direction">
-                                    <div class="wrapper">
-                                        <input id="term-div" type="checkbox" name="terms" class="radio-check">
-                                        <label class="radio-title">
-                                            <a href="#openModal">@Localizer["TermsConditions"]</a>
-                                        </label>
-                                    </div>
-                                </div>
+                        <div class="form-group">
+                            <label for="professional_Rank" class="text-right">@Localizer["ProfessionalRank"]</label>
+                            <div class="form-data select-box">
+                                <select asp-for="Input.ProfessionalRankId" disabled style="cursor:not-allowed" class="form-control" name="professional_Rank" id="category-rank-ddl">
+                                    <option value="0">@Localizer["DefaultOptionProfessionalRank"]</option>
+                                    @foreach (var professionalRank in Model.ProfessionalRanks)
+                                    {
+                                        <option id="@professionalRank.PractitionerTypeId" value="@professionalRank.Id">@(isEng ? professionalRank.TitleEn : professionalRank.TitleAr)</option>
+                                    }
+                                </select>
                             </div>
                         </div>
                     </div>
 
-                        <label id="fields-error" class="error" for="terms" style="display: none;color:red;">@Localizer["FillAllFields"]</label>
-                    <button id="registerSubmit" type="submit" onclick="isFormValid()" class="custom-btn mb-3">
-                        <span>@Localizer["SignUp"]</span>
-                    </button>
-                </form>
-            </div>
+                    <!-- Right Side -->
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="FullName">@Localizer["FullName"]</label>
+                            <div class="form-data">
+                                <input asp-for="Input.FullName" class="form-control" style="text-align:@textAlign" autocomplete="current-password" placeholder="@Localizer["EnterFullName"]" name="FullName" required />
+                                <span asp-validation-for="Input.FullName" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="PhoneNumber">@Localizer["PhoneNumber"]</label>
+                            <div class="form-data">
+                                <input asp-for="Input.PhoneNumber" name="PhoneNumber" onkeyup="checkPhoneNumber()" style="text-align:@textAlign" placeholder="@Localizer["PhoneNumber"]" class="form-control" maxlength="10" onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))" aria-required="true" placeholder="Phone Number" required />
+                                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                                <p id="phoneError" style="display:none; color:#FF0000;font-size:12px;text-align:left;">@Localizer["PhoneAlreadyExists"]</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Email">@Localizer["EmailAddress"]</label>
+                            <div class="form-data">
+                                <input asp-for="Input.Email" onkeyup=checkEmail() class="form-control" style="text-align:@textAlign" autocomplete="current-password" aria-required="true" placeholder="@Localizer["EnterEmail"]" name="Email" required type="email" />
+                                <span asp-validation-for="Input.Email" class="text-danger"></span>
+                            </div>
+                            <p style="display:none; color:#FF0000;font-size:12px;text-align:left">@Localizer["EmailAlreadyUsed"]</p>
+                            <span style="display:none" class="success-email">@Localizer["ValidEmail"]</span>
+                            <span style="display:none" class="error-email">@Localizer["InValidEmail"]</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Password">@Localizer["Password"]</label>
+                            <div class="form-data">
+                                <input asp-for="Input.Password" class="form-control" autocomplete="current-password" style="text-align:@textAlign" onkeyup="isPasswordAccept()" aria-required="true" placeholder="@Localizer["Password"]" name="Password" required />
+                                <span asp-validation-for="Input.Password" class="text-danger"></span>
+                            </div>
+                            <p id="password-notAccept" style="display:none; color:#FF0000;font-size:12px;text-align:left">@Localizer["AtLeast6Char"]</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ConfirmPassword">@Localizer["ConfirmPassword"]</label>
+                            <div class="form-data">
+                                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="current-password" onkeyup="comparePassword()" style="text-align:@textAlign" aria-required="true" placeholder="@Localizer["ConfirmPassword"]" name="ConfirmPassword" required />
+                                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                            </div>
+                            <p id="password-notmatch" style="display:none; color:#FF0000;font-size:12px;text-align:left">@Localizer["PasswordNotMatch"]</p>
+                        </div>
+
+                        <div class="flex-data mt-5" style="direction:@direction">
+                            <div class="wrapper">
+                                <input id="term-div" type="checkbox" name="terms" class="radio-check">
+                                <label class="radio-title">
+                                    <a href="#openModal">@Localizer["TermsConditions"]</a>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <label id="fields-error" class="error" for="terms" style="display: none;color:red;">@Localizer["FillAllFields"]</label>
+                <button id="registerSubmit" type="submit" onclick="isFormValid()" class="custom-btn mb-3">
+                    <span>@Localizer["SignUp"]</span>
+                </button>
+            </form>
         </div>
     </div>
 </div>
-
-
+</div>
 <div id="openModal" class="modalDialog">
     <div>
         <a href="#close" title="Close" class="close">X</a>
@@ -256,8 +169,19 @@
         </div>
     </div>
 </div>
+</div>
 
-
+@* <div id="smallscreensize" class="loginLogo" style="display:none">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <img src="~/images/warning.png" width="40%" height="40%" />
+        <Br />
+        <div class="row">
+            <h2 style="color:#2FBDEB">Screen size is too small</h2>
+            <p style="color:#2FBDEB">Please try viewing on a larger screen for the best experience.</p>
+        </div>
+    </div>
+</div>
+ *@
 
 <script src="https://code.jquery.com/jquery-3.5.0.min.js"></script>
 @section Scripts {
@@ -265,7 +189,6 @@
 }
 
 <script>
-
 
     function checkEmail() {
         var regExp = /^([\w\.\+]{1,})([^\W])(@@)([\w]{1,})(\.[\w]{1,})+$/;
@@ -309,20 +232,15 @@
             showErrorlabel = true;
         }
 
-
-
         if ($("#Input_Email").val().length == 0) {
             $('#email-div').css("border", "solid 1px red")
             showErrorlabel = true;
         }
 
-
         if ($("#Input_PhoneNumber").val().length == 0) {
             $('#phone-div').css("border", "solid 1px red")
             showErrorlabel = true;
         }
-
-
 
         if ($("#Input_Password").val().length == 0) {
             $('#password-div').css("border", "solid 1px red");
@@ -437,8 +355,6 @@
 
         }
 
-
-
     }
 
     function onPractitionerTypeChanged() {
@@ -540,8 +456,6 @@
         margin:1%;
     }
 
-    
-
         .service-provider h2, .beneficiary h2 {
             color: #333;
         }
@@ -558,9 +472,36 @@
         .service-provider p, .beneficiary p {
             margin-top: 10px;
         }
-
-
 </style>
 
+<script>
+    window.onload = function () {
+        checkScreenSize();
+        // window.addEventListener('resize', checkScreenSize);
+    };
 
+    function checkScreenSize() {
 
+        if (window.innerWidth <= 768) {
+             $("#sizeofModel").css("max-width", "100%");
+            // $("#smallscreensize").show();
+            // $("#largescreensize").hide();
+        } else {
+              $("#sizeofModel").css("max-width", "50%");
+            // $("#smallscreensize").hide();
+            // $("#largescreensize").show();
+        }
+    }
+</script>
+
+@* <style>
+    .alert {
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+</style>
+ *@

@@ -144,8 +144,14 @@
   <data name="PhoneNumberExample" xml:space="preserve">
     <value>Example: 05123456</value>
   </data>
+  <data name="PleaseTryLargerScreen" xml:space="preserve">
+    <value>Please try viewing on a larger screen for the best experience.</value>
+  </data>
   <data name="RememberMe" xml:space="preserve">
     <value>Remember Me?</value>
+  </data>
+  <data name="ScreenSizeTooSmall" xml:space="preserve">
+    <value>Screen size is too small</value>
   </data>
   <data name="SignUp" xml:space="preserve">
     <value>Sign Up</value>

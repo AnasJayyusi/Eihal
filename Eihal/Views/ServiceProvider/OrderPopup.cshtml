@@ -1,7 +1,20 @@
 ﻿  <!-- Add Order -->
+
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+@{
+    string cultureCode = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
+    string direction = cultureCode.StartsWith("ar", StringComparison.OrdinalIgnoreCase) ? "rtl" : "ltr";
+    string textAlign = direction == "rtl" ? "right" : "left";
+    bool isEng = direction == "ltr" ? true : false;
+    string footerButtonsValue = isEng ? "0px" : "5px";
+}
+
+
 <div style="text-align: end; cursor:pointer">
     <button onclick="openAddOrderModal()" type="button" class="btn btn-primary add-edit-btn" data-toggle="modal" data-target="#AddOrderModal">
-        <i style="font-size:18px" class="fas fa-add"></i> Add Order
+        <i style="font-size:18px" class="fas fa-add"></i> @Localizer["AddOrder"]
     </button>
 </div>
 

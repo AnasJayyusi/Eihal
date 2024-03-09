@@ -9,7 +9,9 @@
     string closeButtonValue = isEng ? "0" : "1%";
     string footerButtonsValue = isEng ? "0px" : "5px";
     string sendReviewValue = isEng ? "0" : "88%";
+    string currentPath = Context.Request.Path.ToString().ToLower();
 }
+
 
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
@@ -208,6 +210,7 @@
         </div>
     </div>
 </div>
+
 
 <div id="active-profile-sign" style="margin-right:@sendReviewValue" onclick=sendToReview() class="send-review-btn">
     <i id="send-icon" style="color:white;@marginValue:10px" class="fa fa-paper-plane" aria-hidden="true"></i>
@@ -1103,7 +1106,8 @@
     button.addEventListener('click', function () {
         if (buttonText.innerHTML !== "@Localizer["SendToReview"]") {
             buttonText.innerHTML = "@Localizer["SendToReview"]";
-        } else if (buttonText.innerHTML === "@Localizer["SendToReview"]") {
+        }
+        else if (buttonText.innerHTML === "@Localizer["SendToReview"]") {
             buttonText.innerHTML = tickMark;
         }
         $("#send-icon").hide()
