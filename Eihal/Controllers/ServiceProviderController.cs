@@ -865,39 +865,46 @@ namespace Eihal.Controllers
         {
             // Assuming you have a list of items to pass to the view
             var currentUserProfileId = GetUserProfileId();
-            var model = _dbContext.Services
-                .Include(i => i.ClinicalSpeciality)
-                .Include(i => i.ServiceLevel)
-                .Join(_dbContext.UserServices,
-                s => s.Id,
-                us => us.ServiceId,
-                (s, us) => new SupportServiceModal
+            var services = _dbContext.Services
+                                 .Include(i => i.ClinicalSpeciality)
+                                 .Include(i => i.ServiceLevel)
+                                 .Join(_dbContext.UserServices,
+                                     s => s.Id,
+                                     us => us.ServiceId,
+                                     (s, us) => new SupportServiceModal
+                                     {
+                                         ServiceId = s.Id,
+                                         TitleEn = s.TitleEn,
+                                         TitleAr = s.TitleAr,
+                                         Status = us.Status,
+                                         Logo = s.ClinicalSpeciality.LogoImagePath,
+                                         ClinicalSpecialityNameAr = s.ClinicalSpeciality.TitleAr,
+                                         ClinicalSpecialityNameEn = s.ClinicalSpeciality.TitleEn,
+                                         UserProfileId = us.UserId,
+                                         ServiceLevelNameAr = s.ServiceLevel.TitleEn ?? "-",
+                                         ServiceLevelNameEn = s.ServiceLevel.TitleEn ?? "-"
+                                     })
+                                 .Where(us => us.Status == ServicesStatusEnum.Approved && us.UserProfileId != currentUserProfileId)
+                                 .AsSplitQuery();
+
+            var supportServices = new List<SupportServiceModal>();
+
+            foreach (var svc in services)
+            {
+                if (!supportServices.Any(x => x.ServiceId == svc.ServiceId))
                 {
-                    ServiceId = s.Id,
-                    TitleEn = s.TitleEn,
-                    TitleAr = s.TitleAr,
-                    Status = us.Status,
-                    Logo = s.ClinicalSpeciality.LogoImagePath,
-                    ClinicalSpecialityNameAr = s.ClinicalSpeciality.TitleAr,
-                    ClinicalSpecialityNameEn = s.ClinicalSpeciality.TitleEn,
-                    UserProfileId = us.UserId,
-                    ServiceLevelNameAr = s.ServiceLevel.TitleEn ?? "-",
-                    ServiceLevelNameEn = s.ServiceLevel.TitleEn ?? "-"
-                })
-                .Where(us => us.Status == ServicesStatusEnum.Approved && us.UserProfileId != currentUserProfileId)
-                .Distinct()
-                .AsSplitQuery()// Include columns you want from both tables
-                .ToList();
+                    supportServices.Add(svc);
+                }
+            }
 
-
-            if (model != null)
-                model.First().ClinicalSpecialties = model.Select(s => s.ClinicalSpecialityNameEn).Distinct().ToList();
+            if (supportServices != null)
+                supportServices.First().ClinicalSpecialties = supportServices.Select(s => s.ClinicalSpecialityNameEn).Distinct().ToList();
 
 
             // Render the partial view and return it as HTML content
             //string htmlContent = RenderPartialToString("_CardPartial", model); // Replace with the name of your partial view
 
-            return PartialView("PrivilegesOrder", model); // Replace with the name of your partial view
+            return PartialView("PrivilegesOrder", supportServices); // Replace with the name of your partial view
         }
 
 

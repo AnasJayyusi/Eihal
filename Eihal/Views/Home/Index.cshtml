@@ -21,10 +21,10 @@
                             @Localizer["OurVisionDesc"]
                         </p>
 
-                        <div class="flex-data">
+                        <div  class="flex-data">
                             <a style="width: 200px !important;" class="custom-btn" asp-area="" asp-controller="Home" asp-action="About">
                                 <span>
-                                    @Localizer["Readmore"]
+                            @Localizer["Readmore"]
                                 </span>
                             </a>
                         </div>
@@ -40,7 +40,7 @@
                             <div class="form-data select-box">
                                 <select name="specialityId" id="specialities-ddl" class="form-control" onchange="getServices()">
                                     <option value="">
-                                        @Localizer["SpecialityDefaultSelection"]
+                                                        @Localizer["SpecialityDefaultSelection"]
                                     </option>
                                 </select>
                             </div>
@@ -50,9 +50,9 @@
                     <div class="col-lg-2 col-12 padding-screen">
                         <div class="form-group round-left">
                             <div class="form-data select-box">
-                                <select name="serviceId" id="services-ddl" class="form-control">
+                                <select name="serviceId" id="services-ddl" class="form-control" onchange="canSearch()">
                                     <option value="">
-                                        @Localizer["ServiceDefaultSelection"]
+                                       @Localizer["ServiceDefaultSelection"]
                                     </option>
                                 </select>
                             </div>
@@ -64,7 +64,7 @@
                             <div class="form-data select-box">
                                 <select name="cityId" id="cities-ddl" class="form-control" onchange="getDistricts()">
                                     <option value="">
-                                        @Localizer["CityDefaultSelection"]
+                                                        @Localizer["CityDefaultSelection"]
                                     </option>
 
 
@@ -78,7 +78,7 @@
                             <div class="form-data select-box">
                                 <select name="disctrictId" id="disctricts-ddl" class="form-control">
                                     <option value="">
-                                        @Localizer["DistrictDefaultSelection"]
+                                                        @Localizer["DistrictDefaultSelection"]
                                     </option>
                                 </select>
                             </div>
@@ -98,11 +98,11 @@
                     </div>
 
                     <div class="col-lg-2 col-12">
-                        <button type="submit" class="custom-btn" style="border: none;">
+                        <button id="search-btn" type="submit" class="custom-btn" style="border: none;">
                             <img src="~/images/search.svg" alt="" />
 
                             <span>
-                                @Localizer["Search"]
+                             @Localizer["Search"]
                             </span>
                         </button>
                     </div>
@@ -288,8 +288,26 @@
             }
         });
 
+        function canSearch()
+        {
+            var serviceId = $('#services-ddl').val();
+            if (serviceId != null || serviceId != "") {
+                $("#search-btn").prop('disabled', false).removeClass('disabled-button')
+                $("#services-ddl").removeClass('missing-ddl');
+            }
+
+        }
+
         function getServices() {
+            debugger;
             var specialityId = $('#specialities-ddl').val();
+            var serviceId = $('#services-ddl').val();
+
+            if (serviceId == null || serviceId == "") {
+                $("#search-btn").prop('disabled', true).addClass('disabled-button')
+                $("#services-ddl").addClass('missing-ddl');
+            }
+            
             $.ajax({
                 url: '@Url.Action("GetServicesDDLBySpecialityId", "Common")' + "?specialityid=" + specialityId,
                 type: 'GET',
@@ -341,3 +359,14 @@
 }
 
 
+<style>
+    .disabled-button {
+        background: gray; /* Gray background color */
+        color: #666; /* Dark gray text color */
+        cursor: not-allowed; /* Show disabled cursor */
+    }
+
+    .missing-ddl {
+        border: 2px solid red !important/* default border */
+    }
+</style>
