@@ -505,16 +505,16 @@ namespace Eihal.Controllers
         [Route("CanSendProfile")]
         public ActionResult CanSendProfile()
         {
-            var userId = GetAspNetUserId();
+            //var userId = GetAspNetUserId();
 
-            var isRequiredAttachmnetsUploaded = _dbContext.RequiredAttachments.Where(w => w.UserId == userId).Count() >= 1;
-            var isCertifactionsAttachmnetsUploaded = _dbContext.Certifications.Where(w => w.UserId == userId).Count() >= 1;
-            var isAgree = _dbContext.UserProfiles.Single(w => w.UserId == userId).IsAgree;
+            //var isRequiredAttachmnetsUploaded = _dbContext.RequiredAttachments.Where(w => w.UserId == userId).Count() >= 1;
+            //var isCertifactionsAttachmnetsUploaded = _dbContext.Certifications.Where(w => w.UserId == userId).Count() >= 1;
+            //var isAgree = _dbContext.UserProfiles.Single(w => w.UserId == userId).IsAgree;
 
 
-            if (isRequiredAttachmnetsUploaded && isCertifactionsAttachmnetsUploaded && isAgree)
-                return Json(true);
-            return Json(false);
+            //if (isRequiredAttachmnetsUploaded && isCertifactionsAttachmnetsUploaded && isAgree)
+            //    return Json(true);
+            return Json(true);
         }
 
         [HttpPost]
