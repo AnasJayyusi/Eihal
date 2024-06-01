@@ -120,6 +120,22 @@
                                                 <label for="iban">IBAN</label>
                                                 <input type="text" id="iban" name="iban" class="form-control" maxlength="34" value="@Model?.IBAN" />
                                             </div>
+
+                                            <div class="form-group col-md-4">
+                                                @Html.CheckBoxFor(m => m.IsSignedContractRequired, new { @checked = true })
+                                                <label for="IsSignedContractRequired">Set Sign Contract as Required.</label>
+                                               
+                                            </div>
+
+                                            <div class="form-group col-md-4">
+                                                @Html.CheckBoxFor(m => m.IsProfessionalCategoryRequired, new { @checked = true })
+                                                <label for="IsProfessionalCategoryRequired">Set Professional Category as required.</label>
+                                            </div>
+
+                                            <div class="form-group col-md-4">
+                                                @Html.CheckBoxFor(m => m.IsCertifactionsAttachmnetsRequired, new { @checked = true })
+                                                <label for="IsProfessionalCategoryRequired">Set Certifications Attachmnets as required.</label>
+                                            </div>
                                             <button type="submit" class="btn btn-primary">Save</button>
                                             <span style="color:gray;font-style:italic">(Note: VatValue & Site Percentage Only Affected For Future Orders)</span>
                                             <br />
@@ -131,7 +147,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
 
     </div>

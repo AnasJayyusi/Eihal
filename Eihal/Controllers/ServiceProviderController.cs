@@ -333,6 +333,8 @@ namespace Eihal.Controllers
                 }
             }
 
+            var generalsettings = _dbContext.GeneralSettings.FirstOrDefault();
+
             var data = new
             {
                 fullname = userProfile?.FullName,
@@ -346,7 +348,9 @@ namespace Eihal.Controllers
                 rejectionReason = userProfile.RejectionReason,
                 insuranceAccept = userProfile.InsuranceAccepted,
                 accountType = userProfile.AccountTypeId,
-                isagree = userProfile.IsAgree
+                isAgree = generalsettings.IsSignedContractRequired ? userProfile.IsAgree : true,
+                isProfessionalCategoryRequired = generalsettings.IsProfessionalCategoryRequired,
+                isCertifactionsAttachmnetsRequired = generalsettings.IsCertifactionsAttachmnetsRequired
             };
 
             return Json(data);
@@ -505,15 +509,31 @@ namespace Eihal.Controllers
         [Route("CanSendProfile")]
         public ActionResult CanSendProfile()
         {
-            //var userId = GetAspNetUserId();
+            var userId = GetAspNetUserId();
 
-            //var isRequiredAttachmnetsUploaded = _dbContext.RequiredAttachments.Where(w => w.UserId == userId).Count() >= 1;
-            //var isCertifactionsAttachmnetsUploaded = _dbContext.Certifications.Where(w => w.UserId == userId).Count() >= 1;
-            //var isAgree = _dbContext.UserProfiles.Single(w => w.UserId == userId).IsAgree;
+            var generalsettings = _dbContext.GeneralSettings.FirstOrDefault();
+            bool isCertifactionsAttachmnetsRequired = generalsettings.IsCertifactionsAttachmnetsRequired;
+            bool isRequiredAttachmnetsUploaded, isCertifactionsAttachmnetsUploaded, isAgree;
+
+            if (generalsettings.IsProfessionalCategoryRequired)
+                isRequiredAttachmnetsUploaded = _dbContext.RequiredAttachments.Where(w => w.UserId == userId).Count() >= 1;
+            else
+                isRequiredAttachmnetsUploaded = true;
+
+            if (generalsettings.IsSignedContractRequired)
+                isAgree = _dbContext.UserProfiles.Single(w => w.UserId == userId).IsAgree;
+            else
+                isAgree = true;
 
 
-            //if (isRequiredAttachmnetsUploaded && isCertifactionsAttachmnetsUploaded && isAgree)
-            //    return Json(true);
+            if (generalsettings.IsCertifactionsAttachmnetsRequired)
+                isCertifactionsAttachmnetsUploaded = _dbContext.Certifications.Where(w => w.UserId == userId).Count() >= 1;
+            else
+                isCertifactionsAttachmnetsUploaded = true;
+
+
+            if (isRequiredAttachmnetsUploaded && isCertifactionsAttachmnetsUploaded && isAgree)
+                return Json(true);
             return Json(true);
         }
 

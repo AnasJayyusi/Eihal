@@ -1198,6 +1198,9 @@ namespace Eihal.Controllers
             generalSettings.VatValue = updatedSetting.VatValue;
             generalSettings.IBAN = updatedSetting.IBAN;
             generalSettings.SitePercentage = updatedSetting.SitePercentage;
+            generalSettings.IsProfessionalCategoryRequired = updatedSetting.IsProfessionalCategoryRequired;
+            generalSettings.IsSignedContractRequired = updatedSetting.IsSignedContractRequired;
+            generalSettings.IsCertifactionsAttachmnetsRequired = updatedSetting.IsCertifactionsAttachmnetsRequired;
 
             if (generalSettings.Id == 0)
                 _dbContext.GeneralSettings.Add(generalSettings);

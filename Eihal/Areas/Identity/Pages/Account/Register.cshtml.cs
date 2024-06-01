@@ -249,6 +249,11 @@ namespace Eihal.Areas.Identity.Pages.Account
             var applicationUser = _dbContext.ApplicationUsers.Single(x => x.Id == userId);
             var userProfile = new UserProfile();
 
+            var generalsettings = _dbContext.GeneralSettings.First();
+
+            bool isNoRequired = generalsettings.IsSignedContractRequired == false && generalsettings.IsCertifactionsAttachmnetsRequired == false && generalsettings.IsProfessionalCategoryRequired == false;
+
+
             if (applicationUser.AccountTypeId == (int)AccountTypeEnum.Beneficiary)
             {
                 userProfile = new UserProfile()
@@ -271,7 +276,7 @@ namespace Eihal.Areas.Identity.Pages.Account
                     PractitionerTypeId = applicationUser.PractitionerTypeId,
                     PhoneNumber = applicationUser.PhoneNumber,
                     Email = applicationUser.Email,
-                    ProfileStatus = ProfileStatus.UnCompleted,
+                    ProfileStatus = isNoRequired ? ProfileStatus.UnderReview : ProfileStatus.UnCompleted,
                     ProfessionalRankId = applicationUser.ProfessionalRankId
                 };
             }

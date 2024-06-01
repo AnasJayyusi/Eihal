@@ -52,7 +52,7 @@
                 </div>
             </div>
             <a style="text-align:center" class="nav-link text-dark" href="/Admin/Users/UsersProfilesReviews">
-                <span style="color:#00768c;font-weight:bold" >Show All Users In System</span>  <i id="notifications-icon" class="fa fa-angle-double-right"></i>
+                <span style="color:#00768c;font-weight:bold" >Show All Users In System With Full Details</span>  <i id="notifications-icon" class="fa fa-angle-double-right"></i>
             </a>
 
         </div>
@@ -202,11 +202,16 @@
                 }
                 // Clear existing rows
                 table.empty();
+            
+
+                var newRow = $('<tr>');
+                newRow.append($('<td hidden id="userProfileId">').text(id));
+                table.append(newRow);
 
                 // Loop through the response and append rows to the table
                 $.each(response, function (index, row) {
                     var newRow = $('<tr>');
-                    newRow.append($('<td hidden id="userProfileId">').text(row.userProfileId));
+                    // newRow.append($('<td hidden id="userProfileId">').text(row.userProfileId));
                     newRow.append($('<td>').text(row.degree.titleEn));
                     newRow.append($('<td>').text(row.universityNameEn));
 
@@ -298,6 +303,7 @@
     }
 
     function approve() {
+      
         var userProfileId = parseInt($("#userProfileId").text(), 10);
         $("#close-ProfileModal").trigger("click");
 

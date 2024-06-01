@@ -424,16 +424,16 @@
                         <div class="form-group col-md-12">
                             <label for="degrees-ddl" style="font-weight:bold;color:#00768c">@Localizer["Please Add The Required Attachments Below"]</label>
                             <ul>
-                                <li style="color:red;font-weight:bold">
-                                    - Signed Contract  
+                                <li id="sign-contract-upload" style="color:red;font-weight:bold">
+                                    - Signed Contract
                                     <br />
 
-                                    <button  id="showagreementModalBtn" type="button" class="btn btn-primary add-edit-btn" data-toggle="modal" data-target="#agreementModal">
-                                        <i  class="fa-solid fa-signature" aria-hidden="true"></i> Sign Contract
+                                    <button id="showagreementModalBtn" type="button" class="btn btn-primary add-edit-btn" data-toggle="modal" data-target="#agreementModal">
+                                        <i class="fa-solid fa-signature" aria-hidden="true"></i> Sign Contract
                                     </button>
                                 </li>
 
-                                <li style="color:red;font-weight:bold">
+                                <li id="professional-Category-upload" style="color:red;font-weight:bold">
                                     - Professional Category
                                     <br />
                                     <label for="reqattachments-uploader-Category">
@@ -460,7 +460,7 @@
 
 
 <div class="modal fade" id="agreementModal" tabindex="-1" role="dialog" aria-labelledby="agreementModal" aria-hidden="true">
-    <div class="modal-dialog custom-modal-dialog" role="document" >
+    <div class="modal-dialog custom-modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="agreementModal"> @Localizer["Agreement"]
@@ -472,7 +472,7 @@
             </div>
 
             <div class="modal-footer">
-                <button id="agreementConfirmationBtn" data-toggle="modal"  data-target="#agreementConfirmation" type="button" class="btn btn-success" style="background-color:#00768c">@Localizer["IAgree"]</button>
+                <button id="agreementConfirmationBtn" data-toggle="modal" data-target="#agreementConfirmation" type="button" class="btn btn-success" style="background-color:#00768c">@Localizer["IAgree"]</button>
                 <button id="btn-not-now" type="button" class="btn btn-danger" data-dismiss="modal" style="margin:@footerButtonsValue"> @Localizer["NotNow"]</button>
             </div>
         </div>
@@ -489,10 +489,10 @@
 
 <div class="modal" id="agreementConfirmation" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content" >
+        <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"> @Localizer["Confirmation"] </h5>
-             
+
             </div>
             <div class="modal-body">
                 <p> @Localizer["ConfirmationMessage"] </p>
@@ -523,7 +523,7 @@
 <script>
     $(document).ready(function () {
         loadUserProfileOverview();
-      
+
         const dropContainer = document.querySelector('.drop-container');
         const fileInput = document.querySelector('#images');
 
@@ -566,8 +566,8 @@
                 toastr.success('', '@Localizer["Success"]');
             }
         });
-          
-        }
+
+    }
 
     function loadUserProfileOverview() {
         $.ajax({
@@ -620,11 +620,29 @@
                     $("#requiredAttachments-div").hide();
                 }
                 getCertifications();
-
-                if (!response.isagree) {
+              
+                if (!response.isAgree) {
                     $("#showagreementModalBtn").click();
                 }
-        
+                else 
+                {
+                    $("#sign-contract-upload").hide()
+                }
+
+
+                if (!response.isProfessionalCategoryRequired) {
+                    $("#professional-Category-upload").hide();
+                }
+
+                if (!response.isCertifactionsAttachmnetsRequired) {
+                    $("#certifications-div").hide();
+
+                }
+
+                if (!response.isProfessionalCategoryRequired && response.isAgree) {
+                    $("#requiredAttachments-div").hide();
+                }
+
             },
             error: function (error) {
                 console.log(error);
@@ -1155,6 +1173,5 @@
         transition: all .9s;
     }
 
-  
 </style>
 
